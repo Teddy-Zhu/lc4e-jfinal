@@ -1,9 +1,12 @@
 package com.teddy.jfinal.tools;
 
-import com.teddy.jfinal.common.Const;
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Model;
 import com.teddy.jfinal.Exceptions.Lc4eException;
 import com.teddy.jfinal.Exceptions.ReflectException;
+import com.teddy.jfinal.common.Const;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
@@ -460,4 +463,90 @@ public class ReflectTool {
         return list;
     }
 
+    public static Object getFieldByObjectAndFileName(Controller controller, Class type, String fileName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        String tmp[] = fileName.split("\\.");
+        Object arg = controller.getModel(type, tmp[0]);
+        if (arg == null) {
+            return null;
+        }
+
+        if (Model.class.isAnnotationPresent(type)) {
+            for (int i = 1; i < tmp.length; i++) {
+                Method method = arg.getClass().getMethod("get", String.class);
+                arg = method.invoke(arg, tmp[i]);
+            }
+        } else {
+            for (int i = 1; i < tmp.length; i++) {
+                Method method = arg.getClass().getMethod(getGetterNameByFieldName(tmp[i]));
+                arg = method.invoke(arg);
+            }
+        }
+
+        return arg;
+    }
+
+    /**
+     * get field get function
+     */
+    public static String getGetterNameByFieldName(String fieldName) {
+        return "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+    }
+
+
+    public static void setParameter(String key, String value, Controller controller) throws NoSuchFieldException, IllegalAccessException {
+
+        HttpServletRequest innerRequest = controller.getRequest();
+        Field field = innerRequest.getClass().getDeclaredField("parametersParsed");
+        field.setAccessible(true);
+        field.setBoolean(innerRequest, false);
+
+
+        Field coyoteRequestField = innerRequest.getClass().getDeclaredField("coyoteRequest");
+        coyoteRequestField.setAccessible(true);
+        Object coyoteRequestObject = coyoteRequestField.get(innerRequest);
+
+
+        Field parametersField = coyoteRequestObject.getClass().getDeclaredField("parameters");
+        parametersField.setAccessible(true);
+        Object parameterObject = parametersField.get(coyoteRequestObject);
+
+        Field hashTabArrField = parameterObject.getClass().getDeclaredField("paramHashStringArray");
+        hashTabArrField.setAccessible(true);
+
+        Map<String, String[]> map = (Map<String, String[]>) hashTabArrField.get(parameterObject);
+        map.put(key, new String[]{value});
+
+    }
+
+
+    public static void setParameter(String[] key, String[] value, Controller controller) throws NoSuchFieldException, IllegalAccessException {
+
+        if (key.length != value.length) {
+            return;
+        }
+        HttpServletRequest innerRequest = controller.getRequest();
+        Field field = innerRequest.getClass().getDeclaredField("parametersParsed");
+        field.setAccessible(true);
+        field.setBoolean(innerRequest, false);
+
+
+        Field coyoteRequestField = innerRequest.getClass().getDeclaredField("coyoteRequest");
+        coyoteRequestField.setAccessible(true);
+        Object coyoteRequestObject = coyoteRequestField.get(innerRequest);
+
+
+        Field parametersField = coyoteRequestObject.getClass().getDeclaredField("parameters");
+        parametersField.setAccessible(true);
+        Object parameterObject = parametersField.get(coyoteRequestObject);
+
+        Field hashTabArrField = parameterObject.getClass().getDeclaredField("paramHashStringArray");
+        hashTabArrField.setAccessible(true);
+
+        Map<String, String[]> map = (Map<String, String[]>) hashTabArrField.get(parameterObject);
+        for (int i = 0, len = key.length; i < len; i++) {
+            map.put(key[i], new String[]{value[i]});
+        }
+
+    }
 }

@@ -21,12 +21,10 @@ public class DBHelper implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-
-
-        Method setMethod = ReflectTool.getMethodByClassAndNameBase(obj.getClass(), Const.DB_SET);
         String methodName = method.getName();
         if (methodName.equals(Const.DB_UPDATE) || methodName.equals(Const.DB_SAVE)) {
             Date dt = new Date();
+            Method setMethod = ReflectTool.getMethodByClassAndNameBase(obj.getClass(), Const.DB_SET);
             setMethod.invoke(obj, Const.DB_UPDATETIME, dt);
             if (methodName.equals(Const.DB_SAVE)) {
                 setMethod.invoke(obj, Const.DB_CREATETIME, dt);

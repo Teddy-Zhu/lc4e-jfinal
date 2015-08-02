@@ -16,9 +16,4 @@ public class Lc4eBeetlRenderFactory extends BeetlRenderFactory {
         log.debug("Lc4eBeetlRenderFactory end");
         return render;
     }
-
-    public String getViewExtension() {
-        return ".html";
-    }
-
 }

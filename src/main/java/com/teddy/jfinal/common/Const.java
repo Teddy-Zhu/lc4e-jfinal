@@ -86,5 +86,4 @@ public class Const {
 
     public static final String VALIDATE_MAIL = "\\b(^[\'_A-Za-z0-9-]+(\\.[\'_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
 
-    public static final Class[] COM_TYPES =new Class[]{Boolean.class,Integer.class,Long.class,}
 }

@@ -1,7 +1,6 @@
 package com.teddy.jfinal.handler.support;
 
 import com.jfinal.aop.Invocation;
-import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.teddy.jfinal.Exceptions.Lc4eException;
 import com.teddy.jfinal.Exceptions.ValidateException;
@@ -18,6 +17,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.text.ParseException;
 
 /**
  * Created by teddy on 2015/7/20.
@@ -67,7 +67,7 @@ public class GlobalInterceptorKit {
     }
 
     private static void resolve(Invocation ai, Exception e) {
-        ai.getController().renderText(e.getCause() + e.getMessage());
+        ai.getController().renderText(e.getMessage());
     }
 
 
@@ -77,21 +77,16 @@ public class GlobalInterceptorKit {
         }
     }
 
-    public void handleRequiredCondition(Invocation ai) throws Lc4eException, ValidateException {
+    private static void handleRequiredCondition(Invocation ai) throws Lc4eException, ValidateException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, ParseException {
         Method controllerMethod = ai.getMethod();
-        Annotation[] ans = controllerMethod.getAnnotations();
         HttpServletRequest request = ai.getController().getRequest();
-        HttpServletResponse response = ai.getController().getResponse();
-        Controller controller = ai.getController();
         Annotation annotation = null;
         //resovle require header or method
         annotation = ReflectTool.getAnnotationByMethod(controllerMethod, RequestMethod.class);
-
         if (annotation != null && !((RequestMethod) annotation).value().equals(request.getMethod())) {
             // controller.renderError(404);
             throw new Lc4eException("404");
         }
-
         annotation = controllerMethod.getAnnotation(RequestHeader.class);
         ValidateKit.resolveRequestHeader((RequestHeader) annotation, ai);
         annotation = controllerMethod.getAnnotation(ValidateToken.class);
@@ -100,11 +95,10 @@ public class GlobalInterceptorKit {
         ValidateKit.resolveComVars((ValidateComVars) annotation, ai);
         annotation = controllerMethod.getAnnotation(ValidateComVar.class);
         ValidateKit.resolveComVar((ValidateComVar) annotation, ai);
-
         annotation = controllerMethod.getAnnotation(ValidateParams.class);
-
+        ValidateKit.resolveParameters((ValidateParams) annotation, ai);
         annotation = controllerMethod.getAnnotation(ValidateParam.class);
-
+        ValidateKit.resolveParameter((ValidateParam) annotation, ai);
         return;
     }
 
@@ -116,29 +110,10 @@ public class GlobalInterceptorKit {
      * @param ai
      * @throws Lc4eException
      */
-    public static void handleAnnotationsOnControllerMethod(Invocation ai) throws Lc4eException {
-        Method controllerMethod = ai.getMethod();
-        Annotation[] ans = controllerMethod.getAnnotations();
-        HttpServletRequest request = ai.getController().getRequest();
-        HttpServletResponse response = ai.getController().getResponse();
-
-        for (Annotation an : ans) {
-            resolveAnnotationOnControllerAction(request, response, an.annotationType(), an);
-        }
+    public static void handleAnnotationsOnControllerMethod(Invocation ai) throws InvocationTargetException, NoSuchMethodException, ValidateException, IllegalAccessException, NoSuchFieldException, Lc4eException, ParseException {
+        handleRequiredCondition(ai);
     }
 
-    public static void resolveAnnotationOnControllerAction(HttpServletRequest request, HttpServletResponse response, Class<? extends Annotation> type, Annotation an) throws Lc4eException {
-        if (type == ActionKey.class || type == RequestMethod.class || type == RequestHeader.class) {
-            return;
-        } else if (type == ResponseStatus.class) {
-            ResponseStatus status = (ResponseStatus) an;
-            response.setStatus(status.value().toInteger());
-        } else if (type == SetComVar.class) {
-
-        } else if (type == SetUIData.class) {
-
-        }
-    }
 
     public static void handleInject(Invocation ai) throws IllegalAccessException {
         Controller controller = ai.getController();

@@ -1,14 +1,12 @@
 package com.teddy.lc4e.core.web.controller;
 
 import com.jfinal.core.ActionKey;
-
-
-import com.jfinal.plugin.ehcache.CacheName;
+import com.teddy.jfinal.Exceptions.Lc4eException;
 import com.teddy.jfinal.annotation.Controller;
 import com.teddy.jfinal.annotation.Inject;
+import com.teddy.jfinal.annotation.ValidateParam;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.lc4e.core.web.service.testService;
-import com.teddy.jfinal.Exceptions.Lc4eException;
 
 
 /**
@@ -29,6 +27,7 @@ public class ViewController extends BaseController {
     }
 
     @ActionKey("nulltest")
+    @ValidateParam(value = "a", type = int.class, maxInt = 10, minInt = 3)
     public void nulltest() {
         if (getParaToInt("a") == 1) {
             throw new NullPointerException("test null ");

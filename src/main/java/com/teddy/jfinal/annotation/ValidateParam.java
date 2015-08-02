@@ -12,18 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ValidateParam {
 
-    /**
-     * index first
-     *
-     * @return
-     */
-    int index() default -1;
-
-    /**
-     * field name if index == -1 ,it's necessary
-     *
-     * @return
-     */
     String value() default Const.DEFAULT_NONE;
 
     Class type() default String.class;
@@ -38,7 +26,11 @@ public @interface ValidateParam {
     /**
      * validate parameter is not null
      */
-    boolean required() default false;
+    boolean required() default true;
+
+    int minInt() default -1;
+
+    int maxInt() default -1;
 
     /**
      * max length of string
@@ -68,6 +60,8 @@ public @interface ValidateParam {
     String minDate() default Const.DEFAULT_NONE;
 
     String maxDate() default Const.DEFAULT_NONE;
+
+    String DateFormatter() default Const.FORMAT_DATE;
 
     /**
      * unit B

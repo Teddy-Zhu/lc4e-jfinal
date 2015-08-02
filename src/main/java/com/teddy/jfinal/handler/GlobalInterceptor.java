@@ -20,7 +20,6 @@ public class GlobalInterceptor implements Interceptor {
         try {
             GlobalInterceptorKit.handleAOPMethods(ai, Const.BEFORE_INTERCEPT);
 
-
             GlobalInterceptorKit.handleAnnotationsOnControllerMethod(ai);
 
             GlobalInterceptorKit.handleInject(ai);
