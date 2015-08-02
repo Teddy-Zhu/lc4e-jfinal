@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler.support;
+package com.teddy.jfinal.handler;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
@@ -14,14 +14,14 @@ import java.lang.reflect.Method;
 /**
  * Created by teddy on 2015/7/28.
  */
-public class TransactionKit implements MethodInterceptor {
+public class TransactionHelper implements MethodInterceptor {
 
     private Object target;
 
-    public TransactionKit() {
+    public TransactionHelper() {
     }
 
-    public TransactionKit(Object target) {
+    public TransactionHelper(Object target) {
         this.target = target;
     }
 
@@ -44,7 +44,7 @@ public class TransactionKit implements MethodInterceptor {
 
         Enhancer en = new Enhancer();
         en.setSuperclass(target.getClass());
-        en.setCallback(new TransactionKit(target));
+        en.setCallback(new TransactionHelper(target));
         proxy = en.create();
 
         return (T) proxy;
@@ -57,7 +57,7 @@ public class TransactionKit implements MethodInterceptor {
         try {
             Enhancer en = new Enhancer();
             en.setSuperclass(targetClass.getClass());
-            en.setCallback(new TransactionKit(targetClass.newInstance()));
+            en.setCallback(new TransactionHelper(targetClass.newInstance()));
             proxy = en.create();
         } catch (InstantiationException e) {
             e.printStackTrace();

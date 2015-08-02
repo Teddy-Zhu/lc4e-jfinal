@@ -12,10 +12,10 @@ import java.util.Date;
 /**
  * Created by teddy on 2015/7/25.
  */
-public class DBHelper implements MethodInterceptor {
+public class DateSetterHelper implements MethodInterceptor {
     private Object target;
 
-    public DBHelper(Object target) {
+    public DateSetterHelper(Object target) {
         this.target = target;
     }
 
@@ -41,7 +41,7 @@ public class DBHelper implements MethodInterceptor {
         try {
             Enhancer en = new Enhancer();
             en.setSuperclass(targetClass);
-            en.setCallback(new DBHelper(targetClass.newInstance()));
+            en.setCallback(new DateSetterHelper(targetClass.newInstance()));
             proxy = en.create();
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class DBHelper implements MethodInterceptor {
 
         Enhancer en = new Enhancer();
         en.setSuperclass(target.getClass());
-        en.setCallback(new DBHelper(target));
+        en.setCallback(new DateSetterHelper(target));
         proxy = en.create();
 
         return (T) proxy;

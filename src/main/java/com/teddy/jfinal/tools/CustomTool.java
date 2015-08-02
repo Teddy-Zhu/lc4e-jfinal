@@ -1,13 +1,14 @@
 package com.teddy.jfinal.tools;
 
 import com.teddy.jfinal.annotation.Model;
+import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.handler.DBHelper;
-import com.teddy.jfinal.handler.support.TransactionKit;
+import com.teddy.jfinal.handler.TransactionHelper;
 
 /**
  * Created by teddy on 2015/7/26.
  */
-public class DBTool {
+public class CustomTool {
 
     public static <T> T auto(Class<T> target) {
         if (target.isAnnotationPresent(Model.class)) {
@@ -33,11 +34,19 @@ public class DBTool {
     }
 
     public static <T> T transaction(T target) {
-        return TransactionKit.Proxy(target);
+        return TransactionHelper.Proxy(target);
     }
 
     public static <T> T transaction(Class<T> target) {
-        return TransactionKit.Proxy(target);
+        return TransactionHelper.Proxy(target);
+    }
+
+    public static <T> T custom(T target) {
+        return CustomInterceptor.Proxy(target);
+    }
+
+    public static <T> T custom(Class<T> target) {
+        return CustomInterceptor.Proxy(target);
     }
 
 }
