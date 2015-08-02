@@ -1,7 +1,8 @@
 package com.teddy.jfinal.tools;
 
-import com.teddy.jfinal.plugin.PropPlugin;
+import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.plugin.PropPlugin;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
@@ -321,5 +322,9 @@ public class StringTool {
             if (i < len - 1) str_buff.append(flag);
         }
         return str_buff.toString();
+    }
+
+    public static boolean equalEmpty(String txt) {
+        return "".equals(txt.trim()) || Const.DEFAULT_NONE.equals(txt.trim());
     }
 }

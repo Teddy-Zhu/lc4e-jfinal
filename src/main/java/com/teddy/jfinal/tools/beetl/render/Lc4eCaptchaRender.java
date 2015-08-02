@@ -15,11 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 验证码
- *
- * @author 董华健
- */
+
 public class Lc4eCaptchaRender extends Render {
 
     private static Logger log = Logger.getLogger(Lc4eCaptchaRender.class);

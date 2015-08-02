@@ -6,7 +6,6 @@ import com.teddy.jfinal.annotation.Transaction;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
-import com.teddy.jfinal.handler.support.TransactionKit;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
@@ -54,7 +53,7 @@ public class CustomInterceptor implements MethodInterceptor {
         Class clz = ((obj.getClass().getName().indexOf("EnhancerByCGLIB") == -1 ? obj.getClass() : obj.getClass().getSuperclass()));
 
         if (method.isAnnotationPresent(Transaction.class)) {
-            Object transObj = TransactionKit.Proxy(this.target);
+            Object transObj = TransactionHelper.Proxy(this.target);
             GlobalInterceptorKit.Inject(transObj, clz);
             returnValue = methodProxy.invoke(transObj, objects);
         } else {
@@ -86,5 +85,17 @@ public class CustomInterceptor implements MethodInterceptor {
         return (T) proxy;
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T Proxy(T target) {
+        if (null == target) return null;
+        Object proxy = null;
+
+        Enhancer en = new Enhancer();
+        en.setSuperclass(target.getClass());
+        en.setCallback(new CustomInterceptor(target));
+        proxy = en.create();
+
+        return (T) proxy;
+    }
 
 }

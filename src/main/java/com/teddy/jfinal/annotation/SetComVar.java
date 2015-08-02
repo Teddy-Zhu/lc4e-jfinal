@@ -1,7 +1,5 @@
 package com.teddy.jfinal.annotation;
 
-import com.teddy.jfinal.common.Const;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,8 +12,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface SetComVar {
 
-    String[] comVar() default {};
+    String[] value() default {};
 
-    String cacheName() default Const.COMVAR;
+    String[] attrName() default {};
+
 }
 

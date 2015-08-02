@@ -3,7 +3,7 @@ package com.teddy.lc4e.core.web.service;
 import com.teddy.jfinal.annotation.Inject;
 import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.annotation.Transaction;
-import com.teddy.jfinal.Exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.Lc4eException;
 
 /**
  * Created by teddy on 2015/7/24.

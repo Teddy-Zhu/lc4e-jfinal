@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.web.controller;
 
 import com.jfinal.core.ActionKey;
-import com.teddy.jfinal.Exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.annotation.Controller;
 import com.teddy.jfinal.annotation.Inject;
 import com.teddy.jfinal.annotation.ValidateParam;

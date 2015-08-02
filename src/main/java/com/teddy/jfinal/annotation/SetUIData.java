@@ -12,14 +12,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface SetUIData {
 
-    String functionName() default "";
+    Class methodClass();
 
-    String attributeName() default "";
+    /**
+     * the method parameter must be Invocation
+     *
+     * @return
+     */
+    String methodName();
 
-    int[] useVarIndex() default {};
-
-    String cacheName() default "data";
-
-    String key() default "";
+    String attrName();
 
 }

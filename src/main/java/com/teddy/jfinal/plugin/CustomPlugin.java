@@ -8,7 +8,7 @@ import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
-import com.teddy.jfinal.Exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;

@@ -2,8 +2,8 @@ package com.teddy.jfinal.tools;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Model;
-import com.teddy.jfinal.Exceptions.Lc4eException;
-import com.teddy.jfinal.Exceptions.ReflectException;
+import com.teddy.jfinal.exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.ReflectException;
 import com.teddy.jfinal.common.Const;
 
 import javax.servlet.http.HttpServletRequest;
@@ -548,5 +548,14 @@ public class ReflectTool {
             map.put(key[i], new String[]{value[i]});
         }
 
+    }
+
+    public static Map<Class<? extends Annotation>, Annotation> getAnnotationsMap(Method method) {
+        Map<Class<? extends Annotation>, Annotation> ret = new HashMap<>();
+        Annotation[] ans = method.getAnnotations();
+        for (int i = 0, len = ans.length; i < len; i++) {
+            ret.put(ans[i].getClass(), ans[i]);
+        }
+        return ret;
     }
 }

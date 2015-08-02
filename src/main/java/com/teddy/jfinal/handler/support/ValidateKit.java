@@ -4,12 +4,13 @@ import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.StrKit;
 import com.jfinal.upload.UploadFile;
-import com.teddy.jfinal.Exceptions.Lc4eException;
-import com.teddy.jfinal.Exceptions.ValidateException;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.FileType;
+import com.teddy.jfinal.exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.ValidateException;
 import com.teddy.jfinal.tools.ReflectTool;
+import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.core.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.core.web.service.ComVarService;
@@ -109,9 +110,8 @@ class ValidateKit {
         if (comVars == null) {
             return;
         }
-        ValidateComVar[] validateComVars = comVars.fields();
-        for (int i = 0, len = validateComVars.length; i < len; i++) {
-            ValidateException e = resolveComVar(validateComVars[i], invocation);
+        for (int i = 0, len = comVars.fields().length; i < len; i++) {
+            ValidateException e = resolveComVar(comVars.fields()[i], invocation);
             if (e != null) {
                 throw e;
             }
@@ -123,10 +123,10 @@ class ValidateKit {
         if (comVar == null) {
             return null;
         }
-        if (comVar.name().equals(Const.DEFAULT_NONE) || comVar.value().equals(Const.DEFAULT_NONE)) {
-            throw  new ValidateException("Parameter field in invalid!");
+        if (StringTool.equalEmpty(comVar.name()) || StringTool.equalEmpty(comVar.value())) {
+            throw new ValidateException("Parameter field in invalid!");
         }
-        Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.name()).get(T_Sys_Common_Variable.VALUE);
+        Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.name());
         if (variable == null) {
             throw new ValidateException("No ComVar Record Found in Database or Cache");
         } else if (!variable.get(T_Sys_Common_Variable.VALUE).equals(comVar.value())) {

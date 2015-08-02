@@ -2,12 +2,12 @@ package com.teddy.jfinal.handler.support;
 
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
-import com.teddy.jfinal.Exceptions.Lc4eException;
-import com.teddy.jfinal.Exceptions.ValidateException;
 import com.teddy.jfinal.annotation.*;
+import com.teddy.jfinal.exceptions.AutoSetterException;
+import com.teddy.jfinal.exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.ValidateException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.plugin.CustomPlugin;
-import com.teddy.jfinal.tools.ReflectTool;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.ParseException;
+import java.util.Map;
 
 /**
  * Created by teddy on 2015/7/20.
@@ -77,31 +78,6 @@ public class GlobalInterceptorKit {
         }
     }
 
-    private static void handleRequiredCondition(Invocation ai) throws Lc4eException, ValidateException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, ParseException {
-        Method controllerMethod = ai.getMethod();
-        HttpServletRequest request = ai.getController().getRequest();
-        Annotation annotation = null;
-        //resovle require header or method
-        annotation = ReflectTool.getAnnotationByMethod(controllerMethod, RequestMethod.class);
-        if (annotation != null && !((RequestMethod) annotation).value().equals(request.getMethod())) {
-            // controller.renderError(404);
-            throw new Lc4eException("404");
-        }
-        annotation = controllerMethod.getAnnotation(RequestHeader.class);
-        ValidateKit.resolveRequestHeader((RequestHeader) annotation, ai);
-        annotation = controllerMethod.getAnnotation(ValidateToken.class);
-        ValidateKit.resolveToken((ValidateToken) annotation, ai);
-        annotation = controllerMethod.getAnnotation(ValidateComVars.class);
-        ValidateKit.resolveComVars((ValidateComVars) annotation, ai);
-        annotation = controllerMethod.getAnnotation(ValidateComVar.class);
-        ValidateKit.resolveComVar((ValidateComVar) annotation, ai);
-        annotation = controllerMethod.getAnnotation(ValidateParams.class);
-        ValidateKit.resolveParameters((ValidateParams) annotation, ai);
-        annotation = controllerMethod.getAnnotation(ValidateParam.class);
-        ValidateKit.resolveParameter((ValidateParam) annotation, ai);
-        return;
-    }
-
     /**
      * resolve annotation on controller method
      * like RequestMethod ,ResponseStatus,RequestHeader
@@ -110,8 +86,29 @@ public class GlobalInterceptorKit {
      * @param ai
      * @throws Lc4eException
      */
-    public static void handleAnnotationsOnControllerMethod(Invocation ai) throws InvocationTargetException, NoSuchMethodException, ValidateException, IllegalAccessException, NoSuchFieldException, Lc4eException, ParseException {
-        handleRequiredCondition(ai);
+    public static void handleAnnotationsOnControllerMethod(Invocation ai, Map<Class<? extends Annotation>, Annotation> ans) throws InvocationTargetException, NoSuchMethodException, ValidateException, IllegalAccessException, NoSuchFieldException, Lc4eException, ParseException {
+        Method controllerMethod = ai.getMethod();
+        HttpServletRequest request = ai.getController().getRequest();
+        Annotation annotation = null;
+        //resovle require header or method
+        annotation = ans.get(RequestHeader.class);
+        if (annotation != null && !((RequestMethod) annotation).value().equals(request.getMethod())) {
+            // controller.renderError(404);
+            throw new Lc4eException("404");
+        }
+        annotation = ans.get(RequestHeader.class);
+        ValidateKit.resolveRequestHeader((RequestHeader) annotation, ai);
+        annotation = ans.get(ValidateToken.class);
+        ValidateKit.resolveToken((ValidateToken) annotation, ai);
+        annotation = ans.get(ValidateComVars.class);
+        ValidateKit.resolveComVars((ValidateComVars) annotation, ai);
+        annotation = ans.get(ValidateComVar.class);
+        ValidateKit.resolveComVar((ValidateComVar) annotation, ai);
+        annotation = ans.get(ValidateParams.class);
+        ValidateKit.resolveParameters((ValidateParams) annotation, ai);
+        annotation = ans.get(ValidateParam.class);
+        ValidateKit.resolveParameter((ValidateParam) annotation, ai);
+        return;
     }
 
 
@@ -140,5 +137,22 @@ public class GlobalInterceptorKit {
         }
     }
 
+    public static void handleOtherAnnotataion(Invocation ai, Map<Class<? extends Annotation>, Annotation> ans) throws AutoSetterException, Lc4eException {
+        Method controllerMethod = ai.getMethod();
+        HttpServletRequest request = ai.getController().getRequest();
+        Annotation annotation = null;
+        //resovle require header or method
+        annotation = ans.get(ResponseStatus.class);
+        if (annotation != null) {
+            ai.getController().getResponse().setStatus(((ResponseStatus) annotation).value().toInteger());
+        }
+        annotation = ans.get(SetComVar.class);
+        AttributeKit.setComVar((SetComVar) annotation, ai);
+        annotation = ans.get(SetUIDatas.class);
+        AttributeKit.setUIDatas((SetUIDatas) annotation, ai);
+        annotation = ans.get(SetUIData.class);
+        AttributeKit.setUIData((SetUIData) annotation, ai);
+
+    }
 
 }

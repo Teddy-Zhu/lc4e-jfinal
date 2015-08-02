@@ -2,7 +2,7 @@ package com.teddy.jfinal.tools;
 
 import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.handler.CustomInterceptor;
-import com.teddy.jfinal.handler.DBHelper;
+import com.teddy.jfinal.handler.DateSetterHelper;
 import com.teddy.jfinal.handler.TransactionHelper;
 
 /**
@@ -12,7 +12,7 @@ public class CustomTool {
 
     public static <T> T auto(Class<T> target) {
         if (target.isAnnotationPresent(Model.class)) {
-            return DBHelper.Proxy(target);
+            return DateSetterHelper.Proxy(target);
         } else {
             try {
                 return target.newInstance();
@@ -27,7 +27,7 @@ public class CustomTool {
 
     public static <T> T auto(T target) {
         if (target.getClass().isAnnotationPresent(Model.class)) {
-            return DBHelper.Proxy(target);
+            return DateSetterHelper.Proxy(target);
         } else {
             return target;
         }
