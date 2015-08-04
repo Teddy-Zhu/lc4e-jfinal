@@ -29,6 +29,14 @@ import java.util.regex.Pattern;
  */
 class ValidateKit {
 
+
+    public static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws ValidateException {
+        if (method != null && !method.value().toString().equals(invocation.getController().getRequest().getMethod().toUpperCase())) {
+            // controller.renderError(404);
+            throw new ValidateException("404");
+        }
+    }
+
     /**
      * validate request header
      *
@@ -129,8 +137,8 @@ class ValidateKit {
         Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.name());
         if (variable == null) {
             throw new ValidateException("No ComVar Record Found in Database or Cache");
-        } else if (!variable.get(T_Sys_Common_Variable.VALUE).equals(comVar.value())) {
-            throw new ValidateException(variable.get(T_Sys_Common_Variable.ERROR));
+        } else if (!variable.get(T_Sys_Common_Variable.value).equals(comVar.value())) {
+            throw new ValidateException(variable.get(T_Sys_Common_Variable.error));
         }
         return null;
     }

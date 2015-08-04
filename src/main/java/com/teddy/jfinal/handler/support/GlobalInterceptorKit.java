@@ -91,11 +91,8 @@ public class GlobalInterceptorKit {
         HttpServletRequest request = ai.getController().getRequest();
         Annotation annotation = null;
         //resovle require header or method
-        annotation = ans.get(RequestHeader.class);
-        if (annotation != null && !((RequestMethod) annotation).value().equals(request.getMethod())) {
-            // controller.renderError(404);
-            throw new Lc4eException("404");
-        }
+        annotation = ans.get(RequestMethod.class);
+        ValidateKit.resolveRequestMethod((RequestMethod) annotation, ai);
         annotation = ans.get(RequestHeader.class);
         ValidateKit.resolveRequestHeader((RequestHeader) annotation, ai);
         annotation = ans.get(ValidateToken.class);

@@ -83,9 +83,10 @@ public class GenerateDB {
             for (int i = 0, len = model.getFields().size(); i < len; i++) {
                 sb.append(model.getRemarks().get(i));
                 sb.append("    public static final String " + model.getFields().get(i).toUpperCase() + " = \"" + model.getTableName() + "." + model.getFields().get(i) + "\";\n\n");
+                sb.append("    public static final String " + model.getFields().get(i) + " = \"" + model.getFields().get(i) + "\";\n\n");
             }
             sb.append("    public static final String ALL_FIELDS = \"" + model.getTableName() + ".*\";\n\n");
-            sb.append("    public static final String Table_NAME = \"" + model.getTableName() + "\";\n\n");
+            sb.append("    public static final String TABLE_NAME = \"" + model.getTableName() + "\";\n\n");
 
             sb.append("}");
             out.write(sb.toString().getBytes("utf-8"));

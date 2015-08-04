@@ -2,11 +2,11 @@ package com.teddy.jfinal.tools;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Model;
+import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.exceptions.ReflectException;
-import com.teddy.jfinal.common.Const;
+import org.eclipse.jetty.server.Request;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
@@ -496,27 +496,8 @@ public class ReflectTool {
 
     public static void setParameter(String key, String value, Controller controller) throws NoSuchFieldException, IllegalAccessException {
 
-        HttpServletRequest innerRequest = controller.getRequest();
-        Field field = innerRequest.getClass().getDeclaredField("parametersParsed");
-        field.setAccessible(true);
-        field.setBoolean(innerRequest, false);
-
-
-        Field coyoteRequestField = innerRequest.getClass().getDeclaredField("coyoteRequest");
-        coyoteRequestField.setAccessible(true);
-        Object coyoteRequestObject = coyoteRequestField.get(innerRequest);
-
-
-        Field parametersField = coyoteRequestObject.getClass().getDeclaredField("parameters");
-        parametersField.setAccessible(true);
-        Object parameterObject = parametersField.get(coyoteRequestObject);
-
-        Field hashTabArrField = parameterObject.getClass().getDeclaredField("paramHashStringArray");
-        hashTabArrField.setAccessible(true);
-
-        Map<String, String[]> map = (Map<String, String[]>) hashTabArrField.get(parameterObject);
-        map.put(key, new String[]{value});
-
+        Request innerRequest = (Request) controller.getRequest();
+        innerRequest.getParameters().put(key, value);
     }
 
 
@@ -525,27 +506,10 @@ public class ReflectTool {
         if (key.length != value.length) {
             return;
         }
-        HttpServletRequest innerRequest = controller.getRequest();
-        Field field = innerRequest.getClass().getDeclaredField("parametersParsed");
-        field.setAccessible(true);
-        field.setBoolean(innerRequest, false);
+        Request innerRequest = (Request) controller.getRequest();
 
-
-        Field coyoteRequestField = innerRequest.getClass().getDeclaredField("coyoteRequest");
-        coyoteRequestField.setAccessible(true);
-        Object coyoteRequestObject = coyoteRequestField.get(innerRequest);
-
-
-        Field parametersField = coyoteRequestObject.getClass().getDeclaredField("parameters");
-        parametersField.setAccessible(true);
-        Object parameterObject = parametersField.get(coyoteRequestObject);
-
-        Field hashTabArrField = parameterObject.getClass().getDeclaredField("paramHashStringArray");
-        hashTabArrField.setAccessible(true);
-
-        Map<String, String[]> map = (Map<String, String[]>) hashTabArrField.get(parameterObject);
         for (int i = 0, len = key.length; i < len; i++) {
-            map.put(key[i], new String[]{value[i]});
+            innerRequest.getParameters().put(key[i], value[i]);
         }
 
     }
@@ -554,7 +518,7 @@ public class ReflectTool {
         Map<Class<? extends Annotation>, Annotation> ret = new HashMap<>();
         Annotation[] ans = method.getAnnotations();
         for (int i = 0, len = ans.length; i < len; i++) {
-            ret.put(ans[i].getClass(), ans[i]);
+            ret.put(ans[i].annotationType(), ans[i]);
         }
         return ret;
     }

@@ -31,6 +31,7 @@ public class GlobalInterceptor implements Interceptor {
 
             ai.invoke();
             // set other attr
+            GlobalInterceptorKit.handleOtherAnnotataion(ai, ans);
 
             GlobalInterceptorKit.handleAOPMethods(ai, Const.AFTER_INTERCEPT);
         } catch (Exception e) {

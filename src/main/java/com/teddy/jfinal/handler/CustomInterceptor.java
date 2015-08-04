@@ -32,14 +32,18 @@ public class CustomInterceptor implements MethodInterceptor {
         boolean useCache = false;
         Object cacheKey = null;
         Cache cache = ReflectTool.getAnnotationByMethod(method, Cache.class);
-        useCache = cache != null && PropPlugin.getValueToBoolean(Dict.CACHE_USE, true);
+        useCache = cache != null && PropPlugin.getValueToBoolean(Dict.CACHE_USE, true) && cache.index() < objects.length;
         if (useCache) {
             cacheKey = cache.index() == -1 ? cache.key() : objects[cache.index()];
             if (cacheKey.getClass().isArray()) {
                 cacheKey = StringTool.join((String[]) cacheKey, ",");
             } else if (cacheKey instanceof List) {
                 cacheKey = StringTool.join((List<String>) cacheKey, ",");
+            } else {
+                cacheKey = cacheKey.toString();
             }
+
+            cacheKey = method.getName() + cacheKey;
 
             returnValue = CacheKit.get(cache.cacheName(), cacheKey);
             if (returnValue != null) {

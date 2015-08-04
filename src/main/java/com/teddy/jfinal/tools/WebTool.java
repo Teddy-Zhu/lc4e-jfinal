@@ -1,5 +1,6 @@
 package com.teddy.jfinal.tools;
 
+import com.jfinal.kit.StrKit;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.Cookie;
@@ -192,5 +193,10 @@ public class WebTool {
         sourcestr = sourcestr.replaceAll("<br>", "\r");// 回车
         sourcestr = sourcestr.replaceAll("<br>", "\n");// 换行
         return sourcestr;
+    }
+
+    public static boolean isPJAX(HttpServletRequest request) {
+        String pjax = request.getHeader("X-PJAX");
+        return StrKit.notBlank(pjax) && Boolean.valueOf(pjax).equals(true);
     }
 }

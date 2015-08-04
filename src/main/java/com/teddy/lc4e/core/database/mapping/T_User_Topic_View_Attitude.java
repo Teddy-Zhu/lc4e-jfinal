@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/07/29.
+ * Created by lc4e Tool on 15/08/02.
  */
 public class T_User_Topic_View_Attitude {
     /**
@@ -11,12 +11,16 @@ public class T_User_Topic_View_Attitude {
      */
     public static final String ID = "user_topic_view_attitude.id";
 
+    public static final String id = "id";
+
     /**
      * 
      * Type:INT
      * Remarks:
      */
     public static final String TOPICID = "user_topic_view_attitude.topicId";
+
+    public static final String topicId = "topicId";
 
     /**
      * 
@@ -25,12 +29,16 @@ public class T_User_Topic_View_Attitude {
      */
     public static final String USERID = "user_topic_view_attitude.userId";
 
+    public static final String userId = "userId";
+
     /**
      * 
      * Type:INT
      * Remarks:0-default,1-agree,-1-disagree
      */
     public static final String ATTITUDE = "user_topic_view_attitude.attitude";
+
+    public static final String attitude = "attitude";
 
     /**
      * 
@@ -39,6 +47,8 @@ public class T_User_Topic_View_Attitude {
      */
     public static final String CREATETIME = "user_topic_view_attitude.createTime";
 
+    public static final String createTime = "createTime";
+
     /**
      * 
      * Type:DATETIME
@@ -46,8 +56,10 @@ public class T_User_Topic_View_Attitude {
      */
     public static final String UPDAETIME = "user_topic_view_attitude.updaeTime";
 
+    public static final String updaeTime = "updaeTime";
+
     public static final String ALL_FIELDS = "user_topic_view_attitude.*";
 
-    public static final String Table_NAME = "user_topic_view_attitude";
+    public static final String TABLE_NAME = "user_topic_view_attitude";
 
 }

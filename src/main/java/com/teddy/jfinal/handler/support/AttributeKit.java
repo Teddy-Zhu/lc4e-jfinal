@@ -1,6 +1,7 @@
 package com.teddy.jfinal.handler.support;
 
 import com.jfinal.aop.Invocation;
+import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.annotation.SetComVar;
 import com.teddy.jfinal.annotation.SetUIData;
 import com.teddy.jfinal.annotation.SetUIDatas;
@@ -39,7 +40,12 @@ public class AttributeKit {
             throw new AutoSetterException("The method [" + uiData.methodName() + "] can not found in Class [" + uiData.methodClass().toString() + "]");
         }
         try {
-            returnValue = method.invoke(CustomTool.custom(uiData.methodClass().newInstance()), ai);
+            Object obj = uiData.methodClass().newInstance();
+            if (method.getParameterCount() > 0) {
+                returnValue = method.invoke(uiData.methodClass().isAnnotationPresent(Service.class) ? CustomTool.custom(obj) : obj, ai);
+            } else {
+                returnValue = method.invoke(uiData.methodClass().isAnnotationPresent(Service.class) ? CustomTool.custom(obj) : obj);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new AutoSetterException("Call method [" + uiData.methodName() + "] failed");
@@ -66,8 +72,8 @@ public class AttributeKit {
             if (variable == null) {
                 throw new AutoSetterException("No ComVar Record Found in Database or Cache");
             } else {
-                ai.getController().setAttr(StringTool.equalEmpty(comVar.attrName()[i]) ?
-                        comVar.value()[i] : comVar.attrName()[i], variable.get(T_Sys_Common_Variable.VALUE));
+                ai.getController().setAttr(comVar.attrName().length == 0 ? comVar.value()[i] : StringTool.equalEmpty(comVar.attrName()[i]) ?
+                        comVar.value()[i] : comVar.attrName()[i], variable.get(T_Sys_Common_Variable.value));
             }
         }
     }

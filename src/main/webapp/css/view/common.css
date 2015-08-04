@@ -1,0 +1,380 @@
+body {
+    overflow-x: hidden;
+}
+
+/* header */
+#menu, #menu > .column {
+    -webkit-transition: padding 0.3s ease, background-color 0.2s ease;
+    transition: padding 0.3s ease, background-color 0.2s ease;
+}
+
+#menu .ui.dropdown {
+    z-index: 500;
+}
+
+#menu.fixed > .column {
+    padding: .5rem 12% .5rem 12%;
+}
+
+#menu.expended > .column {
+    padding-left: 5em;
+    padding-right: 5em;
+}
+
+#menu .ui.animated.button .visible.content {
+    margin-right: .5em;
+}
+
+#menu .ui.animated.button .hidden.content .icon {
+    margin-right: -.5em;
+}
+
+#menu .ui.dropdown .menu .menu, #menu.ui.dropdown .menu .menu {
+    margin: 0 !important;
+}
+
+#menu.fixed {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.25);
+}
+
+#menu .left.menu .item:hover {
+    color: teal;
+    background-color: #DADADA;
+}
+
+#menu .left.menu > a.item, #menu .left.menu > div.item {
+    border-radius: 0.25em !important;
+}
+
+#menu > .column {
+    width: 100%;
+    padding: 1rem 12% 1rem 12%;
+}
+
+#menu .left.menu {
+    float: left;
+}
+
+#menu .right.menu {
+    float: right;
+}
+
+#menu > .column .left.menu > img {
+    width: 2.8rem;
+    padding: 0px;
+    margin-right: 10px;
+}
+
+#menu .ui.headered.image {
+    width: 3em;
+    border-radius: .25rem;
+    -webkit-transition: width 0.2s ease, height 0.2s ease;
+    transition: width 0.2s ease, height 0.2s ease;
+}
+
+/* header user card*/
+
+#userCardPop {
+    padding: 0 0;
+}
+
+#userCard {
+    box-shadow: none;
+}
+
+#menu .item:before {
+    content: initial;
+}
+
+#userItem > .ui.tiny.attached.label {
+    padding: .1em .3em;
+}
+
+#userItem {
+    padding: 0 0 0 0;
+}
+
+#userCard > .content > .header {
+    text-align: center;
+}
+
+#userCard .description .item {
+    display: inline-block;
+}
+
+#userCard .description .item a.label {
+    padding: .1em .35em;
+}
+
+#userCard > .content > .description {
+    padding: 0 2.1em 0 2.1em;
+}
+
+#userCard > .content > .description > .ui.divided.items > .item {
+    padding: .4em 0 .4em;
+    color: black;
+}
+
+#userItem > img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#userItem > .ui.label {
+    cursor: pointer;
+}
+
+/* header search*/
+#searchSite {
+    -webkit-transition: width 0.5s ease;
+    transition: width 0.5s ease;
+}
+
+#searchSite {
+    width: 10em;
+}
+
+#searchSite.expended {
+    width: 20em;
+}
+
+/* header expend button*/
+#expendHeader .icon {
+    margin: 0 0 0;
+}
+
+#expendHeader .ui.label {
+    padding: .3em .5em;
+}
+
+/* footer */
+
+.ui.footer.segment {
+    border-radius: 0em;
+    padding: 4em 8% 2em 8%;
+    margin-top: 1%;
+    -webkit-transition: padding 0.5s ease;
+    transition: padding 0.5s ease;
+}
+
+.ui.footer.segment.fixed {
+    padding-top: 1em;
+    padding-bottom: 0em;
+    z-index: 101;
+    margin: 0;
+    border: none;
+    bottom: 0px;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    box-shadow: 0px -2px 3px rgba(0, 0, 0, 0.04);
+    position: fixed;
+}
+
+/*main*/
+#mainContent {
+    -webkit-transition: height 0.3s ease, background 0.3s ease, border 0.4s ease, box-shadow 0.4s ease;
+    transition: height 0.3s ease, background 0.3s ease, border 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* go top icon */
+#GTTop {
+    position: fixed;
+    bottom: 14%;
+    z-index: 1000;
+    right: 8%;
+    display: none;
+}
+
+/* media */
+
+@media screen and (min-width: 1200px) {
+
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+
+}
+
+@media screen and ( min-width: 769px) {
+    .hidden-pc {
+        display: none !important;
+    }
+}
+
+@media screen and ( max-width: 768px) {
+
+    #GTTop {
+        right: 2%;
+        bottom: 6%;
+    }
+
+    .hidden-mb {
+        display: none !important;
+    }
+
+    /* for header menu*/
+    #menu > .column > .hidden-pc > .item:before {
+        width: 0;
+    }
+
+    #menu {
+        display: block;
+        width: 100% !important;
+    }
+
+    #menu .left.menu, #menu .right.menu {
+        float: none;
+        display: block;
+    }
+
+    #menu > .column, #menu.fixed > .column {
+        padding: 0;
+    }
+
+    #menu {
+        display: block;
+        background: #ffffff;
+        margin: 0;
+    }
+
+    #menu .allmenus.menuhidden, #menu .allmenus.menuhidden {
+        display: none !important;
+    }
+
+    /*--- Item ---*/
+    #menu .item {
+        display: block;
+        padding: 1em 2em;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    /*--- Label ---*/
+    #menu .item > .label {
+        float: right;
+        text-align: center;
+    }
+
+    /*--- Icon ---*/
+    #menu .item > i.icon {
+        width: 1.18em;
+        float: right;
+        margin: 0em 0em 0em 0.5em;
+    }
+
+    #menu .item > .label + i.icon {
+        float: none;
+        margin: 0em 0.5em 0em 0em;
+    }
+
+    /*--- Border ---*/
+    #menu .item:before {
+        position: absolute;
+        content: '';
+        top: 0%;
+        left: 0px;
+        width: 100%;
+        background: rgba(34, 36, 38, 0.1);
+        height: 1px;
+    }
+
+    #menu .item:first-child:before {
+        display: none !important;
+    }
+
+    /*--- Sub Menu ---*/
+    #menu .menu .menu {
+        left: 0 !important;
+        margin: 0 !important;
+        top: 100% !important;
+    }
+
+    #menu .ui.dropdown .menu .item .dropdown.icon:before {
+        content: '\f0d7';
+    }
+
+    #menu .dropdown.item > .dropdown.icon:before {
+        content: '\f0d7';
+    }
+
+    /*footer*/
+    .ui.footer.segment {
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+}
+
+/* config tool */
+#config-tool {
+    position: fixed;
+    right: 0;
+    top: 100px;
+    width: 230px;
+    z-index: 1000;
+    -webkit-transition: all 0.2s ease-in-out 0s;
+    transition: all 0.2s ease-in-out 0s;
+}
+
+#config-tool.closed {
+    right: -230px;
+}
+
+#config-tool #config-tool-cog {
+    background: #fff;
+    border-radius: 3px 0 0 3px;
+    background-clip: padding-box;
+    box-shadow: -3px 3px 3px -2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    left: -3rem;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    width: 50px;
+    -webkit-transition: left 0.1s ease;
+    transition: left 0.1s ease;
+    margin: 1rem 0;
+}
+
+#config-tool #config-tool-options {
+    background: #fff;
+    box-shadow: -3px 3px 3px -2px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    position: static;
+}
+
+#config-tool-options .angle.double.left.icon {
+    float: right;
+    line-height: 0.9;
+}
+
+#config-tool-options .ui.list .item .angle.double.right.icon {
+    display: inline;
+}
+
+/* other common css*/
+.linked {
+    cursor: pointer;
+}
+
+/*common label*/
+.ui.transparent.label {
+    background: transparent;
+}
+
+.ui.white.label {
+    background-color: white;
+}
+
+/* nobox for segment */
+.ui.nobox.segment {
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+}
