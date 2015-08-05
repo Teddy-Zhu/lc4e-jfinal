@@ -6,8 +6,13 @@ import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.JFinalConfig;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.tools.beetl.render.Lc4eBeetlRenderFactory;
+import com.teddy.lc4e.core.web.service.ComVarService;
+import com.teddy.lc4e.core.web.service.MenuService;
 import org.apache.log4j.Logger;
 import org.beetl.core.GroupTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by teddy on 2015/7/18.
@@ -60,5 +65,9 @@ public class Config implements JFinalConfig {
     }
 
     public void afterJFinalStart() {
+        Map<String,Object> maps = new HashMap<>();
+        maps.put("SiteName", ComVarService.service.getComVarValueByName("SiteName"));
+        maps.put("menulist",MenuService.service.getMenuTree());
+        Lc4eBeetlRenderFactory.groupTemplate.setSharedVars(maps);
     }
 }

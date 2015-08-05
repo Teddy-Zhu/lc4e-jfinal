@@ -1,6 +1,7 @@
 package com.teddy.jfinal.tools.beetl.render;
 
 import com.jfinal.render.Render;
+import com.teddy.lc4e.core.config.Key;
 import org.apache.log4j.Logger;
 import org.beetl.ext.jfinal.BeetlRender;
 import org.beetl.ext.jfinal.BeetlRenderFactory;
@@ -11,9 +12,8 @@ public class Lc4eBeetlRenderFactory extends BeetlRenderFactory {
 
     @Override
     public Render getRender(String view) {
-        log.debug("Lc4eBeetlRenderFactory start");
-        BeetlRender render = new Lc4eBeetlRender(groupTemplate, view);
-        log.debug("Lc4eBeetlRenderFactory end");
+        BeetlRender render = new Lc4eBeetlRender(groupTemplate, view + (view.endsWith(viewExtension) ? Key.Empty : viewExtension));
         return render;
     }
+
 }

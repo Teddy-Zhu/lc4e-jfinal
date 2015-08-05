@@ -1,7 +1,8 @@
-package com.teddy.lc4e.util.tools;
+package com.teddy.jfinal.tools;
 
 import org.apache.log4j.Logger;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -72,5 +73,50 @@ public class RelativeDate {
 
     private static long toYears(long date) {
         return toMonths(date) / 365L;
+    }
+
+
+
+
+    public static Date randomDate(String beginDate, Date endDate) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date start = format.parse(beginDate);
+            Date end = endDate;
+            if (start.getTime() >= end.getTime()) {
+                return null;
+            }
+            long date = random(start.getTime(), end.getTime());
+
+            return new Date(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static Date randomDate(String beginDate, String endDate) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date start = format.parse(beginDate);
+            Date end = format.parse(endDate);
+            if (start.getTime() >= end.getTime()) {
+                return null;
+            }
+            long date = random(start.getTime(), end.getTime());
+
+            return new Date(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static long random(long begin, long end) {
+        long rtnn = begin + (long) (Math.random() * (end - begin));
+        if (rtnn == begin || rtnn == end) {
+            return random(begin, end);
+        }
+        return rtnn;
     }
 }

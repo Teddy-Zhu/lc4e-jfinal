@@ -1,69 +1,15 @@
 <!DOCTYPE>
 <html>
-
 <head>
     <%layout("/common/title.html",{'SiteName':SiteName}){}%>
-    <link rel="stylesheet" type="text/css" class="ui" href="/css/view/index.css">
+    ${headerCSS}
 </head>
 <body>
 <!-- Header Menu Start -->
 <%layout("/common/header.html",{}){}%>
 <!-- Heard Menu End -->
 <!-- Content Start -->
-<div id="content">
-    <div id="mainContent" class="ui grid centered">
-        <div id="leftContent" class="ten wide column">
-            <div id="announcement" class="ui segment">
-                <div class="item">
-                    <div class="ui white label">
-                        <i class="announcement icon"></i>
-
-                        <div class="hidden-mb">AnnounceMent</div>
-                    </div>
-                    <div id="announce" class="ui text shape">
-                        <div class="sides">
-                            <div class="active ui header side">Did you know? This side starts visible.</div>
-                            <div class="ui header side">Help, its another side!</div>
-                            <div class="ui header side">This is the last side</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="articlelist" class="ui stacked raised segment">
-                <div class="ui divided items" page="${page}"></div>
-            </div>
-            <div id="articlebottons" class="ui raised clearing segment">
-                <div id="prePage" class="ui left floated labeled icon button">
-                    <i class="angle double left icon"></i>
-                    Prev
-                </div>
-                <div id="nextPage" class="ui right floated right labeled icon button">
-                    <i class="angle double right icon"></i>
-                    Next
-                </div>
-
-            </div>
-
-        </div>
-        <div id="rightContent" class="four wide column">
-            <div id="todayHot" class="ui raised  segment">
-                <h4 class="ui horizontal header divider">
-                    <i class="bar chart icon"></i> Today HotSpot
-                </h4>
-
-                <div class="ui divided items"></div>
-            </div>
-            <div id="yesterdayHot" class="ui raised  segment">
-                <h4 class="ui horizontal header divider">
-                    <i class="bar chart icon"></i> Yesterday HotSpot
-                </h4>
-
-                <div class="ui divided items"></div>
-            </div>
-            <div class="ui vertical rectangle test ad" data-text="Advertisement"></div>
-        </div>
-    </div>
-</div>
+<%layout("/common/main.html",{}){%>${layoutContent}<%}%>
 <!-- Content  End -->
 <!-- Right Buttons Start -->
 <a id="GTTop" href="#" tabindex="1"><i class="circular large arrow up icon"></i></a>
@@ -123,6 +69,6 @@
 </div>
 <!-- Slider Bar End -->
 <%layout("/common/footer.html",{}){}%>
-<script src="/plugins/require.js/require.min.js" data-main="/js/index"></script>
+${footerJS}
 </body>
 </html>

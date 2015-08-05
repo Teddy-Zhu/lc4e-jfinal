@@ -2,14 +2,14 @@
 ###It's a Light Forum.
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
 
->#### Use Java(`JDK8`),JSP(`HTML5`,`LabJS`,`Jquery`,`CSS3`,`Semantic UI`,`animatescroll`,`Animate`)
+>#### Use Java(`JDK8`),JSP(`HTML5`,`Jquery`,`CSS3`,`Semantic UI`,`animatescroll`,`Animate`)
 
 ----------
 # [Demo](http://lc4e.coding.io) #
 ----------
 > View [http://lc4e.coding.io/InitDB](http://lc4e.coding.io/InitDB) to initial database 
 
-# Descrption #
+# Description #
 ----------
 >Jfianl Extend 基于Jfinal轻量级框架 extend实现了
 ##Annotation enhancement 
@@ -37,8 +37,8 @@
 - `ValidateParam[M]`:参数验证,支持String Integer,Long,Double,Float,Date,File,POJO等验证
 - `ValidateParams[M]`:批量参数验证
 - `ValidateToken[M]`:验证TOKEN
-##Other enhancement
 
+##Other enhancement
 - `BaseController`
 - `DBModel`:增加 enhancer发放，增强Model
 - `Handler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler载入

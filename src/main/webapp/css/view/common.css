@@ -1,11 +1,12 @@
 body {
     overflow-x: hidden;
+    background: #FAFAFB;
 }
 
 /* header */
 #menu, #menu > .column {
-    -webkit-transition: padding 0.3s ease, background-color 0.2s ease;
-    transition: padding 0.3s ease, background-color 0.2s ease;
+    -webkit-transition: padding 0.5s ease, background-color 0.5s ease;
+    transition: padding 0.5s ease, background-color 0.5s ease;
 }
 
 #menu .ui.dropdown {
@@ -50,7 +51,7 @@ body {
 
 #menu > .column {
     width: 100%;
-    padding: 1rem 12% 1rem 12%;
+    padding: 1em 12% 1em 12%;
 }
 
 #menu .left.menu {
@@ -62,7 +63,7 @@ body {
 }
 
 #menu > .column .left.menu > img {
-    width: 2.8rem;
+    width: 2.8em;
     padding: 0px;
     margin-right: 10px;
 }
@@ -82,6 +83,10 @@ body {
 
 #userCard {
     box-shadow: none;
+}
+
+#userCard > .ui.bottom.attached.buttons {
+    margin: -1px -1px;
 }
 
 #menu .item:before {
@@ -191,11 +196,17 @@ body {
 /* media */
 
 @media screen and (min-width: 1200px) {
-
+    #mainContent {
+        padding-left: 8%;
+        padding-right: 8%;
+    }
 }
 
 @media screen and (min-width: 992px) and (max-width: 1200px) {
-
+    #mainContent {
+        padding-left: 6%;
+        padding-right: 6%;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -332,14 +343,14 @@ body {
     background-clip: padding-box;
     box-shadow: -3px 3px 3px -2px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    left: -3rem;
+    left: -3em;
     padding: 10px;
     position: absolute;
     text-align: center;
     width: 50px;
     -webkit-transition: left 0.1s ease;
     transition: left 0.1s ease;
-    margin: 1rem 0;
+    margin: 1em 0;
 }
 
 #config-tool #config-tool-options {

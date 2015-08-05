@@ -9,7 +9,6 @@
 
 (function ($) {
 
-    window.localStorage.setItem('lc4epjaxsuccess', []);
     /* animate scroll */
     // defines various easing effects
     $.easing['jswing'] = $.easing['swing'];

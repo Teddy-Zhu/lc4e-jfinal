@@ -1,7 +1,5 @@
 package com.teddy.jfinal.common;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 /**
  * Created by teddy on 2015/7/20.
  */
