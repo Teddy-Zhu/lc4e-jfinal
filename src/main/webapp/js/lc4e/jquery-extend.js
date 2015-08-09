@@ -411,7 +411,27 @@
         }
         return $progressBar;
     };
+    $.fn.Lc4eStars = function () {
+        var $this = $(this), $menu = $('#menu>.column');
+        if ($('#lc4eStar').length > 0) {
+            $this.removeClass('fullStars');
+            $('#lc4eStar').remove();
+            return;
+        }
+        $this.addClass('fullStars').append('<div id="lc4eStar" class="inStars"></div>');
+        var stars = 100;//stars' number
+        var $stars = $('#lc4eStar');
+        var r = 800;
+        var $star = [];
+        for (var i = 0; i < stars; i++) {
+            var s = 2.2 + Math.random() * 1;
+            var curR = r + Math.random() * 300;
+            $star.push('<div class="inStar" style="height:' + s + 'px;width:' + s + 'px; transform-origin: 0 0 ' + curR + 'px;transform:' + 'translate3d(0,0,-' + curR + 'px) rotateY(' + Math.random() * 360 + 'deg) rotateX(' + Math.random() * -50 + 'deg) "/>')
+        }
+        $stars.append($star.join(''));
+        return this;
 
+    };
     $.extend({
         Lc4eGetter: function (obj, path) {
             if (!path)
@@ -425,9 +445,25 @@
             return obj;
         },
         Lc4eRandomColor: function () {
-            return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6)
-        }
-        ,
+            return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+        },
+        Lc4eLoadScript: function (url) {
+            var dtd = $.Deferred();
+            $.getScript(url, function () {
+                dtd.resolve();
+            })
+            return dtd.promise();
+        },
+        Lc4eLoadScripts: function (urls) {
+            if (!$.isArray(urls)) {
+                return $.Lc4eLoadScript(urls);
+            }
+            var ret = [];
+            for (var i = 0, len = urls.length; i < len; i++) {
+                ret[i] = $.Lc4eLoadScript(urls[i]);
+            }
+            return $.when.apply($, ret);
+        },
         Lc4eAjax: function (data) {
             var loptions = {};
             data = $.extend(true, {
@@ -483,8 +519,10 @@
                         if (e.state) {
                             $(e.state.data).replaceAll($(e.state.target));
                             document.title = e.state.title;
-                            $.lc4e.Lc4ePJAX.successFunc.pop();
-                            $.lc4e.Lc4ePJAX.successFunc[$.lc4e.Lc4ePJAX.successFunc.length - 1].call();
+                            $.lc4e.Lc4ePJAX.successFunc[e.state.target + e.state.url].call();
+                            $('body').animatescroll({
+                                scrollSpeed: 500
+                            });
                         }
                     }
                 }
@@ -496,7 +534,7 @@
                         title: document.title,
                         url: $.lc4e.Lc4ePJAX.active ? data.url : window.location.pathname
                     };
-                    $.lc4e.Lc4ePJAX.successFunc.push(loptions.success);
+                    $.lc4e.Lc4ePJAX.successFunc[state.target + state.url] = loptions.success;
                     if ($.lc4e.Lc4ePJAX.active) {
                         history.pushState(state, document.title, data.url);
                     } else {
@@ -519,6 +557,9 @@
 
             return ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Q', 'q', 'W', 'w', 'E', 'e', 'R', 'r', 'T', 't', 'Y', 'y', 'U', 'u', 'I', 'i', 'O', 'o', 'P', 'p', 'A', 'a', 'S', 's', 'D', 'd', 'F', 'f', 'G', 'g', 'H', 'h', 'J', 'j', 'K', 'k', 'L', 'l', 'Z', 'z', 'X', 'x', 'C', 'c', 'V',
                 'v', 'B', 'b', 'N', 'n', 'M', 'm'].sort(random).join('').substring(5, 20);
+        },
+        Lc4eStars: function () {
+            return $('body').Lc4eStars();
         },
         Lc4eModal: function (options) {
             return $("body").Lc4eModal(options);
@@ -556,9 +597,27 @@
                 return window.history && window.history.pushState && window.history.replaceState && !navigator.userAgent.match(/(iPod|iPhone|iPad|WebApps\/.+CFNetwork)/) && window.localStorage
             },
             active: false,
-            successFunc: []
+            successFunc: {}
         },
-    })
-
+    });
+    String.prototype.trimEnd = function (trimStr) {
+        if (!trimStr) {
+            return this;
+        }
+        var temp = this;
+        while (true) {
+            if (temp.substr(temp.length - trimStr.length, trimStr.length) != trimStr) {
+                break;
+            }
+            temp = temp.substr(0, temp.length - trimStr.length);
+        }
+        return temp;
+    };
+    String.prototype.unix2human = function () {
+        return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
+    };
+    Number.prototype.unix2human = function () {
+        return $.lc4e.Lc4eToDate.unix2human(this);
+    };
 })
 (jQuery);

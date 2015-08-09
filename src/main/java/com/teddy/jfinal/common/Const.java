@@ -84,6 +84,9 @@ public class Const {
 
     public static final String FORMAT_DATE = "yyyy-MM-dd";
 
-    public static final String VALIDATE_MAIL = "\\b(^[\'_A-Za-z0-9-]+(\\.[\'_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
+    public static final String PASSWORD_RETRY_CACHE = "passwordRetryCache";
 
+    public static final String SHIRO_ACTIVE_SESSION_CACHE = "shiro-activeSessionCache";
+
+    public static final String SLASH = "/";
 }

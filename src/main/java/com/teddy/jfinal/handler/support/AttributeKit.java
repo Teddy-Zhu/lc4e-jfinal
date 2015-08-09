@@ -34,7 +34,7 @@ public class AttributeKit {
         if (uiData == null) {
             return;
         }
-        Object returnValue = null;
+        Object returnValue;
         Method method = ReflectTool.getMethodByClassAndName(uiData.methodClass(), uiData.methodName());
         if (method == null) {
             throw new AutoSetterException("The method [" + uiData.methodName() + "] can not found in Class [" + uiData.methodClass().toString() + "]");

@@ -4,7 +4,7 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/07/29.
+ * Created by lc4e Tool on 15/08/07.
  */
 @Model(value = "sys_comment", pk = {"id"})
 public class Sys_Comment extends DBModel<Sys_Comment> {

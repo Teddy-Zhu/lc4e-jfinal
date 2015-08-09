@@ -36,33 +36,33 @@ public class PropPlugin {
     }
 
 
-    public static Integer getValueToInt(String key) {
+    public static Integer getInt(String key) {
         String value = getValue(key);
         return value == null ? (Integer) null : Integer.valueOf(value);
     }
 
-    public static Integer getValueToInt(String key, Integer defaultValue) {
+    public static Integer getInt(String key, Integer defaultValue) {
         String value = getValue(key);
         return value == null ? defaultValue : Integer.valueOf(value);
     }
 
 
-    public static Long getValueToLong(String key) {
+    public static Long getLong(String key) {
         String value = getValue(key);
         return value == null ? (Long) null : Long.valueOf(value);
     }
 
-    public static Long getValueToLong(String key, Long defaultValue) {
+    public static Long getLong(String key, Long defaultValue) {
         String value = getValue(key);
         return value == null ? defaultValue : Long.valueOf(value);
     }
 
-    public static Boolean getValueToBoolean(String key) {
+    public static Boolean getBool(String key) {
         String value = getValue(key);
         return value == null ? (Boolean) null : Boolean.valueOf(value);
     }
 
-    public static Boolean getValueToBoolean(String key, Boolean defaultValue) {
+    public static Boolean getBool(String key, Boolean defaultValue) {
         String value = getValue(key);
         return value == null ? defaultValue : Boolean.valueOf(value);
     }

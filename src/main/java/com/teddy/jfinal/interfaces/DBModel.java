@@ -19,4 +19,8 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         return CustomTool.custom((M) this);
     }
 
+    @SuppressWarnings("unchecked")
+    public M transaction() {
+        return CustomTool.transaction((M) this);
+    }
 }

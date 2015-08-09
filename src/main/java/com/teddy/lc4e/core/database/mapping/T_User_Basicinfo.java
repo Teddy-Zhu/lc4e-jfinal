@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_User_Basicinfo {
     /**
@@ -11,7 +11,7 @@ public class T_User_Basicinfo {
      */
     public static final String ID = "user_basicinfo.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_User_Basicinfo {
      */
     public static final String USERID = "user_basicinfo.userId";
 
-    public static final String userId = "userId";
+    public static final String userId = "USERID";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_User_Basicinfo {
      */
     public static final String PHONENUMBER = "user_basicinfo.phoneNumber";
 
-    public static final String phoneNumber = "phoneNumber";
+    public static final String phoneNumber = "PHONENUMBER";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_User_Basicinfo {
      */
     public static final String SIGN = "user_basicinfo.sign";
 
-    public static final String sign = "sign";
+    public static final String sign = "SIGN";
 
     /**
      * 
@@ -47,16 +47,16 @@ public class T_User_Basicinfo {
      */
     public static final String AVATAR = "user_basicinfo.avatar";
 
-    public static final String avatar = "avatar";
+    public static final String avatar = "AVATAR";
 
     /**
      * 
-     * Type:INT UNSIGNED
+     * Type:DECIMAL UNSIGNED
      * Remarks:
      */
     public static final String BALANCES = "user_basicinfo.balances";
 
-    public static final String balances = "balances";
+    public static final String balances = "BALANCES";
 
     /**
      * 
@@ -65,7 +65,7 @@ public class T_User_Basicinfo {
      */
     public static final String BIRTH = "user_basicinfo.birth";
 
-    public static final String birth = "birth";
+    public static final String birth = "BIRTH";
 
     /**
      * 
@@ -74,7 +74,7 @@ public class T_User_Basicinfo {
      */
     public static final String CREATETIME = "user_basicinfo.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -83,7 +83,7 @@ public class T_User_Basicinfo {
      */
     public static final String UPDATETIME = "user_basicinfo.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "user_basicinfo.*";
 

@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Role {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Role {
      */
     public static final String ID = "sys_role.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Role {
      */
     public static final String ABBR = "sys_role.abbr";
 
-    public static final String abbr = "abbr";
+    public static final String abbr = "ABBR";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Role {
      */
     public static final String NAME = "sys_role.name";
 
-    public static final String name = "name";
+    public static final String name = "NAME";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Role {
      */
     public static final String DESCRIPTION = "sys_role.description";
 
-    public static final String description = "description";
+    public static final String description = "DESCRIPTION";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Role {
      */
     public static final String AVAILABLE = "sys_role.available";
 
-    public static final String available = "available";
+    public static final String available = "AVAILABLE";
 
     public static final String ALL_FIELDS = "sys_role.*";
 

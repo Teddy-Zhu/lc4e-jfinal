@@ -18,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.ParseException;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by teddy on 2015/7/20.
@@ -68,7 +68,7 @@ public class GlobalInterceptorKit {
     }
 
     private static void resolve(Invocation ai, Exception e) {
-        ai.getController().renderText(e.getMessage());
+        ai.getController().renderText(e.getMessage() == null ? e.toString() : e.getMessage());
     }
 
 
@@ -86,33 +86,14 @@ public class GlobalInterceptorKit {
      * @param ai
      * @throws Lc4eException
      */
-    public static void handleAnnotationsOnControllerMethod(Invocation ai, Map<Class<? extends Annotation>, Annotation> ans) throws InvocationTargetException, NoSuchMethodException, ValidateException, IllegalAccessException, NoSuchFieldException, Lc4eException, ParseException {
-        Method controllerMethod = ai.getMethod();
-        HttpServletRequest request = ai.getController().getRequest();
-        Annotation annotation = null;
-        //resovle require header or method
-        annotation = ans.get(RequestMethod.class);
-        ValidateKit.resolveRequestMethod((RequestMethod) annotation, ai);
-        annotation = ans.get(RequestHeader.class);
-        ValidateKit.resolveRequestHeader((RequestHeader) annotation, ai);
-        annotation = ans.get(ValidateToken.class);
-        ValidateKit.resolveToken((ValidateToken) annotation, ai);
-        annotation = ans.get(ValidateComVars.class);
-        ValidateKit.resolveComVars((ValidateComVars) annotation, ai);
-        annotation = ans.get(ValidateComVar.class);
-        ValidateKit.resolveComVar((ValidateComVar) annotation, ai);
-        annotation = ans.get(ValidateParams.class);
-        ValidateKit.resolveParameters((ValidateParams) annotation, ai);
-        annotation = ans.get(ValidateParam.class);
-        ValidateKit.resolveParameter((ValidateParam) annotation, ai);
-        return;
+    public static void handleAnnotationsOnControllerMethod(Invocation ai, List<Annotation> ans) throws InvocationTargetException, NoSuchMethodException, ValidateException, IllegalAccessException, NoSuchFieldException, Lc4eException, ParseException {
+        ValidateKit.resolve(ans, ai);
     }
 
 
     public static void handleInject(Invocation ai) throws IllegalAccessException {
         Controller controller = ai.getController();
 
-        Field[] fields = controller.getClass().getFields();
         Inject(controller, controller.getClass());
     }
 
@@ -134,22 +115,20 @@ public class GlobalInterceptorKit {
         }
     }
 
-    public static void handleOtherAnnotataion(Invocation ai, Map<Class<? extends Annotation>, Annotation> ans) throws AutoSetterException, Lc4eException {
-        Method controllerMethod = ai.getMethod();
-        HttpServletRequest request = ai.getController().getRequest();
-        Annotation annotation = null;
-        //resovle require header or method
-        annotation = ans.get(ResponseStatus.class);
-        if (annotation != null) {
-            ai.getController().getResponse().setStatus(((ResponseStatus) annotation).value().toInteger());
+    public static void handleOtherAnnotataion(Invocation ai, List<Annotation> annotations) throws AutoSetterException, Lc4eException {
+        for (Annotation annotation : annotations) {
+            if (annotation instanceof ResponseStatus) {
+                if (annotation != null) {
+                    ai.getController().getResponse().setStatus(((ResponseStatus) annotation).value().toInteger());
+                }
+            } else if (annotation instanceof SetComVar) {
+                AttributeKit.setComVar((SetComVar) annotation, ai);
+            } else if (annotation instanceof SetUIDatas) {
+                AttributeKit.setUIDatas((SetUIDatas) annotation, ai);
+            } else if (annotation instanceof SetUIData) {
+                AttributeKit.setUIData((SetUIData) annotation, ai);
+            }
         }
-        annotation = ans.get(SetComVar.class);
-        AttributeKit.setComVar((SetComVar) annotation, ai);
-        annotation = ans.get(SetUIDatas.class);
-        AttributeKit.setUIDatas((SetUIDatas) annotation, ai);
-        annotation = ans.get(SetUIData.class);
-        AttributeKit.setUIData((SetUIData) annotation, ai);
-
     }
 
 }

@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_User_Address {
     /**
@@ -11,7 +11,7 @@ public class T_User_Address {
      */
     public static final String ID = "user_address.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_User_Address {
      */
     public static final String USERID = "user_address.userId";
 
-    public static final String userId = "userId";
+    public static final String userId = "USERID";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_User_Address {
      */
     public static final String PROVINCE = "user_address.province";
 
-    public static final String province = "province";
+    public static final String province = "PROVINCE";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_User_Address {
      */
     public static final String CITY = "user_address.city";
 
-    public static final String city = "city";
+    public static final String city = "CITY";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_User_Address {
      */
     public static final String REGION = "user_address.region";
 
-    public static final String region = "region";
+    public static final String region = "REGION";
 
     /**
      * 
@@ -56,7 +56,7 @@ public class T_User_Address {
      */
     public static final String STREET = "user_address.street";
 
-    public static final String street = "street";
+    public static final String street = "STREET";
 
     /**
      * 
@@ -65,7 +65,7 @@ public class T_User_Address {
      */
     public static final String CREATETIME = "user_address.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -74,7 +74,7 @@ public class T_User_Address {
      */
     public static final String UPDATETIME = "user_address.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "user_address.*";
 

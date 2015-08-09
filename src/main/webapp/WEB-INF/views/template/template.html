@@ -1,8 +1,13 @@
 <!DOCTYPE>
 <html>
 <head>
-    <%layout("/common/title.html",{'SiteName':SiteName}){}%>
-    ${headerCSS}
+    <%layout("/common/title.html",{'SiteName':SiteName}){};
+
+    for(var i in headerCSS){
+        println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');
+    }
+    %>
+
 </head>
 <body>
 <!-- Header Menu Start -->
@@ -15,7 +20,7 @@
 <a id="GTTop" href="#" tabindex="1"><i class="circular large arrow up icon"></i></a>
 <!-- Right Buttons End -->
 <!-- Slider Bar Start -->
-<div id="config-tool" class="closed" style="display: none;">
+<div id="config-tool" class="closed">
     <a id="config-tool-cog"> <i class="large setting loading icon"></i>
     </a>
 
@@ -44,6 +49,11 @@
                 </div>
             </div>
             <div class="item">
+                <div id="colorBackground" class="ui checkbox">
+                    <input type="checkbox" name="color"> <label>Colorful background</label>
+                </div>
+            </div>
+            <div class="item">
                 <div class="ui toggle red checkbox">
                     <input type="checkbox" name="public"> <label>Right-to-Left</label>
                 </div>
@@ -69,6 +79,9 @@
 </div>
 <!-- Slider Bar End -->
 <%layout("/common/footer.html",{}){}%>
-${footerJS}
+<script type="text/javascript">
+    $LAB.script("/plugins/jquery/jquery.js").wait().script("/plugins/semantic-ui/semantic.min.js").script("/js/lc4e/jquery-extend.js")
+            .wait()<% for(var i in footerJS){print('.script("'+i+'")');}%>
+</script>
 </body>
 </html>

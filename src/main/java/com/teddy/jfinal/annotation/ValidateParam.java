@@ -11,6 +11,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ValidateParam {
+    /**
+     * use only url parm
+     * @return
+     */
+    int index() default -1;
 
     String value() default Const.DEFAULT_NONE;
 

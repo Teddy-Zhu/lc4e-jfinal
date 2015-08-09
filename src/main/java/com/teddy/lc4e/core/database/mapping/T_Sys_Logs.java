@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Logs {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Logs {
      */
     public static final String ID = "sys_logs.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Logs {
      */
     public static final String OPERATETYPEID = "sys_logs.operateTypeId";
 
-    public static final String operateTypeId = "operateTypeId";
+    public static final String operateTypeId = "OPERATETYPEID";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Logs {
      */
     public static final String USERID = "sys_logs.userId";
 
-    public static final String userId = "userId";
+    public static final String userId = "USERID";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Logs {
      */
     public static final String DESCRIPTION = "sys_logs.description";
 
-    public static final String description = "description";
+    public static final String description = "DESCRIPTION";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Logs {
      */
     public static final String IP = "sys_logs.ip";
 
-    public static final String ip = "ip";
+    public static final String ip = "IP";
 
     /**
      * 
@@ -56,7 +56,7 @@ public class T_Sys_Logs {
      */
     public static final String AGANT = "sys_logs.agant";
 
-    public static final String agant = "agant";
+    public static final String agant = "AGANT";
 
     /**
      * 
@@ -65,7 +65,7 @@ public class T_Sys_Logs {
      */
     public static final String CREATETIME = "sys_logs.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -74,7 +74,7 @@ public class T_Sys_Logs {
      */
     public static final String UPDATETIME = "sys_logs.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "sys_logs.*";
 

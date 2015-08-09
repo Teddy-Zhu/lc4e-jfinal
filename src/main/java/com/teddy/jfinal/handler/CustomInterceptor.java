@@ -32,7 +32,7 @@ public class CustomInterceptor implements MethodInterceptor {
         boolean useCache = false;
         Object cacheKey = null;
         Cache cache = ReflectTool.getAnnotationByMethod(method, Cache.class);
-        useCache = cache != null && PropPlugin.getValueToBoolean(Dict.CACHE_USE, true) && cache.index() < objects.length;
+        useCache = cache != null && PropPlugin.getBool(Dict.CACHE_USE, true) && cache.index() < objects.length;
         if (useCache) {
             cacheKey = cache.index() == -1 ? cache.key() : objects[cache.index()];
             if (cacheKey.getClass().isArray()) {
@@ -54,15 +54,15 @@ public class CustomInterceptor implements MethodInterceptor {
             }
         }
         //resolve Inject
-        Class clz = ((obj.getClass().getName().indexOf("EnhancerByCGLIB") == -1 ? obj.getClass() : obj.getClass().getSuperclass()));
+        Class clz = target.getClass();
 
         if (method.isAnnotationPresent(Transaction.class)) {
             Object transObj = TransactionHelper.Proxy(this.target);
             GlobalInterceptorKit.Inject(transObj, clz);
             returnValue = methodProxy.invoke(transObj, objects);
         } else {
-            GlobalInterceptorKit.Inject(obj, clz);
-            returnValue = methodProxy.invokeSuper(obj, objects);
+            GlobalInterceptorKit.Inject(target, clz);
+            returnValue = methodProxy.invoke(target, objects);
         }
         if (useCache) {
             CacheKit.put(cache.cacheName(), cacheKey, returnValue);

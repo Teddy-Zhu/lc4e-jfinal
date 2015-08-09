@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Dynamic_Info {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Dynamic_Info {
      */
     public static final String ID = "sys_dynamic_info.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Dynamic_Info {
      */
     public static final String USERID = "sys_dynamic_info.userId";
 
-    public static final String userId = "userId";
+    public static final String userId = "USERID";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Dynamic_Info {
      */
     public static final String INFO = "sys_dynamic_info.info";
 
-    public static final String info = "info";
+    public static final String info = "INFO";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Dynamic_Info {
      */
     public static final String CREATETIME = "sys_dynamic_info.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Dynamic_Info {
      */
     public static final String UPDATETIME = "sys_dynamic_info.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "sys_dynamic_info.*";
 

@@ -14,13 +14,20 @@ import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.core.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.core.web.service.ComVarService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.annotation.*;
+import org.apache.shiro.subject.Subject;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,8 +36,38 @@ import java.util.regex.Pattern;
  */
 class ValidateKit {
 
+    public static void resolve(List<Annotation> annotationList, Invocation invocation) throws ValidateException, Lc4eException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, ParseException, InvocationTargetException {
+        for (Annotation annotation : annotationList) {
+            if (annotation instanceof RequestMethod) {
+                resolveRequestMethod((RequestMethod) annotation, invocation);
+            } else if (annotation instanceof RequestHeader) {
+                resolveRequestHeader((RequestHeader) annotation, invocation);
+            } else if (annotation instanceof ValidateToken) {
+                resolveToken((ValidateToken) annotation, invocation);
+            } else if (annotation instanceof RequiresAuthentication) {
+                resolveShiroAuthentication((RequiresAuthentication) annotation);
+            } else if (annotation instanceof RequiresUser) {
+                resolveShiroUser((RequiresUser) annotation);
+            } else if (annotation instanceof RequiresGuest) {
+                resolveShiroGeust((RequiresGuest) annotation);
+            } else if (annotation instanceof RequiresRoles) {
+                resolveShiroRole((RequiresRoles) annotation);
+            } else if (annotation instanceof RequiresPermissions) {
+                resolveShiroPermission((RequiresPermissions) annotation);
+            } else if (annotation instanceof ValidateComVars) {
+                resolveComVars((ValidateComVars) annotation, invocation);
+            } else if (annotation instanceof ValidateComVar) {
+                resolveComVar((ValidateComVar) annotation, invocation);
+            } else if (annotation instanceof ValidateParams) {
+                resolveParameters((ValidateParams) annotation, invocation);
+            } else if (annotation instanceof ValidateParam) {
+                resolveParameter((ValidateParam) annotation, invocation);
+            }
+        }
+    }
 
-    public static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws ValidateException {
+
+    private static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws ValidateException {
         if (method != null && !method.value().toString().equals(invocation.getController().getRequest().getMethod().toUpperCase())) {
             // controller.renderError(404);
             throw new ValidateException("404");
@@ -45,7 +82,7 @@ class ValidateKit {
      * @throws Lc4eException
      * @throws ValidateException
      */
-    public static void resolveRequestHeader(RequestHeader header, Invocation invocation) throws Lc4eException, ValidateException {
+    private static void resolveRequestHeader(RequestHeader header, Invocation invocation) throws Lc4eException, ValidateException {
         if (header == null) {
             return;
         }
@@ -66,7 +103,7 @@ class ValidateKit {
         }
     }
 
-    public static void resolveToken(ValidateToken token, Invocation invocation) throws ValidateException {
+    private static void resolveToken(ValidateToken token, Invocation invocation) throws ValidateException {
         if (token == null) {
             return;
         }
@@ -113,23 +150,19 @@ class ValidateKit {
         }
     }
 
-
-    public static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws ValidateException {
+    private static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws ValidateException {
         if (comVars == null) {
             return;
         }
         for (int i = 0, len = comVars.fields().length; i < len; i++) {
-            ValidateException e = resolveComVar(comVars.fields()[i], invocation);
-            if (e != null) {
-                throw e;
-            }
+            resolveComVar(comVars.fields()[i], invocation);
         }
 
     }
 
-    public static ValidateException resolveComVar(ValidateComVar comVar, Invocation invocation) throws ValidateException {
+    private static void resolveComVar(ValidateComVar comVar, Invocation invocation) throws ValidateException {
         if (comVar == null) {
-            return null;
+            return;
         }
         if (StringTool.equalEmpty(comVar.name()) || StringTool.equalEmpty(comVar.value())) {
             throw new ValidateException("Parameter field in invalid!");
@@ -140,19 +173,24 @@ class ValidateKit {
         } else if (!variable.get(T_Sys_Common_Variable.value).equals(comVar.value())) {
             throw new ValidateException(variable.get(T_Sys_Common_Variable.error));
         }
-        return null;
     }
 
-    public static void resolveParameters(ValidateParams params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, ValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
+    private static void resolveParameters(ValidateParams params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, ValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
         if (params == null) {
             return;
         }
         resolveParams(params.fields(), invocation);
+        boolean isTrue;
         if (params.select()) {
-            if (resolveComVar(params.condition(), invocation) == null) {
-                resolveParams(params.trueFields(), invocation);
-            } else {
+            try {
+                resolveComVar(params.condition(), invocation);
+                isTrue = true;
+            } catch (Exception e) {
+                isTrue = false;
                 resolveParams(params.falseFields(), invocation);
+            }
+            if (isTrue) {
+                resolveParams(params.trueFields(), invocation);
             }
         }
     }
@@ -161,24 +199,29 @@ class ValidateKit {
         if (params == null) {
             return;
         }
-        for (int i = 0, len = params.length; i < len; i++) {
-            resolveParameter(params[i], invocation);
+        for (ValidateParam param : params) {
+            resolveParameter(param, invocation);
         }
     }
 
-    public static void resolveParameter(ValidateParam param, Invocation invocation) throws ValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
+    private static void resolveParameter(ValidateParam param, Invocation invocation) throws ValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
         if (param == null) {
             return;
         }
-        if ("".equals(param.value()) || Const.DEFAULT_NONE.equals(param.value())) {
+        if (StringTool.equalEmpty(param.value()) && param.index() == -1) {
             throw new ValidateException("Parameter field is  invalid");
         }
         Controller controller = invocation.getController();
-        Object object = "";
+        Object object;
         Class type = param.type();
         type = ReflectTool.wrapper(type);
         boolean setDefaultFlag = false;
-        object = controller.getPara(param.value());
+        if (param.index() != -1) {
+            object = controller.getPara(param.index());
+        } else {
+            object = controller.getPara(param.value());
+        }
+
         if (object == null) {
             setDefaultFlag = true;
         }
@@ -323,4 +366,83 @@ class ValidateKit {
         }
     }
 
+    private static void resolveShiroPermission(RequiresPermissions permissions) {
+        if (permissions == null) {
+            return;
+        }
+        String[] perms = permissions.value();
+        Subject subject = SecurityUtils.getSubject();
+
+        if (perms.length == 1) {
+            subject.checkPermission(perms[0]);
+            return;
+        }
+        if (Logical.AND.equals(permissions.logical())) {
+            subject.checkPermissions(perms);
+            return;
+        }
+        if (Logical.OR.equals(permissions.logical())) {
+            // Avoid processing exceptions unnecessarily - "delay" throwing the
+            // exception by calling hasRole first
+            boolean hasAtLeastOnePermission = false;
+            for (String permission : perms)
+                if (subject.isPermitted(permission))
+                    hasAtLeastOnePermission = true;
+            // Cause the exception if none of the role match, note that the
+            // exception message will be a bit misleading
+            if (!hasAtLeastOnePermission)
+                subject.checkPermission(perms[0]);
+        }
+    }
+
+    private static void resolveShiroGeust(RequiresGuest guest) {
+        if (guest == null) {
+            return;
+        }
+        if (SecurityUtils.getSubject().getPrincipal() != null) {
+            throw new UnauthenticatedException("Attempting to perform a guest-only operation.  The current Subject is " +
+                    "not a guest (they have been authenticated or remembered from a previous login).  Access " +
+                    "denied.");
+        }
+    }
+
+    private static void resolveShiroRole(RequiresRoles requiresRoles) {
+        if (requiresRoles == null) {
+            return;
+        }
+        String[] roles = requiresRoles.value();
+        Subject subject = SecurityUtils.getSubject();
+        if (roles.length == 1) {
+            subject.checkRole(roles[0]);
+            return;
+        }
+        if (Logical.AND.equals(requiresRoles.logical())) {
+            subject.checkRoles(Arrays.asList(roles));
+            return;
+        }
+        if (Logical.OR.equals(requiresRoles.logical())) {
+            // Avoid processing exceptions unnecessarily - "delay" throwing the exception by calling hasRole first
+            boolean hasAtLeastOneRole = false;
+            for (String role : roles) if (subject.hasRole(role)) hasAtLeastOneRole = true;
+            // Cause the exception if none of the role match, note that the exception message will be a bit misleading
+            if (!hasAtLeastOneRole) subject.checkRole(roles[0]);
+        }
+    }
+
+    private static void resolveShiroUser(RequiresUser requiresUser) {
+        if (requiresUser == null) {
+            return;
+        }
+        if (SecurityUtils.getSubject().getPrincipal() == null) {
+            throw new UnauthenticatedException("Attempting to perform a user-only operation.  The current Subject is " +
+                    "not a user (they haven't been authenticated or remembered from a previous login).  " +
+                    "Access denied.");
+        }
+    }
+
+    private static void resolveShiroAuthentication(RequiresAuthentication requiresAuthentication) {
+        if (!SecurityUtils.getSubject().isAuthenticated()) {
+            throw new UnauthenticatedException("The current Subject is not authenticated.  Access denied.");
+        }
+    }
 }

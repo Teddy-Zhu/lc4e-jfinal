@@ -43,9 +43,6 @@ public class StringTool {
     public final static String regExp_letter_3 = "^[a-z]+$";// 匹配由26个英文字母的小写组成的字符串
     public final static String regExp_letter_4 = "^[A-Za-z0-9]+$";// 匹配由数字和26个英文字母组成的字符串
     public final static String regExp_letter_5 = "^\\w+$";// 匹配由数字、26个英文字母或者下划线组成的字符串
-
-    public final static String regExp_email = "^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$"; // 匹配email地址
-
     public final static String regExp_url_1 = "^[a-zA-z]+://(\\w+(-\\w+)*)(\\.(\\w+(-\\w+)*))*(\\?\\S*)?$"; // 匹配url
     public final static String regExp_url_2 = "[a-zA-z]+://[^\\s]*"; // 匹配url
 
@@ -68,6 +65,8 @@ public class StringTool {
     public final static String regExp_idCard = "\\d{15} ?\\d{18}"; // 匹配身份证, 中国的身份证为15位或18位
 
     public final static String regExp_ip = "\\d+\\.\\d+\\.\\d+\\.\\d+";//IP
+
+    public static final String regExp_MAIL = "\\b(^[\'_A-Za-z0-9-]+(\\.[\'_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
 
 
     // 定义验证码字符.去除了O、I、l、、等容易混淆的字母
@@ -224,15 +223,15 @@ public class StringTool {
             //System.out.println(str);
             html.append(contents.substring(lastIdx, matchr.start()));
 
-            User user = null;
-            Object userObj = User.dao.cacheGet(userName);
+            com.teddy.lc4e.core.database.model.User user = null;
+            Object userObj = com.teddy.lc4e.core.database.model.User.dao.cacheGet(userName);
             if (null != userObj) {
-                user = (User) userObj;
+                user = (com.teddy.lc4e.core.database.model.User) userObj;
             } else {
                 Map<String, Object> param = new HashMap<String, Object>();
                 param.put("column", "username");
                 String sql = ToolSqlXml.getSql("platform.user.column", param);
-                List<User> userList = User.dao.find(sql, userName);
+                List<com.teddy.lc4e.core.database.model.User> userList = com.teddy.lc4e.core.database.model.User.dao.find(sql, userName);
                 if (userList.size() == 1) {
                     user = userList.get(0);
                 }
@@ -325,6 +324,6 @@ public class StringTool {
     }
 
     public static boolean equalEmpty(String txt) {
-        return "".equals(txt.trim()) || Const.DEFAULT_NONE.equals(txt.trim());
+        return "".equals(txt.trim()) || Const.DEFAULT_NONE.equals(txt);
     }
 }

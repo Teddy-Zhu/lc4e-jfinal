@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Address {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Address {
      */
     public static final String ID = "sys_address.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Address {
      */
     public static final String NAME = "sys_address.name";
 
-    public static final String name = "name";
+    public static final String name = "NAME";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Address {
      */
     public static final String DESCRIPTION = "sys_address.description";
 
-    public static final String description = "description";
+    public static final String description = "DESCRIPTION";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Address {
      */
     public static final String CREATETIME = "sys_address.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Address {
      */
     public static final String UPDATETIME = "sys_address.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "sys_address.*";
 

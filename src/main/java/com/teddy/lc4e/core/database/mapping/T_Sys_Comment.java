@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Comment {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Comment {
      */
     public static final String ID = "sys_comment.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Comment {
      */
     public static final String TOPICID = "sys_comment.topicId";
 
-    public static final String topicId = "topicId";
+    public static final String topicId = "TOPICID";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Comment {
      */
     public static final String USERID = "sys_comment.userId";
 
-    public static final String userId = "userId";
+    public static final String userId = "USERID";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Comment {
      */
     public static final String ORDER = "sys_comment.order";
 
-    public static final String order = "order";
+    public static final String order = "ORDER";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Comment {
      */
     public static final String TITLE = "sys_comment.title";
 
-    public static final String title = "title";
+    public static final String title = "TITLE";
 
     /**
      * 
@@ -56,7 +56,7 @@ public class T_Sys_Comment {
      */
     public static final String BODY = "sys_comment.body";
 
-    public static final String body = "body";
+    public static final String body = "BODY";
 
     /**
      * 
@@ -65,7 +65,7 @@ public class T_Sys_Comment {
      */
     public static final String ATTACHS = "sys_comment.attachs";
 
-    public static final String attachs = "attachs";
+    public static final String attachs = "ATTACHS";
 
     /**
      * 
@@ -74,7 +74,7 @@ public class T_Sys_Comment {
      */
     public static final String TCSTATUSID = "sys_comment.tcStatusId";
 
-    public static final String tcStatusId = "tcStatusId";
+    public static final String tcStatusId = "TCSTATUSID";
 
     /**
      * 
@@ -83,7 +83,7 @@ public class T_Sys_Comment {
      */
     public static final String CREATETIME = "sys_comment.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -92,7 +92,7 @@ public class T_Sys_Comment {
      */
     public static final String UPDATETIME = "sys_comment.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "sys_comment.*";
 

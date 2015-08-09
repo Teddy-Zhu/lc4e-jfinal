@@ -1,7 +1,8 @@
 package com.teddy.jfinal.annotation;
 
+import com.teddy.jfinal.common.Const;
+
 import java.lang.annotation.*;
-import java.lang.reflect.Method;
 
 /**
  * Created by teddy on 2015/7/18.
@@ -17,8 +18,8 @@ public @interface Controller {
      *
      * @return
      */
-    String[] value();
+    String value();
 
-    String[] views() default {};
+    String views() default Const.DEFAULT_NONE;
 
 }

@@ -41,23 +41,34 @@ $(function () {
             $('#config-tool-cog').on('click', function () {
                 $('#config-tool').toggleClass('closed');
             });
-
+            var timerIn, timerOut;
             $('html').visibility({
                 offset: -5,
                 observeChanges: false,
                 once: false,
                 continuous: false,
                 onTopPassed: function () {
+                    clearTimeout(timerIn);
                     $.requestAnimationFrame(function () {
                         $('#menu').addClass('fixed');
-                        $('#GTTop').transition('swing down in');
-                    })
+                    });
+                    timerIn = setTimeout(function () {
+                        $.requestAnimationFrame(function () {
+                            $('#GTTop').transition('swing down in');
+                        })
+                    }, 300);
                 },
                 onTopPassedReverse: function () {
+                    clearTimeout(timerOut);
                     $.requestAnimationFrame(function () {
                         $('#menu').removeClass('fixed');
-                        $('#GTTop').transition('swing down out');
+
                     });
+                    timerOut = setTimeout(function () {
+                        $.requestAnimationFrame(function () {
+                            $('#GTTop').transition('swing down out');
+                        })
+                    }, 300);
                 }
             });
 
@@ -81,6 +92,12 @@ $(function () {
                 }
             });
 
+
+            $('#colorBackground').checkbox({
+                onChange: function (e) {
+                    $.Lc4eStars();
+                }
+            });
             $('#boxedLayout').checkbox({
                 onChange: function (e) {
                     $('#articlelist').toggleClass('nobox');
@@ -97,9 +114,9 @@ $(function () {
                     $.requestAnimationFrame(function () {
                         $('#articlelist>.ui.divided.items>.item').
                             transition({
-                                animation: 'slide up in',
+                                animation: 'fade up in',
                                 duration: 500,
-                                interval: 50,
+                                interval: 80,
                                 onComplete: function () {
                                     $('#articlelist>.ui.divided.items>.item').find('.ui.fluid.image img').popup();
                                 }
@@ -120,7 +137,7 @@ $(function () {
             });
 
             $('#GTTop').on('click', function (e) {
-                $('html').animatescroll({
+                $('body').animatescroll({
                     scrollSpeed: 500
                 });
             });
@@ -136,9 +153,9 @@ $(function () {
                         $.requestAnimationFrame(function () {
                             $('#articlelist>.ui.divided.items>.item').
                                 transition({
-                                    animation: 'slide up in',
+                                    animation: 'fade up in',
                                     duration: 500,
-                                    interval: 50,
+                                    interval: 100,
                                     onComplete: function () {
                                         $('#articlelist>.ui.divided.items>.item').find('.ui.fluid.image img').popup();
                                     }

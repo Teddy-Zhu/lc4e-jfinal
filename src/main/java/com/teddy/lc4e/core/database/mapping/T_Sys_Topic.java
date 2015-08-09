@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Topic {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Topic {
      */
     public static final String ID = "sys_topic.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Topic {
      */
     public static final String AREAID = "sys_topic.areaId";
 
-    public static final String areaId = "areaId";
+    public static final String areaId = "AREAID";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Topic {
      */
     public static final String USERID = "sys_topic.userId";
 
-    public static final String userId = "userId";
+    public static final String userId = "USERID";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Topic {
      */
     public static final String TITLE = "sys_topic.title";
 
-    public static final String title = "title";
+    public static final String title = "TITLE";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Topic {
      */
     public static final String BODY = "sys_topic.body";
 
-    public static final String body = "body";
+    public static final String body = "BODY";
 
     /**
      * 
@@ -56,7 +56,7 @@ public class T_Sys_Topic {
      */
     public static final String ATTACHS = "sys_topic.attachs";
 
-    public static final String attachs = "attachs";
+    public static final String attachs = "ATTACHS";
 
     /**
      * 
@@ -65,16 +65,16 @@ public class T_Sys_Topic {
      */
     public static final String TCSTATUSID = "sys_topic.tcStatusId";
 
-    public static final String tcStatusId = "tcStatusId";
+    public static final String tcStatusId = "TCSTATUSID";
 
     /**
      * 
-     * Type:VARCHAR
+     * Type:INT
      * Remarks:
      */
-    public static final String TAGS = "sys_topic.tags";
+    public static final String COUNT = "sys_topic.count";
 
-    public static final String tags = "tags";
+    public static final String count = "COUNT";
 
     /**
      * 
@@ -83,7 +83,7 @@ public class T_Sys_Topic {
      */
     public static final String CREATETIME = "sys_topic.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -92,7 +92,7 @@ public class T_Sys_Topic {
      */
     public static final String UPDATETIME = "sys_topic.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "sys_topic.*";
 

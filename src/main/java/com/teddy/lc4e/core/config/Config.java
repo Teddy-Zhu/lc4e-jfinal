@@ -5,7 +5,8 @@ import com.teddy.jfinal.annotation.ConfigHandler;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.JFinalConfig;
 import com.teddy.jfinal.plugin.PropPlugin;
-import com.teddy.jfinal.tools.beetl.render.Lc4eBeetlRenderFactory;
+import com.teddy.jfinal.plugin.shiro.ShiroMethod;
+import com.teddy.jfinal.plugin.beetl.Lc4eBeetlRenderFactory;
 import com.teddy.lc4e.core.web.service.ComVarService;
 import com.teddy.lc4e.core.web.service.MenuService;
 import org.apache.log4j.Logger;
@@ -26,12 +27,13 @@ public class Config implements JFinalConfig {
 
         me.setEncoding(PropPlugin.getValue(Dict.ENCODING, "utf-8"));
 
-        me.setDevMode(PropPlugin.getValueToBoolean(Dict.DEV_MODE, false));
+        me.setDevMode(PropPlugin.getBool(Dict.DEV_MODE, false));
 
         me.setMainRenderFactory(new Lc4eBeetlRenderFactory());
 
         GroupTemplate groupTemplate = Lc4eBeetlRenderFactory.groupTemplate;
 
+        groupTemplate.registerFunctionPackage("auth", new ShiroMethod());
         //groupTemplate.registerFunction("i18nFormat", new I18nFormat());
 
         /*
@@ -65,9 +67,9 @@ public class Config implements JFinalConfig {
     }
 
     public void afterJFinalStart() {
-        Map<String,Object> maps = new HashMap<>();
+        Map<String, Object> maps = new HashMap<>();
         maps.put("SiteName", ComVarService.service.getComVarValueByName("SiteName"));
-        maps.put("menulist",MenuService.service.getMenuTree());
+        maps.put("menulist", MenuService.service.getMenuTree());
         Lc4eBeetlRenderFactory.groupTemplate.setSharedVars(maps);
     }
 }

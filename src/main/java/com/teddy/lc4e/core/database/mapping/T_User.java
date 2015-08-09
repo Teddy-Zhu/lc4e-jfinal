@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_User {
     /**
@@ -11,7 +11,7 @@ public class T_User {
      */
     public static final String ID = "user.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_User {
      */
     public static final String NAME = "user.name";
 
-    public static final String name = "name";
+    public static final String name = "NAME";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_User {
      */
     public static final String MAIL = "user.mail";
 
-    public static final String mail = "mail";
+    public static final String mail = "MAIL";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_User {
      */
     public static final String NICK = "user.nick";
 
-    public static final String nick = "nick";
+    public static final String nick = "NICK";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_User {
      */
     public static final String PASSWORD = "user.password";
 
-    public static final String password = "password";
+    public static final String password = "PASSWORD";
 
     /**
      * 
@@ -56,7 +56,7 @@ public class T_User {
      */
     public static final String PASSSALT = "user.passsalt";
 
-    public static final String passsalt = "passsalt";
+    public static final String passsalt = "PASSSALT";
 
     /**
      * 
@@ -65,7 +65,7 @@ public class T_User {
      */
     public static final String LOCKED = "user.locked";
 
-    public static final String locked = "locked";
+    public static final String locked = "LOCKED";
 
     /**
      * 
@@ -74,7 +74,7 @@ public class T_User {
      */
     public static final String CREATETIME = "user.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -83,7 +83,7 @@ public class T_User {
      */
     public static final String UPDATETIME = "user.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "user.*";
 

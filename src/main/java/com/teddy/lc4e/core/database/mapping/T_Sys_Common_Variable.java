@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Common_Variable {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Common_Variable {
      */
     public static final String ID = "sys_common_variable.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Common_Variable {
      */
     public static final String NAME = "sys_common_variable.name";
 
-    public static final String name = "name";
+    public static final String name = "NAME";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Common_Variable {
      */
     public static final String VALUE = "sys_common_variable.value";
 
-    public static final String value = "value";
+    public static final String value = "VALUE";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Common_Variable {
      */
     public static final String ERROR = "sys_common_variable.error";
 
-    public static final String error = "error";
+    public static final String error = "ERROR";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Common_Variable {
      */
     public static final String DESCRIPTION = "sys_common_variable.description";
 
-    public static final String description = "description";
+    public static final String description = "DESCRIPTION";
 
     /**
      * 
@@ -56,7 +56,7 @@ public class T_Sys_Common_Variable {
      */
     public static final String CREATETIME = "sys_common_variable.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -65,7 +65,7 @@ public class T_Sys_Common_Variable {
      */
     public static final String UPDATETIME = "sys_common_variable.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "sys_common_variable.*";
 

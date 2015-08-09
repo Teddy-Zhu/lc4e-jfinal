@@ -1,4 +1,4 @@
-package com.teddy.jfinal.tools.beetl.render;
+package com.teddy.jfinal.plugin.beetl;
 
 import com.jfinal.render.Render;
 import com.teddy.jfinal.tools.AuthTool;
@@ -25,7 +25,7 @@ public class Lc4eCaptchaRender extends Render {
     private final static List<Font> fontList;
 
     static {
-        fontList = new ArrayList<Font>();
+        fontList = new ArrayList<>();
 
         Font font01 = new Font("Terminal", Font.PLAIN, 18);
         fontList.add(font01);

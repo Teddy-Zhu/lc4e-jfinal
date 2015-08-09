@@ -38,7 +38,7 @@ public class AuthTool {
             e.printStackTrace();
         }
 
-        int maxAgeTemp = ((Integer) PropPlugin.getValueToInt(Dict.MAX_AGE)).intValue();
+        int maxAgeTemp = ((Integer) PropPlugin.getInt(Dict.MAX_AGE)).intValue();
         WebTool.addCookie(response, "", "/", true, "authCode", securityCookie, maxAgeTemp);
     }
 

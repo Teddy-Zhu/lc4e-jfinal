@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_User_Topic_Blocked {
     /**
@@ -11,7 +11,7 @@ public class T_User_Topic_Blocked {
      */
     public static final String ID = "user_topic_blocked.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_User_Topic_Blocked {
      */
     public static final String TOPICID = "user_topic_blocked.topicId";
 
-    public static final String topicId = "topicId";
+    public static final String topicId = "TOPICID";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_User_Topic_Blocked {
      */
     public static final String USERID = "user_topic_blocked.userId";
 
-    public static final String userId = "userId";
+    public static final String userId = "USERID";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_User_Topic_Blocked {
      */
     public static final String CREATETIME = "user_topic_blocked.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_User_Topic_Blocked {
      */
     public static final String UPDATETIME = "user_topic_blocked.updateTime";
 
-    public static final String updateTime = "updateTime";
+    public static final String updateTime = "UPDATETIME";
 
     public static final String ALL_FIELDS = "user_topic_blocked.*";
 

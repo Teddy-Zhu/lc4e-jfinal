@@ -24,13 +24,13 @@ public class DateSetterHelper implements MethodInterceptor {
         String methodName = method.getName();
         if (methodName.equals(Const.DB_UPDATE) || methodName.equals(Const.DB_SAVE)) {
             Date dt = new Date();
-            Method setMethod = ReflectTool.getMethodByClassAndNameBase(obj.getClass(), Const.DB_SET);
-            setMethod.invoke(obj, Const.DB_UPDATETIME, dt);
+            Method setMethod = ReflectTool.getMethodByClassAndNameBase(target.getClass(), Const.DB_SET);
+            setMethod.invoke(target, Const.DB_UPDATETIME, dt);
             if (methodName.equals(Const.DB_SAVE)) {
-                setMethod.invoke(obj, Const.DB_CREATETIME, dt);
+                setMethod.invoke(target, Const.DB_CREATETIME, dt);
             }
         }
-        return methodProxy.invokeSuper(obj, objects);
+        return methodProxy.invoke(target, objects);
     }
 
 

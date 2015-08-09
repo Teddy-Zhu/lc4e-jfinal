@@ -1,4 +1,4 @@
-package com.teddy.jfinal.tools.beetl.render;
+package com.teddy.jfinal.plugin.beetl;
 
 import com.teddy.jfinal.common.Const;
 import org.apache.log4j.Logger;
@@ -21,7 +21,7 @@ public class Lc4eBeetlRender extends BeetlRender {
         long end = System.currentTimeMillis();
         long renderTime = end - start;
         log.debug("Lc4eBeetlRender render end time = " + end + "，renderTime = " + renderTime);
-        request.setAttribute(Const.RENDER_TIME, renderTime);
+        request.setAttribute(Const.RENDER_TIME, renderTime / 1000);
     }
 
 }

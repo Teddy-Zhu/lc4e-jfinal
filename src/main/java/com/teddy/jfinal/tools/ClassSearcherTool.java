@@ -1,9 +1,8 @@
 package com.teddy.jfinal.tools;
 
 import com.jfinal.kit.PathKit;
-import com.jfinal.log.Logger;
-import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.plugin.PropPlugin;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -16,27 +15,22 @@ import java.util.jar.JarFile;
 
 public class ClassSearcherTool {
 
-    protected static final Logger LOG = Logger.getLogger(ClassSearcherTool.class);
-
-    private static Map<Class<? extends Annotation>, Set<Class<?>>> extraction(List<String> classFileList, Class<? extends Annotation>... clazzes) {
-        Map<Class<? extends Annotation>, Set<Class<?>>> classList = new HashMap<Class<? extends Annotation>, Set<Class<?>>>();
+    private static Map<Class<? extends Annotation>, Set<Class>> extraction(List<String> classFileList, Class<? extends Annotation>... clazzes) {
+        Map<Class<? extends Annotation>, Set<Class>> classList = new HashMap<>();
         for (Class<? extends Annotation> clazz : clazzes) {
-            classList.put(clazz, new HashSet<Class<?>>());
+            classList.put(clazz, new HashSet<>());
         }
-        int length = clazzes.length;
-        for (int i = 0, len = classFileList.size(); i < len; i++) {
-            String classFile = classFileList.get(i);
-            if (!valiPkg(classFile)) {
-                continue;
-            }
-            Class<?> classInFile = ReflectTool.on(classFile).get();
-            for (int j = 0; j < length; j++) {
-                Class<? extends Annotation> clazz = clazzes[j];
-                if (classInFile.isAnnotationPresent(clazz)) {
-                    classList.get(clazz).add(classInFile);
+        classFileList.forEach(classFile -> {
+            if (valiPkg(classFile)) {
+                Class<?> classInFile = ReflectTool.on(classFile).get();
+                for (Class<? extends Annotation> clazz : clazzes) {
+                    if (classInFile.isAnnotationPresent(clazz)) {
+                        classList.get(clazz).add(classInFile);
+                    }
                 }
             }
-        }
+        });
+
         return classList;
     }
 
@@ -190,7 +184,7 @@ public class ClassSearcherTool {
     }
 
     @SuppressWarnings("unchecked")
-    public Map<Class<? extends Annotation>, Set<Class<?>>> search() {
+    public Map<Class<? extends Annotation>, Set<Class>> search() {
         List<String> classFileList = findFiles(classpath, "*.class");
         classFileList.addAll(findjarFiles(libDir, includeJars));
         return extraction(classFileList, target);

@@ -1,4 +1,4 @@
-package com.teddy.lc4e.util.plugins;
+package com.teddy.lc4e.core.util.plugins;
 
 import java.io.IOException;
 import java.io.InputStream;

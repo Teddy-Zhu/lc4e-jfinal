@@ -1,4 +1,4 @@
-package com.teddy.jfinal.tools.beetl.render;
+package com.teddy.jfinal.plugin.beetl;
 
 import com.jfinal.render.Render;
 import com.teddy.lc4e.core.config.Key;

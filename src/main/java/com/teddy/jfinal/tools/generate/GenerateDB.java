@@ -40,7 +40,7 @@ public class GenerateDB {
         con = DriverManager.getConnection(url, username, password);
 
         List<DatabaseModel> list = new ArrayList<>();
-        ResultSet rs = con.getMetaData().getTables(null, null, "", new String[]{"TABLE"});
+        ResultSet rs = con.getMetaData().getTables(null, null, "", new String[]{"TABLE", "VIEW"});
         while (rs.next()) {
             list.add(new DatabaseModel(rs.getString("TABLE_NAME"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
         }
@@ -83,7 +83,7 @@ public class GenerateDB {
             for (int i = 0, len = model.getFields().size(); i < len; i++) {
                 sb.append(model.getRemarks().get(i));
                 sb.append("    public static final String " + model.getFields().get(i).toUpperCase() + " = \"" + model.getTableName() + "." + model.getFields().get(i) + "\";\n\n");
-                sb.append("    public static final String " + model.getFields().get(i) + " = \"" + model.getFields().get(i) + "\";\n\n");
+                sb.append("    public static final String " + model.getFields().get(i) + " = \"" + model.getFields().get(i).toUpperCase() + "\";\n\n");
             }
             sb.append("    public static final String ALL_FIELDS = \"" + model.getTableName() + ".*\";\n\n");
             sb.append("    public static final String TABLE_NAME = \"" + model.getTableName() + "\";\n\n");
@@ -113,7 +113,7 @@ public class GenerateDB {
             FileOutputStream out = new FileOutputStream(file, true);
 
             StringBuffer sb = new StringBuffer();
-            sb.append(imports).append(header).append("@Model(value = \"" + model.getTableName() + "\", pk = {\"" + StringTool.join(model.getPks(), "\" , \"") + "\"} )\n");
+            sb.append(imports).append(header).append("@Model(value = \"" + model.getTableName() + "\"" + (model.getPks().size() > 0 ? ", pk = {\"" + StringTool.join(model.getPks(), ",") + "\"}" : "") + ")\n");
             //sb.append(imports).append(header).append("@Model\n");
 
             sb.append("public class " + className + " extends DBModel<" + className + "> {\n");

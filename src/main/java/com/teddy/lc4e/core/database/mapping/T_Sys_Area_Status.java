@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/02.
+ * Created by lc4e Tool on 15/08/07.
  */
 public class T_Sys_Area_Status {
     /**
@@ -11,7 +11,7 @@ public class T_Sys_Area_Status {
      */
     public static final String ID = "sys_area_status.id";
 
-    public static final String id = "id";
+    public static final String id = "ID";
 
     /**
      * 
@@ -20,7 +20,7 @@ public class T_Sys_Area_Status {
      */
     public static final String ABBR = "sys_area_status.abbr";
 
-    public static final String abbr = "abbr";
+    public static final String abbr = "ABBR";
 
     /**
      * 
@@ -29,7 +29,7 @@ public class T_Sys_Area_Status {
      */
     public static final String NAME = "sys_area_status.name";
 
-    public static final String name = "name";
+    public static final String name = "NAME";
 
     /**
      * 
@@ -38,7 +38,7 @@ public class T_Sys_Area_Status {
      */
     public static final String VISIBLE = "sys_area_status.visible";
 
-    public static final String visible = "visible";
+    public static final String visible = "VISIBLE";
 
     /**
      * 
@@ -47,7 +47,7 @@ public class T_Sys_Area_Status {
      */
     public static final String CLOSE = "sys_area_status.close";
 
-    public static final String close = "close";
+    public static final String close = "CLOSE";
 
     /**
      * 
@@ -56,7 +56,7 @@ public class T_Sys_Area_Status {
      */
     public static final String MOVE = "sys_area_status.move";
 
-    public static final String move = "move";
+    public static final String move = "MOVE";
 
     /**
      * 
@@ -65,7 +65,7 @@ public class T_Sys_Area_Status {
      */
     public static final String PUBTOPIC = "sys_area_status.pubTopic";
 
-    public static final String pubTopic = "pubTopic";
+    public static final String pubTopic = "PUBTOPIC";
 
     /**
      * 
@@ -74,7 +74,7 @@ public class T_Sys_Area_Status {
      */
     public static final String PUBCOMMENT = "sys_area_status.pubComment";
 
-    public static final String pubComment = "pubComment";
+    public static final String pubComment = "PUBCOMMENT";
 
     /**
      * 
@@ -83,7 +83,7 @@ public class T_Sys_Area_Status {
      */
     public static final String CREATETIME = "sys_area_status.createTime";
 
-    public static final String createTime = "createTime";
+    public static final String createTime = "CREATETIME";
 
     /**
      * 
@@ -92,7 +92,7 @@ public class T_Sys_Area_Status {
      */
     public static final String UPDAETTIME = "sys_area_status.updaetTime";
 
-    public static final String updaetTime = "updaetTime";
+    public static final String updaetTime = "UPDAETTIME";
 
     public static final String ALL_FIELDS = "sys_area_status.*";
 

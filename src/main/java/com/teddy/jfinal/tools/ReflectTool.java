@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Model;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.exceptions.ReflectException;
+import net.sf.cglib.proxy.Enhancer;
 import org.eclipse.jetty.server.Request;
 
 import java.lang.annotation.Annotation;
@@ -451,7 +452,7 @@ public class ReflectTool {
             for (int i = 0, len = fields.length; i < len; i++) {
                 String name = fields[i].getName();
                 for (int j = 0, l = args.length; j < l; j++) {
-                    if (name.contains(args[j])) {
+                    if (name.startsWith(args[j])) {
                         list.add(fields[i].get(null).toString());
                         break;
                     }
@@ -521,5 +522,27 @@ public class ReflectTool {
             ret.put(ans[i].annotationType(), ans[i]);
         }
         return ret;
+    }
+
+
+    /**
+     * exclude method in Controller
+     *
+     * @return
+     */
+    public static Set<String> buildExcludedMethodName(Class... clzes) {
+        Set<String> excludedMethodName = new HashSet<String>();
+        for (Class clz : clzes) {
+            Method[] methods = clz.getMethods();
+            for (Method m : methods) {
+                if (m.getParameterTypes().length == 0)
+                    excludedMethodName.add(m.getName());
+            }
+        }
+        return excludedMethodName;
+    }
+
+    public static <T> void WrapperMethodEnhancer(Enhancer enhancer, T target) {
+        Field[] fields = target.getClass().getFields();
     }
 }
