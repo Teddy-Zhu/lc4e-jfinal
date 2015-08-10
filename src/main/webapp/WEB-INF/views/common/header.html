@@ -15,7 +15,7 @@
                         <input id="searchSite" type="text" placeholder="Search..."> <i class="search link icon"></i>
                     </div>
                 </div>
-
+                <% if(auth.user()){%>
                 <div id="userItem" class="item">
 
                     <img class="ui headered linked image" src="/images/wireframe/image.png"/>
@@ -60,7 +60,7 @@
                                     <i class="setting icon"></i> Settings
                                 </div>
                                 <div class="or"></div>
-                                <div class="ui button">
+                                <div class="ui button" onclick="$.lc4e.signOut()">
                                     <i class="sign out icon"></i>
                                     Sign Out
                                 </div>
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-
+                <%}if(auth.guest()){ %>
                 <div class="ui item animated fade button">
                     <div class="visible content">Sign Up</div>
                     <div class="hidden content">
@@ -81,7 +81,7 @@
                         <i class="user icon"></i>
                     </div>
                 </div>
-
+                <%}%>
 
                 <div id="expendHeader" class="ui item hidden-mb">
                     <div class="ui linked label">

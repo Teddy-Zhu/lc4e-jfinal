@@ -199,4 +199,10 @@ public class WebTool {
         String pjax = request.getHeader("X-PJAX");
         return StrKit.notBlank(pjax) && Boolean.valueOf(pjax).equals(true);
     }
+
+    public static boolean isAJAX(HttpServletRequest request) {
+        String ajax = request.getHeader("X-Requested-With");
+        return StrKit.notBlank(ajax) && "XMLHttpRequest".equals(ajax);
+    }
+
 }

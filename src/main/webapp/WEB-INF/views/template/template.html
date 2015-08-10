@@ -20,6 +20,7 @@
 <a id="GTTop" href="#" tabindex="1"><i class="circular large arrow up icon"></i></a>
 <!-- Right Buttons End -->
 <!-- Slider Bar Start -->
+<%if(configTool){%>
 <div id="config-tool" class="closed">
     <a id="config-tool-cog"> <i class="large setting loading icon"></i>
     </a>
@@ -77,6 +78,7 @@
         </div>
     </div>
 </div>
+<%}%>
 <!-- Slider Bar End -->
 <%layout("/common/footer.html",{}){}%>
 <script type="text/javascript">

@@ -143,7 +143,7 @@ body {
 }
 
 #searchSite.expended {
-    width: 20em;
+    width: 15em;
 }
 
 /* header expend button*/
@@ -197,15 +197,13 @@ body {
 
 @media screen and (min-width: 1200px) {
     #mainContent {
-        padding-left: 8%;
-        padding-right: 8%;
+        padding: 1em 8% 1em 8%;
     }
 }
 
 @media screen and (min-width: 992px) and (max-width: 1200px) {
     #mainContent {
-        padding-left: 6%;
-        padding-right: 6%;
+        padding: 1em 6% 1em 6%;
     }
 }
 
@@ -351,7 +349,7 @@ body {
     -webkit-transition: left 0.1s ease;
     transition: left 0.1s ease;
     margin: 1em 0;
-    border-top: 1px solid rgba(34,36,38,.15);
+    border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
 #config-tool-options {
@@ -391,7 +389,6 @@ body {
     background-color: transparent;
 }
 
-
 /* extend success */
 .ui.input.success input {
     background-color: #C2F1BA;
@@ -399,3 +396,30 @@ body {
     color: green;
     box-shadow: none;
 }
+
+.ui.padding.segment {
+    width: 50%;
+}
+
+.ui.padding.segment:after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+/* form related */
+.ui.form .ui.input > input {
+    width: 100% !important;
+}
+
+.ui.form .inline.fields .field .fieldName {
+    width: 53%;
+    text-align: right;
+    margin: 0px 3.857143em 0 0;
+}
+
+.ui.form .inline.fields .field .fieldValue {
+    width: 70%;
+    text-align: left;
+}
+

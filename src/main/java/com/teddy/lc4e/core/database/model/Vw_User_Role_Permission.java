@@ -4,10 +4,10 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/08/07.
+ * Created by lc4e Tool on 15/08/10.
  */
 @Model(value = "vw_user_role_permission")
 public class Vw_User_Role_Permission extends DBModel<Vw_User_Role_Permission> {
-    public static final Vw_User_Role_Permission dao = new Vw_User_Role_Permission().enhancer();
+    public static final Vw_User_Role_Permission dao = new Vw_User_Role_Permission();
 
 }

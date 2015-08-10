@@ -4,10 +4,10 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/08/07.
+ * Created by lc4e Tool on 15/08/10.
  */
 @Model(value = "sys_role_permission", pk = {"id"})
 public class Sys_Role_Permission extends DBModel<Sys_Role_Permission> {
-    public static final Sys_Role_Permission dao = new Sys_Role_Permission().enhancer();
+    public static final Sys_Role_Permission dao = new Sys_Role_Permission();
 
 }

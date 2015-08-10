@@ -22,40 +22,15 @@ public class Lc4eCaptchaRender extends Render {
 
     // 定义图形验证码中绘制字符的字体
     // private final Font mFont = new Font("Arial Black", Font.PLAIN, 16);
-    private final static List<Font> fontList;
+    private static List<Font> fontList = new ArrayList<>();
 
     static {
-        fontList = new ArrayList<>();
+        String[] fonts = new String[]{"Terminal", "Times New Roman", "Trebuchet MS", "System", "Stencil", "Segoe Print", "Palatino Linotype",
+                "Lucida Sans", "Franklin Gothic", "Felix Titling"};
 
-        Font font01 = new Font("Terminal", Font.PLAIN, 18);
-        fontList.add(font01);
-
-        Font font02 = new Font("Times New Roman", Font.PLAIN, 18);
-        fontList.add(font02);
-
-        Font font03 = new Font("Trebuchet MS", Font.PLAIN, 18);
-        fontList.add(font03);
-
-        Font font04 = new Font("System", Font.PLAIN, 18);
-        fontList.add(font04);
-
-        Font font05 = new Font("Stencil", Font.PLAIN, 18);
-        fontList.add(font05);
-
-        Font font06 = new Font("Segoe Print", Font.PLAIN, 18);
-        fontList.add(font06);
-
-        Font font07 = new Font("Palatino Linotype", Font.PLAIN, 18);
-        fontList.add(font07);
-
-        Font font08 = new Font("Lucida Sans", Font.PLAIN, 18);
-        fontList.add(font08);
-
-        Font font09 = new Font("Franklin Gothic", Font.PLAIN, 18);
-        fontList.add(font09);
-
-        Font font10 = new Font("Felix Titling", Font.PLAIN, 18);
-        fontList.add(font10);
+        for (String font : fonts) {
+            fontList.add(new Font(font, Font.PLAIN, 18));
+        }
     }
 
     // 定义图形验证码的大小

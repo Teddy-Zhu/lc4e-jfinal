@@ -93,7 +93,6 @@ public class GlobalInterceptorKit {
 
     public static void handleInject(Invocation ai) throws IllegalAccessException {
         Controller controller = ai.getController();
-
         Inject(controller, controller.getClass());
     }
 

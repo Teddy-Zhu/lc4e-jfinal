@@ -4,10 +4,10 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/08/07.
+ * Created by lc4e Tool on 15/08/10.
  */
 @Model(value = "sys_area_status", pk = {"id"})
 public class Sys_Area_Status extends DBModel<Sys_Area_Status> {
-    public static final Sys_Area_Status dao = new Sys_Area_Status().enhancer();
+    public static final Sys_Area_Status dao = new Sys_Area_Status();
 
 }

@@ -1,14 +1,13 @@
 <%layout("/template/template.html",{
-'headerCSS':['/css/view/pages/index.css'],
-'footerJS':['/js/pages/index.js']
+'headerCSS':['/css/pages/index.css'],
+'footerJS':['/js/pages/index.js'],
+'configTool':true
 }){%>
 <div id="leftContent" class="ten wide column">
     <div id="announcement" class="ui segment">
         <div class="item">
             <div class="ui white label">
                 <i class="announcement icon"></i>
-
-                <div class="hidden-mb">AnnounceMent</div>
             </div>
             <div id="announce" class="ui text shape">
                 <div class="sides">
@@ -20,7 +19,7 @@
         </div>
     </div>
     <div id="articlelist" class="ui stacked raised segment">
-        <div class="ui divided items" page="${page}"></div>
+        <div class="ui divided items" page="${page!1}"></div>
     </div>
     <div id="articlebottons" class="ui raised clearing segment">
         <div id="prePage" class="ui left floated labeled icon button">

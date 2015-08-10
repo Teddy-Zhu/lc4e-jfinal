@@ -21,7 +21,6 @@ public class Lc4eBeetlRender extends BeetlRender {
         long end = System.currentTimeMillis();
         long renderTime = end - start;
         log.debug("Lc4eBeetlRender render end time = " + end + "，renderTime = " + renderTime);
-        request.setAttribute(Const.RENDER_TIME, renderTime / 1000);
+        request.setAttribute(Const.RENDER_TIME, renderTime);
     }
-
 }

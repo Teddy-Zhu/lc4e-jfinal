@@ -1,21 +1,19 @@
 package com.teddy.lc4e.core.web.controller;
 
-import com.teddy.jfinal.annotation.*;
+import com.teddy.jfinal.annotation.Controller;
+import com.teddy.jfinal.annotation.Inject;
+import com.teddy.jfinal.annotation.RequestMethod;
+import com.teddy.jfinal.annotation.ValidateParam;
 import com.teddy.jfinal.entity.Method;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.tools.RelativeDate;
-import com.teddy.jfinal.tools.WebTool;
-import com.teddy.lc4e.core.database.mapping.T_User;
-import com.teddy.lc4e.core.database.model.User;
 import com.teddy.lc4e.core.entity.Article;
 import com.teddy.lc4e.core.entity.Message;
 import com.teddy.lc4e.core.entity.Popup;
 import com.teddy.lc4e.core.web.service.ComVarService;
-import com.teddy.lc4e.core.web.service.UserService;
 import com.teddy.lc4e.core.web.service.testService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +33,7 @@ public class ViewController extends BaseController {
     @ValidateParam(value = "p", type = int.class, defaultValue = "1")
     public void index() {
         setAttr("page", getPara("p"));
-        if (WebTool.isPJAX(getRequest())) {
+        if (isPJAX()) {
             forwardAction("/Articles");
         } else {
             render("pages/index");
@@ -55,33 +53,37 @@ public class ViewController extends BaseController {
                     RelativeDate.format(RelativeDate.randomDate("2015-05-11 13:00:00", now), now), users[new Random().nextInt(users.length - 1)]));
         }
         setAttr("lists", list);
-        render("pjax/_article");
+        render("ajax/_article");
     }
 
     public void TopHots() {
         render("topHotTest");
     }
 
-    @ValidateParams(fields = {@ValidateParam(value = "user.name", minLen = 4, maxLen = 12), @ValidateParam(value = "user.password", minLen = 6, maxLen = 20)})
-    public void SignUp() {
-        User user = getModel(User.class, "user").enhancer();
-        UserService.service.createUser(user);
-
-        renderJson(user);
-    }
-
-    @ValidateParams(fields = {@ValidateParam(value = "user.name", minLen = 4, maxLen = 12), @ValidateParam(value = "user.password", minLen = 6, maxLen = 20)})
-    public void SignIn() {
-        User user = getModel(User.class, "user");
-        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getStr(T_User.name), user.getStr(T_User.password));
-        token.setRememberMe(true);
-        subject.login(token);
-        if (subject.isAuthenticated()) {
-            renderJson(new Message(true, "Login Success"));
+    public void SignOut() {
+        SecurityUtils.getSubject().logout();
+        if (isAJAX()) {
+            renderJson(new Message(true, "SignOut Successfully"));
         } else {
-            renderJson(new Message("Login failed"));
+            forwardAction("/");
         }
     }
 
+    @RequiresGuest
+    public void SignIn() {
+        render("pages/signin");
+    }
+
+
+    public void SignUp() {
+        render("pages/signup");
+    }
+
+
+    //test
+
+    public void Error() {
+        setAttr("message", new Message("test error"));
+        render("pages/exception");
+    }
 }

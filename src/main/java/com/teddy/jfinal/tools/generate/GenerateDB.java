@@ -118,7 +118,7 @@ public class GenerateDB {
 
             sb.append("public class " + className + " extends DBModel<" + className + "> {\n");
 
-            sb.append("    public static final " + className + " dao = new " + className + "().enhancer();\n\n");
+            sb.append("    public static final " + className + " dao = new " + className + "();\n\n");
 //
 //            for (String pk : model.getPks()) {
 //                sb.append("    public " + className + " get" + className + "By" + StringTool.toUpperCaseFirstOne(pk) + " () " + ";\n\n");

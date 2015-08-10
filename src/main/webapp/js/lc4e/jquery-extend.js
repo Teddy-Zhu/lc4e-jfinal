@@ -8,7 +8,53 @@
  */
 
 (function ($) {
+    $.lc4e = $.lc4e || {};
 
+    $.extend($.lc4e, {
+        version: '1.0',
+        Lc4eToDate: {
+            unix2human: function (unixtime) {
+                var dateObj = new Date(unixtime);
+                var UnixTimeToDate = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1) + '-' + dateObj.getDate() + ' ' + $.lc4e.Lc4eToDate.p(dateObj.getHours()) + ':' + $.lc4e.Lc4eToDate.p(dateObj.getMinutes()) + ':' + $.lc4e.Lc4eToDate.p(dateObj.getSeconds());
+                return UnixTimeToDate;
+            },
+            p: function (s) {
+                return s < 10 ? '0' + s : s;
+            }
+        },
+        Lc4ePJAX: {
+            support: function () {
+                return window.history && window.history.pushState && window.history.replaceState && !navigator.userAgent.match(/(iPod|iPhone|iPad|WebApps\/.+CFNetwork)/) && window.localStorage
+            },
+            active: false,
+            successFunc: {}
+        },
+        signOut: function () {
+            $.Lc4eAjax({
+                url: '/SignOut',
+                success: function (result) {
+                    if (result && result.result) {
+                        $.Lc4eModal({
+                            content: result.message
+                        })
+                    }
+                }
+            })
+        }
+    });
+    String.prototype.trimEnd = function (trimStr) {
+        if (!trimStr) {
+            return this;
+        }
+        var temp = this;
+        while (true) {
+            if (temp.substr(temp.length - trimStr.length, trimStr.length) != trimStr) {
+                break;
+            }
+            temp = temp.substr(0, temp.length - trimStr.length);
+        }
+        return temp;
+    };
     /* animate scroll */
     // defines various easing effects
     $.easing['jswing'] = $.easing['swing'];
@@ -447,23 +493,6 @@
         Lc4eRandomColor: function () {
             return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
         },
-        Lc4eLoadScript: function (url) {
-            var dtd = $.Deferred();
-            $.getScript(url, function () {
-                dtd.resolve();
-            })
-            return dtd.promise();
-        },
-        Lc4eLoadScripts: function (urls) {
-            if (!$.isArray(urls)) {
-                return $.Lc4eLoadScript(urls);
-            }
-            var ret = [];
-            for (var i = 0, len = urls.length; i < len; i++) {
-                ret[i] = $.Lc4eLoadScript(urls[i]);
-            }
-            return $.when.apply($, ret);
-        },
         Lc4eAjax: function (data) {
             var loptions = {};
             data = $.extend(true, {
@@ -564,9 +593,7 @@
         Lc4eModal: function (options) {
             return $("body").Lc4eModal(options);
         },
-        Lc4eToDate: function (unixTime) {
-            return $.lc4e.Lc4eToDate.unix2human(unixTime);
-        },
+        Lc4eToDate: $.lc4e.Lc4eToDate.unix2human,
         Lc4eProgress: function (option, data) {
             return $("body").Lc4eProgress(option, data);
         },
@@ -578,46 +605,99 @@
         }
     });
 
-    $.lc4e = $.lc4e || {};
 
-    $.extend($.lc4e, {
-        version: '1.0',
-        Lc4eToDate: {
-            unix2human: function (unixtime) {
-                var dateObj = new Date(unixtime);
-                var UnixTimeToDate = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1) + '-' + dateObj.getDate() + ' ' + $.lc4e.Lc4eToDate.p(dateObj.getHours()) + ':' + $.lc4e.Lc4eToDate.p(dateObj.getMinutes()) + ':' + $.lc4e.Lc4eToDate.p(dateObj.getSeconds());
-                return UnixTimeToDate;
-            },
-            p: function (s) {
-                return s < 10 ? '0' + s : s;
-            }
-        },
-        Lc4ePJAX: {
-            support: function () {
-                return window.history && window.history.pushState && window.history.replaceState && !navigator.userAgent.match(/(iPod|iPhone|iPad|WebApps\/.+CFNetwork)/) && window.localStorage
-            },
-            active: false,
-            successFunc: {}
-        },
-    });
-    String.prototype.trimEnd = function (trimStr) {
-        if (!trimStr) {
-            return this;
-        }
-        var temp = this;
-        while (true) {
-            if (temp.substr(temp.length - trimStr.length, trimStr.length) != trimStr) {
-                break;
-            }
-            temp = temp.substr(0, temp.length - trimStr.length);
-        }
-        return temp;
-    };
+    //extend ec6
     String.prototype.unix2human = function () {
         return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
     };
     Number.prototype.unix2human = function () {
         return $.lc4e.Lc4eToDate.unix2human(this);
     };
+
+    $.lc4e.common = function(){
+
+        $('#menu .ui.dropdown.item').dropdown({
+            action: "nothing",
+            transition: "horizontal flip",
+            on: 'click'
+        });
+        $('#searchSite').on('focus', function () {
+            $(this).addClass('expended');
+        }).on('blur', function () {
+            $(this).removeClass('expended')
+        });
+
+        $('#expendHeader').on('click', function () {
+            $('#menu').toggleClass('expended');
+        });
+
+        $('#menu .column div:first a').on('click', function () {
+            $('#menu>.column>.allmenus').transition({
+                animation: "fly down",
+                duration: 500,
+                onComplete: function () {
+                    $('#menu>.column>.allmenus').toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
+                }
+            });
+        });
+        $('#config-tool-options .angle.double.left.icon').on('click', function () {
+            if ($($('#config-tool-options .ui.animated.selection.list:not(.hidden)').transition('fade left').attr('data-parent')).transition('fade left').attr('id') == 'menu1') {
+                $(this).addClass('transition hidden');
+            }
+        });
+        $('#config-tool-cog').on('click', function () {
+            $('#config-tool').toggleClass('closed');
+        });
+
+        var timerIn, timerOut;
+        $('html').visibility({
+            offset: -5,
+            observeChanges: false,
+            once: false,
+            continuous: false,
+            onTopPassed: function () {
+                clearTimeout(timerIn);
+                $.requestAnimationFrame(function () {
+                    $('#menu').addClass('fixed');
+                });
+                timerIn = setTimeout(function () {
+                    $.requestAnimationFrame(function () {
+                        $('#GTTop').transition('swing down in');
+                    })
+                }, 300);
+            },
+            onTopPassedReverse: function () {
+                clearTimeout(timerOut);
+                $.requestAnimationFrame(function () {
+                    $('#menu').removeClass('fixed');
+
+                });
+                timerOut = setTimeout(function () {
+                    $.requestAnimationFrame(function () {
+                        $('#GTTop').transition('swing down out');
+                    })
+                }, 300);
+            }
+        });
+
+        $('#userItem img.ui.image').popup({
+            position: 'bottom center',
+            transition: "fade up",
+            popup: $('#userCardPop'),
+            exclusive: false,
+            hideOnScroll: false,
+            on: 'click',
+            closable: true
+        });
+
+        $('#GTTop').on('click', function (e) {
+            $('body').animatescroll({
+                scrollSpeed: 500
+            });
+        });
+    };
+
+
+    $.lc4e.common.call();
 })
 (jQuery);
