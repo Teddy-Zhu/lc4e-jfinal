@@ -70,8 +70,6 @@ public class WebTool {
             cookie.setPath(path);
         }
 
-        cookie.setHttpOnly(isHttpOnly);
-
         if (maxAge > 0) {
             cookie.setMaxAge(maxAge);
         }

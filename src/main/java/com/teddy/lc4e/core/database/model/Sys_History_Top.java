@@ -4,7 +4,7 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/08/10.
+ * Created by lc4e Tool on 15/08/11.
  */
 @Model(value = "sys_history_top", pk = {"id"})
 public class Sys_History_Top extends DBModel<Sys_History_Top> {

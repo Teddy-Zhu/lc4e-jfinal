@@ -1,7 +1,6 @@
 package com.teddy.lc4e.core.web.controller;
 
 import com.teddy.jfinal.annotation.Controller;
-import com.teddy.jfinal.annotation.Inject;
 import com.teddy.jfinal.annotation.RequestMethod;
 import com.teddy.jfinal.annotation.ValidateParam;
 import com.teddy.jfinal.entity.Method;
@@ -11,7 +10,6 @@ import com.teddy.lc4e.core.entity.Article;
 import com.teddy.lc4e.core.entity.Message;
 import com.teddy.lc4e.core.entity.Popup;
 import com.teddy.lc4e.core.web.service.ComVarService;
-import com.teddy.lc4e.core.web.service.testService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 
@@ -26,9 +24,6 @@ import java.util.Random;
  */
 @Controller("/")
 public class ViewController extends BaseController {
-
-    @Inject
-    public testService service;
 
     @ValidateParam(value = "p", type = int.class, defaultValue = "1")
     public void index() {
@@ -81,7 +76,6 @@ public class ViewController extends BaseController {
 
 
     //test
-
     public void Error() {
         setAttr("message", new Message("test error"));
         render("pages/exception");

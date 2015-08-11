@@ -7,4 +7,8 @@ public class Key {
 
     public static final String Empty = "";
 
+    public static final String CASE_SENSITIVE = "CaptchaCaseSensitive";
+
+    public static final String REGISTER_CAPTCHA ="RegisterCaptcha";
+
 }

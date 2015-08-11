@@ -110,23 +110,27 @@ public class CustomPlugin implements IPlugin {
 
     @Override
     public boolean start() {
-        resolveMethod(Const.PLUGIN_START, null);
+        try {
+            resolveMethod(Const.PLUGIN_START, null);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
     @Override
     public boolean stop() {
-        resolveMethod(Const.PLUGIN_STOP, null);
+        try {
+            resolveMethod(Const.PLUGIN_STOP, null);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
 
     public static Map<Class<? extends Annotation>, Set<Class>> getClassesMap() {
         return classesMap;
-    }
-
-    public static void setClassesMap(Map<Class<? extends Annotation>, Set<Class>> classesMap) {
-        CustomPlugin.classesMap = classesMap;
     }
 
     public static Class<?> getClazz() {
@@ -138,7 +142,7 @@ public class CustomPlugin implements IPlugin {
     }
 
 
-    public void init(Routes me) {
+    public void init(Routes me) throws InstantiationException {
         routes.forEach(route -> {
             if (StringTool.equalEmpty(route.getViewPath()))
                 me.add(route.getControllerKey(), route.getControllerClass());
@@ -149,21 +153,21 @@ public class CustomPlugin implements IPlugin {
     }
 
 
-    public void init(Plugins me) {
+    public void init(Plugins me) throws InstantiationException {
         plugins.forEach(me::add);
         resolveMethod(Const.PLUGIN_INIT_PLUGINS, me);
     }
 
-    public void init(Constants me) {
+    public void init(Constants me) throws InstantiationException {
         resolveMethod(Const.PLUGIN_INIT_CONSTANTS, me);
     }
 
-    public void init(Interceptors me) {
+    public void init(Interceptors me) throws InstantiationException {
         interceptors.forEach(me::add);
         resolveMethod(Const.PLUGIN_INIT_INTERCEPTOR, me);
     }
 
-    public void init(Handlers me) {
+    public void init(Handlers me) throws InstantiationException {
         handlers.forEach(me::add);
         resolveMethod(Const.PLUGIN_INIT_HANDLER, me);
     }
@@ -189,13 +193,13 @@ public class CustomPlugin implements IPlugin {
         Set<Class> Classes = classesMap.get(Controller.class);
         Set<String> excludedMethodName = ReflectTool.buildExcludedMethodName(com.jfinal.core.Controller.class, BaseController.class);
         //the Order is important
-        Class<? extends Annotation>[] methodRequiredAnnotations = new Class[]{RequestMethod.class, RequestHeader.class
+        Class[] methodRequiredAnnotations = new Class[]{RequestMethod.class, RequestHeader.class
                 , ValidateToken.class, RequiresAuthentication.class, RequiresPermissions.class, RequiresRoles.class, RequiresUser.class,
                 RequiresGuest.class, ValidateComVars.class, ValidateComVar.class, ValidateParams.class, ValidateParam.class};
-        Class<? extends Annotation>[] contrllerRequiredAnnotations = new Class[]{RequestMethod.class, RequestHeader.class
+        Class[] contrllerRequiredAnnotations = new Class[]{RequestMethod.class, RequestHeader.class
                 , ValidateToken.class, RequiresAuthentication.class, RequiresPermissions.class, RequiresRoles.class, RequiresUser.class,
                 RequiresGuest.class};
-        Class<? extends Annotation>[] afterMethodRequiredAnnotations = new Class[]{ResponseStatus.class, SetComVar.class, SetUIDatas.class, SetUIData.class};
+        Class[] afterMethodRequiredAnnotations = new Class[]{ResponseStatus.class, SetComVar.class, SetUIDatas.class, SetUIData.class};
         Classes.forEach(controller -> {
             Controller controllerBind = (Controller) controller.getAnnotation(Controller.class);
             if (controllerBind != null && BaseController.class.isAssignableFrom(controller)) {
@@ -232,9 +236,9 @@ public class CustomPlugin implements IPlugin {
 
     }
 
-    private List<Annotation> buildAnnotation(Class clz, Class<? extends Annotation>[] requiredAnnotations) {
+    private List<Annotation> buildAnnotation(Class clz, Class[] requiredAnnotations) {
         List<Annotation> annotations = new ArrayList<>();
-        for (Class<? extends Annotation> an : requiredAnnotations) {
+        for (Class an : requiredAnnotations) {
             Annotation annotation = clz.getAnnotation(an);
             if (annotation != null && !annotations.contains(annotation)) {
                 annotations.add(annotation);
@@ -243,9 +247,9 @@ public class CustomPlugin implements IPlugin {
         return annotations;
     }
 
-    private List<Annotation> buildAnnotation(Method method, Class<? extends Annotation>[] requiredAnnotations) {
+    private List<Annotation> buildAnnotation(Method method, Class[] requiredAnnotations) {
         List<Annotation> annotations = new ArrayList<>();
-        for (Class<? extends Annotation> an : requiredAnnotations) {
+        for (Class an : requiredAnnotations) {
             Annotation annotation = method.getAnnotation(an);
             if (annotation != null && !annotations.contains(annotation)) {
                 annotations.add(annotation);
@@ -257,7 +261,7 @@ public class CustomPlugin implements IPlugin {
     private String createActionKey(Class<? extends BaseController> controllerClass,
                                    Method method, String controllerKey) {
         String methodName = method.getName();
-        String actionKey = "";
+        String actionKey;
 
         ActionKey ak = method.getAnnotation(ActionKey.class);
         if (ak != null) {
@@ -305,9 +309,7 @@ public class CustomPlugin implements IPlugin {
                         }
                     }
                 }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
             arp.setShowSql(PropPlugin.getBool(Dict.DEV_MODE, false));
@@ -393,11 +395,7 @@ public class CustomPlugin implements IPlugin {
                     interceptors.add((Interceptor) interceptor.newInstance());
                 }
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (Lc4eException e) {
+        } catch (InstantiationException | IllegalAccessException | Lc4eException e) {
             e.printStackTrace();
         }
 
@@ -406,8 +404,7 @@ public class CustomPlugin implements IPlugin {
     }
 
     private void initHanders() {
-        Set<Class> Classes = null;
-        Classes = classesMap.get(InterceptorHandler.class);
+        Set<Class> Classes = classesMap.get(InterceptorHandler.class);
         try {
             for (Class<?> handler : Classes) {
                 if (Handler.class.isAssignableFrom(handler)) {
@@ -419,11 +416,7 @@ public class CustomPlugin implements IPlugin {
                     handlers.add((com.jfinal.handler.Handler) handler.newInstance());
                 }
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (Lc4eException e) {
+        } catch (InstantiationException | IllegalAccessException | Lc4eException e) {
             e.printStackTrace();
         }
 
@@ -432,8 +425,8 @@ public class CustomPlugin implements IPlugin {
 
     }
 
-    private void resolveMethod(String name, Object me) {
-        boolean result = false;
+    private void resolveMethod(String name, Object me) throws InstantiationException {
+        boolean result;
         try {
             for (Method method : aopHandler.get(name)) {
                 if (me == null)
@@ -444,13 +437,7 @@ public class CustomPlugin implements IPlugin {
                     throw new Lc4eException("Start plugin [" + method.getDeclaringClass().getName() + "] failed");
                 }
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (Lc4eException e) {
+        } catch (IllegalAccessException | InvocationTargetException | Lc4eException e) {
             e.printStackTrace();
         }
     }

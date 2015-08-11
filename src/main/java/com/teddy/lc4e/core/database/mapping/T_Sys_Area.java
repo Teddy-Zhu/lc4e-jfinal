@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/10.
+ * Created by lc4e Tool on 15/08/11.
  */
 public class T_Sys_Area {
     /**

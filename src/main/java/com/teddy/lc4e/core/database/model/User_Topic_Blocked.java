@@ -4,7 +4,7 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/08/10.
+ * Created by lc4e Tool on 15/08/11.
  */
 @Model(value = "user_topic_blocked", pk = {"id"})
 public class User_Topic_Blocked extends DBModel<User_Topic_Blocked> {

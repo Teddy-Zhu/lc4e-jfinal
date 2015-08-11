@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/10.
+ * Created by lc4e Tool on 15/08/11.
  */
 public class T_Sys_Area_Status {
     /**
@@ -30,6 +30,15 @@ public class T_Sys_Area_Status {
     public static final String NAME = "sys_area_status.name";
 
     public static final String name = "NAME";
+
+    /**
+     * 
+     * Type:VARCHAR
+     * Remarks:
+     */
+    public static final String DESCRIPTION = "sys_area_status.description";
+
+    public static final String description = "DESCRIPTION";
 
     /**
      * 

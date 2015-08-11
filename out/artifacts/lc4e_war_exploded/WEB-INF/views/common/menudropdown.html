@@ -1,0 +1,20 @@
+<%
+for(curMenu in menus){
+    if(curMenu.CHILDS.~size > 0){
+        println('<div class="ui dropdown link item">');
+        if(curMenu.ICON !=null && !isEmpty(curMenu.ICON)){
+            print('<i class="'+ curMenu.ICON +' icon"></i>');
+        }
+        print('<span class="text">'+ curMenu.NAME +'</span><i class="dropdown icon"></i><div class="menu">');
+        layout("/common/menudropdown.html",{'menus':curMenu.CHILDS}){};
+        println('</div>');
+        println('</div>');
+    }else{
+        print('<a class="item linked" href="'+ curMenu.ABBR +'">');
+        if(curMenu.ICON != null && !isEmpty(curMenu.ICON)){
+             print('<i class="'+ curMenu.ICON +' icon"></i>');
+        }
+        print(curMenu.NAME +'</a>');
+    }
+}
+%>

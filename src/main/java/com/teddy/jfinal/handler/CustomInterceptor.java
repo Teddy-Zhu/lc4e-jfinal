@@ -28,8 +28,8 @@ public class CustomInterceptor implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-        Object returnValue = null;
-        boolean useCache = false;
+        Object returnValue;
+        boolean useCache;
         Object cacheKey = null;
         Cache cache = ReflectTool.getAnnotationByMethod(method, Cache.class);
         useCache = cache != null && PropPlugin.getBool(Dict.CACHE_USE, true) && cache.index() < objects.length;
@@ -59,10 +59,10 @@ public class CustomInterceptor implements MethodInterceptor {
         if (method.isAnnotationPresent(Transaction.class)) {
             Object transObj = TransactionHelper.Proxy(this.target);
             GlobalInterceptorKit.Inject(transObj, clz);
-            returnValue = methodProxy.invoke(transObj, objects);
+            returnValue = method.invoke(transObj, objects);
         } else {
             GlobalInterceptorKit.Inject(target, clz);
-            returnValue = methodProxy.invoke(target, objects);
+            returnValue = method.invoke(target, objects);
         }
         if (useCache) {
             CacheKit.put(cache.cacheName(), cacheKey, returnValue);

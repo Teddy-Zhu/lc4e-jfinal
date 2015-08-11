@@ -1,9 +1,9 @@
 package com.teddy.jfinal.plugin.beetl;
 
 import com.jfinal.render.Render;
-import com.teddy.jfinal.tools.AuthTool;
 import com.teddy.jfinal.tools.StringTool;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -12,6 +12,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,12 @@ public class Lc4eCaptchaRender extends Render {
 
     private static Logger log = Logger.getLogger(Lc4eCaptchaRender.class);
 
-    // 定义图形验证码中绘制字符的字体
-    // private final Font mFont = new Font("Arial Black", Font.PLAIN, 16);
+    public static final String captcha_code = "lc4e_captcha_code";
+    private static boolean casesensitive = false;
     private static List<Font> fontList = new ArrayList<>();
+    // 定义图形验证码的大小
+    private final int IMG_WIDTH = 100;
+    private final int IMG_HEIGTH = 18;
 
     static {
         String[] fonts = new String[]{"Terminal", "Times New Roman", "Trebuchet MS", "System", "Stencil", "Segoe Print", "Palatino Linotype",
@@ -33,9 +37,6 @@ public class Lc4eCaptchaRender extends Render {
         }
     }
 
-    // 定义图形验证码的大小
-    private final int IMG_WIDTH = 100;
-    private final int IMG_HEIGTH = 18;
 
     @Override
     public void render() {
@@ -43,9 +44,9 @@ public class Lc4eCaptchaRender extends Render {
 
         String sRand = graphics(bufferedImage).toLowerCase();
         log.debug("验证码：" + sRand);
+        //String md5 = encrypt(sRand);
 
-        // 设置验证码值到cookie
-        AuthTool.setAuthCode(response, sRand);
+        SecurityUtils.getSubject().getSession().setAttribute(captcha_code, casesensitive ? sRand : sRand.toLowerCase());
 
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -66,6 +67,27 @@ public class Lc4eCaptchaRender extends Render {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    /**
+     * 使用md5散列字符串
+     *
+     * @param srcStr 输入的字符串
+     * @return 加密后的字符串
+     */
+    public static final String encrypt(String srcStr) {
+        try {
+            StringBuilder result = new StringBuilder();
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] bytes = md.digest(srcStr.getBytes("utf-8"));
+            for (byte b : bytes) {
+                String hex = Integer.toHexString(b & 0xFF).toUpperCase();
+                result.append((hex.length() == 1) ? "0" : "").append(hex);
+            }
+            return result.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -243,4 +265,16 @@ public class Lc4eCaptchaRender extends Render {
         return color;
     }
 
+    public static boolean validate(String code) {
+        Object value = SecurityUtils.getSubject().getSession().getAttribute(captcha_code);
+        return value != null && value.equals(casesensitive ? code : code.toLowerCase());
+    }
+
+    public boolean isCasesensitive() {
+        return casesensitive;
+    }
+
+    public void setCasesensitive(boolean casesensitive) {
+        this.casesensitive = casesensitive;
+    }
 }

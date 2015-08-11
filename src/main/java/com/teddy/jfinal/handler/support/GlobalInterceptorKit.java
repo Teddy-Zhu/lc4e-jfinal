@@ -86,7 +86,7 @@ public class GlobalInterceptorKit {
      * @param ai
      * @throws Lc4eException
      */
-    public static void handleAnnotationsOnControllerMethod(Invocation ai, List<Annotation> ans) throws InvocationTargetException, NoSuchMethodException, ValidateException, IllegalAccessException, NoSuchFieldException, Lc4eException, ParseException {
+    public static void handleAnnotationsOnControllerMethod(Invocation ai, List<Annotation> ans) throws InvocationTargetException, NoSuchMethodException, ValidateException, IllegalAccessException, NoSuchFieldException, Lc4eException, ParseException, ClassNotFoundException {
         ValidateKit.resolve(ans, ai);
     }
 

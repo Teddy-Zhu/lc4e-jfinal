@@ -26,14 +26,13 @@
             <artifactId>ehcache</artifactId>
             <version>2.10.0</version>
         </dependency>
-        <!-- jetty server -->
-        <dependency>
-            <groupId>com.jfinal</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>8.1.8</version>
-        </dependency>
 
         <!-- log print -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -86,11 +85,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-quartz</artifactId>
-            <version>1.2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
             <version>1.2.4</version>
         </dependency>
@@ -117,6 +111,13 @@
             <version>2.2.1</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>3.0-alpha-1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>lc4e</finalName>
