@@ -13,15 +13,6 @@ import java.util.*;
 
 public class ReflectTool {
 
-    private static Field requestField;
-
-    private static Field parametersParsedField;
-
-    private static Field coyoteRequestField;
-
-    private static Field parametersField;
-
-    private static Field hashTabArrField;
 
     public static ReflectTool on(String name) throws ReflectException {
         return on(forName(name));
@@ -557,29 +548,4 @@ public class ReflectTool {
         return excludedMethodName;
     }
 
-    public static <T> void WrapperMethodEnhancer(Enhancer enhancer, T target) {
-        Field[] fields = target.getClass().getFields();
-    }
-
-    private void getParametersMap() throws ClassNotFoundException, NoSuchFieldException {
-        Class clazz = Class.forName("org.apache.catalina.connector.RequestFacade");
-        requestField = clazz.getDeclaredField("request");
-        requestField.setAccessible(true);
-
-
-        parametersParsedField = requestField.getType().getDeclaredField("parametersParsed");
-        parametersParsedField.setAccessible(true);
-
-
-        coyoteRequestField = requestField.getType().getDeclaredField("coyoteRequest");
-        coyoteRequestField.setAccessible(true);
-
-
-        parametersField = coyoteRequestField.getType().getDeclaredField("parameters");
-        parametersField.setAccessible(true);
-
-
-        hashTabArrField = parametersField.getType().getDeclaredField("paramHashStringArray");
-        hashTabArrField.setAccessible(true);
-    }
 }

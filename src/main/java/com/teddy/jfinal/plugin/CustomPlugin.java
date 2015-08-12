@@ -79,10 +79,13 @@ public class CustomPlugin implements IPlugin {
         methodAnnotationsHandler = new HashMap<>();
         afterMethodAnnoHandler = new HashMap<>();
         List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
+        Class[] scanClasses = new Class[]{
+                Job.class, Service.class, PluginHandler.class, ConfigHandler.class, Controller.class, Model.class, ExceptionHandlers.class, InterceptorHandler.class
+        };
         if (jars.size() > 0) {
-            classesMap = ClassSearcherTool.of(Service.class, PluginHandler.class, ConfigHandler.class, Controller.class, Model.class, ExceptionHandlers.class, InterceptorHandler.class).includeAllJarsInLib(ClassSearcherTool.isValiJar()).injars(jars).search();
+            classesMap = ClassSearcherTool.of(scanClasses).includeAllJarsInLib(ClassSearcherTool.isValiJar()).injars(jars).search();
         } else {
-            classesMap = ClassSearcherTool.of(Service.class, PluginHandler.class, ConfigHandler.class, Controller.class, Model.class, ExceptionHandlers.class, InterceptorHandler.class).search();
+            classesMap = ClassSearcherTool.of(scanClasses).search();
         }
 
         Set<Class> clzes = classesMap.get(ConfigHandler.class);
@@ -429,6 +432,7 @@ public class CustomPlugin implements IPlugin {
         boolean result;
         try {
             for (Method method : aopHandler.get(name)) {
+                method.setAccessible(true);
                 if (me == null)
                     result = (boolean) method.invoke(method.getDeclaringClass().newInstance());
                 else

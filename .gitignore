@@ -18,3 +18,5 @@ targetgenerated-sourcesannotations
 *.iml
 *.log
 *.log.*
+
+out/*

@@ -93,6 +93,7 @@ public class Config extends com.jfinal.config.JFinalConfig {
         Method method;
         try {
             method = ReflectTool.getMethodByClassAndName(clz, methodName);
+            method.setAccessible(true);
             if (me == null) {
                 method.invoke(clz.newInstance());
             } else {
