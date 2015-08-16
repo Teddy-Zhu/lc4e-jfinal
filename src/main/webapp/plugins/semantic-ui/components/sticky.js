@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.0.7 - Sticky
+ * # Semantic UI 2.0.8 - Sticky
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -390,12 +390,8 @@ $.fn.sticky = function(parameters) {
           },
           size: function() {
             if(module.cache.element.height !== 0 && module.cache.element.width !== 0) {
-              $module
-                .css({
-                  width  : module.cache.element.width,
-                  height : module.cache.element.height
-                })
-              ;
+              $module.get(0).style.setProperty('width',  module.cache.element.width  + 'px', 'important');
+              $module.get(0).style.setProperty('height', module.cache.element.height + 'px', 'important');
             }
           }
         },

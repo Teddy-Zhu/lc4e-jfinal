@@ -22,6 +22,10 @@ body {
     padding-right: 5em;
 }
 
+#menu .right.menu .ui.animated.button a {
+    color: black;
+}
+
 #menu .ui.animated.button .visible.content {
     margin-right: .5em;
 }
@@ -390,8 +394,8 @@ body {
 }
 
 /* extend success */
-.ui.input.success input {
-    background-color: #C2F1BA;
+.ui.form .field.success input[type=text],.ui.form .field.success input[type=password] {
+    background-color: #E4F7E1;
     border-color: green;
     color: green;
     box-shadow: none;
@@ -413,13 +417,5 @@ body {
 }
 
 .ui.form .inline.fields .field .fieldName {
-    width: 53%;
-    text-align: right;
-    margin: 0px 3.857143em 0 0;
+    margin: auto;
 }
-
-.ui.form .inline.fields .field .fieldValue {
-    width: 70%;
-    text-align: left;
-}
-

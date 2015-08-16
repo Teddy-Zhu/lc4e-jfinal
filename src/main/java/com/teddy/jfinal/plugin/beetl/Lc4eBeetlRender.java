@@ -1,6 +1,5 @@
 package com.teddy.jfinal.plugin.beetl;
 
-import com.teddy.jfinal.common.Const;
 import org.apache.log4j.Logger;
 import org.beetl.core.GroupTemplate;
 import org.beetl.ext.jfinal.BeetlRender;

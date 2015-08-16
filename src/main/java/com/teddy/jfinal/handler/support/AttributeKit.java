@@ -1,15 +1,14 @@
 package com.teddy.jfinal.handler.support;
 
 import com.jfinal.aop.Invocation;
-import com.teddy.jfinal.annotation.Service;
-import com.teddy.jfinal.annotation.SetComVar;
-import com.teddy.jfinal.annotation.SetUIData;
-import com.teddy.jfinal.annotation.SetUIDatas;
+import com.teddy.jfinal.annotation.*;
+import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.exceptions.AutoSetterException;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.tools.CustomTool;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
+import com.teddy.jfinal.tools.WebTool;
 import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.core.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.core.web.service.ComVarService;
@@ -61,20 +60,31 @@ public class AttributeKit {
         if (comVar == null) {
             return;
         }
-        if (comVar.value().length == 0) {
+        if (StringTool.equalEmpty(comVar.value())) {
             throw new AutoSetterException("ComVar Field must be not empty!");
         }
-        if (comVar.attrName().length != 0 && comVar.value().length != comVar.attrName().length) {
-            throw new AutoSetterException("ComVar AttrNames' length must be equal with field's length");
+        Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.value());
+        if (variable == null) {
+            throw new AutoSetterException("No ComVar Record Found in Database or Cache");
+        } else {
+            ai.getController().setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
+                    .type(), variable.getStr(T_Sys_Common_Variable.value)));
         }
-        for (int i = 0, len = comVar.value().length; i < len; i++) {
-            Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.value()[i]);
-            if (variable == null) {
-                throw new AutoSetterException("No ComVar Record Found in Database or Cache");
-            } else {
-                ai.getController().setAttr(comVar.attrName().length == 0 ? comVar.value()[i] : StringTool.equalEmpty(comVar.attrName()[i]) ?
-                        comVar.value()[i] : comVar.attrName()[i], variable.get(T_Sys_Common_Variable.value));
-            }
+    }
+
+    public static void setComVars(SetComVars comVars, Invocation ai) throws AutoSetterException {
+        if (comVars == null) {
+            return;
         }
+        for (SetComVar comVar : comVars.value()) {
+            setComVar(comVar, ai);
+        }
+    }
+
+    public static void setAJAX(SetAJAX setAJAX, Invocation ai) {
+        if (setAJAX == null) {
+            return;
+        }
+        ai.getController().setAttr(setAJAX.value(), WebTool.isAJAX(ai.getController().getRequest()));
     }
 }

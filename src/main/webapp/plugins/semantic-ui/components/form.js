@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.0.7 - Form Validation
+ * # Semantic UI 2.0.8 - Form Validation
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -454,13 +454,7 @@ $.fn.form = function(parameters) {
                     values[name] = [];
                   }
                   if(isCheckbox) {
-                    if(isChecked) {
-                      values[name].push(value);
-                    }
-                    else {
-                      module.debug('Omitted unchecked checkbox', $field);
-                      return true;
-                    }
+                    values[name].push(isChecked);
                   }
                   else {
                     values[name].push(value);
@@ -473,13 +467,7 @@ $.fn.form = function(parameters) {
                     }
                   }
                   else if(isCheckbox) {
-                    if(isChecked) {
-                      values[name] = true;
-                    }
-                    else {
-                      module.debug('Omitted unchecked checkbox', $field);
-                      return true;
-                    }
+                    values[name] = isChecked;
                   }
                   else {
                     values[name] = value;

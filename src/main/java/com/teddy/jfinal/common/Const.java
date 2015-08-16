@@ -89,4 +89,6 @@ public class Const {
     public static final String SHIRO_ACTIVE_SESSION_CACHE = "shiro-activeSessionCache";
 
     public static final String SLASH = "/";
+
+    public static final String LC4EAJAX = "LC4EAJAX";
 }

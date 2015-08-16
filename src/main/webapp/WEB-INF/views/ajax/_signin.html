@@ -1,25 +1,91 @@
-<div id="signForm" class="ui form">
-    <div class="inline fields">
-        <div class="fourteen wide field">
-            <label class="fieldName">用户名</label>
+<style type="text/css">
+    #signForm {
+        margin-top: 2.5em;
+    }
 
-            <div class="ui input fieldValue"><input type="text" placeholder="your login name"/></div>
-        </div>
-    </div>
-    <div class="inline fields">
-        <div class="fourteen wide field">
-            <label class="fieldName">密码</label>
-            <div class="ui icon input fieldValue"><input type="password" placeholder="your password"/><i
-                    class="eye icon"></i></div>
-        </div>
-    </div>
-    <div class="inline fields">
-        <div class="fourteen wide field">
-            <label class="fieldName">验证码</label>
-            <img src="">
-            <div class="ui icon input fieldValue"><input type="password" placeholder="your password"/><i
-                    class="eye icon"></i></div>
-        </div>
-    </div>
+    #signForm .operatepanel {
+        margin-top: 2em;
+    }
 
+    .ui.icon.input .eye.icon {
+        cursor: pointer;
+    }
+
+    #captchaimg {
+        cursor: pointer;
+        border: 1px solid rgba(34, 36, 38, .15);
+        padding: 0.1em .5em;
+        height: 38px;
+        width: 100%;
+        border-radius: .28571429rem;
+        box-shadow: 0 0 0 0 transparent inset;
+    }
+
+</style>
+<div class="ui nobox padding segment flipInY animated">
+    <h2 class="ui center aligned icon header">
+        <i class="circular users icon"></i>
+        Join in ${SiteName}
+    </h2>
+
+    <div id="signInForm" class="ui form" observe-on="blur">
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">UserName</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui icon input">
+                    <input id="user.name" class="fieldValue" name="user.name" type="text"
+                           placeholder="your login name" rules="[{type:'empty'},{type:'minLength[4]'}]"/>
+                    <i class="user icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Password</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui icon input">
+                    <input id="user.password" name="user.password" class="fieldValue" type="password"
+                           placeholder="your password" rules="[{type:'empty'}]"/>
+                    <i class="eye icon link"></i></div>
+            </div>
+        </div>
+        <%if(RegisterCaptcha){%>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Verification Code</label>
+            </div>
+            <div class="six wide field">
+                <div class="ui input">
+                    <input id="captcha" name="captcha" class="fieldValue" type="text"
+                           rules="[{type:'empty'},{type:'exactLength[4]'}]"/>
+                </div>
+            </div>
+            <div class="four wide field">
+                <img id="captchaimg" src="/captcha?rand=<%print(tool.getTime());%>">
+            </div>
+        </div>
+        <%}%>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Remember</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui toggle checkbox">
+                    <input id="rememberMe" name="rememberMe" type="checkbox" class="fieldValue"
+                           rules="[{type:'empty'}]">
+                    <label>One Month</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="inline fields operatepanel">
+            <div class="sixteen wide field ui centered grid">
+                <button id="signIn" class="ui primary button">JoinIn</button>
+                <button id="reset" class="ui basic button">Reset</button>
+            </div>
+        </div>
+    </div>
 </div>

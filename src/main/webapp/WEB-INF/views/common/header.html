@@ -27,7 +27,7 @@
                         <div id="userCard" class="ui card">
                             <div class="content">
                                 <div class="centered aligned header">
-                                   Teddy
+                                    Teddy
                                 </div>
                                 <div class="ui clearing divider"></div>
                                 <div class="description">
@@ -70,16 +70,20 @@
                 </div>
                 <%}if(auth.guest()){ %>
                 <div class="ui item animated fade button">
-                    <div class="visible content">Sign Up</div>
-                    <div class="hidden content">
-                        <i class="add user icon"></i>
-                    </div>
+                    <a href="/SignUp">
+                        <div class="visible content">Sign Up</div>
+                        <div class="hidden content">
+                            <i class="add user icon"></i>
+                        </div>
+                    </a>
                 </div>
                 <div class="ui item animated button">
-                    <div class="visible content">Sign In</div>
-                    <div class="hidden content">
-                        <i class="user icon"></i>
-                    </div>
+                    <a href="/SignIn">
+                        <div class="visible content">Sign In</div>
+                        <div class="hidden content">
+                            <i class="user icon"></i>
+                        </div>
+                    </a>
                 </div>
                 <%}%>
 

@@ -1,10 +1,17 @@
+<%if(has(LC4EAJAX) && LC4EAJAX ){%>
+for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
+%>${layoutContent}
+<script type="text/javascript">
+    $LAB<% for(var i in footerJS){print('.script("'+i+'")');}%>
+</script>
+<%}else{%>
 <!DOCTYPE>
 <html>
 <head>
     <%layout("/common/title.html",{'SiteName':SiteName}){};
 
     for(var i in headerCSS){
-        println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');
+    println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');
     }
     %>
 
@@ -82,8 +89,10 @@
 <!-- Slider Bar End -->
 <%layout("/common/footer.html",{}){}%>
 <script type="text/javascript">
-    $LAB.script("/plugins/jquery/jquery.js").wait().script("/plugins/semantic-ui/semantic.min.js").script("/js/lc4e/jquery-extend.js")
+    $LAB.script("/plugins/jquery/jquery.min.js").wait().script("/plugins/semantic-ui/semantic.js").script("/js/lc4e/jquery-extend.js")
             .wait()<% for(var i in footerJS){print('.script("'+i+'")');}%>
 </script>
 </body>
 </html>
+<%}%>
+

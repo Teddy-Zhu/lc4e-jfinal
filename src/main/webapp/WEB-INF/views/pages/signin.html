@@ -1,13 +1,5 @@
 <%layout("/template/template.html",{
-'headerCSS':['/css/pages/signin.css'],
+'headerCSS':[],
 'footerJS':['/js/pages/signin.js'],
 'configTool':false
-}){%>
-<div class="ui nobox padding segment flipInY animated">
-    <h2 class="ui center aligned icon header">
-        <i class="circular users icon"></i>
-        Join in ${SiteName}
-    </h2>
-    <%layout("/ajax/_signin.html",{}){}%>
-</div>
-<%}%>
+}){layout("/ajax/_signin.html",{}){};}%>

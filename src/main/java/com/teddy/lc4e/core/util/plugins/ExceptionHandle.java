@@ -7,6 +7,9 @@ import com.teddy.jfinal.annotation.ResponseStatus;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.entity.Status;
 import com.teddy.jfinal.plugin.PropPlugin;
+import com.teddy.lc4e.core.entity.Message;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 
@@ -32,4 +35,14 @@ public class ExceptionHandle {
         ai.getController().renderText(a + e.getMessage());
     }
 
+    @ExceptionHandler({AuthenticationException.class, UnauthenticatedException.class})
+    public void auth(Exception e, Invocation ai) {
+        ai.getController().setAttr("message", new Message(e.getMessage()));
+        ai.getController().render("pages/exception");
+    }
+
+    @ExceptionHandler({UnknownAccountException.class})
+    public void unknown(Exception e,Invocation ai) {
+        ai.getController().renderJson(new Message("Username is not match password,please check your info"));
+    }
 }

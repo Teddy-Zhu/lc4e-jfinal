@@ -25,8 +25,8 @@ public class Lc4eCaptchaRender extends Render {
     private static boolean casesensitive = false;
     private static List<Font> fontList = new ArrayList<>();
     // 定义图形验证码的大小
-    private final int IMG_WIDTH = 100;
-    private final int IMG_HEIGTH = 18;
+    private final int IMG_WIDTH = 120;
+    private final int IMG_HEIGTH = 30;
 
     static {
         String[] fonts = new String[]{"Terminal", "Times New Roman", "Trebuchet MS", "System", "Stencil", "Segoe Print", "Palatino Linotype",
@@ -42,8 +42,9 @@ public class Lc4eCaptchaRender extends Render {
     public void render() {
         BufferedImage bufferedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGTH, BufferedImage.TYPE_INT_RGB);
 
-        String sRand = graphics(bufferedImage).toLowerCase();
-        log.debug("验证码：" + sRand);
+        String sRand = graphics(bufferedImage);
+
+        log.debug("Code: [" + sRand + "]");
         //String md5 = encrypt(sRand);
 
         SecurityUtils.getSubject().getSession().setAttribute(captcha_code, casesensitive ? sRand : sRand.toLowerCase());
@@ -105,8 +106,10 @@ public class Lc4eCaptchaRender extends Render {
         graphics.setColor(new Color(102, 102, 102));
         graphics.drawRect(0, 0, IMG_WIDTH - 1, IMG_HEIGTH - 1);
 
-        // 画一道粗线
-        this.drawThickLine(graphics, 0, StringTool.number(IMG_HEIGTH) + 1, IMG_WIDTH, StringTool.number(IMG_HEIGTH) + 1, 4, getRandColor(100, 200));// 加一道线
+        // 画粗线
+        for (int i = 0; i < 2; i++) {
+            this.drawThickLine(graphics, 0, StringTool.number(IMG_HEIGTH) + 1, IMG_WIDTH, StringTool.number(IMG_HEIGTH) + 1, 4, getRandColor(100, 200));// 加一道线
+        }
 
         // 从左上到右下加上多道干扰线
         graphics.setColor(getRandColor(160, 200));
@@ -129,8 +132,7 @@ public class Lc4eCaptchaRender extends Render {
         }
 
         // 使图片扭曲
-        shear(graphics, IMG_WIDTH, IMG_HEIGTH, getRandColor(200, 250));
-
+        shear(graphics, IMG_WIDTH, IMG_HEIGTH, getRandColor(210, 250));
         // 设置绘制字符的字体
         int fontIndex = StringTool.number(9);
         graphics.setFont(fontList.get(fontIndex));// mFont
@@ -143,14 +145,15 @@ public class Lc4eCaptchaRender extends Render {
             // 获取随机颜色
             graphics.setColor(new Color(20 + StringTool.number(110), 20 + StringTool.number(110), 20 + StringTool.number(110)));
             // 在图片上绘制系统生成的随机字符
-            graphics.drawString(String.valueOf(tmp), 20 * i + 20, 15);
+            graphics.drawString(String.valueOf(tmp), 20 * i + 20, StringTool.number(10, 28));
         }
+        fontIndex = StringTool.number(9);
 
-        TextLayout textLayout = new TextLayout(sRand, new Font("Fixedsys", Font.PLAIN, 20), new FontRenderContext(null, true, false));// 获得字体一样的字，20是字体的大小
+        TextLayout textLayout = new TextLayout(sRand, fontList.get(fontIndex), new FontRenderContext(null, true, false));// 获得字体一样的字，20是字体的大小
         textLayout.draw(graphics, 30, 60);// 对字体加投影，第二个是左右相距，越大越远，第三个参数是上下两层相距距离，越大越近
 
         // 添加噪点
-        float yawpRate = 0.012f;// 噪声率
+        float yawpRate = 0.015f;// 噪声率
         int area = (int) (yawpRate * IMG_WIDTH * IMG_HEIGTH);
         for (int i = 0; i < area; i++) {
             int x = StringTool.number(IMG_WIDTH);
@@ -195,8 +198,8 @@ public class Lc4eCaptchaRender extends Render {
         // rectangle...
         double ddx = -scale * (double) dY;
         double ddy = scale * (double) dX;
-        ddx += (ddx > 0) ? 0.5 : -0.5;
-        ddy += (ddy > 0) ? 0.5 : -0.5;
+        ddx += (ddx > 0) ? 0.7 : -0.7;
+        ddy += (ddy > 0) ? 0.7 : -0.7;
         int dx = (int) ddx;
         int dy = (int) ddy;
 

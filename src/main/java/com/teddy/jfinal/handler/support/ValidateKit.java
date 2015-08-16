@@ -62,10 +62,19 @@ class ValidateKit {
                 resolveParameters((ValidateParams) annotation, invocation);
             } else if (annotation instanceof ValidateParam) {
                 resolveParameter((ValidateParam) annotation, invocation);
+            } else if (annotation instanceof ResponseStatus) {
+                resolveResponseStaus((ResponseStatus) annotation, invocation);
             }
         }
     }
 
+    private static void resolveResponseStaus(ResponseStatus responseStatus, Invocation invocation) {
+        if (responseStatus == null) {
+            return;
+        }
+        invocation.getController().getResponse().setStatus(responseStatus.value().toInteger());
+
+    }
 
     private static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws ValidateException {
         if (method != null && !method.value().toString().equals(invocation.getController().getRequest().getMethod().toUpperCase())) {
@@ -351,7 +360,7 @@ class ValidateKit {
                 if (file == null) {
                     throw new ValidateException("Upload File must be not empty!");
                 }
-                if (param.maxSize() != -1 && file.getFile().length() >= param.maxSize()) {
+                if (param.maxSize() != -1 && file.getFile().length() > param.maxSize()) {
                     throw new ValidateException("Upload File size is too large!");
                 }
                 if (param.minSize() != -1 && file.getFile().length() < param.maxSize()) {

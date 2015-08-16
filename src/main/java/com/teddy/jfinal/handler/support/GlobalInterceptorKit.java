@@ -8,6 +8,8 @@ import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.exceptions.ValidateException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.tools.WebTool;
+import com.teddy.lc4e.core.entity.Message;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,24 +53,23 @@ public class GlobalInterceptorKit {
         return params;
     }
 
-    public static void ExceptionHandle(Invocation ai, Exception e) {
+    public static void ExceptionHandle(Invocation ai, Exception e) throws ValidateException, InvocationTargetException, Lc4eException, IllegalAccessException, ParseException, NoSuchMethodException, NoSuchFieldException, InstantiationException {
         Method method = CustomPlugin.getExceptionsMap().get(e.getClass());
         if (method == null) {
             resolve(ai, e);
         } else {
-            ResponseStatus status = method.getAnnotation(ResponseStatus.class);
-            if (status != null)
-                ai.getController().getResponse().setStatus(status.value().toInteger());
-            try {
-                method.invoke(Modifier.isStatic(method.getModifiers()) ? null : method.getDeclaringClass().newInstance(), resolveParameters(method.getParameterTypes(), ai, e));
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            ValidateKit.resolve(CustomPlugin.getExceptionMethodHandler().get(method), ai);
+            method.invoke(Modifier.isStatic(method.getModifiers()) ? null : method.getDeclaringClass().newInstance(), resolveParameters(method.getParameterTypes(), ai, e));
         }
     }
 
     private static void resolve(Invocation ai, Exception e) {
-        ai.getController().renderText(e.getMessage() == null ? e.toString() : e.getMessage());
+        if (WebTool.isAJAX(ai.getController().getRequest())) {
+            ai.getController().renderJson(new Message(e.getMessage() == null ? e.toString() : e.getMessage()));
+        } else {
+            ai.getController().render("pages/exception");
+        }
+
     }
 
 
@@ -122,10 +123,14 @@ public class GlobalInterceptorKit {
                 }
             } else if (annotation instanceof SetComVar) {
                 AttributeKit.setComVar((SetComVar) annotation, ai);
+            } else if (annotation instanceof SetComVars) {
+                AttributeKit.setComVars((SetComVars) annotation, ai);
             } else if (annotation instanceof SetUIDatas) {
                 AttributeKit.setUIDatas((SetUIDatas) annotation, ai);
             } else if (annotation instanceof SetUIData) {
                 AttributeKit.setUIData((SetUIData) annotation, ai);
+            } else if (annotation instanceof SetAJAX) {
+                AttributeKit.setAJAX((SetAJAX) annotation, ai);
             }
         }
     }

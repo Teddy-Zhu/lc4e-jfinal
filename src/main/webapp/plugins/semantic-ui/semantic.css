@@ -1,5 +1,5 @@
  /*
- * # Semantic UI - 2.0.7
+ * # Semantic UI - 2.0.8
  * https://github.com/Semantic-Org/Semantic-UI
  * http://www.semantic-ui.com/
  *
@@ -8,9 +8,9 @@
  * http://opensource.org/licenses/MIT
  *
  */
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
+@import url('http://fonts.useso.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
 /*!
- * # Semantic UI 2.0.7 - Reset
+ * # Semantic UI 2.0.8 - Reset
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -500,7 +500,7 @@ th {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Site
+ * # Semantic UI 2.0.8 - Site
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -669,7 +669,7 @@ input::selection {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Button
+ * # Semantic UI 2.0.8 - Button
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -4368,7 +4368,7 @@ input::selection {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Container
+ * # Semantic UI 2.0.8 - Container
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -4499,7 +4499,7 @@ input::selection {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Divider
+ * # Semantic UI 2.0.8 - Divider
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -4767,7 +4767,7 @@ input::selection {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Flag
+ * # Semantic UI 2.0.8 - Flag
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -6029,7 +6029,7 @@ i.flag.zimbabwe:before {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Header
+ * # Semantic UI 2.0.8 - Header
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -6851,7 +6851,7 @@ a.ui.inverted.grey.header:hover {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Icon
+ * # Semantic UI 2.0.8 - Icon
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -7608,7 +7608,7 @@ i.icon.heartbeat:before {
   content: "\f21e";
 }
 
-/* com.teddy.lc4e.core.database.User Actions */
+/* User Actions */
 
 i.icon.download:before {
   content: "\f019";
@@ -10183,7 +10183,7 @@ i.icon.bed:before {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Image
+ * # Semantic UI 2.0.8 - Image
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -10495,7 +10495,7 @@ img.ui.bordered.image {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Input
+ * # Semantic UI 2.0.8 - Input
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -11030,7 +11030,7 @@ img.ui.bordered.image {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Label
+ * # Semantic UI 2.0.8 - Label
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -12258,7 +12258,7 @@ a.ui.black.label:hover:before {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - List
+ * # Semantic UI 2.0.8 - List
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -13296,10 +13296,10 @@ ol.ui.horizontal.list li:before,
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Loader
+ * # Semantic UI 2.0.8 - Loader
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -13604,7 +13604,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Rail
+ * # Semantic UI 2.0.8 - Rail
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -13739,7 +13739,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Reveal
+ * # Semantic UI 2.0.8 - Reveal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -14074,7 +14074,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Segment
+ * # Semantic UI 2.0.8 - Segment
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -14899,7 +14899,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Step
+ * # Semantic UI 2.0.8 - Step
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -15581,7 +15581,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Breadcrumb
+ * # Semantic UI 2.0.8 - Breadcrumb
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -15713,7 +15713,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Form
+ * # Semantic UI 2.0.8 - Form
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -16799,7 +16799,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Grid
+ * # Semantic UI 2.0.8 - Grid
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -21041,7 +21041,7 @@ Floated Menu / Item
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Message
+ * # Semantic UI 2.0.8 - Message
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -21562,10 +21562,10 @@ Floated Menu / Item
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Table
+ * # Semantic UI 2.0.8 - Table
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -22778,7 +22778,7 @@ Floated Menu / Item
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Ad
+ * # Semantic UI 2.0.8 - Ad
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -23065,10 +23065,10 @@ Floated Menu / Item
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Item
+ * # Semantic UI 2.0.8 - Item
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -24128,10 +24128,10 @@ a.ui.card:hover,
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Comment
+ * # Semantic UI 2.0.8 - Comment
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -24288,7 +24288,7 @@ a.ui.card:hover,
 }
 
 /*--------------------
-     com.teddy.lc4e.core.database.User Actions
+     User Actions
 ---------------------*/
 
 .ui.comments .comment .actions {
@@ -24398,10 +24398,10 @@ a.ui.card:hover,
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Feed
+ * # Semantic UI 2.0.8 - Feed
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -24561,7 +24561,7 @@ a.ui.card:hover,
 }
 
 /*--------------
-      com.teddy.lc4e.core.database.User
+      User
 ---------------*/
 
 .ui.feed > .event > .content .user {
@@ -24717,10 +24717,10 @@ a.ui.card:hover,
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Item
+ * # Semantic UI 2.0.8 - Item
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -25233,10 +25233,10 @@ a.ui.card:hover,
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Statistic
+ * # Semantic UI 2.0.8 - Statistic
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -25884,10 +25884,10 @@ a.ui.card:hover,
 *******************************/
 
 /*******************************
-    com.teddy.lc4e.core.database.User Variable Overrides
+    User Variable Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Accordion
+ * # Semantic UI 2.0.8 - Accordion
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -26149,10 +26149,10 @@ a.ui.card:hover,
 }
 
 /*******************************
-        com.teddy.lc4e.core.database.User Overrides
+        User Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Checkbox
+ * # Semantic UI 2.0.8 - Checkbox
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -26819,7 +26819,7 @@ a.ui.card:hover,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Dimmer
+ * # Semantic UI 2.0.8 - Dimmer
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -27024,10 +27024,10 @@ body.dimmable > .dimmer {
 *******************************/
 
 /*******************************
-        com.teddy.lc4e.core.database.User Overrides
+        User Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Dropdown
+ * # Semantic UI 2.0.8 - Dropdown
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -28538,10 +28538,10 @@ select.ui.dropdown {
 */
 
 /*******************************
-        com.teddy.lc4e.core.database.User Overrides
+        User Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Video
+ * # Semantic UI 2.0.8 - Video
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -28708,7 +28708,7 @@ select.ui.dropdown {
   padding-bottom: 42.85714286%;
 }
 /*!
- * # Semantic UI 2.0.7 - Modal
+ * # Semantic UI 2.0.8 - Modal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -29267,7 +29267,7 @@ select.ui.dropdown {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Nag
+ * # Semantic UI 2.0.8 - Nag
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -29410,10 +29410,10 @@ a.ui.nag {
 *******************************/
 
 /*******************************
-        com.teddy.lc4e.core.database.User Overrides
+        User Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Popup
+ * # Semantic UI 2.0.8 - Popup
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -29784,10 +29784,10 @@ a.ui.nag {
 *******************************/
 
 /*******************************
-        com.teddy.lc4e.core.database.User Overrides
+        User Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Progress Bar
+ * # Semantic UI 2.0.8 - Progress Bar
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -30369,7 +30369,7 @@ a.ui.nag {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Rating
+ * # Semantic UI 2.0.8 - Rating
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -30520,7 +30520,7 @@ a.ui.nag {
 }
 
 /*-------------------
-   com.teddy.lc4e.core.database.User Interactive
+   User Interactive
 --------------------*/
 
 /* Selected Rating */
@@ -30649,7 +30649,7 @@ a.ui.nag {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Search
+ * # Semantic UI 2.0.8 - Search
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -31047,7 +31047,7 @@ a.ui.nag {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Shape
+ * # Semantic UI 2.0.8 - Shape
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -31200,10 +31200,10 @@ a.ui.nag {
 *******************************/
 
 /*******************************
-        com.teddy.lc4e.core.database.User Overrides
+        User Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Sidebar
+ * # Semantic UI 2.0.8 - Sidebar
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -31892,7 +31892,7 @@ html.ios body {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Sticky
+ * # Semantic UI 2.0.8 - Sticky
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -31967,7 +31967,7 @@ html.ios body {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Tab
+ * # Semantic UI 2.0.8 - Tab
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -32052,10 +32052,10 @@ html.ios body {
 *******************************/
 
 /*******************************
-        com.teddy.lc4e.core.database.User Overrides
+        User Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Table
+ * # Semantic UI 2.0.8 - Table
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -33268,7 +33268,7 @@ html.ios body {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.0.7 - Transition
+ * # Semantic UI 2.0.8 - Transition
  * http://github.com/semantic-org/semantic-ui/
  *
  *

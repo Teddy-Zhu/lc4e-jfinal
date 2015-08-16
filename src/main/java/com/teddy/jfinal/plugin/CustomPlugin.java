@@ -44,6 +44,8 @@ public class CustomPlugin implements IPlugin {
 
     private static Map<Class<? extends Exception>, Method> exceptionsMap;
 
+    private static Map<Method,List<Annotation>> exceptionMethodHandler;
+
     private static Map<String, Set<Method>> aopHandler;
 
     private static Map<String, List<Annotation>> methodAnnotationsHandler;
@@ -75,7 +77,7 @@ public class CustomPlugin implements IPlugin {
         plugins = new ArrayList<>();
         interceptors = new ArrayList<>();
         handlers = new ArrayList<>();
-
+        exceptionMethodHandler = new HashMap<>();
         methodAnnotationsHandler = new HashMap<>();
         afterMethodAnnoHandler = new HashMap<>();
         List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
@@ -202,7 +204,7 @@ public class CustomPlugin implements IPlugin {
         Class[] contrllerRequiredAnnotations = new Class[]{RequestMethod.class, RequestHeader.class
                 , ValidateToken.class, RequiresAuthentication.class, RequiresPermissions.class, RequiresRoles.class, RequiresUser.class,
                 RequiresGuest.class};
-        Class[] afterMethodRequiredAnnotations = new Class[]{ResponseStatus.class, SetComVar.class, SetUIDatas.class, SetUIData.class};
+        Class[] afterMethodRequiredAnnotations = new Class[]{ResponseStatus.class, SetComVar.class, SetUIDatas.class, SetUIData.class, SetAJAX.class};
         Classes.forEach(controller -> {
             Controller controllerBind = (Controller) controller.getAnnotation(Controller.class);
             if (controllerBind != null && BaseController.class.isAssignableFrom(controller)) {
@@ -355,6 +357,7 @@ public class CustomPlugin implements IPlugin {
     }
 
     private void initExceptions() {
+        Class[] afterMethodRequiredAnnotations = new Class[]{ResponseStatus.class, SetComVar.class, SetUIDatas.class, SetUIData.class, SetAJAX.class};
 
         //Init Exception annotation
         Set<Class> Classes = classesMap.get(ExceptionHandlers.class);
@@ -373,6 +376,7 @@ public class CustomPlugin implements IPlugin {
                     default:
                         // resolve @ExceptionHandler add method into ExceptionMap
                         if (method.isAnnotationPresent(ExceptionHandler.class)) {
+                            exceptionMethodHandler.put(method,buildAnnotation(method,afterMethodRequiredAnnotations));
                             for (Class<? extends Exception> exception : method.getAnnotation(ExceptionHandler.class).value()) {
                                 exceptionsMap.put(exception, method);
                             }
@@ -454,6 +458,9 @@ public class CustomPlugin implements IPlugin {
         return exceptionsMap;
     }
 
+    public static Map<Method, List<Annotation>> getExceptionMethodHandler() {
+        return exceptionMethodHandler;
+    }
 
     public static Map<String, List<Annotation>> getMethodAnnotationsHandler() {
         return methodAnnotationsHandler;

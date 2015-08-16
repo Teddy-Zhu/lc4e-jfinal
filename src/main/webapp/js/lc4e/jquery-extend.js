@@ -29,19 +29,29 @@
             active: false,
             successFunc: {}
         },
+        plugins: {
+            Lc4eModal: $.fn.Lc4eModal
+        },
         signOut: function () {
             $.Lc4eAjax({
                 url: '/SignOut',
                 success: function (result) {
-                    if (result && result.result) {
-                        $.Lc4eModal({
-                            content: result.message
-                        })
-                    }
+                    $.Lc4eResolveMessage(result, function () {
+                        window.location.href = "/"
+                    });
                 }
             })
         }
-    });
+    })
+    ;
+//extend ec6
+    String.prototype.unix2human = function () {
+        return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
+    };
+    Number.prototype.unix2human = function () {
+        return $.lc4e.Lc4eToDate.unix2human(this);
+    };
+
     String.prototype.trimEnd = function (trimStr) {
         if (!trimStr) {
             return this;
@@ -56,7 +66,7 @@
         return temp;
     };
     /* animate scroll */
-    // defines various easing effects
+// defines various easing effects
     $.easing['jswing'] = $.easing['swing'];
     $.extend($.easing, {
         def: 'easeOutQuad',
@@ -273,7 +283,7 @@
         element: "html,body"
     };
 
-    //TODO
+//TODO
     $.fn.Lc4eDimmer = function (options, data) {
         var defaults = {
                 type: 'loader', // loader or dimmer
@@ -341,115 +351,177 @@
             }
         })
     };
-    $.fn.Lc4eModal = function (options) {
-        var defaults = {
-                Id: null,
-                title: "Message",
-                content: "This is a Lc4e Test Modal",
-                closable: true, // enable esc or click dim page to close
-                useCSS: true,
-                closeIcon: true,
-                transition: "scale", // extend transition
-                duration: 400,// animation
-                type: "basic", // basic standard
-                size: "small", // fullscreen ,small,large,long
-                allowMultiple: false, // multiple modal
-                offset: 2,
-                context: 'body',
-                queue: false,
-                easing: "easeOutExpo",
-                selector: {
-                    close: '.close'
-                },
-                dimmerSettings: {
-                    closable: false,
-                    useCSS: true
-                },
-                onDeny: function () {
-                },
-                onApprove: function () {
-                },
-                onShow: function () {
-                },
-                onVisible: function () {
 
-                },
-                onHide: function () {
-                },
-                onAfterHide: function () {
-                },
-                onHidden: function () {
-                },
-                OtherButtons: [],
-                OtherButtonsClass: [],
-                OtherButtonsClick: []
-            }, basciDefaults = {
-                IconClass: 'warning circle',
-                bottonNames: ['<i class="Remove icon"></i>No', '<i class="checkmark icon"></i>Yes'],
-                buttonClass: ["deny close red basic inverted", "approve close green basic inverted"]
-            }, standardDefaults = {
-                bottonNames: ['Close'],
-                buttonClass: ['basic close']
-            },
-            basicModalHtml = '<div id="{ModalId}" class="ui basic {Mutiple} {Size} modal">{CloseIcon}<div class="header">{Title}</div><div class="content"><div class="image"><i class="{IconClass} icon"></i></div><div class="description">{Content}</div></div><div class="actions"><div class="{ButtonNumber} fluid ui inverted buttons">{Buttons}</div></div></div></div>',
-            buttonHtml = '<div {ButtonId} class="ui {ButtonClass} button">{ButtonName}</div>', standardModalHtml = '<div id="{ModalId}" class="ui standard {Mutiple} {Size} modal">{CloseIcon}<div class="header">{Title}</div><div class="content">{Content}</div><div class="actions">{Buttons}</div></div>',
-            NumberEng = ['one', 'two', 'three', 'four', 'five', 'six'], $operate;
-        options = $.extend(defaults, options);
 
-        this.each(function () {
-            var $obj = $(this), modalId = options.Id == null ? "Lc4eModal-" + $.Lc4eRandom() : options.Id, $modalObj, html = "", buttonsHtml = "";
-            switch (options.type) {
-                case "basic":
-                {
-                    options = $.extend(basciDefaults, options);
-                    html = basicModalHtml;
-                    html = html.replace(new RegExp('{IconClass}', 'g'), options.IconClass).replace(new RegExp('{ButtonNumber}', 'g'), NumberEng[options.bottonNames.length - 1]);
-                    break;
-                }
-                case "standard":
-                {
-                    options = $.extend(standardDefaults, options);
-                    html = standardModalHtml;
-                    break;
-                }
-                default:
-                {
-                    return false;
-                }
-            }
-            for (var i = 0, len = options.bottonNames.length; i < len; i++) {
-                buttonsHtml += buttonHtml.replace(new RegExp('{ButtonId}', 'g'), "").replace(new RegExp('{ButtonClass}', 'g'), options.buttonClass[i]).replace(new RegExp('{ButtonName}', 'g'), options.bottonNames[i]);
-            }
-            for (var i = 0, len = options.OtherButtons.length; i < len; i++) {
-                buttonsHtml += buttonHtml.replace(new RegExp('{ButtonId}', 'g'), 'id="' + modalId + '-button-' + i + '"').replace(new RegExp('{ButtonClass}', 'g'), options.OtherButtonsClass[i]).replace(new RegExp('{ButtonName}', 'g'), options.OtherButtons[i]);
-            }
-            html = html.replace(new RegExp('{Mutiple}', 'g'), options.allowMultiple ? "coupled" : "").replace(new RegExp('{CloseIcon}', 'g'), options.closeIcon ? '<i class="close icon"></i>' : "").replace(new RegExp('{Size}', 'g'), options.size).
-                replace(new RegExp('{ModalId}', 'g'), modalId).replace(new RegExp('{Title}', 'g'), options.title).
-                replace(new RegExp('{Content}', 'g'), options.content).replace(new RegExp('{Buttons}'), buttonsHtml);
+    //rewrite for semantic ui 2.0+ in 2015/08/16
+    //author:zhuxi
+    $.fn.Lc4eModal = function (parameters) {
+        var query = arguments[0],
+            methodInvoked = (typeof query == 'string'),
+            queryArguments = [].slice.call(arguments, 1),
+            returnValue;
+        return this.each(function () {
+            var settings = methodInvoked ? query : $.extend({}, $.fn.Lc4eModal.settings.config, query),
+                $module = $(this),
+                namespace = $.fn.Lc4eModal.settings.namespace,
+                id,
+                $modal,
+                instance = $module.data(namespace),
+                module;
+            settings.context = $module;
+            module = {
+                initialize: function () {
+                    id = namespace + $.Lc4eRandom();
+                    settings['id'] = id;
+                    if (!module.exist()) {
+                        module.create(settings);
+                    } else {
+                        module.instantiate();
+                    }
+                },
+                create: function (options) {
+                    if (options.hasOwnProperty('onHidden') && typeof options.onHidden === 'function') {
+                        $module.data('onHidden', options.onHidden);
+                        options.onHidden = function (modal) {
+                            $module.data('onHidden').call($module, modal);
+                            $modal.modal('destroy').remove();
+                            module.destroy();
+                        }
+                    }
+                    $modal = $($.fn.Lc4eModal.settings.template.modal(options));
 
-            $obj.append(html);
-            $modalObj = $("#" + modalId); // get modal
-            while (options.OtherButtonsClick.length != options.OtherButtonsClass.length) {
-                options.OtherButtonsClass.push("");
-            }
-            for (var i = 0, len = options.OtherButtonsClick.length; i < len; i++) {
-                if (typeof (options.OtherButtonsClick[i]) == "function") {
-                    $('#' + modalId + "-button-" + i).on('click', options.OtherButtonsClick[i]);
+                    $modal.append($.fn.Lc4eModal.settings.template.close(options))
+                        .append($.fn.Lc4eModal.settings.template.title(options))
+                        .append($.fn.Lc4eModal.settings.template.content(options))
+                        .append($.fn.Lc4eModal.settings.template.button(options))
+                    $(options['context']).append($modal);
+                    $modal.modal(options);
+                },
+                instantiate: function () {
+                    instance = module;
+                    $module.data(namespace, instance);
+                },
+                exist: function () {
+                    return $modal && !$('#' + id) ? true : false;
+                },
+                invoke: function (query) {
+                    $modal.modal(query, queryArguments);
+                },
+                destroy: function () {
+                    $module.removeData('onHidden').removeData(namespace);
+                    settings = null;
+                    id = null;
+                    instance = null;
                 }
-            }
-            options.onHidden = function () {
-                options.onAfterHide();
-                $modalObj.remove();
-                $('.ui.dimmer.modals.page').remove();
             };
-            $modalObj.modal(options);
-            $modalObj.modal('show');
-            $operate = $modalObj;
-            return false;
+
+            if (methodInvoked) {
+                if (instance === undefined) {
+                    module.initialize();
+                }
+                module.invoke(query);
+            }
+            else {
+                module.initialize();
+                $modal.modal('show');
+            }
         });
-        return $operate;
     };
-    //TODO
+    $.fn.Lc4eModal.settings = {
+        namespace: 'Lc4eModal',
+        type: {
+            stand: 'standard',
+            basic: 'basic'
+        },
+        size: {
+            small: 'small',
+            large: 'large',
+            full: 'fullscreen',
+            long: 'long'
+        },
+        config: {
+            id: '',
+            closeIcon: false,
+            size: 'small',
+            type: 'stand',
+            title: 'Message',
+            content: 'this is a modal',
+            allowMultiple: false,
+            transition: 'horizontal flip',
+            inverted: false,
+            blurring: true,
+            context: 'body',
+            closable: true,     //forbit closing modal by click dimmer
+            dimmerSettings: {
+                closable: false,
+                useCSS: true
+            },
+            duration: 400,
+            queue: false,
+            buttons: {
+                'Close': {
+                    id: '',
+                    name: 'Close',
+                    icon: '',
+                    content: '',
+                    css: 'basic close'
+                }
+            },
+            onShow: function () {
+
+            }
+            ,
+            onVisible: function () {
+
+            }
+            ,
+            onHide: function () {
+
+            }
+            ,
+            onHidden: function () {
+
+            }
+            ,
+            onApprove: function (el) {
+                return true;
+            }
+            ,
+            onDeny: function (el) {
+                return true;
+            }
+        },
+        template: {
+            button: function (options) {
+                var html = '<div class="actions">';
+                for (var name in options['buttons']) {
+                    var button = options['buttons'][name];
+                    html += '<button ' + (button['id'] ? 'id="' + button['id'] + '"' : '')
+                        + (button['name'] ? 'name="' + button['name'] + '"' : '' )
+                        + ' class="ui ' + (button['css'] ? button['css'] : '' ) + ' button">'
+                        + (button['icon'] ? '<i class="' + button['icon'] + ' icon"></i>' : '')
+                        + (button['content'] ? button['content'] : name) + '</button>';
+                }
+                html += '</div>';
+                return html;
+            }
+            ,
+            modal: function (options) {
+                return '<div ' + (options['id'] ? 'id="' + options['id'] + '"' : '') + ' class="ui ' + $.fn.Lc4eModal.settings.size[options['size']] + ' ' + $.fn.Lc4eModal.settings.type[options['type']] + ' modal"></div>';
+            }
+            ,
+            title: function (options) {
+                return options['title'] ? ('<div class="header">' + options['title'] + '</div>' ) : '';
+            },
+            content: function (options) {
+                return '<div class="content">' + options['content'] + '</div>'
+            },
+            close: function (options) {
+                return options.closeIcon ? '<i class="close icon"></i>' : '';
+            }
+        }
+    }
+//TODO
     $.fn.Lc4eProgress = function (option, data) {
 
         switch (option) {
@@ -478,7 +550,104 @@
         return this;
 
     };
+    $.fn.parseForm = function () {
+        var $form = $(this);
+        if ($form.length != 1) {
+            return;
+        } else {
+            $form.data('fieldsInfo', {});
+            var data = {
+                onValid: function () {
+                    $(this).closest('.field').removeClass('error').addClass('success');
+                    delete $form.data('fieldsInfo')[$(this).attr('name')];
+                },
+                onInvalid: function () {
+                    $(this).closest('.field').removeClass('success');
+                    $form.data('fieldsInfo')[$(this).attr('name')] = $(this).attr('prompt') ? $(this).attr('prompt') : $(this).closest('.fieldName').html();
+                }
+            }, validate = {}, $field = $form.find('.fieldValue');
+            $field.each(function () {
+                var $this = $(this),
+                    rules = $this.attr('rules'),
+                    name = $this.attr('name');
+                rules ? (rules = new Function("return " + rules)()) : (rules = []);
+                validate[name] = {};
+                validate[name]['identifier'] = name;
+                validate[name]['rules'] = rules;
+            });
+            data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
+            data["fields"] = validate;
+            $form.form(data);
+            $form.attr('data-content', "please fill the form");
+            $form.popup({
+                inline: true,
+                position: 'right center',
+                hideOnScroll: false,
+                exclusive: true,
+                closable: false,
+                setFluidWidth: true,
+                on: 'manual',
+                preserve: true,
+                onShow: function (modal) {
+                    $(this).find('.content').html($(modal).attr('data-content'));
+                }
+            });
+            return this;
+        }
+    };
+    $.fn.Lc4eSubmit = function (options) {
+        options = $.extend(true, {
+            success: function () {
+            },
+            error: function () {
+            }
+        }, options);
+        var $form = $(this);
+        if ($form.length != 1) {
+            return;
+        } else {
+            //$form.popup('hide').popup('remove popup');
+            if ($form.form('is valid')) {
+                $form.popup('hide');
+                $.Lc4eAjax({
+                        url: options.url,
+                        data: $form.form('get values'),
+                        success: function (data) {
+                            $.Lc4eResolveMessage(data, options.success, options.error);
+                        }
+                    }
+                )
+            } else {
+                var errorinfo = $form.data('fieldsInfo'), content = "";
+                for (var i in errorinfo) {
+                    content += i + " is invalid\n";
+                }
+                $form.attr('data-content', content);
+
+                $form.popup('animate hide', function () {
+                    $form.popup('show');
+                });
+            }
+            return this;
+        }
+    };
+    $.fn.Lc4eHover = function (css) {
+        return this.each(function () {
+            $(this).addClass('allAnimation');
+            $(this).hover(function () {
+                $(this).addClass(css);
+            }, function () {
+                $(this).removeClass(css);
+            })
+        })
+    };
     $.extend({
+        Lc4eMethodInvoke: function ($this, obj, name, params) {
+            var method = $.lc4e.plugins[obj][method][name];
+            if (method && typeof method === 'function') {
+                method.apply($this, params);
+            }
+        },
         Lc4eGetter: function (obj, path) {
             if (!path)
                 return obj;
@@ -579,13 +748,23 @@
 
             return $.ajax(data);
         },
-        Lc4eRandom: function () {
-            function random(a, b) {
-                return Math.random() > 0.5 ? -1 : 1;
+        Lc4eResolveMessage: function (returnVal, success, error) {
+            if (returnVal) {
+                $.Lc4eModal({
+                    type: 'stand',
+                    content: returnVal.message,
+                    onHide: function () {
+                        if (returnVal.result) {
+                            success.call();
+                        } else {
+                            error.call();
+                        }
+                    }
+                })
             }
-
-            return ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Q', 'q', 'W', 'w', 'E', 'e', 'R', 'r', 'T', 't', 'Y', 'y', 'U', 'u', 'I', 'i', 'O', 'o', 'P', 'p', 'A', 'a', 'S', 's', 'D', 'd', 'F', 'f', 'G', 'g', 'H', 'h', 'J', 'j', 'K', 'k', 'L', 'l', 'Z', 'z', 'X', 'x', 'C', 'c', 'V',
-                'v', 'B', 'b', 'N', 'n', 'M', 'm'].sort(random).join('').substring(5, 20);
+        },
+        Lc4eRandom: function () {
+            return (Math.random().toString(16) + '000000000').substr(2, 8);
         },
         Lc4eStars: function () {
             return $('body').Lc4eStars();
@@ -606,15 +785,7 @@
     });
 
 
-    //extend ec6
-    String.prototype.unix2human = function () {
-        return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
-    };
-    Number.prototype.unix2human = function () {
-        return $.lc4e.Lc4eToDate.unix2human(this);
-    };
-
-    $.lc4e.common = function(){
+    $.lc4e.common = function () {
 
         $('#menu .ui.dropdown.item').dropdown({
             action: "nothing",
@@ -687,7 +858,12 @@
             exclusive: false,
             hideOnScroll: false,
             on: 'click',
-            closable: true
+            prefer: 'opposite',
+            closable: true,
+            onVisible: function (model) {
+                if ($(window).width() <= 768)
+                    $(model).popup('reposition');
+            }
         });
 
         $('#GTTop').on('click', function (e) {

@@ -1,11 +1,10 @@
 package com.teddy.lc4e.core.web.controller;
 
-import com.teddy.jfinal.annotation.Controller;
-import com.teddy.jfinal.annotation.RequestMethod;
-import com.teddy.jfinal.annotation.ValidateParam;
+import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.entity.Method;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.tools.RelativeDate;
+import com.teddy.lc4e.core.config.Key;
 import com.teddy.lc4e.core.entity.Article;
 import com.teddy.lc4e.core.entity.Message;
 import com.teddy.lc4e.core.entity.Popup;
@@ -26,6 +25,7 @@ import java.util.Random;
 public class ViewController extends BaseController {
 
     @ValidateParam(value = "p", type = int.class, defaultValue = "1")
+    @SetAJAX
     public void index() {
         setAttr("page", getPara("p"));
         if (isPJAX()) {
@@ -51,6 +51,10 @@ public class ViewController extends BaseController {
         render("ajax/_article");
     }
 
+    public void captcha() {
+        renderCaptcha();
+    }
+
     public void TopHots() {
         render("topHotTest");
     }
@@ -65,6 +69,8 @@ public class ViewController extends BaseController {
     }
 
     @RequiresGuest
+    @SetComVar(value = Key.REGISTER_CAPTCHA, type = Boolean.class)
+    @SetAJAX
     public void SignIn() {
         render("pages/signin");
     }

@@ -12,9 +12,6 @@ public class ShiroMethod {
 
     private static final String NAMES_DELIMETER = ",";
 
-    /**
-     * 禁止初始化
-     */
     public ShiroMethod() {
     }
 

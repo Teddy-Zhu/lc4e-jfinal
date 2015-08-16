@@ -32,4 +32,25 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         sb.append("select ").append(tableName).append(".* from " + tableName);
         return find(sb.toString());
     }
+
+    public boolean getToBoolean(String attr) {
+        return Boolean.valueOf(getStr(attr));
+    }
+
+    public Integer getToInteger(String attr) {
+        return Integer.valueOf(getStr(attr));
+    }
+
+
+    public Long getToLong(String attr) {
+        return Long.valueOf(getStr(attr));
+    }
+
+    public Double getToDouble(String attr) {
+        return Double.valueOf(getStr(attr));
+    }
+
+    public Float getToFloat(String attr) {
+        return Float.valueOf(getStr(attr));
+    }
 }

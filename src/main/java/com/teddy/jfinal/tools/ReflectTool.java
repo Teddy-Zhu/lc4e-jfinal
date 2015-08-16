@@ -5,7 +5,6 @@ import com.jfinal.plugin.activerecord.Model;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.exceptions.ReflectException;
-import net.sf.cglib.proxy.Enhancer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -396,6 +395,25 @@ public class ReflectTool {
         }
 
         return type;
+    }
+
+    public static Object wrapperObject(Class clazz, String object) {
+        Class clz = wrapper(clazz);
+        if (clz == String.class) {
+            return String.valueOf(object);
+        } else if (clz == Boolean.class) {
+            return Boolean.valueOf(object);
+        } else if (clz == Integer.class) {
+            return Integer.valueOf(object);
+        } else if (clz == Float.class) {
+            return Float.valueOf(object);
+        } else if (clz == Double.class) {
+            return Double.valueOf(object);
+        } else if (clz == Long.class) {
+            return Long.valueOf(object);
+        } else {
+            return object;
+        }
     }
 
     /**
