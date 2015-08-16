@@ -44,7 +44,7 @@
         }
     })
     ;
-//extend ec6
+    //extend ec6
     String.prototype.unix2human = function () {
         return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
     };
@@ -66,7 +66,7 @@
         return temp;
     };
     /* animate scroll */
-// defines various easing effects
+    // defines various easing effects
     $.easing['jswing'] = $.easing['swing'];
     $.extend($.easing, {
         def: 'easeOutQuad',
@@ -283,85 +283,138 @@
         element: "html,body"
     };
 
-//TODO
-    $.fn.Lc4eDimmer = function (options, data) {
-        var defaults = {
-                type: 'loader', // loader or dimmer
-                color: 'black',
-                content: "Loading"
-            }, loaderDefaults = {
-                size: 'small', // small mini medium large
-                direction: "" // indeterminate
-            }, template = '<div class="ui active {Color} dimmer">{Content}</div>',
-
-            Loadertemplate = '<div class="ui {Direction} {Size} text loader">{Content}</div>';
-
+    //rewrite for semantic ui 2.0+ in 2015/08/16
+    //author:zhuxi
+    $.fn.Lc4eDimmer = function (parameters) {
+        var query = arguments[0],
+            methodInvoked = (typeof query == 'string'),
+            queryArguments = [].slice.call(arguments, 1);
         return this.each(function () {
-            var $that = $(this), html = "";
-            switch (options) {
-                case "toggle":
-                {
-                    if ($that.find('.ui.active.dimmer').length != 0) {
-                        $that.find('.ui.dimmer').removeClass('active');
+            var settings = methodInvoked ? $.extend({}, $.fn.Lc4eDimmer.settings.config) : $.extend({}, $.fn.Lc4eDimmer.settings.config, query),
+                $module = $(this),
+                namespace = $.fn.Lc4eDimmer.settings.namespace,
+                $dimmer,
+                instance = $module.data(namespace),
+                module;
+            module = {
+                initialize: function () {
+                    if (!module.exist()) {
+                        module.create(settings);
                     } else {
-                        if ($that.find('.ui.dimmer').length != 0) {
-                            $that.find('.ui.dimmer').addClass('active');
-                        } else {
-                            options = options = $.extend(defaults, data);
-                            if (options.type == "dimmer") {
-                                html = template.replace(new RegExp('{Content}', 'g'), options.content).replace(new RegExp('{Color}', 'g'), options.color == "black" ? "" : "inverted");
-                            } else {
-                                options = $.extend(loaderDefaults, options);
-                                html = template.replace(new RegExp('{Content}', 'g'), Loadertemplate).replace(new RegExp('{Content}', 'g'), options.content).replace(new RegExp('{Color}', 'g'),
-                                    options.color == "black" ? "" : "inverted").replace(new RegExp('{Direction}', 'g'), options.direction).replace(new RegExp('{Size}', 'g'), options.size);
-                            }
-                            $that.append(html);
+                        if (settings.dimmerName) {
+                            $dimmer = $module.find(settings.selector.dimmer).filter('.' + settings.dimmerName);
+                        }
+                        else {
+                            $dimmer = $module.find(settings.selector.dimmer);
                         }
                     }
-                    break;
-                }
-                case "hide":
-                {
-                    $that.find('.ui.active.dimmer').removeClass('active');
-                    break;
-                }
-                case "show":
-                {
-                    $that.find('.ui.dimmer').addClass('active');
-                    break;
-                }
-                case "remove":
-                {
-                    $that.find('.ui.dimmer').remove();
-                    break;
-                }
-                default:
-                {
-                    options = $.extend(defaults, options);
-                    if (options.type == "dimmer") {
-                        html = template.replace(new RegExp('{Content}', 'g'), options.content).replace(new RegExp('{Color}', 'g'), options.color == "black" ? "" : "inverted");
-                    } else {
-                        options = $.extend(loaderDefaults, options);
-                        html = template.replace(new RegExp('{Content}', 'g'), Loadertemplate).replace(new RegExp('{Content}', 'g'), options.content).replace(new RegExp('{Color}', 'g'), options.color == "black" ? "" : "inverted").replace(new RegExp('{Direction}', 'g'), options.direction).replace(new RegExp('{Size}', 'g'), options.size);
+                },
+                create: function (options) {
+                    if (options.hasOwnProperty('onHide') && typeof options.onHide === 'function') {
+                        $module.data('onHide', options.onHide);
+                        options.onHide = function (dimmable) {
+                            $module.data('onHide').call($module, dimmable);
+                            $module.dimmer('destroy');
+                            module.destroy();
+                        }
                     }
-                    $that.find('.ui.dimmer').remove();
-                    $that.append(html);
-                    break;
+                    $dimmer = $($.fn.Lc4eDimmer.settings.template.dimmer(options));
+
+                    $dimmer.append($.fn.Lc4eDimmer.settings.template.content(options));
+                    if (options.blurring) {
+                        $module.addClass('blurring');
+                    }
+                    $module.append($dimmer);
+
+                    $module.dimmer(options);
+                },
+                instantiate: function () {
+                    instance = module;
+                    $module.data(namespace, instance);
+                },
+                exist: function () {
+                    return $module.dimmer('has dimmer') && $module.data('onHide');
+                },
+                invoke: function (query) {
+                    $module.dimmer(query, queryArguments);
+                },
+                destroy: function () {
+                    if (settings.blurring) {
+                        $module.removeClass('blurring');
+                    }
+                    $module.removeData('onHide').removeData(namespace);
+                    settings = null;
+                    instance = null;
                 }
+            };
+
+            if (methodInvoked) {
+                if (instance === undefined) {
+                    module.initialize();
+                }
+                module.invoke(query);
             }
-        })
+            else {
+                module.initialize();
+                if (settings.autoShow) {
+                    $module.dimmer('show');
+                }
+
+            }
+        });
     };
 
+    $.fn.Lc4eDimmer.settings = {
+        namespace: 'Lc4eDimmer',
+        type: {
+            common: '',
+            simple: 'simple',
+            page: 'page',
+            inverted: 'inverted'
+        },
+        config: {
+            opacity: 'auto',
+            variation: false,
+            dimmerName: false,
+            type: 'common',
+            closable: false,
+            autoShow: true,
+            content: '<div class="ui text loader">Loading</div>',
+            on: false,
+            blurring: true,
+            transition: 'scale',
+            useCSS: true,
+            onShow: function () {
+            },
+            onHide: function () {
+            },
+            onChange: function () {
+            },
+            selector: {
+                dimmer: '> .ui.dimmer',
+                content: '.ui.dimmer > .content, .ui.dimmer > .content > .center'
+            }
+        },
+        template: {
+            dimmer: function (options) {
+                return '<div class="ui '
+                    + ($.fn.Lc4eDimmer.settings.type[options.type])
+                    + ' dimmer"></div>';
+            },
+            content: function (options) {
+                return '<div class="content">' + (options.content ? options.content : '') + '</div>'
+            }
+        }
+    };
 
     //rewrite for semantic ui 2.0+ in 2015/08/16
     //author:zhuxi
     $.fn.Lc4eModal = function (parameters) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
-            queryArguments = [].slice.call(arguments, 1),
-            returnValue;
+            queryArguments = [].slice.call(arguments, 1);
         return this.each(function () {
-            var settings = methodInvoked ? query : $.extend({}, $.fn.Lc4eModal.settings.config, query),
+            var settings = methodInvoked ? $.extend({}, $.fn.Lc4eModal.settings.config) : $.extend({}, $.fn.Lc4eModal.settings.config, query),
                 $module = $(this),
                 namespace = $.fn.Lc4eModal.settings.namespace,
                 id,
@@ -423,7 +476,9 @@
             }
             else {
                 module.initialize();
-                $modal.modal('show');
+                if (settings.autoShow) {
+                    $modal.modal('show');
+                }
             }
         });
     };
@@ -450,6 +505,7 @@
             transition: 'horizontal flip',
             inverted: false,
             blurring: true,
+            autoShow: true,
             context: 'body',
             closable: true,     //forbit closing modal by click dimmer
             dimmerSettings: {
@@ -494,27 +550,27 @@
         template: {
             button: function (options) {
                 var html = '<div class="actions">';
-                for (var name in options['buttons']) {
-                    var button = options['buttons'][name];
-                    html += '<button ' + (button['id'] ? 'id="' + button['id'] + '"' : '')
-                        + (button['name'] ? 'name="' + button['name'] + '"' : '' )
-                        + ' class="ui ' + (button['css'] ? button['css'] : '' ) + ' button">'
-                        + (button['icon'] ? '<i class="' + button['icon'] + ' icon"></i>' : '')
-                        + (button['content'] ? button['content'] : name) + '</button>';
+                for (var name in options.buttons) {
+                    var button = options.buttons.name;
+                    html += '<button ' + (button.id ? 'id="' + button.id + '"' : '')
+                        + (button.name ? 'name="' + button.name + '"' : '' )
+                        + ' class="ui ' + (button.css ? button.css : '' ) + ' button">'
+                        + (button.icon ? '<i class="' + button.icon + ' icon"></i>' : '')
+                        + (button.content ? button.content : name) + '</button>';
                 }
                 html += '</div>';
                 return html;
             }
             ,
             modal: function (options) {
-                return '<div ' + (options['id'] ? 'id="' + options['id'] + '"' : '') + ' class="ui ' + $.fn.Lc4eModal.settings.size[options['size']] + ' ' + $.fn.Lc4eModal.settings.type[options['type']] + ' modal"></div>';
+                return '<div ' + (options.id ? 'id="' + options.id + '"' : '') + ' class="ui ' + $.fn.Lc4eModal.settings.size[options.size] + ' ' + $.fn.Lc4eModal.settings.type[options.type] + ' modal"></div>';
             }
             ,
             title: function (options) {
-                return options['title'] ? ('<div class="header">' + options['title'] + '</div>' ) : '';
+                return options.title ? ('<div class="header">' + options.title + '</div>' ) : '';
             },
             content: function (options) {
-                return '<div class="content">' + options['content'] + '</div>'
+                return '<div class="content">' + options.content + '</div>'
             },
             close: function (options) {
                 return options.closeIcon ? '<i class="close icon"></i>' : '';
@@ -771,6 +827,14 @@
         },
         Lc4eModal: function (options) {
             return $("body").Lc4eModal(options);
+        },
+        Lc4eDimmer: function (options) {
+            if (options) {
+                options.type = 'page';
+            } else {
+                options = {type: 'page'}
+            }
+            return $('body').Lc4eDimmer(options);
         },
         Lc4eToDate: $.lc4e.Lc4eToDate.unix2human,
         Lc4eProgress: function (option, data) {
