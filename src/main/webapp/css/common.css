@@ -5,12 +5,13 @@ body {
 
 /* header */
 #menu, #menu > .column {
+    margin: 0;
     -webkit-transition: padding 0.5s ease, background-color 0.5s ease;
     transition: padding 0.5s ease, background-color 0.5s ease;
 }
 
 #menu .ui.dropdown {
-    z-index: 500;
+    z-index: 102;
 }
 
 #menu.fixed > .column {
@@ -394,7 +395,7 @@ body {
 }
 
 /* extend success */
-.ui.form .field.success input[type=text],.ui.form .field.success input[type=password] {
+.ui.form .field.success input[type=text], .ui.form .field.success input[type=password] {
     background-color: #E4F7E1;
     border-color: green;
     color: green;
