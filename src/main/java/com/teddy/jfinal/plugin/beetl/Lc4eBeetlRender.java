@@ -14,6 +14,8 @@ public class Lc4eBeetlRender extends BeetlRender {
 
     @Override
     public void render() {
+        log.info(System.currentTimeMillis());
         super.render();
+        log.info(System.currentTimeMillis());
     }
 }

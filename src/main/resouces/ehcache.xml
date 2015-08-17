@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache name="es">
+<ehcache name="es" updateCheck="false">
 
     <diskStore path="java.io.tmpdir"/>
     <!-- 登录记录缓存 锁定10分钟 -->

@@ -12,6 +12,7 @@ public class Lc4eBeetlRenderFactory extends BeetlRenderFactory {
 
     @Override
     public Render getRender(String view) {
+
         BeetlRender render = new Lc4eBeetlRender(groupTemplate, view + (view.endsWith(viewExtension) ? Key.Empty : viewExtension));
         return render;
     }

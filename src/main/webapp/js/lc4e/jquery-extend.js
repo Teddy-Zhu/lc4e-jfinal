@@ -9,7 +9,6 @@
 
 (function ($) {
     $.lc4e = $.lc4e || {};
-
     $.extend($.lc4e, {
         version: '1.0',
         Lc4eToDate: {
@@ -42,9 +41,8 @@
                 }
             })
         }
-    })
-    ;
-    //extend ec6
+    });
+    /*extend ec6*/
     String.prototype.unix2human = function () {
         return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
     };
@@ -66,7 +64,7 @@
         return temp;
     };
     /* animate scroll */
-    // defines various easing effects
+    /* defines various easing effects*/
     $.easing['jswing'] = $.easing['swing'];
     $.extend($.easing, {
         def: 'easeOutQuad',
@@ -245,25 +243,17 @@
 
     $.fn.animatescroll = function (options) {
 
-        // fetches options
         var opts = $.extend({}, $.fn.animatescroll.defaults, options);
-
-        // make sure the callback is a function
         if (typeof opts.onScrollStart == 'function') {
-            // brings the scope to the callback
             opts.onScrollStart.call(this);
         }
 
         if (opts.element == "html,body") {
-            // Get the distance of particular id or class from top
             var offset = this.offset().top;
-
-            // Scroll the page to the desired position
             $(opts.element).stop().animate({
                 scrollTop: offset - opts.padding
             }, opts.scrollSpeed, opts.easing);
         } else {
-            // Scroll the element to the desired position
             $(opts.element).stop().animate({
                 scrollTop: this.offset().top - this.parent().offset().top + this.parent().scrollTop() - opts.padding
             }, opts.scrollSpeed, opts.easing);
@@ -283,8 +273,8 @@
         element: "html,body"
     };
 
-    //rewrite for semantic ui 2.0+ in 2015/08/16
-    //author:zhuxi
+    /*rewrite for semantic ui 2.0+ in 2015/08/16*/
+    /*author:zhuxi*/
     $.fn.Lc4eDimmer = function (parameters) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
@@ -310,7 +300,7 @@
                     }
                 },
                 create: function (options) {
-                    if (options.hasOwnProperty('onHide') && typeof options.onHide === 'function') {
+                    if (query.hasOwnProperty('onHide') && typeof query.onHide === 'function') {
                         $module.data('onHide', options.onHide);
                         options.onHide = function (dimmable) {
                             $module.data('onHide').call($module, dimmable);
@@ -407,8 +397,8 @@
         }
     };
 
-    //rewrite for semantic ui 2.0+ in 2015/08/16
-    //author:zhuxi
+    /*rewrite for semantic ui 2.0+ in 2015/08/16*/
+    /*author:zhuxi*/
     $.fn.Lc4eModal = function (parameters) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
@@ -433,7 +423,7 @@
                     }
                 },
                 create: function (options) {
-                    if (options.hasOwnProperty('onHidden') && typeof options.onHidden === 'function') {
+                    if (query.hasOwnProperty('onHidden') && typeof query.onHidden === 'function') {
                         $module.data('onHidden', options.onHidden);
                         options.onHidden = function (modal) {
                             $module.data('onHidden').call($module, modal);
@@ -446,7 +436,7 @@
                     $modal.append($.fn.Lc4eModal.settings.template.close(options))
                         .append($.fn.Lc4eModal.settings.template.title(options))
                         .append($.fn.Lc4eModal.settings.template.content(options))
-                        .append($.fn.Lc4eModal.settings.template.button(options))
+                        .append($.fn.Lc4eModal.settings.template.button(options));
                     $(options['context']).append($modal);
                     $modal.modal(options);
                 },
@@ -507,7 +497,7 @@
             blurring: true,
             autoShow: true,
             context: 'body',
-            closable: true,     //forbit closing modal by click dimmer
+            closable: true, /*forbit closing modal by click dimmer*/
             dimmerSettings: {
                 closable: false,
                 useCSS: true
@@ -551,7 +541,7 @@
             button: function (options) {
                 var html = '<div class="actions">';
                 for (var name in options.buttons) {
-                    var button = options.buttons.name;
+                    var button = options.buttons[name];
                     html += '<button ' + (button.id ? 'id="' + button.id + '"' : '')
                         + (button.name ? 'name="' + button.name + '"' : '' )
                         + ' class="ui ' + (button.css ? button.css : '' ) + ' button">'
@@ -576,14 +566,117 @@
                 return options.closeIcon ? '<i class="close icon"></i>' : '';
             }
         }
-    }
-//TODO
+    };
+
     $.fn.Lc4eProgress = function (option, data) {
+        var query = arguments[0],
+            methodInvoked = (typeof query == 'string'),
+            queryArguments = [].slice.call(arguments, 1);
+        return this.each(function () {
+            var settings = methodInvoked ? $.extend({}, $.fn.Lc4eProgress.settings.config) : $.extend({}, $.fn.Lc4eProgress.settings.config, query),
+                $module = $(this),
+                namespace = $.fn.Lc4eModal.settings.namespace,
+                id,
+                $progress,
+                instance = $module.data(namespace),
+                module;
+            settings.context = $module;
+            module = {
+                initialize: function () {
+                    id = namespace + $.Lc4eRandom();
+                    settings['id'] = id;
+                    if (!module.exist()) {
+                        module.create(settings);
+                    } else {
+                        module.instantiate();
+                    }
+                },
+                create: function (options) {
+                    if (query.hasOwnProperty('onSuccess') && typeof query.onSuccess === 'function') {
+                        $module.data('onSuccess', options.onSuccess);
+                        options.onSuccess = function (modal) {
+                            $module.data('onSuccess').call($module, modal);
+                            $progress.progress('destroy').remove();
+                            module.destroy();
+                        }
+                    }
+                    $progress = $($.fn.Lc4eModal.settings.template.progress(options));
 
-        switch (option) {
+                    $progress.progress(options);
+                },
+                instantiate: function () {
+                    instance = module;
+                    $module.data(namespace, instance);
+                },
+                exist: function () {
+                    return $progress && !$('#' + id) ? true : false;
+                },
+                invoke: function (query) {
+                    $progress.progress(query, queryArguments);
+                },
+                destroy: function () {
+                    $module.removeData('onHidden').removeData(namespace);
+                    settings = null;
+                    id = null;
+                    instance = null;
+                }
+            };
 
+            if (methodInvoked) {
+                if (instance === undefined) {
+                    module.initialize();
+                }
+                module.invoke(query);
+            }
+            else {
+                module.initialize();
+            }
+        });
+    }
+    $.fn.Lc4eProgress.settings = {
+        namespace: 'Lc4eProgress',
+        size: {
+            tiny: 'tiny',
+            small: 'small',
+            common: '',
+            large: 'large',
+            big: 'big'
+        },
+        config: {
+            id: '',
+            autoSuccess: true,
+            indicating: true,
+            color: '',
+            total: 100,
+            size: 'common',
+            attach: '', /*top or bottom*/
+            onChange: function (percent, value, total) {
+
+            },
+            onSuccess: function (total) {
+
+            },
+            onActive: function (value, total) {
+
+            },
+            onError: function (value, total) {
+
+            },
+            onWarning: function (value, total) {
+
+            }
+        },
+        template: {
+            progress: function (options) {
+                return '<div class="ui '
+                    + (options.indicating ? ' indicating ' : '')
+                    + (options.color ? ' ' + options.color + ' ' : '')
+                    + ($.fn.Lc4eProgress.settings.size[options.size])
+                    + (options.attach ? ' ' + options.attach + ' attach ' : '')
+                    + ' progress"><div class="bar"><div class="progress"></div></div>/div>';
+            }
         }
-        return $progressBar;
+
     };
     $.fn.Lc4eStars = function () {
         var $this = $(this), $menu = $('#menu>.column');
@@ -593,7 +686,8 @@
             return;
         }
         $this.addClass('fullStars').append('<div id="lc4eStar" class="inStars"></div>');
-        var stars = 100;//stars' number
+        var stars = 100;
+        /*stars' number*/
         var $stars = $('#lc4eStar');
         var r = 800;
         var $star = [];
@@ -662,7 +756,6 @@
         if ($form.length != 1) {
             return;
         } else {
-            //$form.popup('hide').popup('remove popup');
             if ($form.form('is valid')) {
                 $form.popup('hide');
                 $.Lc4eAjax({
@@ -886,32 +979,21 @@
 
         var timerIn, timerOut;
         $('html').visibility({
-            offset: -5,
+            offset: -10,
             observeChanges: false,
             once: false,
             continuous: false,
             onTopPassed: function () {
-                clearTimeout(timerIn);
                 $.requestAnimationFrame(function () {
                     $('#menu').addClass('fixed');
+                    $('#GTTop').transition('swing down in');
                 });
-                timerIn = setTimeout(function () {
-                    $.requestAnimationFrame(function () {
-                        $('#GTTop').transition('swing down in');
-                    })
-                }, 300);
             },
             onTopPassedReverse: function () {
-                clearTimeout(timerOut);
                 $.requestAnimationFrame(function () {
                     $('#menu').removeClass('fixed');
-
+                    $('#GTTop').transition('swing down out');
                 });
-                timerOut = setTimeout(function () {
-                    $.requestAnimationFrame(function () {
-                        $('#GTTop').transition('swing down out');
-                    })
-                }, 300);
             }
         });
 
@@ -936,8 +1018,6 @@
             });
         });
     };
-
-
     $.lc4e.common.call();
 })
 (jQuery);

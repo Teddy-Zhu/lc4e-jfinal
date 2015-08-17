@@ -1,20 +1,14 @@
-<%if(has(LC4EAJAX) && LC4EAJAX ){%>
+<%if(has(LC4EAJAX) && LC4EAJAX ){
 for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
 %>${layoutContent}
 <script type="text/javascript">
-    $LAB<% for(var i in footerJS){print('.script("'+i+'")');}%>
+    <% if(!isEmpty(footerJS)){print('$LAB');}for(var i in footerJS){print('.script("'+i+'")');}%>
 </script>
 <%}else{%>
 <!DOCTYPE>
 <html>
 <head>
-    <%layout("/common/title.html",{'SiteName':SiteName}){};
-
-    for(var i in headerCSS){
-    println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');
-    }
-    %>
-
+    <%layout("/common/title.html",{'SiteName':SiteName}){for(var i in headerCSS){staticInclude(i){};}};%>
 </head>
 <body>
 <!-- Header Menu Start -->
