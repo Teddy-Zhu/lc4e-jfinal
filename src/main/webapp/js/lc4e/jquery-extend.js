@@ -701,91 +701,106 @@
 
     };
 
-    $.fn.resetForm = function () {
+    $.fn.Lc4eForm = function (parameters) {
+        var query = arguments[0],
+            methodInvoked = (typeof query == 'string'),
+            queryArguments = arguments[1];
         return this.each(function () {
-            var $form = $(this), $field;
-            $form.data('fieldsInfo', {}).popup('hide');
-            $field = $form.find('.fieldValue');
-            $field.each(function () {
-                var $this = $(this);
-                $this.closest('.field').removeClass('success');
-            });
-            $form.form('reset');
-        });
-    };
-    $.fn.parseForm = function () {
-        return this.each(function () {
-            var $form = $(this);
-            $form.data('fieldsInfo', {});
-            var data = {
-                onValid: function () {
-                    $(this).closest('.field').removeClass('error').addClass('success');
-                    delete $form.data('fieldsInfo')[$(this).attr('name')];
+            var module,
+                $form = $(this),
+                $field = $form.find('.fieldValue');
+            module = {
+                initialize: function () {
+                    $form.data('fieldsInfo', {});
+                    var data = {
+                        onValid: function () {
+                            $(this).closest('.field').removeClass('error').addClass('success');
+                            delete $form.data('fieldsInfo')[$(this).attr('name')];
+                        },
+                        onInvalid: function () {
+                            $(this).closest('.field').removeClass('success');
+                            $form.data('fieldsInfo')[$(this).attr('name')] = $(this).attr('prompt') ? $(this).attr('prompt') : $(this).closest('.fieldName').html();
+                        }
+                    }, validate = {}, $field = $form.find('.fieldValue');
+                    $field.each(function () {
+                        var $this = $(this),
+                            rules = $this.attr('rules'),
+                            name = $this.attr('name');
+                        rules ? (rules = new Function("return " + rules)()) : (rules = []);
+                        validate[name] = {};
+                        validate[name]['identifier'] = name;
+                        validate[name]['rules'] = rules;
+                    });
+                    data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
+                    data["fields"] = validate;
+                    $form.form(data).attr('data-content', "please fill the form").popup({
+                        inline: true,
+                        position: 'right center',
+                        hideOnScroll: false,
+                        exclusive: true,
+                        closable: false,
+                        setFluidWidth: true,
+                        on: 'manual',
+                        preserve: true,
+                        onShow: function (modal) {
+                            $(this).find('.content').html($(modal).attr('data-content'));
+                        }
+                    });
                 },
-                onInvalid: function () {
-                    $(this).closest('.field').removeClass('success');
-                    $form.data('fieldsInfo')[$(this).attr('name')] = $(this).attr('prompt') ? $(this).attr('prompt') : $(this).closest('.fieldName').html();
+                reset: function () {
+
+                    $form.data('fieldsInfo', {}).popup('hide');
+
+                    $field.each(function () {
+                        var $this = $(this);
+                        $this.closest('.field').removeClass('success');
+                    });
+                    $form.form('reset');
+                },
+                submit: function (options) {
+                    options = $.extend(true, $.fn.Lc4eForm.settings.config, options);
+                    if ($form.form('is valid')) {
+                        $form.popup('hide');
+                        $.Lc4eAjax({
+                                url: options.url,
+                                data: $form.form('get values'),
+                                success: function (data) {
+                                    $.Lc4eResolveMessage(data, options.success, options.error);
+                                }
+                            }
+                        )
+                    } else {
+                        var errorinfo = $form.data('fieldsInfo'), content = "";
+                        for (var i in errorinfo) {
+                            content += i + " is invalid\n";
+                        }
+                        $form.attr('data-content', content);
+
+                        $form.popup('animate hide', function () {
+                            $form.popup('show');
+                        });
+                    }
+                },
+                destroy: function () {
+
+                },
+                invoke: function (name) {
+                    module[name] && module[name].call($form, queryArguments);
                 }
-            }, validate = {}, $field = $form.find('.fieldValue');
-            $field.each(function () {
-                var $this = $(this),
-                    rules = $this.attr('rules'),
-                    name = $this.attr('name');
-                rules ? (rules = new Function("return " + rules)()) : (rules = []);
-                validate[name] = {};
-                validate[name]['identifier'] = name;
-                validate[name]['rules'] = rules;
-            });
-            data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
-            data["fields"] = validate;
-            $form.form(data).attr('data-content', "please fill the form").popup({
-                inline: true,
-                position: 'right center',
-                hideOnScroll: false,
-                exclusive: true,
-                closable: false,
-                setFluidWidth: true,
-                on: 'manual',
-                preserve: true,
-                onShow: function (modal) {
-                    $(this).find('.content').html($(modal).attr('data-content'));
-                }
-            });
+            };
+            if (methodInvoked) {
+                module.invoke(query);
+            } else {
+                module.initialize();
+            }
         });
     };
-    $.fn.Lc4eSubmit = function (options) {
-        options = $.extend(true, {
+    $.fn.Lc4eForm.settings = {
+        config: {
             success: function () {
             },
             error: function () {
             }
-        }, options);
-        var $form = $(this);
-        if ($form.length != 1) {
-            return;
-        } else {
-            if ($form.form('is valid')) {
-                $form.popup('hide');
-                $.Lc4eAjax({
-                        url: options.url,
-                        data: $form.form('get values'),
-                        success: function (data) {
-                            $.Lc4eResolveMessage(data, options.success, options.error);
-                        }
-                    }
-                )
-            } else {
-                var errorinfo = $form.data('fieldsInfo'), content = "";
-                for (var i in errorinfo) {
-                    content += i + " is invalid\n";
-                }
-                $form.attr('data-content', content);
-
-                $form.popup('animate hide', function () {
-                    $form.popup('show');
-                });
-            }
-            return this;
         }
     };
     $.fn.Lc4eHover = function (css) {

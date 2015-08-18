@@ -19,16 +19,16 @@ $(function () {
             })
         }
     });
-    $('#signInForm').parseForm();
+    $('#signInForm').Lc4eForm();
     $('#signIn').on('click', function () {
-        $('#signInForm').Lc4eSubmit({
+        $('#signInForm').Lc4eForm('submit', {
             url: '/member/signin', success: function () {
                 window.location.href = "/";
             }
         });
     });
     $('#reset').on('click', function () {
-        $('#signInForm').resetForm();
+        $('#signInForm').Lc4eForm('reset');
     });
 
     $('#user\\.password').next('.eye.icon').on({
