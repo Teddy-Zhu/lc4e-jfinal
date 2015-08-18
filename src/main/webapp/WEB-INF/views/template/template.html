@@ -1,14 +1,13 @@
 <%if(has(LC4EAJAX) && LC4EAJAX ){
 for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
 %>${layoutContent}
-<script type="text/javascript">
-    <% for(var i in footerJS){staticInclude(i){};}%>
-</script>
-<%}else{%>
+<%if(!isEmpty(footerJS)){print('$LAB');}for(var i in footerJS){print('.script("'+i+'")');}}else{%>
 <!DOCTYPE>
 <html>
 <head>
-    <%layout("/common/title.html",{'SiteName':SiteName}){for(var i in headerCSS){staticInclude(i){};}};%>
+    <%layout("/common/title.html",{'SiteName':SiteName}){
+    for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
+    };%>
 </head>
 <body>
 <!-- Header Menu Start -->
@@ -83,10 +82,8 @@ for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="u
 <!-- Slider Bar End -->
 <%layout("/common/footer.html",{}){}%>
 <script type="text/javascript">
-    <%staticInclude("/plugins/lab/LAB.min.js"){};%>
-    <%staticInclude("/plugins/jquery/jquery.min.js"){};%>
-    $LAB.script("/plugins/semantic-ui/semantic.js").script("/js/lc4e/jquery-extend.js")
-            .wait()<% for(var i in footerJS){print('.script("'+i+'")');}%>
+    $LAB.script("/plugins/jquery/jquery.min.js").wait().script("/plugins/semantic-ui/semantic.js").script("/js/lc4e/jquery-extend.js")
+        .wait()<%for(var i in footerJS){print('.script("'+i+'")');}%>
 </script>
 </body>
 </html>
