@@ -700,11 +700,22 @@
         return this;
 
     };
+
+    $.fn.resetForm = function () {
+        return this.each(function () {
+            var $form = $(this), $field;
+            $form.data('fieldsInfo', {}).popup('hide');
+            $field = $form.find('.fieldValue');
+            $field.each(function () {
+                var $this = $(this);
+                $this.closest('.field').removeClass('success');
+            });
+            $form.form('reset');
+        });
+    };
     $.fn.parseForm = function () {
-        var $form = $(this);
-        if ($form.length != 1) {
-            return;
-        } else {
+        return this.each(function () {
+            var $form = $(this);
             $form.data('fieldsInfo', {});
             var data = {
                 onValid: function () {
@@ -727,9 +738,7 @@
             });
             data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
             data["fields"] = validate;
-            $form.form(data);
-            $form.attr('data-content', "please fill the form");
-            $form.popup({
+            $form.form(data).attr('data-content', "please fill the form").popup({
                 inline: true,
                 position: 'right center',
                 hideOnScroll: false,
@@ -742,8 +751,7 @@
                     $(this).find('.content').html($(modal).attr('data-content'));
                 }
             });
-            return this;
-        }
+        });
     };
     $.fn.Lc4eSubmit = function (options) {
         options = $.extend(true, {

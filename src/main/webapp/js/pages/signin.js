@@ -28,7 +28,7 @@ $(function () {
         });
     });
     $('#reset').on('click', function () {
-        $('#signInForm').form('reset');
+        $('#signInForm').resetForm();
     });
 
     $('#user\\.password').next('.eye.icon').on({
