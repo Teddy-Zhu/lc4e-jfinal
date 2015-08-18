@@ -82,7 +82,7 @@ for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="u
 <!-- Slider Bar End -->
 <%layout("/common/footer.html",{}){}%>
 <script type="text/javascript">
-    $LAB.script("/plugins/jquery/jquery.min.js").wait().script("/plugins/semantic-ui/semantic.js").script("/js/lc4e/jquery-extend.js")
+    $LAB.script("/plugins/jquery/jquery.min.js").wait().script("/plugins/semantic-ui/semantic.min.js").script("/js/lc4e/jquery-extend.js")
         .wait()<%for(var i in footerJS){print('.script("'+i+'")');}%>
 </script>
 </body>
