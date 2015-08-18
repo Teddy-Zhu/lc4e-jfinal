@@ -49,6 +49,10 @@
     #mainContent #rightContent {
         width: 100% !important;
     }
+
+    #articlelist .ui.divided.items > .item {
+        padding-left: 1em;
+    }
 }
 
 @media screen and ( max-width: 600px) {

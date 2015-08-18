@@ -87,7 +87,8 @@ $(function () {
 
             setInterval(function () {
                 $('#announce').shape('flip down');
-            }, 4000);
+                console.log(Math.random());
+            }, 10000);
 
         }
     };

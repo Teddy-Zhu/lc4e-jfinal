@@ -8,13 +8,13 @@ for(curMenu in menus){
         print('<span class="text">'+ curMenu.NAME +'</span><i class="dropdown icon"></i><div class="menu">');
         layout("/common/menudropdown.html",{'menus':curMenu.CHILDS}){};
         println('</div>');
-        println('</div>');
+        println('<div class="itemBar"></div></div>');
     }else{
         print('<a class="item linked" href="'+ curMenu.ABBR +'">');
         if(curMenu.ICON != null && !isEmpty(curMenu.ICON)){
              print('<i class="'+ curMenu.ICON +' icon"></i>');
         }
-        print(curMenu.NAME +'</a>');
+        print(curMenu.NAME +'<div class="itemBar"></div></a>');
     }
 }
 %>

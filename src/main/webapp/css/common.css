@@ -57,9 +57,23 @@ body {
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.25);
 }
 
-#menu .left.menu .item:hover {
-    color: teal;
-    background-color: #DADADA;
+#menu .left.menu > .item:hover {
+    background: none;
+}
+
+#menu .left.menu > .item:hover > .itemBar {
+    height: 100%;
+}
+
+#menu .left.menu > .item > .itemBar {
+    position: absolute;
+    width: 100%;
+    height: 0px;
+    background: #DADADA;
+    transition: height 0.2s ease;
+    left: 0;
+    top: 0;
+    z-index: -1;
 }
 
 #menu .left.menu > a.item, #menu .left.menu > div.item {

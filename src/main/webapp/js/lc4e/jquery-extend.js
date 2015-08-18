@@ -28,9 +28,6 @@
             active: false,
             successFunc: {}
         },
-        plugins: {
-            Lc4eModal: $.fn.Lc4eModal
-        },
         signOut: function () {
             $.Lc4eAjax({
                 url: '/SignOut',
@@ -814,12 +811,6 @@
         })
     };
     $.extend({
-        Lc4eMethodInvoke: function ($this, obj, name, params) {
-            var method = $.lc4e.plugins[obj][method][name];
-            if (method && typeof method === 'function') {
-                method.apply($this, params);
-            }
-        },
         Lc4eGetter: function (obj, path) {
             if (!path)
                 return obj;
@@ -1022,7 +1013,7 @@
 
         $('#userItem img.ui.image').popup({
             position: 'bottom center',
-            transition: "fade up",
+            transition: "horizontal flip",
             popup: $('#userCardPop'),
             exclusive: false,
             hideOnScroll: false,
