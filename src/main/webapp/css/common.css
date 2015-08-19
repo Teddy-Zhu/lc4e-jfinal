@@ -16,6 +16,24 @@ body {
 }
 
 /* header */
+
+#menu {
+    background: 0 0;
+    border: none;
+    box-shadow: none;
+}
+
+#menu .item {
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    box-shadow: none;
+    border: none;
+    padding: .71428571em .92857143em;
+    margin: 0 .35714286em;
+    background: 0 0;
+}
+
 #menu, #menu > .column {
     margin: 0;
     -webkit-transition: padding 0.5s ease, background-color 0.5s ease;

@@ -7,32 +7,6 @@
 
 @charset "UTF-8";
 
-#lc4eProgress {
-    pointer-events: none;
-}
-
-#lc4eProgress .ui.mini.progress .bar {
-    height: 0.2em;
-}
-
-#lc4eProgress .ui.mini.progress {
-    border: 0px;
-    padding: 0px;
-    position: fixed;
-    z-index: 1031;
-    top: 0;
-    left: 0;
-    width: 100%;
-}
-
-#lc4eProgress > .spinner {
-    display: block;
-    position: fixed;
-    z-index: 1031;
-    top: 12px;
-    right: 15px;
-}
-
 .fullStars {
     background: radial-gradient(220% 105% at top center, #A8C0F1 10%, #364F6F 40%, #5D2B7D 65%, #D0D065) fixed;
 }
@@ -84,6 +58,11 @@
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+}
+
+.animated-fast.infinite {
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
 }
 
 .animated-slow.infinite {
@@ -3348,16 +3327,36 @@
     animation-name: slideOutUp;
 }
 
-/*@keyframes scaleSpin {*/
-/*from {*/
-/*-webkit-transform: scale(1.5, 1.5) rotate(360deg);*/
-/*transform: scale(1.5, 1.5) rotate(360deg);*/
-/*}*/
-/*to {*/
-/*-webkit-transform: scale(1, 1) rotate(0deg);*/
-/*transform: scale(1, 1) rotate(0deg);*/
-/*}*/
-/*}*/
+@keyframes spin {
+    from {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+    to {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
+
+.spin {
+    -webkit-animation-name: spin;
+    animation-timing-function: linear;
+    animation-name: spin;
+}
+
+@keyframes scaleYDown {
+    0%{
+        height: 0px;
+    }
+    100%{
+        height: 100%;
+    }
+}
+
+.scaleYDown{
+    -webkit-animation-name: scaleYDown;
+    animation-name: scaleYDown;
+}
 
 .scaleSpin {
     -webkit-transform: scale(1.5, 1.5) rotate(360deg);

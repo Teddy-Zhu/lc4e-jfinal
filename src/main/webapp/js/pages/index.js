@@ -30,6 +30,7 @@ $(function () {
 
             $('#announce').shape();
 
+
             $.Lc4eAjax({
                 url: "/?p=" + parseInt($("#articlelist>.ui.divided.items").attr("page")),
                 target: '#articlelist>.ui.divided.items',
@@ -61,7 +62,6 @@ $(function () {
             });
 
 
-
             $('#prePage,#nextPage').on('click', function () {
                 var page = parseInt($("#articlelist>.ui.divided.items").attr("page")) + 1;
                 $("#articlelist>.ui.divided.items").attr("page", page);
@@ -84,8 +84,9 @@ $(function () {
                     }
                 })
             });
-
-            setInterval(function () {
+            var interval;
+            clearInterval(interval);
+            interval = setInterval(function () {
                 $('#announce').shape('flip down');
                 console.log(Math.random());
             }, 10000);

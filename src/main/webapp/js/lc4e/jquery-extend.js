@@ -1031,6 +1031,7 @@
                 scrollSpeed: 500
             });
         });
+        $('#menu .left.menu .logo').Lc4eHover('animated infinite spin');
     };
     $.lc4e.common.call();
 })
