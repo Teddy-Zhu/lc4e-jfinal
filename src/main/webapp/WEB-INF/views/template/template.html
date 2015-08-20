@@ -1,7 +1,7 @@
-<%if(has(LC4EAJAX) && LC4EAJAX ){
+<%if(has(LC4EPJAX) && LC4EPJAX ){
 for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
 %>${layoutContent}
-<%if(!isEmpty(footerJS)){print('$LAB');}for(var i in footerJS){print('.script("'+i+'")');}}else{%>
+<%if(!isEmpty(footerJS)){print('<script type="text/javascript">$LAB');}for(var i in footerJS){print('.remove("'+i+'").script("'+i+'?rand='+ tool.getTime() +'")');}; print('</script>'); }else{%>
 <!DOCTYPE>
 <html>
 <head>

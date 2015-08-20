@@ -100,12 +100,12 @@ public class GlobalInterceptorKit {
     public static void Inject(Object obj, Class clz) {
         Field[] fields = clz.getFields();
         try {
-            for (int i = 0, len = fields.length; i < len; i++) {
-                Class clzss = fields[i].getType();
-                if (clzss.isAnnotationPresent(Service.class) && fields[i].isAnnotationPresent(Inject.class) && !Modifier.isStatic(fields[i].getModifiers())) {
-                    fields[i].setAccessible(true);
-                    if (fields[i].get(obj) == null) {
-                        fields[i].set(obj, CustomInterceptor.Proxy(clzss));
+            for (Field field : fields) {
+                Class clzss = field.getType();
+                if (clzss.isAnnotationPresent(Service.class) && field.isAnnotationPresent(Inject.class) && !Modifier.isStatic(field.getModifiers())) {
+                    field.setAccessible(true);
+                    if (field.get(obj) == null) {
+                        field.set(obj, CustomInterceptor.Proxy(clzss));
                     }
                 }
             }
@@ -118,9 +118,7 @@ public class GlobalInterceptorKit {
     public static void handleOtherAnnotataion(Invocation ai, List<Annotation> annotations) throws AutoSetterException, Lc4eException {
         for (Annotation annotation : annotations) {
             if (annotation instanceof ResponseStatus) {
-                if (annotation != null) {
-                    ai.getController().getResponse().setStatus(((ResponseStatus) annotation).value().toInteger());
-                }
+                ai.getController().getResponse().setStatus(((ResponseStatus) annotation).value().toInteger());
             } else if (annotation instanceof SetComVar) {
                 AttributeKit.setComVar((SetComVar) annotation, ai);
             } else if (annotation instanceof SetComVars) {
@@ -131,6 +129,8 @@ public class GlobalInterceptorKit {
                 AttributeKit.setUIData((SetUIData) annotation, ai);
             } else if (annotation instanceof SetAJAX) {
                 AttributeKit.setAJAX((SetAJAX) annotation, ai);
+            } else if (annotation instanceof SetPJAX) {
+                AttributeKit.setPJAX((SetPJAX) annotation, ai);
             }
         }
     }

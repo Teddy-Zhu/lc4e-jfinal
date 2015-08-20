@@ -489,7 +489,7 @@
             title: 'Message',
             content: 'this is a modal',
             allowMultiple: false,
-            transition: 'horizontal flip',
+            transition: 'scale',
             inverted: false,
             blurring: true,
             autoShow: true,
@@ -825,13 +825,129 @@
         Lc4eRandomColor: function () {
             return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
         },
+        Lc4eLoading: function (parameters) {
+            var config = {
+                    id: "Lc4eLoading",
+                    title: '',
+                    type: 'squirm', //cube /
+                    animation: 'vertical flip',
+                    number: 5,
+                    duration: '1.2s',
+                    interval: 0.1
+                },
+                query = arguments[0],
+                methodInvoke = (typeof query === 'string'),
+                queryArguments = arguments[1],
+                $Loading = $('#' + config.id),
+                timer,
+                $body = $('body');
+            module = {
+                initialize: function () {
+                    var settingsOld = $body.data(config.id);
+                    if ((settingsOld && query.type && settingsOld.type != query.type) || $Loading.length == 0) {
+                        module.create();
+                    } else {
+                        query = $.extend(true, config, query);
+                        $body.data(query.id, {options: query});
+                    }
+                    module.invoke('show');
+                },
+                exist: function () {
+                    return $Loading.length > 0;
+                },
+                create: function () {
+                    query = $.extend(true, config, query);
+                    $body.data(query.id, {options: query});
+                    if ($Loading.length == 0) {
+                        $Loading = $('<div id="' + query.id + '" class="lc4e-loading"><div class="title">' + query.title + '</div><div class="loadingArea"></div></div>');
+                    }
+                    var $Square = $Loading.find('.loadingArea');
+                    $Square.empty();
+                    if (module.template[query.type]) {
+                        module.template[query.type].call(null, $Square);
+                    }
+                    $body.append($Loading);
+                },
+                setTitle: function (content) {
+                    $Loading.find('.title').html(content ? content : '');
+                },
+                show: function () {
+                    if ($Loading.transition('is animating')) {
+                        $Loading.transition('stop all');
+                    }
+                    $Loading.transition(query.animation + ' in');
+                },
+                hide: function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        $Loading.transition('stop all').transition(query.animation + ' out');
+                    }, 3000);
+                },
+                invoke: function (name) {
+                    query = $body.data(config.id).options;
+                    module.setTitle(query.title);
+                    if (typeof module[name] === 'function') {
+                        module[name].call($Loading, queryArguments);
+                    }
+                },
+                destroy: function () {
+                    $body.removeData(config.id);
+                    $Loading.remove();
+                },
+                template: {
+                    cube: function ($Square) {
+                        $Square.append($('<div class="cube"/>').css({
+                                '-webkit-animation-delay': '0s',
+                                'animation-delay': '0s'
+                            })
+                        ).append($('<div class="cube"/>').css({
+                                '-webkit-animation-delay': '0.9s',
+                                'animation-delay': '0.9s'
+                            }));
+                    },
+                    squirm: function ($Square) {
+                        for (var i = 0; i < 5; i++) {
+                            var delay = i == 0 ? 0 : i * 0.1 - 1.2,
+                                $div = $('<div class="squirm"/>').css({
+                                    '-webkit-animation-delay': delay + 's',
+                                    'animation-delay': delay + 's'
+                                });
+                            $Square.append($div)
+                        }
+                    },
+                    foldingCube: function ($Square) {
+                        $Square.closest('.loadingArea');
+                        $Square.append('<div class="foldingCube"><div/></div>')
+                            .append($('<div class="foldingCube"><div style="-webkit-animation-delay:0.3s;animation-delay:0.3s"/></div>').css({
+                                '-webkit-transform': 'scale(1.1) rotateZ(90deg)',
+                                'transform': 'scale(1.1) rotateZ(90deg)'
+                            }))
+                            .append($('<div class="foldingCube"><div style="-webkit-animation-delay:0.9s;animation-delay:0.9s"/></div>').css({
+                                '-webkit-transform': 'scale(1.1) rotateZ(270deg)',
+                                'transform': 'scale(1.1) rotateZ(270deg)'
+                            }))
+                            .append($('<div class="foldingCube"><div style="-webkit-animation-delay:0.6s;animation-delay:0.6s"/></div>').css({
+                                '-webkit-transform': 'scale(1.1) rotateZ(180deg)',
+                                'transform': 'scale(1.1) rotateZ(180deg)'
+                            }));
+                    }
+                }
+            };
+            if (methodInvoke) {
+                if (module.exist()) {
+                    module.invoke(query);
+                }
+            } else {
+                module.initialize();
+            }
+        },
         Lc4eAjax: function (data) {
-            var loptions = {};
             data = $.extend(true, {
                 cjson: false,
                 pjax: false,
                 target: '',
-                token: false
+                token: false,
+                options: {}
             }, data);
             if (data.cjson) {
                 var tdata = data.data;
@@ -854,27 +970,28 @@
                 }, data);
             }
             if (data.hasOwnProperty("beforeSend") && typeof data.beforeSend === "function") {
-                loptions["beforeSend"] = data["beforeSend"];
+                data.options["beforeSend"] = data["beforeSend"];
             }
-            if (data.token || data.pjax) {
-                data.beforeSend = function (xhr, settings) {
-                    if (data.token) {
-                        var tk = 'l' + 'c' + '4' + 'e' + '-' + 't' + 'o' + 'k' + 'e' + 'n', lsuf = (data.url.length - 1).toString(), lpre = (data.url.length + 1).toString(), t = new Date().getTime().toString();
-                        xhr.setRequestHeader(tk, lsuf + t + lpre);
-                    }
-                    if (data.pjax) {
-                        xhr.setRequestHeader('X-PJAX', true);
-                    }
-                    if (typeof loptions.beforeSend === "function") {
-                        loptions.beforeSend.call(this, xhr, settings);
-                    }
+            data.beforeSend = function (xhr, settings) {
+                $.Lc4eLoading({
+                    title: data.loading
+                });
+                if (data.token) {
+                    var tk = 'l' + 'c' + '4' + 'e' + '-' + 't' + 'o' + 'k' + 'e' + 'n', lsuf = (data.url.length - 1).toString(), lpre = (data.url.length + 1).toString(), t = new Date().getTime().toString();
+                    xhr.setRequestHeader(tk, lsuf + t + lpre);
                 }
-            }
+                if (data.pjax) {
+                    xhr.setRequestHeader('X-PJAX', true);
+                }
+                if (typeof data.options.beforeSend === "function") {
+                    data.options.beforeSend.call(this, xhr, settings);
+                }
+            };
             if (data.hasOwnProperty("success") && typeof data.success === "function") {
-                loptions["success"] = data["success"];
+                data.options["success"] = data["success"];
             }
 
-            if (data.pjax && data.target && data.target != '') {
+            if (data.pjax && data.target) {
                 if (!$.lc4e.Lc4ePJAX.active) {
                     window.onpopstate = function (e) {
                         if (e.state) {
@@ -895,22 +1012,32 @@
                         title: document.title,
                         url: $.lc4e.Lc4ePJAX.active ? data.url : window.location.pathname
                     };
-                    $.lc4e.Lc4ePJAX.successFunc[state.target + state.url] = loptions.success;
+                    $.lc4e.Lc4ePJAX.successFunc[state.target + state.url] = data.options.success;
                     if ($.lc4e.Lc4ePJAX.active) {
                         history.pushState(state, document.title, data.url);
                     } else {
                         history.replaceState(state, document.title);
                         $.lc4e.Lc4ePJAX.active = true;
                     }
-                    if (typeof loptions.success === "function") {
-                        loptions.success.call(this, resValue, textStatus);
+                    if (typeof data.options.success === "function") {
+                        data.options.success.call(this, resValue, textStatus);
                     }
                 }
 
             }
-
+            if (data.hasOwnProperty("complete") && typeof data.complete === "function") {
+                data.options["complete"] = data["complete"];
+            }
+            data.complete = function (xhr, ts) {
+                if (typeof data.options.complete === "function") {
+                    data.options.complete.call(this, xhr, ts);
+                }
+                $.Lc4eLoading('hide');
+            };
             return $.ajax(data);
-        },
+        }
+
+        ,
         Lc4eResolveMessage: function (returnVal, success, error) {
             if (returnVal) {
                 $.Lc4eModal({
@@ -925,16 +1052,20 @@
                     }
                 })
             }
-        },
+        }
+        ,
         Lc4eRandom: function () {
             return (Math.random().toString(16) + '000000000').substr(2, 8);
-        },
+        }
+        ,
         Lc4eStars: function () {
             return $('body').Lc4eStars();
-        },
+        }
+        ,
         Lc4eModal: function (options) {
             return $("body").Lc4eModal(options);
-        },
+        }
+        ,
         Lc4eDimmer: function (options) {
             if (options) {
                 options.type = 'page';
@@ -942,11 +1073,14 @@
                 options = {type: 'page'}
             }
             return $('body').Lc4eDimmer(options);
-        },
+        }
+        ,
         Lc4eToDate: $.lc4e.Lc4eToDate.unix2human,
         Lc4eProgress: function (option, data) {
             return $("body").Lc4eProgress(option, data);
-        },
+        }
+
+        ,
         requestAnimationFrame: function (callback) {
             var requestAnimation = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
                     window.setTimeout(callback, 0);
@@ -1032,6 +1166,20 @@
             });
         });
         $('#menu .left.menu .logo').Lc4eHover('animated infinite spin');
+
+        $('#menu a[href]').on('click', function (e) {
+            var href = $(this).attr('href');
+            e.preventDefault();
+            $.Lc4eAjax({
+                url: href,
+                pjax: true,
+                target: '#mainContent',
+                success: function (data) {
+
+                }
+            })
+
+        })
     };
     $.lc4e.common.call();
 })

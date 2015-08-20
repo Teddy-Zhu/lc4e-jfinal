@@ -24,11 +24,14 @@ import java.util.Random;
 @Controller("/")
 public class ViewController extends BaseController {
 
-    @ValidateParam(value = "p", type = int.class, defaultValue = "1")
-    @SetAJAX
+    @ValidateParams(fields = {
+            @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
+            @ValidateParam(value = "art", type = boolean.class, defaultValue = "false")
+    })
+    @SetPJAX
     public void index() {
         setAttr("page", getPara("p"));
-        if (isPJAX()) {
+        if (getParaToBoolean("art")) {
             forwardAction("/Articles");
         } else {
             render("pages/index");
@@ -70,7 +73,7 @@ public class ViewController extends BaseController {
 
     @RequiresGuest
     @SetComVar(value = Key.REGISTER_CAPTCHA, type = Boolean.class)
-    @SetAJAX
+    @SetPJAX
     public void SignIn() {
         render("pages/signin");
     }

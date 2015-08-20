@@ -3345,15 +3345,15 @@
 }
 
 @keyframes scaleYDown {
-    0%{
+    0% {
         height: 0px;
     }
-    100%{
+    100% {
         height: 100%;
     }
 }
 
-.scaleYDown{
+.scaleYDown {
     -webkit-animation-name: scaleYDown;
     animation-name: scaleYDown;
 }
@@ -3366,4 +3366,151 @@
 .allAnimation {
     -webkit-transition: all 1s ease;
     transition: all 1s ease;
+}
+
+.lc4e-loading {
+    background: rgba(111, 111, 111, 0.3);
+    box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 0.29em;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    height: 60px;
+}
+
+.lc4e-loading > .title {
+    font-weight: bold;
+    font-size: medium;
+    float: left;
+    color: teal;
+    padding-left: 7px;
+    padding-right: 7px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+}
+
+.lc4e-loading > .loadingArea {
+    width: 60px;
+    height: 60px;
+    float: right;
+    text-align: center;
+}
+
+.lc4e-loading > .loadingArea > .squirm {
+    background-color: teal;
+    height: 100%;
+    width: 6px;
+    margin-right: 2px;
+    display: inline-block;
+    -webkit-animation: stretchDelay 1.2s infinite ease-in-out;
+    animation: stretchDelay 1.2s infinite ease-in-out;
+}
+
+.lc4e-loading > .loadingArea > .cube {
+    background-color: teal;
+    margin-top: 5px;
+    width: 23px;
+    height: 23px;
+    position: absolute;
+    -webkit-animation: cubemove 1.8s infinite ease-in-out;
+    animation: cubemove 1.8s infinite ease-in-out;
+}
+
+.lc4e-loading > .loadingArea > .foldingCube {
+    float: left;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.lc4e-loading > .loadingArea > .foldingCube> div {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: teal;
+    -webkit-animation: foldCube 2.4s infinite linear both;
+    animation: foldCube 2.4s infinite linear both;
+    -webkit-transform-origin: 100% 100%;
+    -ms-transform-origin: 100% 100%;
+    transform-origin: 100% 100%;
+}
+
+@keyframes stretchDelay {
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1.0);
+        -webkit-transform: scaleY(1.0);
+    }
+}
+
+@keyframes cubemove {
+    25% {
+        transform: translateX(28px) rotate(-90deg) scale(0.5);
+        -webkit-transform: translateX(28px) rotate(-90deg) scale(0.5);
+    }
+    50% {
+        transform: translateX(28px) translateY(28px) rotate(-179deg);
+        -webkit-transform: translateX(28px) translateY(28px) rotate(-179deg);
+    }
+    50.1% {
+        transform: translateX(28px) translateY(28px) rotate(-180deg);
+        -webkit-transform: translateX(28px) translateY(28px) rotate(-180deg);
+    }
+    75% {
+        transform: translateX(0px) translateY(28px) rotate(-270deg) scale(0.5);
+        -webkit-transform: translateX(0px) translateY(28px) rotate(-270deg) scale(0.5);
+    }
+    100% {
+        transform: rotate(-360deg);
+        -webkit-transform: rotate(-360deg);
+    }
+}
+
+@keyframes foldCube {
+    0%, 10% {
+        -webkit-transform: perspective(140px) rotateX(-180deg);
+        transform: perspective(140px) rotateX(-180deg);
+        opacity: 0;
+    }
+    25%, 75% {
+        -webkit-transform: perspective(140px) rotateX(0deg);
+        transform: perspective(140px) rotateX(0deg);
+        opacity: 1;
+    }
+    90%, 100% {
+        -webkit-transform: perspective(140px) rotateY(180deg);
+        transform: perspective(140px) rotateY(180deg);
+        opacity: 0;
+    }
+}
+
+.closeScreen {
+    -webkit-animation-name: closeScreen;
+    animation-name: closeScreen;
+}
+
+@keyframes closeScreen {
+    0% {
+        transform: scaleY(1);
+        -webkit-transform: scaleY(1);
+    }
+    70% {
+        transform: scaleY(0.1);
+        -webkit-transform: scaleY(0.1);
+    }
+    100% {
+        visibility: hidden;
+        transform: scaleY(0.1) scaleX(0.001);
+        -webkit-transform: scaleY(0.1) scaleX(0.001);
+    }
 }

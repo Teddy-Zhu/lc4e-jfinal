@@ -34,7 +34,9 @@ $(function () {
             $.Lc4eAjax({
                 url: "/?p=" + parseInt($("#articlelist>.ui.divided.items").attr("page")),
                 target: '#articlelist>.ui.divided.items',
+                data: {art: true},
                 pjax: true,
+                loading: 'loading artiles',
                 success: function (data) {
                     $.requestAnimationFrame(function () {
                         $('#articlelist>.ui.divided.items>.item').
@@ -67,8 +69,10 @@ $(function () {
                 $("#articlelist>.ui.divided.items").attr("page", page);
                 $.Lc4eAjax({
                     url: "/?p=" + page,
+                    data: {art: true},
                     target: '#articlelist>.ui.divided.items',
                     pjax: true,
+                    loading: 'loading artiles',
                     success: function (data) {
                         $.requestAnimationFrame(function () {
                             $('#articlelist>.ui.divided.items>.item').
@@ -88,7 +92,6 @@ $(function () {
             clearInterval(interval);
             interval = setInterval(function () {
                 $('#announce').shape('flip down');
-                console.log(Math.random());
             }, 10000);
 
         }

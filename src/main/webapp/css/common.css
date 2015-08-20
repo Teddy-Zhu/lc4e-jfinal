@@ -23,7 +23,7 @@ body {
     box-shadow: none;
 }
 
-#menu .item {
+#menu .left.menu > .item {
     -webkit-align-self: center;
     -ms-flex-item-align: center;
     align-self: center;

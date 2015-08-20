@@ -20,6 +20,4 @@ public abstract class BaseController extends Controller {
         Lc4eCaptchaRender lc4eCaptchaRender = new Lc4eCaptchaRender();
         render(lc4eCaptchaRender);
     }
-
-
 }

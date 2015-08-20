@@ -80,7 +80,12 @@ public class AttributeKit {
             setComVar(comVar, ai);
         }
     }
-
+    public static void setPJAX(SetPJAX setPJAX, Invocation ai) {
+        if (setPJAX == null) {
+            return;
+        }
+        ai.getController().setAttr(setPJAX.value(), WebTool.isPJAX(ai.getController().getRequest()));
+    }
     public static void setAJAX(SetAJAX setAJAX, Invocation ai) {
         if (setAJAX == null) {
             return;

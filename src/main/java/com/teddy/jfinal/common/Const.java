@@ -91,4 +91,5 @@ public class Const {
     public static final String SLASH = "/";
 
     public static final String LC4EAJAX = "LC4EAJAX";
+    public static final String LC4EPJAX = "LC4EPJAX";
 }
