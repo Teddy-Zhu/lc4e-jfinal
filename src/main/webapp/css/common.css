@@ -113,7 +113,7 @@ body {
 
 #menu > .column .left.menu > img {
     width: 2.8em;
-    padding: 0px;
+    padding: 3px 0px 0px;
     margin-right: 10px;
 }
 
@@ -234,12 +234,31 @@ body {
 }
 
 /* go top icon */
-#GTTop {
+#floatTools {
     position: fixed;
-    bottom: 14%;
-    z-index: 1000;
-    right: 8%;
+    bottom: 13em;
+    z-index: 1;
+    left: 8%;
     display: none;
+}
+
+#floatTools > div.button {
+    height: 50px;
+    width: 59px;
+    border-radius: 0.1em;
+    margin-bottom: 10px;
+    background: none;
+    box-shadow: -1px 2px 1px 2px #8E8E8E;
+}
+
+#floatTools > .tool {
+    cursor: pointer;
+    line-height: 50px;
+    font-size: 50px;
+    margin-bottom: 10px;
+    display: block;
+    border-radius: 0.1em;
+    box-shadow: -1px 2px 1px 2px #8E8E8E;
 }
 
 /* media */

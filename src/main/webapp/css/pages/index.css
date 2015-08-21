@@ -1,10 +1,4 @@
 
-#articlebottons:after {
-    clear: both;
-    content: "";
-    display: block;
-}
-
 #announcement .item:first-child .ui.label .hidden-mb {
     display: inline-block;
 }
@@ -14,7 +8,13 @@
     padding-left: 2em;
 }
 
-#articlelist .ui.divided.items .item > .ui.image {
+#articlebottons:after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+#articlelist > .ui.divided.items .item > .ui.image {
     width: 5rem;
 }
 
@@ -36,7 +36,7 @@
         background-color: transparent;
     }
 
-    #mainContent #articlelist .ui.divided.items > .item > .image {
+    #articlelist > .ui.divided.items > .item > .image {
         width: 70px !important;
         max-width: 30% !important;
         margin-left: inherit;
@@ -50,7 +50,7 @@
         width: 100% !important;
     }
 
-    #articlelist .ui.divided.items > .item {
+    #articlelist > .ui.divided.items > .item {
         padding-left: 1em;
     }
 }
@@ -62,24 +62,24 @@
 
 }
 
-#articlelist .ui.divided.items > .item {
+#articlelist > .ui.divided.items > .item {
     padding-bottom: 0.5em;
     padding-top: 0.5em;
 }
 
-#articlelist .ui.divided.items > .item > .content {
+#articlelist > .ui.divided.items > .item > .content {
     padding-top: 0.5em;
 }
 
-#articlelist .ui.divided.items > .item img {
+#articlelist > .ui.divided.items > .item img {
     border-radius: .25rem;
 }
 
-#articlelist .ui.divided.items > .item > .content > .header > .title {
+#articlelist > .ui.divided.items > .item > .content > .header > .title {
     display: inline-block;
 }
 
-#articlelist .ui.divided.items > .item > .content > .header:after {
+#articlelist > .ui.divided.items > .item > .content > .header:after {
     width: 100%;
     height: 1.5px;
     background-color: #4183C4;
@@ -94,34 +94,36 @@
     display: block;
 }
 
-#articlelist .ui.divided.items > .item > .content > .header:hover:after {
+#articlelist > .ui.divided.items > .item > .content > .header:hover:after {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
 }
 
-
-
-#articlelist .ui.divided.items > .item > .content > .header i.icon {
+#articlelist > .ui.divided.items > .item > .content > .header i.icon {
     margin: 0 0 0 0;
 }
 
-#articlelist .ui.divided.items > .item > .content > .extra > .ui.label .icon {
+#articlelist > .ui.divided.items > .item > .content > .extra > .ui.label .icon {
     margin: 0 .1em 0 0;
 }
 
-#articlelist .ui.divided.items > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
+#articlelist > .ui.divided.items > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
     top: .3em;
     padding: .2em .3em .2em .3em;
     left: calc(.49em - 1.2em);
 }
 
-#articlelist .ui.divided.items > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
+#articlelist > .ui.divided.items > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
     border-width: 0 0.8em 0.8em 0;
 }
 
-#articlelist .ui.divided.items > .item > .content > .extra > .ui.label {
+#articlelist > .ui.divided.items > .item > .content > .extra > .ui.label {
     padding: .2em .25em;
     margin: .55rem .2rem 0 0;
+}
+
+#articlelist >.ui.divided.items>.item{
+
 }
 
 #rightContent > .ui.segment > .ui.divided.items > .item > .ui.label {

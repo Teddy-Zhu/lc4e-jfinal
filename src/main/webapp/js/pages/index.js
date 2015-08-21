@@ -19,7 +19,11 @@ $(function () {
 
             $('#colorBackground').checkbox({
                 onChange: function (e) {
-                    $.Lc4eStars();
+                    if ($('#colorBackground').checkbox('is checked')) {
+                        $.Lc4eStars();
+                    } else {
+                        $.Lc4eStars('destroy');
+                    }
                 }
             });
             $('#boxedLayout').checkbox({

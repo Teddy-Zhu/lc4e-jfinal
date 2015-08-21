@@ -2,8 +2,7 @@
 for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
 %>${layoutContent}
 <%if(!isEmpty(footerJS)){print('<script type="text/javascript">$LAB');}for(var i in footerJS){print('.remove("'+i+'").script("'+i+'?rand='+ tool.getTime() +'")');}; print('</script>'); }else{%>
-<!DOCTYPE>
-<html>
+<!doctype html>
 <head>
     <%layout("/common/title.html",{'SiteName':SiteName}){
     for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
@@ -17,7 +16,17 @@ for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="u
 <%layout("/common/main.html",{}){%>${layoutContent}<%}%>
 <!-- Content  End -->
 <!-- Right Buttons Start -->
-<a id="GTTop" href="#" tabindex="1"><i class="circular large arrow up icon"></i></a>
+<div id="floatTools">
+    <div class="ui item animated fade button">
+        <a href="/SignUp">
+            <div class="visible content">Sign Up</div>
+            <div class="hidden content">
+                <i class="add user icon"></i>
+            </div>
+        </a>
+    </div>
+    <i class="arrow up icon tool"></i>
+    <i  id="gtop" class="angle up icon tool"></i></div>
 <!-- Right Buttons End -->
 <!-- Slider Bar Start -->
 <%if(configTool){%>

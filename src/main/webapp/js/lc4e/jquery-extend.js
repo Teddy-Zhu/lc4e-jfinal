@@ -629,7 +629,7 @@
                 module.initialize();
             }
         });
-    }
+    };
     $.fn.Lc4eProgress.settings = {
         namespace: 'Lc4eProgress',
         size: {
@@ -675,29 +675,74 @@
         }
 
     };
-    $.fn.Lc4eStars = function () {
-        var $this = $(this), $menu = $('#menu>.column');
-        if ($('#lc4eStar').length > 0) {
-            $this.removeClass('fullStars');
-            $('#lc4eStar').remove();
-            return;
-        }
-        $this.addClass('fullStars').append('<div id="lc4eStar" class="inStars"></div>');
-        var stars = 100;
-        /*stars' number*/
-        var $stars = $('#lc4eStar');
-        var r = 800;
-        var $star = [];
-        for (var i = 0; i < stars; i++) {
-            var s = 2.2 + Math.random() * 1;
-            var curR = r + Math.random() * 300;
-            $star.push('<div class="inStar" style="height:' + s + 'px;width:' + s + 'px; transform-origin: 0 0 ' + curR + 'px;transform:' + 'translate3d(0,0,-' + curR + 'px) rotateY(' + Math.random() * 360 + 'deg) rotateX(' + Math.random() * -50 + 'deg) "/>')
-        }
-        $stars.append($star.join(''));
-        return this;
+    $.fn.Lc4eStars = function (parameters) {
+        var query = arguments[0],
+            methodInvoked = (typeof query == 'string'),
+            queryArguments = arguments[1];
+        return this.each(function () {
+            var settings = methodInvoked ? $.extend({}, $.fn.Lc4eStars.settings.config) : $.extend({}, $.fn.Lc4eStars.settings.config, query),
+                module,
+                id,
+                $context = $(this),
+                namespace = $.fn.Lc4eStars.settings.namespace,
+                $lc4eStar = $('#' + $context.data(namespace));
+            module = {
 
+                initialize: function () {
+                    id = namespace + $.Lc4eRandom();
+                    settings['id'] = id;
+                    if (!module.exist()) {
+                        module.create(settings);
+                    }
+                },
+                create: function () {
+                    $context.addClass('fullStars');
+                    $lc4eStar = $('<div id="' + id + '" class="inStars"></div>');
+                    $lc4eStar.append($.fn.Lc4eStars.settings.template.star(settings.number));
+                    $context.append($lc4eStar).data(namespace, id);
+                },
+                exist: function () {
+                    return $('#' + id).length > 0 || $lc4eStar.length > 0;
+                },
+                invoke: function (name) {
+                    if (typeof module[name] === 'function') {
+                        module[name].call($context, queryArguments);
+                    }
+                },
+                destroy: function () {
+                    $context.removeClass('fullStars').
+                        removeData(namespace);
+                    $lc4eStar && $lc4eStar.remove();
+                }
+            };
+            if (methodInvoked) {
+                if (!$lc4eStar) {
+                    module.initialize();
+                }
+                module.invoke(query);
+            }
+            else {
+                module.initialize();
+            }
+        });
     };
-
+    $.fn.Lc4eStars.settings = {
+        namespace: 'Lc4eStars',
+        config: {
+            number: 100
+        },
+        template: {
+            star: function (number) {
+                var starHtml = [];
+                for (var i = 0; i < number; i++) {
+                    var s = 2.2 + Math.random();
+                    var curR = 800 + Math.random() * 300;
+                    starHtml.push('<div class="inStar" style="height:' + s + 'px;width:' + s + 'px; transform-origin: 0 0 ' + curR + 'px;transform:' + 'translate3d(0,0,-' + curR + 'px) rotateY(' + Math.random() * 360 + 'deg) rotateX(' + Math.random() * -50 + 'deg) "/>')
+                }
+                return starHtml.join('');
+            }
+        }
+    };
     $.fn.Lc4eForm = function (parameters) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
@@ -814,7 +859,7 @@
         Lc4eGetter: function (obj, path) {
             if (!path)
                 return obj;
-            var keys = path.split('.'), key, len = keys.length;
+            var keys = path.split('.'), len = keys.length;
             for (var i = 0; i < len; i++) {
                 if (obj) {
                     obj = obj[keys[i]];
@@ -822,6 +867,10 @@
             }
             return obj;
         },
+        /**
+         * @return {string}
+         * @return {string}
+         */
         Lc4eRandomColor: function () {
             return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
         },
@@ -840,7 +889,7 @@
                 queryArguments = arguments[1],
                 $Loading = $('#' + config.id),
                 timer,
-                $body = $('body');
+                $body = $('body'), module;
             module = {
                 initialize: function () {
                     var settingsOld = $body.data(config.id);
@@ -993,6 +1042,7 @@
             if (data.pjax && data.target) {
                 if (!$.lc4e.Lc4ePJAX.active) {
                     window.onpopstate = function (e) {
+                        console.log(e);
                         if (e.state) {
                             $(e.state.data).replaceAll($(e.state.target));
                             document.title = e.state.title;
@@ -1051,14 +1101,16 @@
                     }
                 })
             }
-        }
-        ,
+        },
+        /**
+         * @return {string}
+         */
         Lc4eRandom: function () {
             return (Math.random().toString(16) + '000000000').substr(2, 8);
         }
         ,
-        Lc4eStars: function () {
-            return $('body').Lc4eStars();
+        Lc4eStars: function (options) {
+            return $('body').Lc4eStars(options);
         }
         ,
         Lc4eModal: function (options) {
@@ -1090,8 +1142,8 @@
 
 
     $.lc4e.common = function () {
-
-        $('#menu .ui.dropdown.item').dropdown({
+        var $menu = $('#menu'), $configTool = $('#config-tool-options'), $floatTool = $('#floatTools');
+        $menu.find('.ui.dropdown.item').dropdown({
             action: "nothing",
             transition: "horizontal flip",
             on: 'click'
@@ -1103,20 +1155,20 @@
         });
 
         $('#expendHeader').on('click', function () {
-            $('#menu').toggleClass('expended');
+            $menu.toggleClass('expended');
         });
 
-        $('#menu .column div:first a').on('click', function () {
-            $('#menu>.column>.allmenus').transition({
+        $menu.find('.column div:first a').on('click', function () {
+            $menu.find('>.column>.allmenus').transition({
                 animation: "fly down",
                 duration: 500,
                 onComplete: function () {
-                    $('#menu>.column>.allmenus').toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
+                    $(this).toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
                 }
             });
         });
-        $('#config-tool-options .angle.double.left.icon').on('click', function () {
-            if ($($('#config-tool-options .ui.animated.selection.list:not(.hidden)').transition('fade left').attr('data-parent')).transition('fade left').attr('id') == 'menu1') {
+        $configTool.find('.angle.double.left.icon').on('click', function () {
+            if ($($configTool.find('.ui.animated.selection.list:not(.hidden)').transition('fade left').attr('data-parent')).transition('fade left').attr('id') == 'menu1') {
                 $(this).addClass('transition hidden');
             }
         });
@@ -1125,42 +1177,26 @@
         });
 
         $('html').visibility({
-            offset: -10,
+            offset: -1,
             observeChanges: false,
             once: false,
             continuous: false,
             onTopPassed: function () {
                 $.requestAnimationFrame(function () {
-                    $('#menu').addClass('fixed');
-                    $('#GTTop').transition('stop all').transition('swing down in');
+                    $menu.addClass('fixed');
+                    $floatTool.transition('stop all').transition('fade left in');
                 });
             },
             onTopPassedReverse: function () {
                 $.requestAnimationFrame(function () {
-                    $('#menu').removeClass('fixed');
-                    $('#GTTop').transition('stop all').transition('swing down out');
+                    $menu.removeClass('fixed');
+                    $floatTool.transition('stop all').transition('fade left out');
                 });
             }
         });
 
-        $('#GTTop').visibility({
-            offset: 0,
-            observeChanges: false,
-            once: false,
-            continuous: false,
-            onTopPassed: function () {
-                $.requestAnimationFrame(function () {
-                    $('#GTTop').transition('stop all').transition('swing down in');
-                });
-            },
-            onTopPassedReverse: function () {
-                $.requestAnimationFrame(function () {
-                    $('#GTTop').transition('stop all').transition('swing down out');
-                });
-            }
-        });
 
-        $('#userItem img.ui.image').popup({
+        $('#userItem').find('img.ui.image').popup({
             position: 'bottom center',
             transition: "horizontal flip",
             popup: $('#userCardPop'),
@@ -1175,17 +1211,21 @@
             }
         });
 
-        $('#GTTop').on('click', function (e) {
-            $('body').animate({scrollTop: 0}, 1000);
+        $('#gtop').on('click', function () {
+            $('html').animatescroll({scrollSpeed: 2000, easing: 'easeOutBounce'})
         });
-        $('#menu .left.menu .logo').Lc4eHover('animated infinite spin');
 
-        $('#menu a[href]').on('click', function (e) {
+        $menu.find('.left.menu .logo').Lc4eHover('animated infinite spin');
+
+        $menu.find('a[href]').on('click', function (e) {
             var href = $(this).attr('href');
             e.preventDefault();
             $.Lc4eAjax({
                 url: href,
                 pjax: true,
+                data: { //for ie disable cache
+                    rand: new Date().getTime()
+                },
                 target: '#mainContent',
                 success: function (data) {
 
