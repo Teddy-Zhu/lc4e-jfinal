@@ -1,14 +1,14 @@
 $(function () {
     $.lc4e.index = {
         ready: function () {
-
-            $("#config-tool-options .ui.list .item[data-target^='#']").on('click', function () {
+            var $configTool = $("#config-tool-options"), $artile = $("#articlelist");
+            $configTool.find(".ui.list .item[data-target^='#']").on('click', function () {
                 $(this).parent().transition('fade left');
                 $($(this).attr('data-target')).transition('fade left');
-                $('#config-tool-options .angle.double.left.icon').removeClass('transition hidden');
+                $configTool.find('.angle.double.left.icon').removeClass('transition hidden');
             });
 
-            $('#config-tool-options .ui.checkbox').checkbox();
+            $configTool.find('.ui.checkbox').checkbox();
 
             $('#fixFooter').checkbox({
                 onChange: function (e) {
@@ -36,20 +36,20 @@ $(function () {
 
 
             $.Lc4eAjax({
-                url: "/?p=" + parseInt($("#articlelist>.ui.divided.items").attr("page")),
+                url: "/?p=" + parseInt($artile.find(">.ui.divided.items").attr("page")),
                 target: '#articlelist>.ui.divided.items',
                 data: {art: true},
                 pjax: true,
                 loading: 'loading artiles',
                 success: function (data) {
                     $.requestAnimationFrame(function () {
-                        $('#articlelist>.ui.divided.items>.item').
+                        $artile.find('>.ui.divided.items>.item').
                             transition({
                                 animation: 'fade up in',
                                 duration: 500,
                                 interval: 80,
                                 onComplete: function () {
-                                    $('#articlelist>.ui.divided.items>.item').find('.ui.fluid.image img').popup();
+                                    $artile.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
                                 }
                             });
                     })
@@ -69,8 +69,8 @@ $(function () {
 
 
             $('#prePage,#nextPage').on('click', function () {
-                var page = parseInt($("#articlelist>.ui.divided.items").attr("page")) + 1;
-                $("#articlelist>.ui.divided.items").attr("page", page);
+                var page = parseInt($artile.find(">.ui.divided.items").attr("page")) + 1;
+                $artile.find(">.ui.divided.items").attr("page", page);
                 $.Lc4eAjax({
                     url: "/?p=" + page,
                     data: {art: true},
@@ -79,7 +79,7 @@ $(function () {
                     loading: 'loading artiles',
                     success: function (data) {
                         $.requestAnimationFrame(function () {
-                            $('#articlelist>.ui.divided.items>.item').
+                            $artile.find('>.ui.divided.items>.item').
                                 transition({
                                     animation: 'fade up in',
                                     duration: 500,

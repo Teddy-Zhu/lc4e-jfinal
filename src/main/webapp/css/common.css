@@ -53,10 +53,6 @@ body {
     padding-right: 5em;
 }
 
-#menu .right.menu .ui.animated.button a {
-    color: black;
-}
-
 #menu .ui.animated.button .visible.content {
     margin-right: .5em;
 }
@@ -148,6 +144,8 @@ body {
 
 #userItem {
     padding: 0 0 0 0;
+    margin-left: .5em;
+    margin-right: .5em;
 }
 
 #userCard > .content > .header {

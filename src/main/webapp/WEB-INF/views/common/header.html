@@ -69,21 +69,17 @@
                     </div>
                 </div>
                 <%}if(auth.guest()){ %>
-                <div class="ui item animated fade button">
-                    <a href="/SignUp">
-                        <div class="visible content">Sign Up</div>
-                        <div class="hidden content">
-                            <i class="add user icon"></i>
-                        </div>
-                    </a>
+                <div class="ui item animated fade button" href="/SignUp">
+                    <div class="visible content">Sign Up</div>
+                    <div class="hidden content">
+                        <i class="add user icon"></i>
+                    </div>
                 </div>
-                <div class="ui item animated button">
-                    <a href="/SignIn">
-                        <div class="visible content">Sign In</div>
-                        <div class="hidden content">
-                            <i class="user icon"></i>
-                        </div>
-                    </a>
+                <div class="ui item animated button" href="/SignIn">
+                    <div class="visible content">Sign In</div>
+                    <div class="hidden content">
+                        <i class="user icon"></i>
+                    </div>
                 </div>
                 <%}%>
 

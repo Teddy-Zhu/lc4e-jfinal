@@ -1217,7 +1217,7 @@
 
         $menu.find('.left.menu .logo').Lc4eHover('animated infinite spin');
 
-        $menu.find('a[href]').on('click', function (e) {
+        $menu.find('[href]').on('click', function (e) {
             var href = $(this).attr('href');
             e.preventDefault();
             $.Lc4eAjax({
