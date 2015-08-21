@@ -916,7 +916,6 @@
                         }
                     },
                     foldingCube: function ($Square) {
-                        $Square.closest('.loadingArea');
                         $Square.append('<div class="foldingCube"><div/></div>')
                             .append($('<div class="foldingCube"><div style="-webkit-animation-delay:0.3s;animation-delay:0.3s"/></div>').css({
                                 '-webkit-transform': 'scale(1.1) rotateZ(90deg)',
@@ -1125,7 +1124,6 @@
             $('#config-tool').toggleClass('closed');
         });
 
-        var timerIn, timerOut;
         $('html').visibility({
             offset: -10,
             observeChanges: false,
@@ -1134,13 +1132,30 @@
             onTopPassed: function () {
                 $.requestAnimationFrame(function () {
                     $('#menu').addClass('fixed');
-                    $('#GTTop').transition('swing down in');
+                    $('#GTTop').transition('stop all').transition('swing down in');
                 });
             },
             onTopPassedReverse: function () {
                 $.requestAnimationFrame(function () {
                     $('#menu').removeClass('fixed');
-                    $('#GTTop').transition('swing down out');
+                    $('#GTTop').transition('stop all').transition('swing down out');
+                });
+            }
+        });
+
+        $('#GTTop').visibility({
+            offset: 0,
+            observeChanges: false,
+            once: false,
+            continuous: false,
+            onTopPassed: function () {
+                $.requestAnimationFrame(function () {
+                    $('#GTTop').transition('stop all').transition('swing down in');
+                });
+            },
+            onTopPassedReverse: function () {
+                $.requestAnimationFrame(function () {
+                    $('#GTTop').transition('stop all').transition('swing down out');
                 });
             }
         });
@@ -1161,9 +1176,7 @@
         });
 
         $('#GTTop').on('click', function (e) {
-            $('body').animatescroll({
-                scrollSpeed: 500
-            });
+            $('body').animate({scrollTop: 0}, 1000);
         });
         $('#menu .left.menu .logo').Lc4eHover('animated infinite spin');
 
