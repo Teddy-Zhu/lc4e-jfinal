@@ -489,7 +489,7 @@
             title: 'Message',
             content: 'this is a modal',
             allowMultiple: false,
-            transition: 'scale',
+            transition: 'horizontal flip',
             inverted: false,
             blurring: true,
             autoShow: true,
@@ -877,18 +877,18 @@
         Lc4eLoading: function (parameters) {
             var config = {
                     id: "Lc4eLoading",
-                    title: '',
+                    title: 'Loading',
                     type: 'squirm', //cube /
                     animation: 'vertical flip',
                     number: 5,
                     duration: '1.2s',
                     interval: 0.1
                 },
+                namespace = 'Lc4eLoading',
                 query = arguments[0],
                 methodInvoke = (typeof query === 'string'),
                 queryArguments = arguments[1],
                 $Loading = $('#' + config.id),
-                timer,
                 $body = $('body'), module;
             module = {
                 initialize: function () {
@@ -921,28 +921,39 @@
                     $Loading.find('.title').html(content ? content : '');
                 },
                 show: function () {
-                    if ($Loading.transition('is animating')) {
-                        $Loading.transition('stop all');
+                    if ($Loading.data(namespace + 'timer')) {
+                        module.hide();
                     }
-                    $Loading.transition(query.animation + ' in');
+                    if ($Loading.transition('is animating')) {
+                        if ($Loading.hasClass('out')) {
+                            $Loading.transition(query.animation + ' in');
+                        }
+                    } else {
+                        if (!$Loading.transition('is visible')) {
+                            $Loading.transition(query.animation + ' in');
+                        }
+                    }
                 },
                 hide: function () {
-                    clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        $Loading.transition('stop all').transition(query.animation + ' out');
-                    }, 3000);
-                },
+                    clearTimeout($Loading.data(namespace + 'timer'));
+                    $Loading.data(namespace + 'timer', setTimeout(function () {
+                        $Loading.transition(query.animation + ' out');
+                    }, 3000));
+                }
+                ,
                 invoke: function (name) {
                     query = $body.data(config.id).options;
                     module.setTitle(query.title);
                     if (typeof module[name] === 'function') {
                         module[name].call($Loading, queryArguments);
                     }
-                },
+                }
+                ,
                 destroy: function () {
                     $body.removeData(config.id);
                     $Loading.remove();
-                },
+                }
+                ,
                 template: {
                     cube: function ($Square) {
                         $Square.append($('<div class="cube"/>').css({
@@ -953,7 +964,8 @@
                                 '-webkit-animation-delay': '0.9s',
                                 'animation-delay': '0.9s'
                             }));
-                    },
+                    }
+                    ,
                     squirm: function ($Square) {
                         for (var i = 0; i < 5; i++) {
                             var delay = i == 0 ? 0 : i * 0.1 - 1.2,
@@ -963,7 +975,8 @@
                                 });
                             $Square.append($div)
                         }
-                    },
+                    }
+                    ,
                     foldingCube: function ($Square) {
                         $Square.append('<div class="foldingCube"><div/></div>')
                             .append($('<div class="foldingCube"><div style="-webkit-animation-delay:0.3s;animation-delay:0.3s"/></div>').css({
@@ -1124,14 +1137,11 @@
                 options = {type: 'page'}
             }
             return $('body').Lc4eDimmer(options);
-        }
-        ,
+        },
         Lc4eToDate: $.lc4e.Lc4eToDate.unix2human,
         Lc4eProgress: function (option, data) {
             return $("body").Lc4eProgress(option, data);
-        }
-
-        ,
+        },
         requestAnimationFrame: function (callback) {
             var requestAnimation = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
                     window.setTimeout(callback, 0);
@@ -1182,16 +1192,20 @@
             once: false,
             continuous: false,
             onTopPassed: function () {
-                $.requestAnimationFrame(function () {
-                    $menu.addClass('fixed');
-                    $floatTool.transition('stop all').transition('fade left in');
-                });
+                $menu.addClass('fixed');
+                clearTimeout($floatTool.data('timer'));
+                if (!$floatTool.transition('is visible')) {
+                    $floatTool.transition('fade left in');
+                }
             },
             onTopPassedReverse: function () {
-                $.requestAnimationFrame(function () {
-                    $menu.removeClass('fixed');
-                    $floatTool.transition('stop all').transition('fade left out');
-                });
+                $menu.removeClass('fixed');
+                clearTimeout($floatTool.data('timer'));
+                $floatTool.data('timer', setTimeout(function () {
+                    console.log('fade out ');
+                    $floatTool.transition('fade left out');
+                }, 800));
+
             }
         });
 
@@ -1212,27 +1226,31 @@
         });
 
         $('#gtop').on('click', function () {
-            $('html').animatescroll({scrollSpeed: 2000, easing: 'easeOutBounce'})
+            $.requestAnimationFrame(function () {
+                $('html').animatescroll({scrollSpeed: 2000, easing: 'easeOutBounce'})
+            });
         });
 
         $menu.find('.left.menu .logo').Lc4eHover('animated infinite spin');
 
         $menu.find('[href]').on('click', function (e) {
-            var href = $(this).attr('href');
-            e.preventDefault();
-            $.Lc4eAjax({
-                url: href,
-                pjax: true,
-                data: { //for ie disable cache
-                    rand: new Date().getTime()
-                },
-                target: '#mainContent',
-                success: function (data) {
+                var $this = $(this), href = $this.attr('href'), title = $this.attr('title');
+                e.preventDefault();
+                $.Lc4eAjax({
+                    url: href,
+                    pjax: true,
+                    title: 'loading' + title,
+                    data: { //for ie disable cache
+                        rand: new Date().getTime()
+                    }
+                    ,
+                    target: '#mainContent',
+                    success: function (data) {
 
-                }
-            })
-
-        })
+                    }
+                })
+            }
+        )
     };
     $.lc4e.common.call();
 })

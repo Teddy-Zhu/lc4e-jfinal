@@ -12,4 +12,8 @@ public class Key {
     public static final String REGISTER_CAPTCHA = "RegisterCaptcha";
 
     public static final String LC4EAJAX = "LC4EAJAX";
+
+    public static final String SIMPLE_REGISTER = "SimpleRegister";
+
+    public static final String REGISTER = "Register";
 }

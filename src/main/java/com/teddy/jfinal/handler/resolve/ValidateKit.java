@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler.support;
+package com.teddy.jfinal.handler.resolve;
 
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
@@ -36,39 +36,7 @@ import java.util.regex.Pattern;
  */
 class ValidateKit {
 
-    public static void resolve(List<Annotation> annotationList, Invocation invocation) throws ValidateException, Lc4eException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, ParseException, InvocationTargetException {
-        for (Annotation annotation : annotationList) {
-            if (annotation instanceof RequestMethod) {
-                resolveRequestMethod((RequestMethod) annotation, invocation);
-            } else if (annotation instanceof RequestHeader) {
-                resolveRequestHeader((RequestHeader) annotation, invocation);
-            } else if (annotation instanceof ValidateToken) {
-                resolveToken((ValidateToken) annotation, invocation);
-            } else if (annotation instanceof RequiresAuthentication) {
-                resolveShiroAuthentication((RequiresAuthentication) annotation);
-            } else if (annotation instanceof RequiresUser) {
-                resolveShiroUser((RequiresUser) annotation);
-            } else if (annotation instanceof RequiresGuest) {
-                resolveShiroGeust((RequiresGuest) annotation);
-            } else if (annotation instanceof RequiresRoles) {
-                resolveShiroRole((RequiresRoles) annotation);
-            } else if (annotation instanceof RequiresPermissions) {
-                resolveShiroPermission((RequiresPermissions) annotation);
-            } else if (annotation instanceof ValidateComVars) {
-                resolveComVars((ValidateComVars) annotation, invocation);
-            } else if (annotation instanceof ValidateComVar) {
-                resolveComVar((ValidateComVar) annotation, invocation);
-            } else if (annotation instanceof ValidateParams) {
-                resolveParameters((ValidateParams) annotation, invocation);
-            } else if (annotation instanceof ValidateParam) {
-                resolveParameter((ValidateParam) annotation, invocation);
-            } else if (annotation instanceof ResponseStatus) {
-                resolveResponseStaus((ResponseStatus) annotation, invocation);
-            }
-        }
-    }
-
-    private static void resolveResponseStaus(ResponseStatus responseStatus, Invocation invocation) {
+    public static void resolveResponseStaus(ResponseStatus responseStatus, Invocation invocation) {
         if (responseStatus == null) {
             return;
         }
@@ -76,7 +44,7 @@ class ValidateKit {
 
     }
 
-    private static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws ValidateException {
+    public static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws ValidateException {
         if (method != null && !method.value().toString().equals(invocation.getController().getRequest().getMethod().toUpperCase())) {
             // controller.renderError(404);
             throw new ValidateException("404");
@@ -91,7 +59,7 @@ class ValidateKit {
      * @throws Lc4eException
      * @throws ValidateException
      */
-    private static void resolveRequestHeader(RequestHeader header, Invocation invocation) throws Lc4eException, ValidateException {
+    public static void resolveRequestHeader(RequestHeader header, Invocation invocation) throws Lc4eException, ValidateException {
         if (header == null) {
             return;
         }
@@ -112,7 +80,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveToken(ValidateToken token, Invocation invocation) throws ValidateException {
+    public static void resolveToken(ValidateToken token, Invocation invocation) throws ValidateException {
         if (token == null) {
             return;
         }
@@ -159,7 +127,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws ValidateException {
+    public static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws ValidateException {
         if (comVars == null) {
             return;
         }
@@ -169,7 +137,7 @@ class ValidateKit {
 
     }
 
-    private static void resolveComVar(ValidateComVar comVar, Invocation invocation) throws ValidateException {
+    public static void resolveComVar(ValidateComVar comVar, Invocation invocation) throws ValidateException {
         if (comVar == null) {
             return;
         }
@@ -184,7 +152,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveParameters(ValidateParams params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, ValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
+    public static void resolveParameters(ValidateParams params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, ValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
         if (params == null) {
             return;
         }
@@ -213,7 +181,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveParameter(ValidateParam param, Invocation invocation) throws ValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
+    public static void resolveParameter(ValidateParam param, Invocation invocation) throws ValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
         if (param == null) {
             return;
         }
@@ -239,7 +207,7 @@ class ValidateKit {
         validate(param, controller, type, object, setDefaultFlag);
     }
 
-    private static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws ValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
+    public static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws ValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
         if (String.class == type) {
             if (param.required() && object == null) {
                 throw new ValidateException("Parameter field is  invalid");
@@ -375,7 +343,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveShiroPermission(RequiresPermissions permissions) {
+    public static void resolveShiroPermission(RequiresPermissions permissions) {
         if (permissions == null) {
             return;
         }
@@ -404,10 +372,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveShiroGeust(RequiresGuest guest) {
-        if (guest == null) {
-            return;
-        }
+    public static void resolveShiroGeust(RequiresGuest guest) {
         if (SecurityUtils.getSubject().getPrincipal() != null) {
             throw new UnauthenticatedException("Attempting to perform a guest-only operation.  The current Subject is " +
                     "not a guest (they have been authenticated or remembered from a previous login).  Access " +
@@ -415,7 +380,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveShiroRole(RequiresRoles requiresRoles) {
+    public static void resolveShiroRole(RequiresRoles requiresRoles) {
         if (requiresRoles == null) {
             return;
         }
@@ -438,10 +403,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveShiroUser(RequiresUser requiresUser) {
-        if (requiresUser == null) {
-            return;
-        }
+    public static void resolveShiroUser(RequiresUser requiresUser) {
         if (SecurityUtils.getSubject().getPrincipal() == null) {
             throw new UnauthenticatedException("Attempting to perform a user-only operation.  The current Subject is " +
                     "not a user (they haven't been authenticated or remembered from a previous login).  " +
@@ -449,7 +411,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveShiroAuthentication(RequiresAuthentication requiresAuthentication) {
+    public static void resolveShiroAuthentication(RequiresAuthentication requiresAuthentication) {
         if (!SecurityUtils.getSubject().isAuthenticated()) {
             throw new UnauthenticatedException("The current Subject is not authenticated.  Access denied.");
         }

@@ -41,6 +41,8 @@ public class UserService {
     @Transaction
     public User createUser(User user) {
         PassDisposer.encryptPassword(user);
+
+
         user.set(T_User.mail, "test@test.com").set(T_User.nick, user.getStr(T_User.name))
                 .set(T_User.locked, false);
         user.save();

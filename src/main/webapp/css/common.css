@@ -246,7 +246,6 @@ body {
     border-radius: 0.1em;
     margin-bottom: 10px;
     background: none;
-    box-shadow: -1px 2px 1px 2px #8E8E8E;
 }
 
 #floatTools > .tool {
@@ -256,7 +255,6 @@ body {
     margin-bottom: 10px;
     display: block;
     border-radius: 0.1em;
-    box-shadow: -1px 2px 1px 2px #8E8E8E;
 }
 
 /* media */
@@ -270,6 +268,10 @@ body {
 @media screen and (min-width: 992px) and (max-width: 1200px) {
     #mainContent {
         padding: 1em 6% 1em 6%;
+    }
+
+    #floatTools {
+        left: 6%;
     }
 }
 

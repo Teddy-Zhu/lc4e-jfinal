@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler.support;
+package com.teddy.jfinal.handler.resolve;
 
 import com.jfinal.aop.Invocation;
 import com.teddy.jfinal.annotation.*;

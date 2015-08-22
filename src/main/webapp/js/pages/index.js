@@ -1,7 +1,7 @@
 $(function () {
     $.lc4e.index = {
         ready: function () {
-            var $configTool = $("#config-tool-options"), $artile = $("#articlelist");
+            var $configTool = $("#config-tool-options"), $article = $("#articlelist");
             $configTool.find(".ui.list .item[data-target^='#']").on('click', function () {
                 $(this).parent().transition('fade left');
                 $($(this).attr('data-target')).transition('fade left');
@@ -34,26 +34,22 @@ $(function () {
 
             $('#announce').shape();
 
-
             $.Lc4eAjax({
-                url: "/?p=" + parseInt($artile.find(">.ui.divided.items").attr("page")),
+                url: "/?p=" + parseInt($article.find(">.ui.divided.items").attr("page")),
                 target: '#articlelist>.ui.divided.items',
                 data: {art: true},
                 pjax: true,
                 loading: 'loading artiles',
                 success: function (data) {
-                    $.requestAnimationFrame(function () {
-                        $artile.find('>.ui.divided.items>.item').
-                            transition({
-                                animation: 'fade up in',
-                                duration: 500,
-                                interval: 80,
-                                onComplete: function () {
-                                    $artile.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
-                                }
-                            });
-                    })
-
+                    $article.find('>.ui.divided.items>.item').
+                        transition({
+                            animation: 'fade up in',
+                            duration: 500,
+                            interval: 80,
+                            onComplete: function () {
+                                $article.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
+                            }
+                        });
                 }
             });
 
@@ -69,8 +65,8 @@ $(function () {
 
 
             $('#prePage,#nextPage').on('click', function () {
-                var page = parseInt($artile.find(">.ui.divided.items").attr("page")) + 1;
-                $artile.find(">.ui.divided.items").attr("page", page);
+                var page = parseInt($article.find(">.ui.divided.items").attr("page")) + 1;
+                $article.find(">.ui.divided.items").attr("page", page);
                 $.Lc4eAjax({
                     url: "/?p=" + page,
                     data: {art: true},
@@ -78,17 +74,15 @@ $(function () {
                     pjax: true,
                     loading: 'loading artiles',
                     success: function (data) {
-                        $.requestAnimationFrame(function () {
-                            $artile.find('>.ui.divided.items>.item').
-                                transition({
-                                    animation: 'fade up in',
-                                    duration: 500,
-                                    interval: 100,
-                                    onComplete: function () {
-                                        $('#articlelist>.ui.divided.items>.item').find('.ui.fluid.image img').popup();
-                                    }
-                                });
-                        });
+                        $article.find('>.ui.divided.items>.item').
+                            transition({
+                                animation: 'fade up in',
+                                duration: 500,
+                                interval: 100,
+                                onComplete: function () {
+                                    $article.find('>.ui.divided.items>.item').find('.ui.fluid.image img').popup();
+                                }
+                            });
                     }
                 })
             });

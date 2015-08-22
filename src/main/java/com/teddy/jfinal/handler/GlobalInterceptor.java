@@ -16,13 +16,13 @@ public class GlobalInterceptor implements Interceptor {
         try {
             GlobalInterceptorKit.handleAOPMethods(ai, Const.BEFORE_INTERCEPT);
 
-            GlobalInterceptorKit.handleAnnotationsOnControllerMethod(ai, CustomPlugin.getMethodAnnotationsHandler().get(ai.getActionKey()));
+            GlobalInterceptorKit.resolveAOPResolver(ai, CustomPlugin.getMethodAnnotationsHandler().get(ai.getActionKey()));
 
             GlobalInterceptorKit.handleInject(ai);
 
             ai.invoke();
             // set other attr
-            GlobalInterceptorKit.handleOtherAnnotataion(ai, CustomPlugin.getAfterMethodAnnoHandler().get(ai.getActionKey()));
+            GlobalInterceptorKit.resolveAOPResolver(ai, CustomPlugin.getAfterMethodAnnoHandler().get(ai.getActionKey()));
 
             GlobalInterceptorKit.handleAOPMethods(ai, Const.AFTER_INTERCEPT);
         } catch (Exception e) {

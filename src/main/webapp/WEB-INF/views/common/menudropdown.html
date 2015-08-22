@@ -10,7 +10,7 @@ for(curMenu in menus){
         println('</div>');
         println('<div class="itemBar"></div></div>');
     }else{
-        print('<a class="item linked" href="'+ curMenu.ABBR +'">');
+        print('<a class="item linked" title="'+ curMenu.NAME +'" href="'+ curMenu.ABBR +'">');
         if(curMenu.ICON != null && !isEmpty(curMenu.ICON)){
              print('<i class="'+ curMenu.ICON +' icon"></i>');
         }

@@ -18,6 +18,8 @@ import com.teddy.jfinal.entity.Route;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.handler.GlobalInterceptor;
+import com.teddy.jfinal.handler.resolve.*;
+import com.teddy.jfinal.interfaces.AnnotationResolver;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.interfaces.Handler;
 import com.teddy.jfinal.tools.ClassSearcherTool;
@@ -44,13 +46,13 @@ public class CustomPlugin implements IPlugin {
 
     private static Map<Class<? extends Exception>, Method> exceptionsMap;
 
-    private static Map<Method, List<Annotation>> exceptionMethodHandler;
+    private static Map<Method, List<AnnotationResolver>> exceptionMethodHandler;
 
     private static Map<String, Set<Method>> aopHandler;
 
-    private static Map<String, List<Annotation>> methodAnnotationsHandler;
+    private static Map<String, List<AnnotationResolver>> methodAnnotationsHandler;
 
-    private static Map<String, List<Annotation>> afterMethodAnnoHandler;
+    private static Map<String, List<AnnotationResolver>> afterMethodAnnoHandler;
 
     private static Class<?> clazz;
 
@@ -234,15 +236,14 @@ public class CustomPlugin implements IPlugin {
                         List<Annotation> methodAns = buildAnnotation(method, methodRequiredAnnotations);
                         methodAns.removeAll(controllerAns);
                         methodAns.addAll(controllerAns);
-                        methodAnnotationsHandler.put(actionKey, methodAns);
+                        methodAnnotationsHandler.put(actionKey, buildAnnotationResolver(methodAns));
 
-                        afterMethodAnnoHandler.put(actionKey, buildAnnotation(method, afterMethodRequiredAnnotations));
+                        afterMethodAnnoHandler.put(actionKey, buildAnnotationResolver(buildAnnotation(method, afterMethodRequiredAnnotations)));
                     }
                 }
                 LOGGER.debug("Controller Registered : controller = " + controller + ", Mapping URL = " + controllerKey);
             }
         });
-
     }
 
     private List<Annotation> buildAnnotation(Class clz, Class[] requiredAnnotations) {
@@ -254,6 +255,59 @@ public class CustomPlugin implements IPlugin {
             }
         }
         return annotations;
+    }
+
+    private List<AnnotationResolver> buildAnnotationResolver(List<Annotation> annotations) {
+        List<AnnotationResolver> resolvers = new ArrayList<>();
+        annotations.forEach(annotation -> {
+            resolvers.add(convertToResolver(annotation));
+        });
+        return resolvers;
+    }
+
+    public static AnnotationResolver convertToResolver(Annotation annotation) {
+
+        if (annotation instanceof RequestMethod) {
+            return new RequestMethodResolver((RequestMethod) annotation);
+        } else if (annotation instanceof RequestHeader) {
+            return new RequestHeaderResolver((RequestHeader) annotation);
+        } else if (annotation instanceof ValidateToken) {
+            return new ValidateTokenResolver((ValidateToken) annotation);
+        } else if (annotation instanceof RequiresAuthentication) {
+            return new RequiresAuthenticationResolver((RequiresAuthentication) annotation);
+        } else if (annotation instanceof RequiresUser) {
+            return new RequiresUserResolver((RequiresUser) annotation);
+        } else if (annotation instanceof RequiresGuest) {
+            return new RequiresGuestResolver((RequiresGuest) annotation);
+        } else if (annotation instanceof RequiresRoles) {
+            return new RequiresRolesResolver((RequiresRoles) annotation);
+        } else if (annotation instanceof RequiresPermissions) {
+            return new RequiresPermissionsResovler((RequiresPermissions) annotation);
+        } else if (annotation instanceof ValidateComVars) {
+            return new ValidateComVarsResolver((ValidateComVars) annotation);
+        } else if (annotation instanceof ValidateComVar) {
+            return new ValidateComVarResolver((ValidateComVar) annotation);
+        } else if (annotation instanceof ValidateParams) {
+            return new ValidateParamsResolver((ValidateParams) annotation);
+        } else if (annotation instanceof ValidateParam) {
+            return new ValidateParamResolver((ValidateParam) annotation);
+        } else if (annotation instanceof ResponseStatus) {
+            return new ResponseStatusResolver((ResponseStatus) annotation);
+        } else if (annotation instanceof SetComVar) {
+            return new SetComVarResolver((SetComVar) annotation);
+        } else if (annotation instanceof SetComVars) {
+            return new SetComVarsResolver((SetComVars) annotation);
+        } else if (annotation instanceof SetUIDatas) {
+            return new SetUIDatasResolver((SetUIDatas) annotation);
+        } else if (annotation instanceof SetUIData) {
+            return new SetUIDataResolver((SetUIData) annotation);
+        } else if (annotation instanceof SetAJAX) {
+            return new SetAJAXResolver((SetAJAX) annotation);
+        } else if (annotation instanceof SetPJAX) {
+            return new SetPJAXResolver((SetPJAX) annotation);
+        } else {
+            throw new RuntimeException("Can not find Annotation[" + annotation.getClass().getName() + "]");
+        }
     }
 
     private List<Annotation> buildAnnotation(Method method, Class[] requiredAnnotations) {
@@ -378,7 +432,7 @@ public class CustomPlugin implements IPlugin {
                     default:
                         // resolve @ExceptionHandler add method into ExceptionMap
                         if (method.isAnnotationPresent(ExceptionHandler.class)) {
-                            exceptionMethodHandler.put(method, buildAnnotation(method, afterMethodRequiredAnnotations));
+                            exceptionMethodHandler.put(method, buildAnnotationResolver(buildAnnotation(method, afterMethodRequiredAnnotations)));
                             for (Class<? extends Exception> exception : method.getAnnotation(ExceptionHandler.class).value()) {
                                 exceptionsMap.put(exception, method);
                             }
@@ -460,15 +514,15 @@ public class CustomPlugin implements IPlugin {
         return exceptionsMap;
     }
 
-    public static Map<Method, List<Annotation>> getExceptionMethodHandler() {
+    public static Map<Method, List<AnnotationResolver>> getExceptionMethodHandler() {
         return exceptionMethodHandler;
     }
 
-    public static Map<String, List<Annotation>> getMethodAnnotationsHandler() {
+    public static Map<String, List<AnnotationResolver>> getMethodAnnotationsHandler() {
         return methodAnnotationsHandler;
     }
 
-    public static Map<String, List<Annotation>> getAfterMethodAnnoHandler() {
+    public static Map<String, List<AnnotationResolver>> getAfterMethodAnnoHandler() {
         return afterMethodAnnoHandler;
     }
 }
