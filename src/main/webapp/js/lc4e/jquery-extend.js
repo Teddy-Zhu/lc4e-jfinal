@@ -1079,7 +1079,7 @@
                     KEYMAP.ctrlDown = true;
                 }
             })
-            .on('keyup.xdsoftctrl', function (e) {
+            .on('keyup.ctrl', function (e) {
                 if (e.keyCode === KEYMAP.CTRLKEY) {
                     KEYMAP.ctrlDown = false;
                 }
@@ -1087,6 +1087,7 @@
         return this.each(function () {
             var options = ($.isPlainObject(opt) || !opt) ? $.extend(true, {}, $.fn.Lc4eDateTimePicker.settings.config, opt) : $.extend(true, {}, $.fn.Lc4eDateTimePicker.settings.config),
                 namespace = $.fn.Lc4eDateTimePicker.settings.namespace,
+                scrollnamespace = $.fn.Lc4eScroller.settings.namespace,
                 $module = $(this),
                 $datetimepicker = $module.data(namespace),
                 lazyInitTimer = 0,
@@ -1110,7 +1111,7 @@
                             }, 100);
                         });
                 },
-                createDateTimePicker: function ($input) {
+                createDateTimePicker: function () {
                     $datetimepicker = $('<div class="datetimepicker datetimepicker_noselect"></div>');
                     var copyright = $('<div class="datetimepicker_copyright"><a target="_blank" href="http://www.lc4e.com/">lc4e</a></div>'),
                         datepicker = $('<div class="datepicker active"></div>'),
@@ -1118,7 +1119,7 @@
                             '<div class="datetimepicker_label datetimepicker_month"><span></span><i></i></div>' +
                             '<div class="datetimepicker_label datetimepicker_year"><span></span><i></i></div>' +
                             '<button type="button" class="datetimepicker_next"></button></div>'),
-                        calendar = $('<div class="datetimepicker_calendar"></div>'),
+                        calendar = $('<div class="datetimepicker_calendar ui small compact table seven column"></div>'),
                         timepicker = $('<div class="datetimepicker_timepicker active"><button type="button" class="datetimepicker_prev"></button><div class="datetimepicker_time_box"></div><button type="button" class="datetimepicker_next"></button></div>'),
                         timeboxparent = timepicker.find('.datetimepicker_time_box').eq(0),
                         timebox = $('<div class="datetimepicker_time_variant"></div>'),
@@ -1330,13 +1331,13 @@
                         }
 
                         if ((options.open || options.opened) && (!options.inline)) {
-                            $input.trigger('open.' + namespace);
+                            $module.trigger('open.' + namespace);
                         }
 
                         if (options.inline) {
                             triggerAfterOpen = true;
                             $datetimepicker.addClass('datetimepicker_inline');
-                            $input.after($datetimepicker).hide();
+                            $module.after($datetimepicker).hide();
                         }
 
                         if (options.inverseButton) {
@@ -1358,8 +1359,8 @@
 
                         if (options.value) {
                             _datetimepicker_datetime.setCurrentTime(options.value);
-                            if ($input && $input.val) {
-                                $input.val(_datetimepicker_datetime.str);
+                            if ($module && $module.val) {
+                                $module.val(_datetimepicker_datetime.str);
                             }
                         }
 
@@ -1396,7 +1397,7 @@
                             .css('visibility', !options.nextButton ? 'hidden' : 'visible');
 
                         if (options.mask) {
-                            $input.off('keydown.' + namespace);
+                            $module.off('keydown.' + namespace);
 
                             if (options.mask === true) {
                                 options.mask = options.format
@@ -1410,11 +1411,11 @@
                             }
 
                             if ($.type(options.mask) === 'string') {
-                                if (!isValidValue(options.mask, $input.val())) {
-                                    $input.val(options.mask.replace(/[0-9]/g, '_'));
+                                if (!isValidValue(options.mask, $module.val())) {
+                                    $module.val(options.mask.replace(/[0-9]/g, '_'));
                                 }
 
-                                $input.on('keydown.' + namespace, function (event) {
+                                $module.on('keydown.' + namespace, function (event) {
                                     var val = this.value,
                                         key = event.which,
                                         pos,
@@ -1430,7 +1431,7 @@
                                         }
 
                                         while (/[^0-9_]/.test(options.mask.substr(pos, 1)) && pos < options.mask.length && pos > 0) {
-                                            pos += (key === KEYMAP.BACKSPACE || key === DEL) ? -1 : 1;
+                                            pos += (key === KEYMAP.BACKSPACE || key === KEYMAP.DEL) ? -1 : 1;
                                         }
 
                                         val = val.substr(0, pos) + digit + val.substr(pos + 1);
@@ -1454,7 +1455,7 @@
                                         } else if ($.trim(val) === '') {
                                             this.value = options.mask.replace(/[0-9]/g, '_');
                                         } else {
-                                            $input.trigger('error_input.' + namespace);
+                                            $module.trigger('error_input.' + namespace);
                                         }
                                     } else {
                                         if (([KEYMAP.AKEY, KEYMAP.CKEY, KEYMAP.VKEY, KEYMAP.ZKEY, KEYMAP.YKEY].indexOf(key) !== -1 &&
@@ -1471,7 +1472,7 @@
                             }
                         }
                         if (options.validateOnBlur) {
-                            $input
+                            $module
                                 .off('blur' + namespace)
                                 .on('blur.' + namespace, function () {
                                     if (options.allowBlank && !$.trim($(this).val()).length) {
@@ -1711,16 +1712,16 @@
                         e.preventDefault();
                         $datetimepicker.data('changed', true);
                         _datetimepicker_datetime.setCurrentTime(getCurrentValue());
-                        $input.val(_datetimepicker_datetime.str());
+                        $module.val(_datetimepicker_datetime.str());
                         $datetimepicker.trigger('close.' + namespace);
                     });
                     mounth_picker
                         .find('.datetimepicker_today_button')
-                        .on('mousedown' + namespace, function () {
+                        .on('mousedown.' + namespace, function () {
                             $datetimepicker.data('changed', true);
                             _datetimepicker_datetime.setCurrentTime(0);
                             $datetimepicker.trigger('afterOpen.' + namespace);
-                        }).on('dblclick' + namespace, function () {
+                        }).on('dblclick.' + namespace, function () {
                             var currentDate = _datetimepicker_datetime.getCurrentTime(), minDate, maxDate;
                             currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
                             minDate = _datetimepicker_datetime.strToDate(options.minDate);
@@ -1733,8 +1734,8 @@
                             if (currentDate > maxDate) {
                                 return;
                             }
-                            $input.val(_datetimepicker_datetime.str());
-                            $input.trigger('change');
+                            $module.val(_datetimepicker_datetime.str());
+                            $module.trigger('change');
                             $datetimepicker.trigger('close.' + namespace);
                         });
                     mounth_picker
@@ -1780,7 +1781,7 @@
                                 } else if ($this.hasClass(options.prev) && top - options.timeHeightInTimePicker >= 0) {
                                     timebox.css('marginTop', '-' + (top - options.timeHeightInTimePicker) + 'px');
                                 }
-                                timeboxparent.trigger('scroll_element.' + namespace, [Math.abs(parseInt(timebox.css('marginTop'), 10) / (height - pheight))]);
+                                timeboxparent.trigger('scroll_element.' + scrollnamespace, [Math.abs(parseInt(timebox.css('marginTop'), 10) / (height - pheight))]);
                                 period = (period > 10) ? 10 : period - 10;
                                 if (!stop) {
                                     timer = setTimeout(arguments_callee4, v || period);
@@ -1837,7 +1838,7 @@
                                 }
 
                                 for (j = 0; j < 7; j += 1) {
-                                    table += '<th>' + options.i18n[options.lang].dayOfWeek[(j + options.dayOfWeekStart) % 7] + '</th>';
+                                    table += '<th class="center aligned">' + options.i18n[options.lang].dayOfWeek[(j + options.dayOfWeekStart) % 7] + '</th>';
                                 }
 
                                 table += '</tr></thead>';
@@ -2025,9 +2026,9 @@
                                     if ((height - pheight) < top) {
                                         top = height - pheight;
                                     }
-                                    timeboxparent.trigger('scroll_element.' + namespace, [parseInt(top, 10) / (height - pheight)]);
+                                    timeboxparent.trigger('scroll_element.' + scrollnamespace, [parseInt(top, 10) / (height - pheight)]);
                                 } else {
-                                    timeboxparent.trigger('scroll_element.' + namespace, [0]);
+                                    timeboxparent.trigger('scroll_element.' + scrollnamespace, [0]);
                                 }
                             }
                         });
@@ -2056,7 +2057,7 @@
 
                             $datetimepicker.trigger('select.' + namespace, [currentTime]);
 
-                            $input.val(_datetimepicker_datetime.str());
+                            $module.val(_datetimepicker_datetime.str());
                             if ((timerclick > 1 || (options.closeOnDateSelect === true || (options.closeOnDateSelect === false && !options.timepicker))) && !options.inline) {
                                 $datetimepicker.trigger('close.' + namespace);
                             }
@@ -2119,7 +2120,7 @@
                             return false;
                         });
 
-                    $input
+                    $module
                         .on('mousewheel.' + namespace, function (event) {
                             if (!options.scrollInput) {
                                 return true;
@@ -2136,8 +2137,8 @@
                             }
                             if (options.datepicker && !options.timepicker) {
                                 datepicker.trigger(event, [event.deltaY, event.deltaX, event.deltaY]);
-                                if ($input.val) {
-                                    $input.val(_datetimepicker_datetime.str());
+                                if ($module.val) {
+                                    $module.val(_datetimepicker_datetime.str());
                                 }
                                 $datetimepicker.trigger('changedatetime.' + namespace);
                                 return false;
@@ -2244,7 +2245,7 @@
                                 $datetimepicker.trigger('open.' + namespace);
                             }
                         })
-                        .data('input', $input);
+                        .data('input', $module);
 
                     timer = 0;
                     timer1 = 0;
@@ -2258,7 +2259,7 @@
                         if (options.startDate) {
                             ct = _datetimepicker_datetime.strToDate(options.startDate);
                         } else {
-                            ct = options.value || (($input && $input.val && $input.val()) ? $input.val() : '');
+                            ct = options.value || (($module && $module.val && $module.val()) ? $module.val() : '');
                             if (ct) {
                                 ct = _datetimepicker_datetime.strToDateTime(ct);
                             } else if (options.defaultDate) {
@@ -2282,15 +2283,15 @@
 
                     _datetimepicker_datetime.setCurrentTime(getCurrentValue());
 
-                    $input
+                    $module
                         .data(namespace, $datetimepicker)
                         .on('open.' + namespace + ' focusin.' + namespace + ' mousedown.' + namespace, function (event) {
-                            if ($input.is(':disabled') || ($input.data(namespace).is(':visible') && options.closeOnInputClick)) {
+                            if ($module.is(':disabled') || ($module.data(namespace).is(':visible') && options.closeOnInputClick)) {
                                 return;
                             }
                             clearTimeout(timer);
                             timer = setTimeout(function () {
-                                if ($input.is(':disabled')) {
+                                if ($module.is(':disabled')) {
                                     return;
                                 }
 
