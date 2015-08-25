@@ -78,4 +78,6 @@ public @interface ValidateParam {
     int minSize() default -1;
 
     FileType fileType() default FileType.NONE;
+
+    String error() default Const.DEFAULT_NONE;
 }

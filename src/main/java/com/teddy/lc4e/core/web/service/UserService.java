@@ -6,6 +6,7 @@ import com.teddy.jfinal.annotation.Transaction;
 import com.teddy.lc4e.core.database.mapping.T_User;
 import com.teddy.lc4e.core.database.mapping.T_Vw_User_Role_Permission;
 import com.teddy.lc4e.core.database.model.User;
+import com.teddy.lc4e.core.database.model.User_Basicinfo;
 import com.teddy.lc4e.core.database.model.Vw_User_Role_Permission;
 import com.teddy.lc4e.core.util.shiro.PassDisposer;
 
@@ -39,9 +40,8 @@ public class UserService {
 
 
     @Transaction
-    public User createUser(User user) {
+    public User createUser(User user, User_Basicinfo basicinfo) {
         PassDisposer.encryptPassword(user);
-
 
         user.set(T_User.mail, "test@test.com").set(T_User.nick, user.getStr(T_User.name))
                 .set(T_User.locked, false);

@@ -5,11 +5,13 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.Method;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.plugin.beetl.Lc4eCaptchaRender;
+import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.core.config.Key;
 import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.core.database.mapping.T_User;
 import com.teddy.lc4e.core.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.core.database.model.User;
+import com.teddy.lc4e.core.database.model.User_Basicinfo;
 import com.teddy.lc4e.core.entity.Message;
 import com.teddy.lc4e.core.web.service.ComVarService;
 import com.teddy.lc4e.core.web.service.UserService;
@@ -28,28 +30,33 @@ public class MemberController extends BaseController {
 
 
     @RequestMethod(Method.POST)
-    @ValidateParams(fields = {@ValidateParam(value = "user.name", minLen = 4, maxLen = 12),
+    @ValidateParams({
+            @ValidateParam(value = "user.name", minLen = 4, maxLen = 12),
             @ValidateParam(value = "user.password", minLen = 6, maxLen = 20),
             @ValidateParam(value = "user.nick", minLen = 4, maxLen = 12),
-            @ValidateParam(value = "extend.phoneNumber", required = false, minLen = 11, maxLen = 11),
+            @ValidateParam(value = "user.mail", minLen = 5, maxLen = 20,regex = StringTool.regExp_MAIL),
+            @ValidateParam(value = "extend.phoneNumber", required = false, regex = StringTool.regExp_PhoneNumber),
             @ValidateParam(value = "extend.sign", required = false, maxLen = 50),
             @ValidateParam(value = "extend.avatar", required = false, defaultValue = ""),
             @ValidateParam(value = "extend.birth", required = false, type = Date.class, defaultValue = ""),
-
             @ValidateParam(value = "captcha", defaultValue = "@@@@", maxLen = 4, minLen = 4)
-
     })
+    @ValidateComVar(name = Key.REGISTER, value = "false")
     public void signup() {
+        User user;
+        User_Basicinfo basicInfo = null;
         Sys_Common_Variable simpleregister = ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER);
-
-        User user = getModel(User.class, "user").enhancer();
-        UserService.service.createUser(user);
+        if (simpleregister.getToBoolean(T_Sys_Common_Variable.value)) {
+            basicInfo = getModel(User_Basicinfo.class, "extend").enhancer();
+        }
+        user = getModel(User.class, "user").enhancer();
+         UserService.service.createUser(user, basicInfo);
 
         renderJson(user);
     }
 
-    @ValidateComVar(name = Key.REGISTER, value = "false")
-    @ValidateParams(fields = {@ValidateParam(value = "user.name", minLen = 4, maxLen = 12),
+    @ValidateParams({
+            @ValidateParam(value = "user.name", minLen = 4, maxLen = 12),
             @ValidateParam(value = "user.password", minLen = 6, maxLen = 20),
             @ValidateParam(value = "captcha", defaultValue = "@@@@", maxLen = 4, minLen = 4),
             @ValidateParam(value = "rememberMe", type = Boolean.class)

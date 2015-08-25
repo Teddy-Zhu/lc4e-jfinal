@@ -24,7 +24,7 @@ import java.util.Random;
 @Controller("/")
 public class ViewController extends BaseController {
 
-    @ValidateParams(fields = {
+    @ValidateParams(value = {
             @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
             @ValidateParam(value = "art", type = boolean.class, defaultValue = "false")
     })
@@ -83,6 +83,10 @@ public class ViewController extends BaseController {
         render("pages/signup");
     }
 
+    @SetPJAX
+    public void test() {
+        render("pages/test");
+    }
 
     //test
     public void Error() {

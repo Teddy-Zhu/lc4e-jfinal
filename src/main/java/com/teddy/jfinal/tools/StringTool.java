@@ -68,6 +68,7 @@ public class StringTool {
 
     public static final String regExp_MAIL = "\\b(^[\'_A-Za-z0-9-]+(\\.[\'_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
 
+    public static final String regExp_PhoneNumber = "^1[3|4|5|8|7]\\d{9}$";
 
     // 定义验证码字符.去除了O、I、l、、等容易混淆的字母
     public static final char authCode[] = {

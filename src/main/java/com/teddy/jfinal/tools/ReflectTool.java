@@ -117,7 +117,7 @@ public class ReflectTool {
     }
 
     public Map<String, ReflectTool> fields() {
-        Map<String, ReflectTool> result = new LinkedHashMap<String, ReflectTool>();
+        Map<String, ReflectTool> result = new LinkedHashMap<>();
 
         for (Field field : type().getFields()) {
             if (!isClass ^ Modifier.isStatic(field.getModifiers())) {
@@ -222,34 +222,31 @@ public class ReflectTool {
     @SuppressWarnings("unchecked")
     public <P> P as(Class<P> proxyType) {
         final boolean isMap = (object instanceof Map);
-        final InvocationHandler handler = new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                String name = method.getName();
+        final InvocationHandler handler = (proxy, method, args) -> {
+            String name = method.getName();
 
-                // Actual method name matches always come first
-                try {
-                    return on(object).call(name, args).get();
-                }
+            // Actual method name matches always come first
+            try {
+                return on(object).call(name, args).get();
+            }
 
-                // [#14] Simulate POJO behaviour on wrapped map objects
-                catch (ReflectException e) {
-                    if (isMap) {
-                        Map<String, Object> map = (Map<String, Object>) object;
-                        int length = (args == null ? 0 : args.length);
+            // [#14] Simulate POJO behaviour on wrapped map objects
+            catch (ReflectException e) {
+                if (isMap) {
+                    Map<String, Object> map = (Map<String, Object>) object;
+                    int length = (args == null ? 0 : args.length);
 
-                        if (length == 0 && name.startsWith("get")) {
-                            return map.get(property(name.substring(3)));
-                        } else if (length == 0 && name.startsWith("is")) {
-                            return map.get(property(name.substring(2)));
-                        } else if (length == 1 && name.startsWith("set")) {
-                            map.put(property(name.substring(3)), args[0]);
-                            return null;
-                        }
+                    if (length == 0 && name.startsWith("get")) {
+                        return map.get(property(name.substring(3)));
+                    } else if (length == 0 && name.startsWith("is")) {
+                        return map.get(property(name.substring(2)));
+                    } else if (length == 1 && name.startsWith("set")) {
+                        map.put(property(name.substring(3)), args[0]);
+                        return null;
                     }
-
-                    throw e;
                 }
+
+                throw e;
             }
         };
 
@@ -449,15 +446,11 @@ public class ReflectTool {
         return null;
     }
 
-    public static String parseDefaultValue(String value) {
-        return Const.DEFAULT_NONE.equals(value) ? null : value;
-    }
-
     public static Field getFieldByClass(Class clz, String name) {
         Field[] fields = clz.getFields();
-        for (int i = 0, len = fields.length; i < len; i++) {
-            if (fields[i].getName().equals(name)) {
-                return fields[i];
+        for (Field field : fields) {
+            if (field.getName().equals(name)) {
+                return field;
             }
         }
         return null;
@@ -467,11 +460,11 @@ public class ReflectTool {
         Field[] fields = Const.class.getDeclaredFields();
         List<String> list = new ArrayList<>();
         try {
-            for (int i = 0, len = fields.length; i < len; i++) {
-                String name = fields[i].getName();
-                for (int j = 0, l = args.length; j < l; j++) {
-                    if (name.startsWith(args[j])) {
-                        list.add(fields[i].get(null).toString());
+            for (Field field : fields) {
+                String name = field.getName();
+                for (String arg : args) {
+                    if (name.startsWith(arg)) {
+                        list.add(field.get(null).toString());
                         break;
                     }
                 }
@@ -533,7 +526,7 @@ public class ReflectTool {
         Map<String, ArrayList<String>> map = RequestTool.getParameterMap(controller.getRequest());
 
         for (int i = 0, len = key.length; i < len; i++) {
-            ArrayList<String> values = new ArrayList<String>();
+            ArrayList<String> values = new ArrayList<>();
             values.add(value[i]);
             map.put(key[i], values);
         }
@@ -542,8 +535,8 @@ public class ReflectTool {
     public static Map<Class<? extends Annotation>, Annotation> getAnnotationsMap(Method method) {
         Map<Class<? extends Annotation>, Annotation> ret = new HashMap<>();
         Annotation[] ans = method.getAnnotations();
-        for (int i = 0, len = ans.length; i < len; i++) {
-            ret.put(ans[i].annotationType(), ans[i]);
+        for (Annotation an : ans) {
+            ret.put(an.annotationType(), an);
         }
         return ret;
     }
@@ -552,10 +545,10 @@ public class ReflectTool {
     /**
      * exclude method in Controller
      *
-     * @return
+     * @return Set<String>
      */
     public static Set<String> buildExcludedMethodName(Class... clzes) {
-        Set<String> excludedMethodName = new HashSet<String>();
+        Set<String> excludedMethodName = new HashSet<>();
         for (Class clz : clzes) {
             Method[] methods = clz.getMethods();
             for (Method m : methods) {

@@ -16,11 +16,7 @@ public class ComVarService {
 
     @Cache(index = 0)
     public Sys_Common_Variable getComVarByName(String name) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("select ").append(T_Sys_Common_Variable.ALL_FIELDS).append(" from ")
-                .append(T_Sys_Common_Variable.TABLE_NAME).append(" Where ").append(T_Sys_Common_Variable.NAME + " = ?");
-        Sys_Common_Variable commonVariable = Sys_Common_Variable.dao.findFirst(sql.toString(), name);
-        return commonVariable;
+        return Sys_Common_Variable.dao.findFirst("select " + T_Sys_Common_Variable.ALL_FIELDS + " from " + T_Sys_Common_Variable.TABLE_NAME + " Where " + T_Sys_Common_Variable.NAME + " = ?", name);
     }
 
     @Cache(index = 0)

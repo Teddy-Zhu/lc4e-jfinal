@@ -21,13 +21,11 @@ import org.apache.shiro.subject.Subject;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -156,7 +154,7 @@ class ValidateKit {
         if (params == null) {
             return;
         }
-        resolveParams(params.fields(), invocation);
+        resolveParams(params.value(), invocation);
         boolean isTrue;
         if (params.select()) {
             try {
@@ -199,7 +197,7 @@ class ValidateKit {
             object = controller.getPara(param.value());
         }
 
-        if (object == null) {
+        if (object == null && param.required()) {
             setDefaultFlag = true;
         }
         object = object != null ? object : Const.DEFAULT_NONE.equals(param.defaultValue()) ? object : param.defaultValue();
