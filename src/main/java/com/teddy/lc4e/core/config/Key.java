@@ -9,7 +9,7 @@ public class Key {
 
     public static final String CASE_SENSITIVE = "CaptchaCaseSensitive";
 
-    public static final String REGISTER_CAPTCHA = "RegisterCaptcha";
+    public static final String CAPTCHA = "Captcha";
 
     public static final String LC4EAJAX = "LC4EAJAX";
 

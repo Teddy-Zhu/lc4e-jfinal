@@ -1,13 +1,17 @@
 <style type="text/css">
-    #signForm {
-        margin-top: 2.5em;
+    #signUpForm {
+        margin-top: 3em;
     }
 
-    #signForm .operatepanel {
+    #signUpForm .operatepanel {
         margin-top: 2em;
     }
 
-    .ui.icon.input .eye.icon {
+    #signUpForm.ui.form .inline.fields {
+        margin: 1.5em 0 1.5em;
+    }
+
+    #signUpForm .ui.icon.input .eye.icon {
         cursor: pointer;
     }
 
@@ -21,72 +25,135 @@
         box-shadow: 0 0 0 0 transparent inset;
     }
 </style>
-<div id="signInForm" class="ui form" observe-on="blur">
-    <div class="inline fields">
-        <div class="four wide field">
-            <label class="fieldName">UserName</label>
-        </div>
-        <div class="ten wide field">
-            <div class="ui input"><input id="user.name" class="fieldValue" name="user.name" type="text"
-                                         placeholder="your login name" rules="[{type:'empty'},{type:'minLength[4]'}]"/>
+<div class="ui nobox padding segment flipInY animated">
+    <h2 class="ui center aligned icon header">
+        <i class="circular users icon"></i>
+        Join in ${SiteName}
+    </h2>
+
+    <div id="signUpForm" class="ui form" observe-on="blur" data-url="/member/signup">
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">UserName</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui icon input">
+                    <input id="user.name" class="fieldValue" name="user.name" type="text"
+                           placeholder="login name" data-rules="[{type:'empty'},{type:'minLength[4]'}]"/>
+                    <i class="user icon"></i>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="inline fields">
-        <div class="four wide field">
-            <label class="fieldName">Password</label>
-        </div>
-        <div class="ten wide field">
-            <div class="ui icon input">
-                <input id="user.password" name="user.password" class="fieldValue" type="password"
-                       placeholder="your password" rules="[{type:'empty'}]"/>
-                <i class="eye icon link"></i></div>
-        </div>
-    </div>
-    <div class="inline fields">
-        <div class="four wide field">
-            <label class="fieldName">Verification Code</label>
-        </div>
-        <div class="six wide field">
-            <div class="ui input">
-                <input id="captcha" name="captcha" class="fieldValue" type="text"
-                       rules="[{type:'empty'},{type:'exactLength[4]'}]"/>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Password</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui icon input">
+                    <input id="user.password" name="user.password" class="fieldValue" type="password"
+                           placeholder="password" data-rules="[{type:'empty'}]"/>
+                    <i class="eye icon link"></i></div>
             </div>
         </div>
-        <div class="four wide field">
-            <img id="captchaimg" src="/captcha?rand=<%print(tool.getTime());%>">
-        </div>
-    </div>
-
-    <div class="inline fields">
-        <div class="four wide field">
-            <label class="fieldName">Remember</label>
-        </div>
-        <div class="ten wide field">
-            <div class="ui toggle checkbox">
-                <input id="rememberMe" name="rememberMe" type="checkbox" class="fieldValue">
-                <label>One Month</label>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Repeat Pass</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui icon input">
+                    <input id="user.repassword" name="user.repassword" class="fieldValue" type="password"
+                           placeholder="repeat password" data-rules="[{type:'match[user.password]'}]"/>
+                    <i class="eye icon link"></i></div>
             </div>
         </div>
-    </div>
-    <div class="inline fields">
-        <div class="four wide field">
-
-        </div>
-        <div class="ten wide field">
-            <div class="ui checkbox">
-                <input class="fieldValue" type="checkbox" id="tof" name="tof" rules="[{type:'checked'}]"
-                       prompt="you must be agree the TOS">
-                <label>agree the term of service</label>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Nick</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui icon input">
+                    <input id="user.nick" name="user.nick" class="fieldValue" type="text"
+                           placeholder="your nick" data-rules="[{type:'minLength[4]'},{type:'maxLength[12]'}]"/>
+                    <i class="detective icon"></i>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="inline fields operatepanel">
-        <div class="sixteen wide field ui centered grid">
-            <button id="signIn" class="ui primary button">JoinIn</button>
-            <button id="reset" class="ui basic button">Reset</button>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Email</label>
+            </div>
+            <div class="ten wide field">
+                <div class="ui icon input">
+                    <input id="user.mail" name="user.mail" class="fieldValue" type="text"
+                           placeholder="your email"
+                           data-rules="[{type:'regExp[/\\b(^[\'_A-Za-z0-9-]+(\\.[\'_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b/]'}]"/>
+                    <i class="at icon"></i>
+                </div>
+            </div>
         </div>
-    </div>
+        <%if(Captcha){%>
+        <div class="inline fields">
+            <div class="four wide field">
+                <label class="fieldName">Verification Code</label>
+            </div>
+            <div class="six wide field">
+                <div class="ui input">
+                    <input id="captcha" name="captcha" class="fieldValue" type="text"
+                           data-rules="[{type:'empty'},{type:'exactLength[4]'}]"/>
+                </div>
+            </div>
+            <div class="four wide field">
+                <img id="captchaimg" src="/captcha?rand=<%print(tool.getTime());%>">
+            </div>
+        </div>
+        <%}%>
 
+        <h4 class="ui horizontal divider header">
+            <div id="extendDes" class="linked"><i class="add icon"></i>
+                Description(optional)
+            </div>
+        </h4>
+        <div id="extendPanel" style="display: none;">
+            <div class="inline fields">
+                <div class="four wide field">
+                    <label class="fieldName">Phone</label>
+                </div>
+                <div class="ten wide field">
+                    <div class="ui icon input">
+                        <input id="extend.phoneNumber" name="extend.phoneNumber" class="fieldValue" type="text"
+                               placeholder="phone"
+                               data-rules="[{type:'regExp[/(^1[3|4|5|8|7]\\d{9}$)|(^[\\t|\\s]*$)/]'}]"/>
+                    </div>
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="four wide field">
+                    <label class="fieldName">BirthDay</label>
+                </div>
+                <div class="ten wide field">
+                    <div class="ui icon input">
+                        <input id="extend.birth" name="user.birth" class="fieldValue" type="text"
+                               placeholder="birth day,it should be true"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="inline fields operatepanel">
+            <div class="sixteen wide field ui centered grid">
+                <div class="ui buttons">
+                    <button class="ui labeled icon lc4eSubmit primary button">
+                        <i class="add user icon"></i>
+                        SignIn
+                    </button>
+                    <div class="or"></div>
+                    <button class="ui right labeled icon button lc4eReset">
+                        <i class="refresh icon"></i>
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

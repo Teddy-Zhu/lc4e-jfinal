@@ -5,6 +5,7 @@
  * 
  * Include jquery (http://jquery.com/) semantic-ui (http://semantic-ui.com/)
  * animatescroll(http://plugins.compzets.com/animatescroll/)
+ * datetimepicker (http://xdsoft.net/jqplugins/datetimepicker/)
  */
 
 (function ($) {
@@ -46,26 +47,6 @@
             })
         }
     });
-    /*extend ec6*/
-    String.prototype.unix2human = function () {
-        return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
-    };
-    Number.prototype.unix2human = function () {
-        return $.lc4e.Lc4eToDate.unix2human(this);
-    };
-    String.prototype.trimEnd = function (trimStr) {
-        if (!trimStr) {
-            return this;
-        }
-        var temp = this;
-        while (true) {
-            if (temp.substr(temp.length - trimStr.length, trimStr.length) != trimStr) {
-                break;
-            }
-            temp = temp.substr(0, temp.length - trimStr.length);
-        }
-        return temp;
-    };
     /*  fix for ie8- */
     if (!window.getComputedStyle) {
         window.getComputedStyle = function (el, pseudo) {
@@ -96,9 +77,6 @@
             return -1;
         };
     }
-    Date.prototype.countDaysInMonth = function () {
-        return new Date(this.getFullYear(), this.getMonth() + 1, 0).getDate();
-    };
 
     /* animate scroll */
     /* defines various easing effects*/
@@ -459,7 +437,7 @@
                     }
                 },
                 create: function (options) {
-                    if (query.hasOwnProperty('onHidden') && typeof query.onHidden === 'function') {
+                    if (typeof query.onHidden === 'function') {
                         $module.data('onHidden', options.onHidden);
                         options.onHidden = function (modal) {
                             $module.data('onHidden').call($module, modal);
@@ -795,17 +773,24 @@
                     $form.data('fieldsInfo', {});
                     var data = {
                         onValid: function () {
-                            $(this).closest('.field').removeClass('error').addClass('success');
-                            delete $form.data('fieldsInfo')[$(this).attr('name')];
+                            var $this = $(this), $field = $this.closest('.field');
+                            $field.removeClass('error').addClass('success');
+                            delete $form.data('fieldsInfo')[$this.attr('name')];
                         },
                         onInvalid: function () {
-                            $(this).closest('.field').removeClass('success');
-                            $form.data('fieldsInfo')[$(this).attr('name')] = $(this).attr('prompt') ? $(this).attr('prompt') : $(this).closest('.fieldName').html();
+                            var $this = $(this), $field = $this.closest('.field');
+                            $field.removeClass('success');
+                            $form.data('fieldsInfo')[$this.attr('name')] = $this.attr('prompt') ? $this.attr('prompt') : $field.prev().find('label.fieldName').html();
                         }
-                    }, validate = {}, $field = $form.find('.fieldValue');
+                    }, validate = {};
+                    $form.find('input.fieldValue:not([type="checkbox"]):not([type="radio"]):last').on('keydown', function (e) {
+                        if (e.which == 13 || e.keyCode == 13) {
+                            $form.Lc4eForm('submit');
+                        }
+                    });
                     $field.each(function () {
                         var $this = $(this),
-                            rules = $this.attr('rules'),
+                            rules = $this.attr('data-rules'),
                             name = $this.attr('name');
                         rules ? (rules = new Function("return " + rules)()) : (rules = []);
                         validate[name] = {};
@@ -827,9 +812,29 @@
                             $(this).find('.content').html($(modal).attr('data-content'));
                         }
                     });
+                    module.bindEvent();
+                },
+                bindEvent: function () {
+                    $form.find('button.lc4eSubmit').off('click').on('click', function (event) {
+                        var $this = $(this);
+                        $this.removeClass('loading').prop('disabled', false);
+                        $form.Lc4eForm('submit', {
+                            success: function () {
+                                window.location.href = "/";
+                            },
+                            error: function () {
+                                $this.removeClass('loading').prop('disabled', false);
+                            }
+                        })
+                    });
+                    $form.find('button.lc4eReset').off('click').on('click', function (event) {
+                        var $this = $(this);
+                        $this.addClass('loading').prop('disabled', true);
+                        $form.Lc4eForm('reset');
+                        $this.removeClass('loading').prop('disabled', false);
+                    });
                 },
                 reset: function () {
-
                     $form.data('fieldsInfo', {}).popup('hide');
 
                     $field.each(function () {
@@ -843,7 +848,7 @@
                     if ($form.form('is valid')) {
                         $form.popup('hide');
                         $.Lc4eAjax({
-                                url: options.url,
+                                url: options.url ? options.url : $form.attr('data-url'),
                                 data: $form.form('get values'),
                                 success: function (data) {
                                     $.Lc4eResolveMessage(data, options.success, options.error);
@@ -853,7 +858,7 @@
                     } else {
                         var errorinfo = $form.data('fieldsInfo'), content = "";
                         for (var i in errorinfo) {
-                            content += i + " is invalid\n";
+                            content += '<div class="nobr">' + errorinfo[i] + ' is invalid</div>\n';
                         }
                         $form.attr('data-content', content);
 
@@ -1066,7 +1071,6 @@
     $.fn.Lc4eScroller.settings = {
         namespace: 'Lc4eScroller'
     };
-
     $.fn.Lc4eDateTimePicker = function (opt) {
         var query = arguments[0],
             KEYMAP = $.fn.Lc4eDateTimePicker.settings.KEY,
@@ -1123,7 +1127,7 @@
                         timepicker = $('<div class="datetimepicker_timepicker active"><button type="button" class="datetimepicker_prev"></button><div class="datetimepicker_time_box"></div><button type="button" class="datetimepicker_next"></button></div>'),
                         timeboxparent = timepicker.find('.datetimepicker_time_box').eq(0),
                         timebox = $('<div class="datetimepicker_time_variant"></div>'),
-                        applyButton = $('<button type="button" class="datetimepicker_save_selected blue-gradient-button">Save Selected</button>'),
+                        applyButton = $('<button type="button" class="datetimepicker_save_selected ui button">Save Selected</button>'),
                         monthselect = $('<div class="datetimepicker_select datetimepicker_monthselect"><div></div></div>'),
                         yearselect = $('<div class="datetimepicker_select datetimepicker_yearselect"><div></div></div>'),
                         triggerAfterOpen = false,
@@ -1278,7 +1282,7 @@
                                 var splitData = $.map(value.split(','), $.trim),
                                     exDesc,
                                     hDate = $.lc4e.HighlightedDate(Date.parseDate(splitData[0], options.formatDate), splitData[1], splitData[2]), // date, desc, style
-                                    keyDate = hDate.date.dateFormat(options.formatDate);
+                                    keyDate = hDate.date.format(options.formatDate);
                                 if (highlightedDates[keyDate] !== undefined) {
                                     exDesc = highlightedDates[keyDate].desc;
                                     if (exDesc && exDesc.length && hDate.desc && hDate.desc.length) {
@@ -1306,7 +1310,7 @@
 
                                 while (dateTest <= dateEnd) {
                                     hDate = $.lc4e.HighlightedDate(dateTest, desc, style);
-                                    keyDate = dateTest.dateFormat(options.formatDate);
+                                    keyDate = dateTest.format(options.formatDate);
                                     dateTest.setDate(dateTest.getDate() + 1);
                                     if (highlightedDates[keyDate] !== undefined) {
                                         exDesc = highlightedDates[keyDate].desc;
@@ -1375,11 +1379,11 @@
                         }
 
                         if (options.minDate && /^[\+\-](.*)$/.test(options.minDate)) {
-                            options.minDate = _datetimepicker_datetime.strToDateTime(options.minDate).dateFormat(options.formatDate);
+                            options.minDate = _datetimepicker_datetime.strToDateTime(options.minDate).format(options.formatDate);
                         }
 
                         if (options.maxDate && /^[\+\-](.*)$/.test(options.maxDate)) {
-                            options.maxDate = _datetimepicker_datetime.strToDateTime(options.maxDate).dateFormat(options.formatDate);
+                            options.maxDate = _datetimepicker_datetime.strToDateTime(options.maxDate).format(options.formatDate);
                         }
 
                         applyButton.toggle(options.showApplyButton);
@@ -1488,7 +1492,7 @@
                                                 return item > 9 ? item : '0' + item;
                                             }).join(':'));
                                         } else {
-                                            $(this).val((_datetimepicker_datetime.now()).dateFormat(options.format));
+                                            $(this).val((_datetimepicker_datetime.now()).format(options.format));
                                         }
 
                                         $datetimepicker.data('datetimepicker_datetime').setCurrentTime($(this).val());
@@ -1701,7 +1705,7 @@
                         };
 
                         _this.str = function () {
-                            return _this.currentTime.dateFormat(options.format);
+                            return _this.currentTime.format(options.format);
                         };
                         _this.currentTime = this.now();
                     };
@@ -1875,7 +1879,7 @@
 
                                     if ((maxDate !== false && start > maxDate) || (minDate !== false && start < minDate) || (customDateSettings && customDateSettings[0] === false)) {
                                         classes.push('datetimepicker_disabled');
-                                    } else if (options.disabledDates.indexOf(start.dateFormat(options.formatDate)) !== -1) {
+                                    } else if (options.disabledDates.indexOf(start.format(options.formatDate)) !== -1) {
                                         classes.push('datetimepicker_disabled');
                                     } else if (options.disabledWeekDays.indexOf(day) !== -1) {
                                         classes.push('datetimepicker_disabled');
@@ -1889,20 +1893,20 @@
                                         classes.push('datetimepicker_other_month');
                                     }
 
-                                    if ((options.defaultSelect || $datetimepicker.data('changed')) && _datetimepicker_datetime.currentTime.dateFormat(options.formatDate) === start.dateFormat(options.formatDate)) {
+                                    if ((options.defaultSelect || $datetimepicker.data('changed')) && _datetimepicker_datetime.currentTime.format(options.formatDate) === start.format(options.formatDate)) {
                                         classes.push('datetimepicker_current');
                                     }
 
-                                    if (today.dateFormat(options.formatDate) === start.dateFormat(options.formatDate)) {
+                                    if (today.format(options.formatDate) === start.format(options.formatDate)) {
                                         classes.push('datetimepicker_today');
                                     }
 
-                                    if (start.getDay() === 0 || start.getDay() === 6 || options.weekends.indexOf(start.dateFormat(options.formatDate)) !== -1) {
+                                    if (start.getDay() === 0 || start.getDay() === 6 || options.weekends.indexOf(start.format(options.formatDate)) !== -1) {
                                         classes.push('datetimepicker_weekend');
                                     }
 
-                                    if (options.highlightedDates[start.dateFormat(options.formatDate)] !== undefined) {
-                                        hDate = options.highlightedDates[start.dateFormat(options.formatDate)];
+                                    if (options.highlightedDates[start.format(options.formatDate)] !== undefined) {
+                                        hDate = options.highlightedDates[start.format(options.formatDate)];
                                         classes.push(hDate.style === undefined ? 'datetimepicker_highlighted_default' : hDate.style);
                                         description = hDate.desc === undefined ? '' : hDate.desc;
                                     }
@@ -1972,7 +1976,7 @@
                                     if (parseInt(today.getHours(), 10) === parseInt(h, 10) && parseInt(today.getMinutes(), 10) === parseInt(m, 10)) {
                                         classes.push('datetimepicker_today');
                                     }
-                                    time += '<div class="datetimepicker_time ' + classes.join(' ') + '" data-hour="' + h + '" data-minute="' + m + '">' + now.dateFormat(options.formatTime) + '</div>';
+                                    time += '<div class="datetimepicker_time ' + classes.join(' ') + '" data-hour="' + h + '" data-minute="' + m + '">' + now.format(options.formatTime) + '</div>';
                                 };
 
                                 if (!options.allowTimes || !$.isArray(options.allowTimes) || !options.allowTimes.length) {
@@ -2376,7 +2380,70 @@
             }
         });
     };
+    $.fn.Lc4eTransition = function (parameters) {
+        var query = arguments[0],
+            methodInvoked = (typeof query == 'string'),
+            queryArguments = arguments[1];
+        return this.each(function () {
+            var settings = methodInvoked ? $.extend({}, $.fn.Lc4eTransition.settings.config) : $.extend({}, $.fn.Lc4eTransition.settings.config, query),
+                $module = $(this),
+                namespace = $.fn.Lc4eTransition.settings.namespace,
+                module;
+            module = {
+                initialize: function () {
+                    var originStatus = $module.is(':visible');
+                    $module.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                            if (settings.animation.indexOf('in') > -1) {
+                                module.show();
+                            } else if (settings.animation.indexOf('out') > -1) {
+                                module.hide();
+                            } else {
+                                if (originStatus) {
+                                    module.hide();
+                                } else {
+                                    module.show();
+                                }
+                            }
+                            settings.onComplete.call($module);
+                        }
+                    );
+                    $module.show();
+                    settings.onStart.call($module);
+                    $module.addClass(settings.animation);
+                },
+                hide: function () {
+                    $module.removeClass('out').hide();
+                    settings.onHide.call($module);
+                },
+                show: function () {
+                    $module.removeClass('in').show();
+                    settings.onShow.call($module);
+                }
+            };
+            if (methodInvoked) {
+                settings.animation = query;
+            }
+            module.initialize();
+        });
+    };
+    $.fn.Lc4eTransition.settings = {
+        namespace: 'Lc4eTransition',
+        config: {
+            animation: 'fade',
+            onShow: function () {
 
+            },
+            onHide: function () {
+
+            },
+            onStart: function () {
+
+            },
+            onComplete: function () {
+
+            }
+        }
+    };
     $.fn.Lc4eDateTimePicker.settings = {
         namespace: 'Lc4eDateTimePicker',
         KEY: {
@@ -2841,9 +2908,9 @@
             lang: 'en',
             rtl: false,
 
-            format: 'Y/m/d H:i',
-            formatTime: 'H:i',
-            formatDate: 'Y/m/d',
+            format: 'yyyy/MM/dd hh:mm',
+            formatTime: 'hh:mm',
+            formatDate: 'yyyy/MM/dd',
 
             startDate: false, // new Date(), '1986/12/08', '-1970/01/05','-1970/01/05',
             step: 60,
@@ -2911,7 +2978,7 @@
 
             lazyInit: false,
             mask: false,
-            validateOnBlur: true,
+            validateOnBlur: false,
             allowBlank: true,
             yearStart: 1950,
             yearEnd: 2050,
@@ -3176,9 +3243,7 @@
                 $.Lc4eLoading('hide');
             };
             return $.ajax(data);
-        }
-
-        ,
+        },
         Lc4eResolveMessage: function (returnVal, success, error) {
             if (returnVal) {
                 $.Lc4eModal({
@@ -3199,16 +3264,13 @@
          */
         Lc4eRandom: function () {
             return (Math.random().toString(16) + '000000000').substr(2, 8);
-        }
-        ,
+        },
         Lc4eStars: function (options) {
             return $('body').Lc4eStars(options);
-        }
-        ,
+        },
         Lc4eModal: function (options) {
             return $("body").Lc4eModal(options);
-        }
-        ,
+        },
         Lc4eDimmer: function (options) {
             if (options) {
                 options.type = 'page';
@@ -3228,7 +3290,6 @@
             return requestAnimation(callback);
         }
     });
-
 
     $.lc4e.common = function () {
         var $menu = $('#menu'), $configTool = $('#config-tool-options'), $floatTool = $('#floatTools');
@@ -3303,7 +3364,6 @@
                 $menu.removeClass('fixed');
                 clearTimeout($floatTool.data('timer'));
                 $floatTool.data('timer', setTimeout(function () {
-                    console.log('fade out ');
                     $floatTool.transition('fade left out');
                 }, 800));
 
@@ -3397,275 +3457,62 @@
             }
         })
     });
-    Date.parseFunctions = {count: 0};
-    Date.parseRegexes = [];
-    Date.formatFunctions = {count: 0};
-    Date.prototype.dateFormat = function (b) {
-        if (b == "unixtime") {
-            return parseInt(this.getTime() / 1000);
-        }
-        if (Date.formatFunctions[b] == null) {
-            Date.createNewFormat(b);
-        }
-        var a = Date.formatFunctions[b];
-        return this[a]();
+    Date.prototype.countDaysInMonth = function () {
+        return new Date(this.getFullYear(), this.getMonth() + 1, 0).getDate();
     };
-    Date.createNewFormat = function (format) {
-        var funcName = "format" + Date.formatFunctions.count++;
-        Date.formatFunctions[format] = funcName;
-        var codePrefix = "Date.prototype." + funcName + " = function() {return ";
-        var code = "";
-        var special = false;
-        var ch = "";
-        for (var i = 0; i < format.length; ++i) {
-            ch = format.charAt(i);
-            if (!special && ch == "\\") {
-                special = true;
-            } else {
-                if (special) {
-                    special = false;
-                    code += "'" + String.escape(ch) + "' + ";
-                } else {
-                    code += Date.getFormatCode(ch);
-                }
+    /*extend ec6*/
+    String.prototype.unix2human = function () {
+        return $.lc4e.Lc4eToDate.unix2human(parseInt(this));
+    };
+    Number.prototype.unix2human = function () {
+        return $.lc4e.Lc4eToDate.unix2human(this);
+    };
+    String.prototype.trimEnd = function (trimStr) {
+        if (!trimStr) {
+            return this;
+        }
+        var temp = this;
+        while (true) {
+            if (temp.substr(temp.length - trimStr.length, trimStr.length) != trimStr) {
+                break;
+            }
+            temp = temp.substr(0, temp.length - trimStr.length);
+        }
+        return temp;
+    };
+    Date.prototype.format = function (format) {
+        var o = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            "S": this.getMilliseconds()
+        };
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4
+                - RegExp.$1.length));
+        }
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                    ? o[k]
+                    : ("00" + o[k]).substr(("" + o[k]).length));
             }
         }
-        if (code.length == 0) {
-            code = "\"\"";
-        } else {
-            code = code.substring(0, code.length - 3);
-        }
-        eval(codePrefix + code + ";}");
+        return format;
     };
-    Date.getFormatCode = function (a) {
-        switch (a) {
-            case"d":
-                return "String.leftPad(this.getDate(), 2, '0') + ";
-            case"D":
-                return "Date.dayNames[this.getDay()].substring(0, 3) + ";
-            case"j":
-                return "this.getDate() + ";
-            case"l":
-                return "Date.dayNames[this.getDay()] + ";
-            case"S":
-                return "this.getSuffix() + ";
-            case"w":
-                return "this.getDay() + ";
-            case"z":
-                return "this.getDayOfYear() + ";
-            case"W":
-                return "this.getWeekOfYear() + ";
-            case"F":
-                return "Date.monthNames[this.getMonth()] + ";
-            case"m":
-                return "String.leftPad(this.getMonth() + 1, 2, '0') + ";
-            case"M":
-                return "Date.monthNames[this.getMonth()].substring(0, 3) + ";
-            case"n":
-                return "(this.getMonth() + 1) + ";
-            case"t":
-                return "this.getDaysInMonth() + ";
-            case"L":
-                return "(this.isLeapYear() ? 1 : 0) + ";
-            case"Y":
-                return "this.getFullYear() + ";
-            case"y":
-                return "('' + this.getFullYear()).substring(2, 4) + ";
-            case"a":
-                return "(this.getHours() < 12 ? 'am' : 'pm') + ";
-            case"A":
-                return "(this.getHours() < 12 ? 'AM' : 'PM') + ";
-            case"g":
-                return "((this.getHours() %12) ? this.getHours() % 12 : 12) + ";
-            case"G":
-                return "this.getHours() + ";
-            case"h":
-                return "String.leftPad((this.getHours() %12) ? this.getHours() % 12 : 12, 2, '0') + ";
-            case"H":
-                return "String.leftPad(this.getHours(), 2, '0') + ";
-            case"i":
-                return "String.leftPad(this.getMinutes(), 2, '0') + ";
-            case"s":
-                return "String.leftPad(this.getSeconds(), 2, '0') + ";
-            case"O":
-                return "this.getGMTOffset() + ";
-            case"T":
-                return "this.getTimezone() + ";
-            case"Z":
-                return "(this.getTimezoneOffset() * -60) + ";
-            default:
-                return "'" + String.escape(a) + "' + ";
-        }
-    };
+
     Date.parseDate = function (a, c) {
-        if (c == "unixtime") {
-            return new Date(!isNaN(parseInt(a)) ? parseInt(a) * 1000 : 0);
-        }
-        if (Date.parseFunctions[c] == null) {
-            Date.createParser(c);
-        }
-        var b = Date.parseFunctions[c];
-        return Date[b](a);
+        return new Date(Date.parse(a.replace(/-/g, '/').replace(/T/g, ' '))).format(c);
     };
-    Date.createParser = function (format) {
-        var funcName = "parse" + Date.parseFunctions.count++;
-        var regexNum = Date.parseRegexes.length;
-        var currentGroup = 1;
-        Date.parseFunctions[format] = funcName;
-        var code = "Date." + funcName + " = function(input) {\nvar y = -1, m = -1, d = -1, h = -1, i = -1, s = -1, z = -1;\nvar d = new Date();\ny = d.getFullYear();\nm = d.getMonth();\nd = d.getDate();\nvar results = input.match(Date.parseRegexes[" + regexNum + "]);\nif (results && results.length > 0) {";
-        var regex = "";
-        var special = false;
-        var ch = "";
-        for (var i = 0; i < format.length; ++i) {
-            ch = format.charAt(i);
-            if (!special && ch == "\\") {
-                special = true;
-            } else {
-                if (special) {
-                    special = false;
-                    regex += String.escape(ch);
-                } else {
-                    obj = Date.formatCodeToRegex(ch, currentGroup);
-                    currentGroup += obj.g;
-                    regex += obj.s;
-                    if (obj.g && obj.c) {
-                        code += obj.c;
-                    }
-                }
-            }
-        }
-        code += "if (y > 0 && z > 0){\nvar doyDate = new Date(y,0);\ndoyDate.setDate(z);\nm = doyDate.getMonth();\nd = doyDate.getDate();\n}";
-        code += "if (y > 0 && m >= 0 && d > 0 && h >= 0 && i >= 0 && s >= 0)\n{return new Date(y, m, d, h, i, s);}\nelse if (y > 0 && m >= 0 && d > 0 && h >= 0 && i >= 0)\n{return new Date(y, m, d, h, i);}\nelse if (y > 0 && m >= 0 && d > 0 && h >= 0)\n{return new Date(y, m, d, h);}\nelse if (y > 0 && m >= 0 && d > 0)\n{return new Date(y, m, d);}\nelse if (y > 0 && m >= 0)\n{return new Date(y, m);}\nelse if (y > 0)\n{return new Date(y);}\n}return null;}";
-        Date.parseRegexes[regexNum] = new RegExp("^" + regex + "$", 'i');
-        eval(code);
-    };
-    Date.formatCodeToRegex = function (b, a) {
-        switch (b) {
-            case"D":
-                return {g: 0, c: null, s: "(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)"};
-            case"j":
-            case"d":
-                return {g: 1, c: "d = parseInt(results[" + a + "], 10);\n", s: "(\\d{1,2})"};
-            case"l":
-                return {g: 0, c: null, s: "(?:" + Date.dayNames.join("|") + ")"};
-            case"S":
-                return {g: 0, c: null, s: "(?:st|nd|rd|th)"};
-            case"w":
-                return {g: 0, c: null, s: "\\d"};
-            case"z":
-                return {g: 1, c: "z = parseInt(results[" + a + "], 10);\n", s: "(\\d{1,3})"};
-            case"W":
-                return {g: 0, c: null, s: "(?:\\d{2})"};
-            case"F":
-                return {
-                    g: 1,
-                    c: "m = parseInt(Date.monthNumbers[results[" + a + "].substring(0, 3)], 10);\n",
-                    s: "(" + Date.monthNames.join("|") + ")"
-                };
-            case"M":
-                return {
-                    g: 1,
-                    c: "m = parseInt(Date.monthNumbers[results[" + a + "]], 10);\n",
-                    s: "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"
-                };
-            case"n":
-            case"m":
-                return {g: 1, c: "m = parseInt(results[" + a + "], 10) - 1;\n", s: "(\\d{1,2})"};
-            case"t":
-                return {g: 0, c: null, s: "\\d{1,2}"};
-            case"L":
-                return {g: 0, c: null, s: "(?:1|0)"};
-            case"Y":
-                return {g: 1, c: "y = parseInt(results[" + a + "], 10);\n", s: "(\\d{4})"};
-            case"y":
-                return {
-                    g: 1,
-                    c: "var ty = parseInt(results[" + a + "], 10);\ny = ty > Date.y2kYear ? 1900 + ty : 2000 + ty;\n",
-                    s: "(\\d{1,2})"
-                };
-            case"a":
-                return {
-                    g: 1,
-                    c: "if (results[" + a + "] == 'am') {\nif (h == 12) { h = 0; }\n} else { if (h < 12) { h += 12; }}",
-                    s: "(am|pm)"
-                };
-            case"A":
-                return {
-                    g: 1,
-                    c: "if (results[" + a + "] == 'AM') {\nif (h == 12) { h = 0; }\n} else { if (h < 12) { h += 12; }}",
-                    s: "(AM|PM)"
-                };
-            case"g":
-            case"G":
-            case"h":
-            case"H":
-                return {g: 1, c: "h = parseInt(results[" + a + "], 10);\n", s: "(\\d{1,2})"};
-            case"i":
-                return {g: 1, c: "i = parseInt(results[" + a + "], 10);\n", s: "(\\d{2})"};
-            case"s":
-                return {g: 1, c: "s = parseInt(results[" + a + "], 10);\n", s: "(\\d{2})"};
-            case"O":
-                return {g: 0, c: null, s: "[+-]\\d{4}"};
-            case"T":
-                return {g: 0, c: null, s: "[A-Z]{3}"};
-            case"Z":
-                return {g: 0, c: null, s: "[+-]\\d{1,5}"};
-            default:
-                return {g: 0, c: null, s: String.escape(b)};
-        }
-    };
-    Date.prototype.getTimezone = function () {
-        return this.toString().replace(/^.*? ([A-Z]{3}) [0-9]{4}.*$/, "$1").replace(/^.*?\(([A-Z])[a-z]+ ([A-Z])[a-z]+ ([A-Z])[a-z]+\)$/, "$1$2$3");
-    };
-    Date.prototype.getGMTOffset = function () {
-        return (this.getTimezoneOffset() > 0 ? "-" : "+") + String.leftPad(Math.floor(Math.abs(this.getTimezoneOffset()) / 60), 2, "0") + String.leftPad(Math.abs(this.getTimezoneOffset()) % 60, 2, "0");
-    };
-    Date.prototype.getDayOfYear = function () {
-        var a = 0;
-        Date.daysInMonth[1] = this.isLeapYear() ? 29 : 28;
-        for (var b = 0; b < this.getMonth(); ++b) {
-            a += Date.daysInMonth[b];
-        }
-        return a + this.getDate();
-    };
-    Date.prototype.getWeekOfYear = function () {
-        var b = this.getDayOfYear() + (4 - this.getDay());
-        var a = new Date(this.getFullYear(), 0, 1);
-        var c = (7 - a.getDay() + 4);
-        return String.leftPad(Math.ceil((b - c) / 7) + 1, 2, "0");
-    };
+
     Date.prototype.isLeapYear = function () {
         var a = this.getFullYear();
         return ((a & 3) == 0 && (a % 100 || (a % 400 == 0 && a)));
     };
-    Date.prototype.getFirstDayOfMonth = function () {
-        var a = (this.getDay() - (this.getDate() - 1)) % 7;
-        return (a < 0) ? (a + 7) : a;
-    };
-    Date.prototype.getLastDayOfMonth = function () {
-        var a = (this.getDay() + (Date.daysInMonth[this.getMonth()] - this.getDate())) % 7;
-        return (a < 0) ? (a + 7) : a;
-    };
-    Date.prototype.getDaysInMonth = function () {
-        Date.daysInMonth[1] = this.isLeapYear() ? 29 : 28;
-        return Date.daysInMonth[this.getMonth()];
-    };
-    Date.prototype.getSuffix = function () {
-        switch (this.getDate()) {
-            case 1:
-            case 21:
-            case 31:
-                return "st";
-            case 2:
-            case 22:
-                return "nd";
-            case 3:
-            case 23:
-                return "rd";
-            default:
-                return "th";
-        }
-    };
+
     String.escape = function (a) {
         return a.replace(/('|\\)/g, "\\$1");
     };
@@ -3678,36 +3525,5 @@
             a = c + a;
         }
         return a;
-    };
-    Date.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    Date.monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    Date.dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    Date.y2kYear = 50;
-    Date.monthNumbers = {
-        Jan: 0,
-        Feb: 1,
-        Mar: 2,
-        Apr: 3,
-        May: 4,
-        Jun: 5,
-        Jul: 6,
-        Aug: 7,
-        Sep: 8,
-        Oct: 9,
-        Nov: 10,
-        Dec: 11
-    };
-    Date.patterns = {
-        ISO8601LongPattern: "Y-m-d H:i:s",
-        ISO8601ShortPattern: "Y-m-d",
-        ShortDatePattern: "n/j/Y",
-        LongDatePattern: "l, F d, Y",
-        FullDateTimePattern: "l, F d, Y g:i:s A",
-        MonthDayPattern: "F d",
-        ShortTimePattern: "g:i A",
-        LongTimePattern: "g:i:s A",
-        SortableDateTimePattern: "Y-m-d\\TH:i:s",
-        UniversalSortableDateTimePattern: "Y-m-d H:i:sO",
-        YearMonthPattern: "F, Y"
     };
 }());

@@ -483,3 +483,7 @@ body {
 .ui.form .inline.fields .field .fieldName {
     margin: auto;
 }
+
+.ui.popup .nobr {
+    white-space: nowrap;
+}

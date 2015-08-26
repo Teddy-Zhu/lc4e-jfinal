@@ -1,13 +1,17 @@
 <style type="text/css">
-    #signForm {
-        margin-top: 2.5em;
+    #signInForm {
+        margin-top: 3em;
     }
 
-    #signForm .operatepanel {
+    #signInForm .operatepanel {
         margin-top: 2em;
     }
 
-    .ui.icon.input .eye.icon {
+    #signInForm.ui.form .inline.fields {
+        margin: 1.5em 0 1.5em;
+    }
+
+    #signInForm .ui.icon.input .eye.icon {
         cursor: pointer;
     }
 
@@ -20,15 +24,14 @@
         border-radius: .28571429rem;
         box-shadow: 0 0 0 0 transparent inset;
     }
-
 </style>
 <div class="ui nobox padding segment flipInY animated">
     <h2 class="ui center aligned icon header">
-        <i class="circular users icon"></i>
-        Join in ${SiteName}
+        <i class="circular massive home icon"></i>
+        Sign in ${SiteName},Welcome Back!
     </h2>
 
-    <div id="signInForm" class="ui form" observe-on="blur">
+    <div id="signInForm" class="ui form" observe-on="blur" data-url="/member/signin">
         <div class="inline fields">
             <div class="four wide field">
                 <label class="fieldName">UserName</label>
@@ -36,7 +39,7 @@
             <div class="ten wide field">
                 <div class="ui icon input">
                     <input id="user.name" class="fieldValue" name="user.name" type="text"
-                           placeholder="your login name" rules="[{type:'empty'},{type:'minLength[4]'}]"/>
+                           placeholder="your login name" data-rules="[{type:'empty'},{type:'minLength[4]'}]"/>
                     <i class="user icon"></i>
                 </div>
             </div>
@@ -48,11 +51,11 @@
             <div class="ten wide field">
                 <div class="ui icon input">
                     <input id="user.password" name="user.password" class="fieldValue" type="password"
-                           placeholder="your password" rules="[{type:'empty'}]"/>
+                           placeholder="your password" data-rules="[{type:'empty'}]"/>
                     <i class="eye icon link"></i></div>
             </div>
         </div>
-        <%if(RegisterCaptcha){%>
+        <%if(Captcha){%>
         <div class="inline fields">
             <div class="four wide field">
                 <label class="fieldName">Verification Code</label>
@@ -60,7 +63,7 @@
             <div class="six wide field">
                 <div class="ui input">
                     <input id="captcha" name="captcha" class="fieldValue" type="text"
-                           rules="[{type:'empty'},{type:'exactLength[4]'}]"/>
+                           data-rules="[{type:'empty'},{type:'exactLength[4]'}]"/>
                 </div>
             </div>
             <div class="four wide field">
@@ -75,7 +78,7 @@
             <div class="ten wide field">
                 <div class="ui toggle checkbox">
                     <input id="rememberMe" name="rememberMe" type="checkbox" class="fieldValue"
-                           rules="[{type:'empty'}]">
+                           data-rules="[{type:'empty'}]">
                     <label>One Month</label>
                 </div>
             </div>
@@ -83,8 +86,11 @@
 
         <div class="inline fields operatepanel">
             <div class="sixteen wide field ui centered grid">
-                <button id="signIn" class="ui primary button">JoinIn</button>
-                <button id="reset" class="ui basic button">Reset</button>
+                <div class="ui buttons">
+                    <button class="ui lc4eSubmit primary button">SignIn</button>
+                    <div class="or"></div>
+                    <button class="ui button lc4eReset">Reset</button>
+                </div>
             </div>
         </div>
     </div>

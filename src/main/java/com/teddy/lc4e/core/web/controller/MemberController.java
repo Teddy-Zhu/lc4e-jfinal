@@ -37,7 +37,6 @@ public class MemberController extends BaseController {
             @ValidateParam(value = "user.mail", minLen = 5, maxLen = 20,regex = StringTool.regExp_MAIL),
             @ValidateParam(value = "extend.phoneNumber", required = false, regex = StringTool.regExp_PhoneNumber),
             @ValidateParam(value = "extend.sign", required = false, maxLen = 50),
-            @ValidateParam(value = "extend.avatar", required = false, defaultValue = ""),
             @ValidateParam(value = "extend.birth", required = false, type = Date.class, defaultValue = ""),
             @ValidateParam(value = "captcha", defaultValue = "@@@@", maxLen = 4, minLen = 4)
     })
@@ -65,7 +64,7 @@ public class MemberController extends BaseController {
     @RequiresGuest
     public void signin() {
         User user = getModel(User.class, "user");
-        Sys_Common_Variable captcha = ComVarService.service.getComVarByName(Key.REGISTER_CAPTCHA);
+        Sys_Common_Variable captcha = ComVarService.service.getComVarByName(Key.CAPTCHA);
         if (captcha != null && captcha.getToBoolean(T_Sys_Common_Variable.value) && !Lc4eCaptchaRender.validate(getPara("captcha"))) {
             renderJson(new Message(captcha.getStr(T_Sys_Common_Variable.error)));
             return;

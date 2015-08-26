@@ -45,7 +45,7 @@ public class ViewController extends BaseController {
         String[] cate = new String[]{"Java", "Obj-C", "C", "C++", "IOS", "Android"};
         String[] users = new String[]{"Admin", "Test", "Myas", "Liakx", "Google", "vsss"};
         Date now = new Date();
-        List<Article> list = new ArrayList<Article>();
+        List<Article> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             list.add(new Article("/images/wireframe/image.png", new Popup("Matt", "Matt has been a member since July 2014"), "The friction between your thoughts and your code", cate[new Random().nextInt(cate.length - 1)], users[new Random().nextInt(users.length - 1)], new Random().nextInt(100),
                     RelativeDate.format(RelativeDate.randomDate("2015-05-11 13:00:00", now), now), users[new Random().nextInt(users.length - 1)]));
@@ -72,13 +72,15 @@ public class ViewController extends BaseController {
     }
 
     @RequiresGuest
-    @SetComVar(value = Key.REGISTER_CAPTCHA, type = Boolean.class)
+    @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
     @SetPJAX
     public void SignIn() {
         render("pages/signin");
     }
 
-
+    @SetPJAX
+    @RequiresGuest
+    @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
     public void SignUp() {
         render("pages/signup");
     }
