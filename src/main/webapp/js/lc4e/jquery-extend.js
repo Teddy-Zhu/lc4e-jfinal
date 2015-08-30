@@ -12,6 +12,18 @@
     $.lc4e = $.lc4e || {};
     $.extend($.lc4e, {
         version: '1.0',
+        popstate: function () {
+            window.onpopstate = function (e) {
+                var state = e.state;
+                if (state) {
+                    $(state.data).replaceAll($(state.target));
+                    document.title = state.title;
+                    if (state.animate) {
+                        $.lc4e.Lc4ePJAX.successFunc[state.target + state.url].call();
+                    }
+                }
+            }
+        },
         Lc4eToDate: {
             unix2human: function (unixtime) {
                 var dateObj = new Date(unixtime);
@@ -1127,7 +1139,9 @@
                         timepicker = $('<div class="datetimepicker_timepicker active"><button type="button" class="datetimepicker_prev"></button><div class="datetimepicker_time_box"></div><button type="button" class="datetimepicker_next"></button></div>'),
                         timeboxparent = timepicker.find('.datetimepicker_time_box').eq(0),
                         timebox = $('<div class="datetimepicker_time_variant"></div>'),
-                        applyButton = $('<button type="button" class="datetimepicker_save_selected ui button">Save Selected</button>'),
+                        buttons = $('<div class="ui buttons"></div>'),
+                        applyButton = $('<button type="button" class="ui button">Save</button>'),
+                        clearButton = $('<button type="button" class="ui button">Clear</button>'),
                         monthselect = $('<div class="datetimepicker_select datetimepicker_monthselect"><div></div></div>'),
                         yearselect = $('<div class="datetimepicker_select datetimepicker_yearselect"><div></div></div>'),
                         triggerAfterOpen = false,
@@ -1387,7 +1401,7 @@
                         }
 
                         applyButton.toggle(options.showApplyButton);
-
+                        clearButton.toggle(options.showClearButton);
                         mounth_picker
                             .find('.datetimepicker_today_button')
                             .css('visibility', !options.todayButton ? 'hidden' : 'visible');
@@ -1536,11 +1550,12 @@
                         $datetimepicker
                             .append(copyright);
                     }
-
+                    buttons.append(applyButton)
+                        .append(clearButton);
                     datepicker
                         .append(mounth_picker)
                         .append(calendar)
-                        .append(applyButton);
+                        .append(buttons);
 
                     $(options.parentID)
                         .append($datetimepicker);
@@ -1718,6 +1733,10 @@
                         _datetimepicker_datetime.setCurrentTime(getCurrentValue());
                         $module.val(_datetimepicker_datetime.str());
                         $datetimepicker.trigger('close.' + namespace);
+                    });
+                    clearButton.on('click', function (e) {
+                        e.preventDefault();
+                        $module.val('');
                     });
                     mounth_picker
                         .find('.datetimepicker_today_button')
@@ -2998,7 +3017,8 @@
             beforeShowDay: null,
 
             enterLikeTab: true,
-            showApplyButton: false
+            showApplyButton: false,
+            showClearButton: true
         }
     };
     $.extend({
@@ -3168,7 +3188,7 @@
             } else if (data.pjax) {
                 data = $.extend(true, {
                     type: 'get',
-                    dataType: "html"
+                    dataType: "html",
                 }, data);
             } else {
                 data = $.extend(true, {
@@ -3189,6 +3209,27 @@
                 }
                 if (data.pjax) {
                     xhr.setRequestHeader('X-PJAX', true);
+                    var state = window.history.state;
+
+                    if (state) {
+                        if (state.target != data.target) {
+                            state.target = data.target;
+                            state.animate = false;
+                            state.data = $(data.target).prop('outerHTML');
+                            history.replaceState(state, document.title);
+                        }
+                    } else {
+                        state = {
+                            target: data.target,
+                            data: $(data.target).prop('outerHTML'),
+                            title: document.title,
+                            url: window.location.pathname
+                        };
+                        $.lc4e.Lc4ePJAX.active = true;
+                        $.lc4e.popstate();
+                        history.replaceState(state, document.title);
+                    }
+
                 }
                 if (typeof data.options.beforeSend === "function") {
                     data.options.beforeSend.call(this, xhr, settings);
@@ -3200,27 +3241,26 @@
 
             if (data.pjax && data.target) {
                 if (!$.lc4e.Lc4ePJAX.active) {
-                    window.onpopstate = function (e) {
-                        console.log(e);
-                        if (e.state) {
-                            $(e.state.data).replaceAll($(e.state.target));
-                            document.title = e.state.title;
-                            $.lc4e.Lc4ePJAX.successFunc[e.state.target + e.state.url].call();
-                            $('body').animatescroll({
-                                scrollSpeed: 500
-                            });
-                        }
-                    }
+                    $.lc4e.popstate();
                 }
                 data.success = function (resValue, textStatus) {
-                    $(data.target).html(resValue);
+                    if (data.pjax) {
+                        $('body').animatescroll({
+                            scrollSpeed: 500
+                        });
+                    }
+                    $(data.target).empty().html(resValue);
                     var state = {
                         target: data.target,
                         data: $(data.target).prop('outerHTML'),
                         title: document.title,
-                        url: $.lc4e.Lc4ePJAX.active ? data.url : window.location.pathname
+                        url: data.url
                     };
-                    $.lc4e.Lc4ePJAX.successFunc[state.target + state.url] = data.options.success;
+                    if (typeof data.animate === 'function') {
+                        data.animate.call(this, resValue, textStatus);
+                        $.lc4e.Lc4ePJAX.successFunc[state.target + state.url] = data.animate;
+                        state.animate = true;
+                    }
                     if ($.lc4e.Lc4ePJAX.active) {
                         history.pushState(state, document.title, data.url);
                     } else {
@@ -3243,7 +3283,8 @@
                 $.Lc4eLoading('hide');
             };
             return $.ajax(data);
-        },
+        }
+        ,
         Lc4eResolveMessage: function (returnVal, success, error) {
             if (returnVal) {
                 $.Lc4eModal({
@@ -3258,19 +3299,23 @@
                     }
                 })
             }
-        },
+        }
+        ,
         /**
          * @return {string}
          */
         Lc4eRandom: function () {
             return (Math.random().toString(16) + '000000000').substr(2, 8);
-        },
+        }
+        ,
         Lc4eStars: function (options) {
             return $('body').Lc4eStars(options);
-        },
+        }
+        ,
         Lc4eModal: function (options) {
             return $("body").Lc4eModal(options);
-        },
+        }
+        ,
         Lc4eDimmer: function (options) {
             if (options) {
                 options.type = 'page';
@@ -3278,11 +3323,14 @@
                 options = {type: 'page'}
             }
             return $('body').Lc4eDimmer(options);
-        },
+        }
+        ,
         Lc4eToDate: $.lc4e.Lc4eToDate.unix2human,
         Lc4eProgress: function (option, data) {
             return $("body").Lc4eProgress(option, data);
-        },
+        }
+
+        ,
         requestAnimationFrame: function (callback) {
             var requestAnimation = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
                     window.setTimeout(callback, 0);
@@ -3296,22 +3344,10 @@
 
         $menu.find('.left.menu .logo').Lc4eHover('animated infinite spin');
 
-        $menu.find('[href]').on('click', function (e) {
+        $menu.find('div.button[href]').on('click', function (e) {
                 var $this = $(this), href = $this.attr('href'), title = $this.attr('title');
                 e.preventDefault();
-                $.Lc4eAjax({
-                    url: href,
-                    pjax: true,
-                    title: 'loading' + title,
-                    data: { //for ie disable cache
-                        rand: new Date().getTime()
-                    }
-                    ,
-                    target: '#mainContent',
-                    success: function (data) {
-
-                    }
-                })
+                window.location.href = href;
             }
         );
 
@@ -3335,7 +3371,7 @@
                 animation: "fly down",
                 duration: 500,
                 onComplete: function () {
-                    $(this).toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
+                    $menu.find('>.column>.allmenus').toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
                 }
             });
         });
@@ -3370,6 +3406,12 @@
             }
         });
 
+        $('#fixFooter').checkbox({
+            onChange: function (e) {
+                $('#content').toggleClass('footerFixed');
+                $('.ui.footer').toggleClass('fixed');
+            }
+        });
 
         $('#userItem').find('img.ui.image').popup({
             position: 'bottom center',
@@ -3386,6 +3428,22 @@
             }
         });
 
+        $('#colorBackground').checkbox({
+            onChange: function (e) {
+                if ($('#colorBackground').checkbox('is checked')) {
+                    $.Lc4eStars();
+                } else {
+                    $.Lc4eStars('destroy');
+                }
+            }
+        });
+        $('#boxedLayout').checkbox({
+            onChange: function (e) {
+                $('#articlelist').toggleClass('nobox');
+            }
+        });
+
+
         $('#gtop').on('click', function () {
             $.requestAnimationFrame(function () {
                 $('html').animatescroll({scrollSpeed: 2000, easing: 'easeOutBounce'})
@@ -3398,6 +3456,7 @@
             duration: 500
         });
     };
+
     $.lc4e.common.call();
 })
 (jQuery);

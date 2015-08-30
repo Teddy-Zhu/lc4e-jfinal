@@ -1,29 +1,40 @@
-<%
+<!---
 for(art in lists){
-%>
+--->
 <div class="item" style="display: none;">
     <div class="ui fluid tiny image hidden-mb">
-        <div class="ui blue ribbon label">${art.user}</div>
-        <img src="${art.imageUrl}" data-title="${art.popUp.title}" data-content="${art.popUp.content}">
+        <div class="ui blue ribbon label">
+            <beetl>art.user</beetl>
+        </div>
+        <img src="<beetl>art.imageUrl</beetl>" data-title="<beetl>art.popUp.title</beetl>"
+             data-content="<beetl>art.popUp.content</beetl>">
     </div>
     <div class="content">
-        <a class="header"><i class="red protect icon"></i>${art.articleTitle}</a>
-
+        <a class="header"><i class="red protect icon"></i>
+            <beetl>art.articleTitle</beetl>
+        </a>
         <div class="extra">
-            <a class="ui blue label hidden-pc">${art.user}</a>
-            <a class="ui teal label">${art.category}</a>
+            <a class="ui blue label hidden-pc">
+                <beetl>art.user</beetl>
+            </a>
+            <a class="ui teal label">
+                <beetl>art.category</beetl>
+            </a>
             <div class="ui transparent label">
-                <i class="calendar icon"></i>${art.publishTime}
+                <i class="calendar icon"></i>
+                <beetl>art.publishTime</beetl>
             </div>
             <div class="ui transparent label">
-                <i class="comments outline icon"></i>${art.comments}
+                <i class="comments outline icon"></i>
+                <beetl>art.comments</beetl>
             </div>
-
             <div class="ui transparent label">
                 <i class="comment icon"></i>Last Reply
             </div>
-            <a class="ui label">${art.lastCommentUser}</a>
+            <a class="ui label">
+                <beetl>art.lastCommentUser</beetl>
+            </a>
         </div>
     </div>
 </div>
-<%}%>
+<!---}--->

@@ -1,8 +1,10 @@
 package com.teddy.lc4e.core.web.controller;
 
+import com.jfinal.kit.StrKit;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.Method;
+import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.plugin.beetl.Lc4eCaptchaRender;
 import com.teddy.jfinal.tools.StringTool;
@@ -34,24 +36,23 @@ public class MemberController extends BaseController {
             @ValidateParam(value = "user.name", minLen = 4, maxLen = 12),
             @ValidateParam(value = "user.password", minLen = 6, maxLen = 20),
             @ValidateParam(value = "user.nick", minLen = 4, maxLen = 12),
-            @ValidateParam(value = "user.mail", minLen = 5, maxLen = 20,regex = StringTool.regExp_MAIL),
-            @ValidateParam(value = "extend.phoneNumber", required = false, regex = StringTool.regExp_PhoneNumber),
-            @ValidateParam(value = "extend.sign", required = false, maxLen = 50),
-            @ValidateParam(value = "extend.birth", required = false, type = Date.class, defaultValue = ""),
+            @ValidateParam(value = "user.mail", minLen = 5, maxLen = 20, regex = StringTool.regExp_MAIL),
+            @ValidateParam(value = "extend.phoneNumber", defaultValue = "", regex = StringTool.regExp_PhoneNumber),
+            @ValidateParam(value = "extend.sign", defaultValue = "", maxLen = 50),
+            @ValidateParam(value = "extend.birth", required = false, type = Date.class),
             @ValidateParam(value = "captcha", defaultValue = "@@@@", maxLen = 4, minLen = 4)
     })
     @ValidateComVar(name = Key.REGISTER, value = "false")
-    public void signup() {
-        User user;
-        User_Basicinfo basicInfo = null;
-        Sys_Common_Variable simpleregister = ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER);
-        if (simpleregister.getToBoolean(T_Sys_Common_Variable.value)) {
-            basicInfo = getModel(User_Basicinfo.class, "extend").enhancer();
+    public void signup() throws Lc4eException {
+        User user = getModel(User.class, "user").enhancer();
+        User_Basicinfo basicInfo = getModel(User_Basicinfo.class, "extend").enhancer();
+        //Sys_Common_Variable simpleregister = ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER);
+        UserService.service.createUser(user, basicInfo);
+        if (StrKit.notBlank(user.getStr(T_User.id))) {
+            renderJson(new Message(true, "register successfully"));
+        } else {
+            renderJson(new Message("register failed"));
         }
-        user = getModel(User.class, "user").enhancer();
-         UserService.service.createUser(user, basicInfo);
-
-        renderJson(user);
     }
 
     @ValidateParams({

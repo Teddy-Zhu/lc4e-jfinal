@@ -28,12 +28,12 @@ public class ViewController extends BaseController {
             @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
             @ValidateParam(value = "art", type = boolean.class, defaultValue = "false")
     })
-    @SetPJAX
     public void index() {
         setAttr("page", getPara("p"));
-        if (getParaToBoolean("art")) {
+        if (isPJAX()) {
             forwardAction("/Articles");
         } else {
+            setAttr("articles", getArticle(getParaToInt("p")));
             render("pages/index");
         }
     }
@@ -41,16 +41,7 @@ public class ViewController extends BaseController {
     @RequestMethod(Method.GET)
     @ValidateParam(value = "p", type = int.class, defaultValue = "1")
     public void Articles() {
-        Integer size = Integer.valueOf(ComVarService.service.getComVarValueByName("IndexPageSize"));
-        String[] cate = new String[]{"Java", "Obj-C", "C", "C++", "IOS", "Android"};
-        String[] users = new String[]{"Admin", "Test", "Myas", "Liakx", "Google", "vsss"};
-        Date now = new Date();
-        List<Article> list = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            list.add(new Article("/images/wireframe/image.png", new Popup("Matt", "Matt has been a member since July 2014"), "The friction between your thoughts and your code", cate[new Random().nextInt(cate.length - 1)], users[new Random().nextInt(users.length - 1)], new Random().nextInt(100),
-                    RelativeDate.format(RelativeDate.randomDate("2015-05-11 13:00:00", now), now), users[new Random().nextInt(users.length - 1)]));
-        }
-        setAttr("lists", list);
+        setAttr("lists", getArticle(getParaToInt("p")));
         render("ajax/_article");
     }
 
@@ -73,26 +64,36 @@ public class ViewController extends BaseController {
 
     @RequiresGuest
     @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
-    @SetPJAX
     public void SignIn() {
         render("pages/signin");
     }
 
-    @SetPJAX
     @RequiresGuest
     @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
     public void SignUp() {
         render("pages/signup");
     }
 
-    @SetPJAX
     public void test() {
-        render("pages/test");
+        render("pages/test.html");
     }
 
     //test
     public void Error() {
         setAttr("message", new Message("test error"));
         render("pages/exception");
+    }
+
+    public List<Article> getArticle(int page) {
+        Integer size = Integer.valueOf(ComVarService.service.getComVarValueByName("IndexPageSize"));
+        String[] cate = new String[]{"Java", "Obj-C", "C", "C++", "IOS", "Android"};
+        String[] users = new String[]{"Admin", "Test", "Myas", "Liakx", "Google", "vsss"};
+        Date now = new Date();
+        List<Article> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(new Article("/images/wireframe/image.png", new Popup("Matt", "Matt has been a member since July 2014"), "The friction between your thoughts and your code" + getPara("p"), cate[new Random().nextInt(cate.length - 1)], users[new Random().nextInt(users.length - 1)], new Random().nextInt(100),
+                    RelativeDate.format(RelativeDate.randomDate("2015-05-11 13:00:00", now), now), users[new Random().nextInt(users.length - 1)]));
+        }
+        return list;
     }
 }

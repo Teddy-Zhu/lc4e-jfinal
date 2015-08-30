@@ -9,5 +9,4 @@ import com.teddy.jfinal.interfaces.DBModel;
 @Model(value = "user", pk = {"id"})
 public class User extends DBModel<User> {
     public static final User dao = new User();
-
 }

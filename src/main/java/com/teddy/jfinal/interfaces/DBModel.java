@@ -1,5 +1,6 @@
 package com.teddy.jfinal.interfaces;
 
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
 import com.teddy.jfinal.tools.CustomTool;
 
@@ -10,6 +11,8 @@ import java.util.List;
  */
 public abstract class DBModel<M extends DBModel> extends Model<M> {
     private static final long serialVersionUID = -101956006715745792L;
+
+    private String tableName;
 
     @SuppressWarnings("unchecked")
     public M enhancer() {
@@ -26,10 +29,16 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         return CustomTool.transaction((M) this);
     }
 
+    public String getTbName() {
+        if (StrKit.isBlank(this.tableName)) {
+            this.tableName = this.getClass().getAnnotation(com.teddy.jfinal.annotation.Model.class).value();
+        }
+        return this.tableName;
+    }
+
     public List<M> findAll() {
         StringBuilder sb = new StringBuilder();
-        String tableName = this.getClass().getAnnotation(com.teddy.jfinal.annotation.Model.class).value();
-        sb.append("select ").append(tableName).append(".* from " + tableName);
+        sb.append("select ").append(getTbName()).append(".* from " + getTbName());
         return find(sb.toString());
     }
 
@@ -52,5 +61,9 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
 
     public Float getToFloat(String attr) {
         return Float.valueOf(getStr(attr));
+    }
+
+    public boolean exist(String param, String columnName) {
+        return findFirst("select if(count(*)>0,1,0) as result from " + getTbName() + " where " + columnName + " =?", param).getToBoolean("result");
     }
 }

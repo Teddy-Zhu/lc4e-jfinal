@@ -1,19 +1,15 @@
-<%if(has(LC4EPJAX) && LC4EPJAX ){
-for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
-%>${layoutContent}
-<%if(!isEmpty(footerJS)){print('<script type="text/javascript">$LAB');}for(var i in footerJS){print('.remove("'+i+'").script("'+i+'?rand='+ tool.getTime() +'")');}; print('</script>'); }else{%>
-<!doctype html>
+<!DOCTYPE html>
 <head>
-    <%layout("/common/title.html",{'SiteName':SiteName}){
-    for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+i+'">');}
-    };%>
+    <!---layout("/common/title.html",{'SiteName':SiteName,'CSS':CSS}){};--->
 </head>
 <body>
 <!-- Header Menu Start -->
-<%layout("/common/header.html",{}){}%>
+<!---layout("/common/header.html",{}){}--->
 <!-- Heard Menu End -->
 <!-- Content Start -->
-<%layout("/common/main.html",{}){%>${layoutContent}<%}%>
+<!---layout("/common/main.html",{}){--->
+<beetl>layoutContent</beetl>
+<!---}--->
 <!-- Content  End -->
 <!-- Right Buttons Start -->
 <div id="floatTools">
@@ -26,10 +22,10 @@ for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="u
         </a>
     </div>
     <i class="arrow up icon tool"></i>
-    <i  id="gtop" class="angle up icon tool"></i></div>
+    <i id="gtop" class="angle up icon tool"></i></div>
 <!-- Right Buttons End -->
 <!-- Slider Bar Start -->
-<%if(configTool){%>
+<!---if(configTool){--->
 <div id="config-tool" class="closed">
     <a id="config-tool-cog"> <i class="large setting loading icon"></i>
     </a>
@@ -87,14 +83,15 @@ for(var i in headerCSS){println('<link rel="stylesheet" type="text/css" class="u
         </div>
     </div>
 </div>
-<%}%>
+<!---}--->
 <!-- Slider Bar End -->
-<%layout("/common/footer.html",{}){}%>
-<script type="text/javascript">
-    $LAB.script("/plugins/jquery/jquery.min.js").wait().script("/plugins/semantic-ui/semantic.js").script("/js/lc4e/jquery-extend.js")
-        .wait()<%for(var i in footerJS){print('.script("'+i+'")');}%>
-</script>
+<!---
+layout("/common/footer.html",{}){}
+print('<script type="text/javascript">var ready = true; $LAB.setOptions({AlwaysPreserveOrder: true})'
++'.script("/plugins/jquery/jquery.min.js").script("/plugins/semantic-ui/semantic.min.js")'
++'.script("/js/lc4e/jquery-extend.js")');
+if(has(JS)){for(path in JS){ println('.script("'+path+'")');}}
+print('</script>');
+--->
 </body>
 </html>
-<%}%>
-

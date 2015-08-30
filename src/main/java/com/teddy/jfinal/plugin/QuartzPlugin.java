@@ -9,7 +9,6 @@ import com.teddy.lc4e.core.database.model.Sys_Job;
 import com.teddy.lc4e.core.web.service.JobService;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;

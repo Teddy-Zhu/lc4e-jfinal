@@ -1,7 +1,6 @@
 package com.teddy.lc4e.core.config;
 
 import com.jfinal.config.*;
-import com.jfinal.core.JFinal;
 import com.teddy.jfinal.annotation.ConfigHandler;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.JFinalConfig;
@@ -13,8 +12,10 @@ import com.teddy.jfinal.plugin.shiro.ShiroMethod;
 import com.teddy.lc4e.core.web.service.ComVarService;
 import com.teddy.lc4e.core.web.service.MenuService;
 import org.apache.log4j.Logger;
+import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

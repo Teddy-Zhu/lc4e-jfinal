@@ -1,8 +1,10 @@
-<%layout("/template/template.html",{
-'headerCSS':['/css/pages/index.css'],
-'footerJS':['/js/pages/index.js'],
+<!---
+layout("/template/template.html",{
+'CSS':['/css/pages/index.css'],
+'JS':['/js/pages/index.js'],
 'configTool':true
-}){%>
+}){
+--->
 <div id="leftContent" class="ten wide column">
     <div id="announcement" class="ui segment">
         <div class="item">
@@ -19,7 +21,9 @@
         </div>
     </div>
     <div id="articlelist" class="ui stacked raised segment">
-        <div class="ui divided items" page="${page!1}"></div>
+        <div class="ui divided items" page="<beetl>page!1</beetl>">
+            <!--- if(has(articles) && articles !=null){ layout("/ajax/_article.html",{'lists':articles}){};}--->
+        </div>
     </div>
     <div id="articlebottons" class="ui raised clearing segment">
         <div id="prePage" class="ui left floated labeled icon button">
@@ -51,4 +55,4 @@
     </div>
     <div class="ui vertical rectangle test ad" data-text="Advertisement"></div>
 </div>
-<%}%>
+<!---}--->

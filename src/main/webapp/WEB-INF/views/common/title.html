@@ -4,8 +4,10 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="Cache-Control" content="no-siteapp"/>
 <link rel="alternate icon" type="image/png" href="/images/logo.png">
-<title>${SiteName}</title>
+<title>
+    <beetl>SiteName</beetl>
+</title>
 <link rel="stylesheet" type="text/css" class="ui" href="/plugins/semantic-ui/semantic.min.css">
 <link rel="stylesheet" type="text/css" class="ui" href="/css/lc4e/jquery-extend.css">
-<link rel="stylesheet" type="text/css" class="ui" href="/css/common.css">
-${layoutContent}
+<!---if(has(CSS)){for(path in CSS){println('<link rel="stylesheet" type="text/css" class="ui" href="'+ path +'">');}}--->
+<script src="/plugins/lab/LAB.min.js"></script>

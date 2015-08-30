@@ -7,7 +7,7 @@
         <div class="allmenus">
             <div class="left menu">
                 <img class="logo ui image item hidden-mb" src="/images/logo.png">
-                <%include("/common/menudropdown.html",{'menus':menulist}){}%>
+                <!--- include("/common/menudropdown.html",{'menus':menulist}){} --->
             </div>
             <div class="right menu">
                 <div class="item">
@@ -15,7 +15,7 @@
                         <input id="searchSite" type="text" placeholder="Search..."> <i class="search link icon"></i>
                     </div>
                 </div>
-                <% if(auth.user()){%>
+                <!--- if(auth.user()){ --->
                 <div id="userItem" class="item">
 
                     <img class="ui headered linked image" src="/images/wireframe/image.png"/>
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-                <%}if(auth.guest()){ %>
+                <!---}if(auth.guest()){ --->
                 <div class="ui item animated fade button" href="/SignUp">
                     <div class="visible content">Sign Up</div>
                     <div class="hidden content">
@@ -81,7 +81,7 @@
                         <i class="user icon"></i>
                     </div>
                 </div>
-                <%}%>
+                <!---}--->
 
                 <div id="expendHeader" class="ui item hidden-mb">
                     <div class="ui linked label">
