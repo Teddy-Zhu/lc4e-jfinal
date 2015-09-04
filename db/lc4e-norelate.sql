@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50610
 File Encoding         : 65001
 
-Date: 2015-08-12 11:09:55
+Date: 2015-09-04 21:46:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `admin_log`;
 CREATE TABLE `admin_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `logdetail` varchar(255) COLLATE utf8_bin NOT NULL,
+  `logDetail` varchar(255) COLLATE utf8_bin NOT NULL,
   `createTime` datetime NOT NULL,
   `updateTime` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -130,7 +130,7 @@ CREATE TABLE `sys_common_variable` (
   `createTime` datetime NOT NULL,
   `updateTime` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of sys_common_variable
@@ -140,7 +140,8 @@ INSERT INTO `sys_common_variable` VALUES ('2', 'IndexPageSize', '20', '', '', '2
 INSERT INTO `sys_common_variable` VALUES ('3', 'Register', 'true', 'Register is forbid', '', '2015-08-02 22:45:55', '2015-08-02 22:45:58');
 INSERT INTO `sys_common_variable` VALUES ('4', 'SimpleRegister', 'true', '', '', '2015-08-02 22:46:14', '2015-08-02 22:46:16');
 INSERT INTO `sys_common_variable` VALUES ('5', 'CaptchaCaseSensitive', 'true', '', '', '2015-08-11 10:31:49', '2015-08-11 10:31:51');
-INSERT INTO `sys_common_variable` VALUES ('6', 'RegisterCaptcha', 'true', '', '', '2015-08-11 10:33:20', '2015-08-11 10:33:23');
+INSERT INTO `sys_common_variable` VALUES ('6', 'Captcha', 'false', '验证码错误', '', '2015-08-11 10:33:20', '2015-08-11 10:33:23');
+INSERT INTO `sys_common_variable` VALUES ('7', 'UserInitBalances', '10', '', '', '2015-08-22 11:20:32', '2015-08-22 11:20:34');
 
 -- ----------------------------
 -- Table structure for sys_dynamic_info
@@ -298,7 +299,7 @@ CREATE TABLE `sys_permission` (
   `createTime` datetime NOT NULL,
   `updateTime` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of sys_permission
@@ -307,6 +308,7 @@ INSERT INTO `sys_permission` VALUES ('1', 'view', 'view', 'asd', '1', '2015-08-0
 INSERT INTO `sys_permission` VALUES ('2', 'add', 'add', 'asxxawed', '1', '2015-08-07 13:06:50', '2015-08-07 13:06:53');
 INSERT INTO `sys_permission` VALUES ('3', 'delete', 'delete', 'xckkxz', '1', '2015-08-07 13:07:06', '2015-08-07 13:07:08');
 INSERT INTO `sys_permission` VALUES ('4', 'query', 'query', 'dsdd', '1', '2015-08-07 13:07:17', '2015-08-07 13:07:20');
+INSERT INTO `sys_permission` VALUES ('5', 'clearcache', 'clearcache', '清缓存', '1', '2015-08-12 11:34:30', '2015-08-12 11:34:32');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -581,7 +583,7 @@ CREATE TABLE `user_role` (
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
-INSERT INTO `user_role` VALUES ('1', '1', '1', '2015-08-07 11:58:07', '2015-08-07 11:58:09', '2015-08-07 11:59:55');
+INSERT INTO `user_role` VALUES ('1', '1', '1', '2015-08-16 11:58:07', '2015-08-07 11:58:09', '2015-08-07 11:59:55');
 INSERT INTO `user_role` VALUES ('2', '1', '2', '2015-08-08 13:05:04', '2015-08-07 13:05:13', '2015-08-07 13:05:16');
 
 -- ----------------------------
@@ -658,4 +660,4 @@ CREATE TABLE `user_topic_view_attitude` (
 -- View structure for vw_user_role_permission
 -- ----------------------------
 DROP VIEW IF EXISTS `vw_user_role_permission`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_user_role_permission` AS select `user`.`id` AS `id`,`user`.`name` AS `name`,`user`.`mail` AS `mail`,`user`.`nick` AS `nick`,`user`.`password` AS `password`,`user`.`passsalt` AS `passsalt`,`user`.`locked` AS `locked`,`user`.`createTime` AS `createTime`,`user`.`updateTime` AS `updateTime`,`sys_role`.`abbr` AS `roleAbbr`,`sys_permission`.`abbr` AS `permissionAbbr`,`sys_role`.`name` AS `roleName`,`sys_role`.`description` AS `roleDescription`,`sys_role`.`available` AS `roleAvailable`,`sys_permission`.`name` AS `permissionName`,`sys_permission`.`description` AS `permissionDescription`,`sys_permission`.`available` AS `permissionAvailable`,`user_role`.`endTime` AS `roleEndTime` from ((((`user` left join `user_role` on((`user`.`id` = `user_role`.`userId`))) left join `sys_role` on((`user_role`.`roleId` = `sys_role`.`id`))) left join `sys_role_permission` on((`sys_role`.`id` = `sys_role_permission`.`roleId`))) left join `sys_permission` on((`sys_role_permission`.`permissionId` = `sys_permission`.`id`))) ;
+CREATE SQL SECURITY DEFINER VIEW `vw_user_role_permission` AS select `user`.`id` AS `id`,`user`.`name` AS `name`,`user`.`mail` AS `mail`,`user`.`nick` AS `nick`,`user`.`password` AS `password`,`user`.`passsalt` AS `passsalt`,`user`.`locked` AS `locked`,`user`.`createTime` AS `createTime`,`user`.`updateTime` AS `updateTime`,`sys_role`.`abbr` AS `roleAbbr`,`sys_permission`.`abbr` AS `permissionAbbr`,`sys_role`.`name` AS `roleName`,`sys_role`.`description` AS `roleDescription`,`sys_role`.`available` AS `roleAvailable`,`sys_permission`.`name` AS `permissionName`,`sys_permission`.`description` AS `permissionDescription`,`sys_permission`.`available` AS `permissionAvailable`,`user_role`.`endTime` AS `roleEndTime` from ((((`user` left join `user_role` on((`user`.`id` = `user_role`.`userId`))) left join `sys_role` on((`user_role`.`roleId` = `sys_role`.`id`))) left join `sys_role_permission` on((`sys_role`.`id` = `sys_role_permission`.`roleId`))) left join `sys_permission` on((`sys_role_permission`.`permissionId` = `sys_permission`.`id`))) ;
