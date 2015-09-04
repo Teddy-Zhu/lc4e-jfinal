@@ -3,6 +3,7 @@ package com.teddy.jfinal.interfaces;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
 import com.teddy.jfinal.tools.CustomTool;
+import com.teddy.lc4e.core.config.Key;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public boolean getToBoolean(String attr) {
-        return Boolean.valueOf(getStr(attr));
+        return getLong(attr) == 1;
     }
 
     public Integer getToInteger(String attr) {
@@ -64,6 +65,6 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public boolean exist(String param, String columnName) {
-        return findFirst("select if(count(*)>0,1,0) as result from " + getTbName() + " where " + columnName + " =?", param).getToBoolean("result");
+        return StrKit.notBlank(param) && findFirst("select count(1)>0 as result from " + getTbName() + " where " + columnName + " =?", param).getToBoolean(Key.RESULT);
     }
 }

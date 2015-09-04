@@ -201,17 +201,14 @@ class ValidateKit {
             setDefaultFlag = true;
         }
         object = object != null ? object : Const.DEFAULT_NONE.equals(param.defaultValue()) ? object : param.defaultValue();
-
         validate(param, controller, type, object, setDefaultFlag);
     }
 
     public static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws ValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
         String error = StringTool.equalEmpty(param.error()) ? "Parameter" : param.error();
         if (String.class == type) {
-            if (param.required() && object == null) {
-                throw new ValidateException(error + " is  invalid");
-            }
-            if (object != null) {
+            validateRequired(param, object, error);
+            if (param.required() && object != null) {
                 String tmp = String.valueOf(object.toString());
                 if (param.minLen() != -1 && param.minLen() > tmp.length()) {
                     throw new ValidateException(error + " length is too short");
@@ -219,26 +216,22 @@ class ValidateKit {
                 if (param.maxLen() != -1 && param.maxLen() < tmp.length()) {
                     throw new ValidateException(error + " length is too long");
                 }
-                if (setDefaultFlag) {
-                    ReflectTool.setParameter(param.value(), object.toString(), controller);
-                }
+            }
+            if (setDefaultFlag) {
+                ReflectTool.setParameter(param.value(), object.toString(), controller);
             }
 
         } else if (Boolean.class == type) {
-            if (param.required() && object == null) {
-                throw new ValidateException(error + " field is  invalid");
-            }
-            if (object != null) {
+            validateRequired(param, object, error);
+            if (param.required() && object != null) {
                 Boolean.valueOf(object.toString());
-                if (setDefaultFlag) {
-                    ReflectTool.setParameter(param.value(), object.toString(), controller);
-                }
+            }
+            if (setDefaultFlag) {
+                ReflectTool.setParameter(param.value(), object.toString(), controller);
             }
         } else if (Integer.class == type) {
-            if (param.required() && object == null) {
-                throw new ValidateException(error + " field is  invalid");
-            }
-            if (object != null) {
+            validateRequired(param, object, error);
+            if (param.required() && object != null) {
                 Integer tmp = Integer.valueOf(object.toString());
                 if (param.minInt() != -1 && param.minInt() > tmp) {
                     throw new ValidateException(error + " is too small");
@@ -246,15 +239,13 @@ class ValidateKit {
                 if (param.maxInt() != -1 && param.maxInt() < tmp) {
                     throw new ValidateException(error + " is too large");
                 }
-                if (setDefaultFlag) {
-                    ReflectTool.setParameter(param.value(), object.toString(), controller);
-                }
+            }
+            if (setDefaultFlag) {
+                ReflectTool.setParameter(param.value(), object.toString(), controller);
             }
         } else if (Long.class == type) {
-            if (param.required() && object == null) {
-                throw new ValidateException(error + " is  invalid");
-            }
-            if (object != null) {
+            validateRequired(param, object, error);
+            if (param.required() && object != null) {
                 Long tmp = Long.valueOf(object.toString());
                 if (param.minLong() != -1 && param.minLong() > tmp) {
                     throw new ValidateException(error + " is too small");
@@ -262,17 +253,13 @@ class ValidateKit {
                 if (param.maxLong() != -1 && param.maxLong() < tmp) {
                     throw new ValidateException(error + " is too large");
                 }
-                if (setDefaultFlag) {
-                    ReflectTool.setParameter(param.value(), object.toString(), controller);
-                }
-
             }
-
+            if (setDefaultFlag) {
+                ReflectTool.setParameter(param.value(), object.toString(), controller);
+            }
         } else if (Double.class == type) {
-            if (param.required() && object == null) {
-                throw new ValidateException(error + " is  invalid");
-            }
-            if (object != null) {
+            validateRequired(param, object, error);
+            if (param.required() && object != null) {
                 Double tmp = Double.valueOf(object.toString());
                 if (param.minDouble() != -1 && param.minDouble() > tmp) {
                     throw new ValidateException(error + " is too small");
@@ -280,16 +267,13 @@ class ValidateKit {
                 if (param.maxDouble() != -1 && param.maxDouble() < tmp) {
                     throw new ValidateException(error + " is too large");
                 }
-                if (setDefaultFlag) {
-                    ReflectTool.setParameter(param.value(), object.toString(), controller);
-                }
-
+            }
+            if (setDefaultFlag) {
+                ReflectTool.setParameter(param.value(), object.toString(), controller);
             }
         } else if (Float.class == type) {
-            if (param.required() && object == null) {
-                throw new ValidateException(error + " field is  invalid");
-            }
-            if (object != null) {
+            validateRequired(param, object, error);
+            if (param.required() && object != null) {
                 Float tmp = Float.valueOf(object.toString());
                 if (param.minDouble() != -1 && param.minDouble() > tmp) {
                     throw new ValidateException(error + " is too small");
@@ -297,30 +281,26 @@ class ValidateKit {
                 if (param.maxDouble() != -1 && param.maxDouble() < tmp) {
                     throw new ValidateException(error + " is too large");
                 }
-                if (setDefaultFlag) {
-                    ReflectTool.setParameter(param.value(), object.toString(), controller);
-                }
             }
-
+            if (setDefaultFlag) {
+                ReflectTool.setParameter(param.value(), object.toString(), controller);
+            }
         } else if (Date.class == type) {
-            if (param.required() && object == null) {
-                throw new ValidateException(error + " is  invalid");
-            }
-            if (object != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat(param.DateFormatter());
+            validateRequired(param, object, error);
+            SimpleDateFormat sdf = new SimpleDateFormat(param.DateFormatter());
+            if (param.required() && object != null) {
                 Date tmp = sdf.parse(object.toString());
-
                 if (!Const.DEFAULT_NONE.equals(param.minDate()) && sdf.parse(param.minDate()).getTime() > tmp.getTime()) {
                     throw new ValidateException(error + " is too early");
                 }
                 if (!Const.DEFAULT_NONE.equals(param.maxDate()) && sdf.parse(param.maxDate()).getTime() < tmp.getTime()) {
                     throw new ValidateException(error + " is too late");
                 }
-                if (setDefaultFlag) {
-                    ReflectTool.setParameter(param.value(), sdf.format(tmp), controller);
-                }
+                object = tmp;
             }
-
+            if (setDefaultFlag) {
+                ReflectTool.setParameter(param.value(), sdf.format(object), controller);
+            }
         } else if (File.class == type) {
             UploadFile file = controller.getFile(param.value());
             if (param.required()) {
@@ -339,6 +319,12 @@ class ValidateKit {
             }
         } else {
             throw new ValidateException("Do not support the type [" + type.toString() + "]");
+        }
+    }
+
+    private static void validateRequired(ValidateParam param, Object object, String error) throws ValidateException {
+        if (param.required() && object == null) {
+            throw new ValidateException(error + " is  invalid");
         }
     }
 

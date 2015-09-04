@@ -72,7 +72,7 @@ public class CustomPlugin implements IPlugin {
     private Class[] contrllerRequiredAnnotations = new Class[]{RequestMethod.class, RequestHeader.class
             , ValidateToken.class, RequiresAuthentication.class, RequiresPermissions.class, RequiresRoles.class, RequiresUser.class,
             RequiresGuest.class};
-    private Class[] afterMethodRequiredAnnotations = new Class[]{ResponseStatus.class, SetComVar.class, SetUIDatas.class, SetUIData.class,
+    private Class[] afterMethodRequiredAnnotations = new Class[]{ResponseStatus.class, SetComVars.class, SetComVar.class, SetUIDatas.class, SetUIData.class,
             SetAJAX.class, SetPJAX.class};
 
 

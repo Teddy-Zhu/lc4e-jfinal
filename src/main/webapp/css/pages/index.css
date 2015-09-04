@@ -160,6 +160,9 @@
     top: .2rem;
 }
 
-#announcement, #articlelist, #articlebottons, #todayHot, #yesterdayHot {
+#articlelist, #articlebottons, #todayHot, #yesterdayHot {
     border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
 }

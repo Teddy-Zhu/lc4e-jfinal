@@ -69,7 +69,10 @@ public class ViewController extends BaseController {
     }
 
     @RequiresGuest
-    @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
+    @SetComVars(value = {
+            @SetComVar(value = Key.SIMPLE_REGISTER, type = Boolean.class),
+            @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
+    })
     public void SignUp() {
         render("pages/signup");
     }

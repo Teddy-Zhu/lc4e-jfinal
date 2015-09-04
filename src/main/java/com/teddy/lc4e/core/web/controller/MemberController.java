@@ -36,7 +36,7 @@ public class MemberController extends BaseController {
             @ValidateParam(value = "user.name", minLen = 4, maxLen = 12),
             @ValidateParam(value = "user.password", minLen = 6, maxLen = 20),
             @ValidateParam(value = "user.nick", minLen = 4, maxLen = 12),
-            @ValidateParam(value = "user.mail", minLen = 5, maxLen = 20, regex = StringTool.regExp_MAIL),
+            @ValidateParam(value = "user.mail", minLen = 5, maxLen = 30, regex = StringTool.regExp_MAIL),
             @ValidateParam(value = "extend.phoneNumber", defaultValue = "", regex = StringTool.regExp_PhoneNumber),
             @ValidateParam(value = "extend.sign", defaultValue = "", maxLen = 50),
             @ValidateParam(value = "extend.birth", required = false, type = Date.class),
@@ -46,7 +46,6 @@ public class MemberController extends BaseController {
     public void signup() throws Lc4eException {
         User user = getModel(User.class, "user").enhancer();
         User_Basicinfo basicInfo = getModel(User_Basicinfo.class, "extend").enhancer();
-        //Sys_Common_Variable simpleregister = ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER);
         UserService.service.createUser(user, basicInfo);
         if (StrKit.notBlank(user.getStr(T_User.id))) {
             renderJson(new Message(true, "register successfully"));

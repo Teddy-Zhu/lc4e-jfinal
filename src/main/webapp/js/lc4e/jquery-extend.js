@@ -12,6 +12,13 @@
     $.lc4e = $.lc4e || {};
     $.extend($.lc4e, {
         version: '1.0',
+        isEmptyObject: function (obj) {
+            if (!obj) return true;
+            for (var name in obj) {
+                return false;
+            }
+            return true;
+        },
         popstate: function () {
             window.onpopstate = function (e) {
                 var state = e.state;
@@ -782,17 +789,17 @@
                 $field = $form.find('.fieldValue');
             module = {
                 initialize: function () {
-                    $form.data('fieldsInfo', {});
+                    $form.data('errorFields', {}).data('validate', true).data('errorInfos', {});
                     var data = {
                         onValid: function () {
                             var $this = $(this), $field = $this.closest('.field');
                             $field.removeClass('error').addClass('success');
-                            delete $form.data('fieldsInfo')[$this.attr('name')];
+                            delete $form.data('errorFields')[$this.attr('name')];
                         },
                         onInvalid: function () {
                             var $this = $(this), $field = $this.closest('.field');
                             $field.removeClass('success');
-                            $form.data('fieldsInfo')[$this.attr('name')] = $this.attr('prompt') ? $this.attr('prompt') : $field.prev().find('label.fieldName').html();
+                            $form.data('errorFields')[$this.attr('name')] = $this.attr('prompt') ? $this.attr('prompt') : $field.prev().find('label.fieldName').html();
                         }
                     }, validate = {};
                     $form.find('input.fieldValue:not([type="checkbox"]):not([type="radio"]):last').on('keydown', function (e) {
@@ -803,8 +810,34 @@
                     $field.each(function () {
                         var $this = $(this),
                             rules = $this.attr('data-rules'),
-                            name = $this.attr('name');
+                            name = $this.attr('name'),
+                            remote = $this.attr('data-remote');
                         rules ? (rules = new Function("return " + rules)()) : (rules = []);
+                        remote ? (remote = new Function("return " + remote)()) : (remote = {});
+                        if (!$.lc4e.isEmptyObject(remote)) {
+                            $this.on('blur', function () {
+                                var $that = $(this), id = $that.attr('id');
+                                var val = $.trim($that.val());
+                                if (val) {
+                                    $form.addClass('validating');
+                                    var data = {};
+                                    data[name] = val;
+                                    $.Lc4eAjax($.extend(true, {
+                                        data: data,
+                                        success: function (data) {
+                                            $form.removeClass('validating');
+                                            if (data && data.result) {
+                                                $this.closest('.field').removeClass('success').addClass('error');
+                                                $form.data('validate', false).data('errorInfos')[id] = data.message;
+                                            } else {
+                                                $this.closest('.field').removeClass('error').addClass('success');
+                                                delete  $form.data('validate', false).data('errorInfos')[id];
+                                            }
+                                        }
+                                    }, remote));
+                                }
+                            });
+                        }
                         validate[name] = {};
                         validate[name]['identifier'] = name;
                         validate[name]['rules'] = rules;
@@ -847,8 +880,7 @@
                     });
                 },
                 reset: function () {
-                    $form.data('fieldsInfo', {}).popup('hide');
-
+                    $form.data('errorInfos', {}).data('validate', true).data('errorFields', {}).popup('hide');
                     $field.each(function () {
                         var $this = $(this);
                         $this.closest('.field').removeClass('success');
@@ -857,7 +889,7 @@
                 },
                 submit: function (options) {
                     options = $.extend(true, $.fn.Lc4eForm.settings.config, options);
-                    if ($form.form('is valid')) {
+                    if (!$form.hasClass('validating') && $form.form('is valid')) {
                         $form.popup('hide');
                         $.Lc4eAjax({
                                 url: options.url ? options.url : $form.attr('data-url'),
@@ -867,16 +899,22 @@
                                 }
                             }
                         )
-                    } else {
-                        var errorinfo = $form.data('fieldsInfo'), content = "";
-                        for (var i in errorinfo) {
-                            content += '<div class="nobr">' + errorinfo[i] + ' is invalid</div>\n';
+                    }
+                    else {
+                        var errorfields = $form.data('errorFields'), errorInfos = $form.data('errorInfos'), content = "";
+                        for (var i in errorfields) {
+                            content += '<div class="nobr">' + errorfields[i] + ' is invalid</div>\n';
                         }
-                        $form.attr('data-content', content);
-
-                        $form.popup('animate hide', function () {
-                            $form.popup('show');
-                        });
+                        for (var i in errorInfos) {
+                            content += '<div class="nobr">' + errorInfos[i] + '</div>\n';
+                            $('#' + i.replace(/\./g, '\\.')).closest('.field').removeClass('success').addClass('error');
+                        }
+                        if ($.trim(content)) {
+                            $form.attr('data-content', content);
+                            $form.popup('animate hide', function () {
+                                $form.popup('show');
+                            });
+                        }
                     }
                 },
                 destroy: function () {
@@ -1124,7 +1162,7 @@
                                 $input
                                     .off('open.' + namespace + ' focusin.' + namespace + ' mousedown.' + namespace, initOnActionCallback)
                                     .trigger('open.' + namespace);
-                            }, 100);
+                            }, 0);
                         });
                 },
                 createDateTimePicker: function () {
@@ -2233,18 +2271,23 @@
                                 onShow = options.onShow.call($datetimepicker, _datetimepicker_datetime.currentTime, $datetimepicker.data('input'), event);
                             }
                             if (onShow !== false) {
-                                $datetimepicker.show();
-                                setPos();
-                                $(window)
-                                    .off('resize.' + namespace, setPos)
-                                    .on('resize.' + namespace, setPos);
+                                $datetimepicker.transition('stop all').transition({
+                                    animation: options.animate + " in",
+                                    duration: '300ms',
+                                    onStart: function () {
+                                        setPos();
+                                        $(window)
+                                            .off('resize.' + namespace, setPos)
+                                            .on('resize.' + namespace, setPos);
 
-                                if (options.closeOnWithoutClick) {
-                                    $([document.body, window]).on('mousedown.' + namespace, function arguments_callee6() {
-                                        $datetimepicker.trigger('close.' + namespace);
-                                        $([document.body, window]).off('mousedown.' + namespace, arguments_callee6);
-                                    });
-                                }
+                                        if (options.closeOnWithoutClick) {
+                                            $([document.body, window]).on('mousedown.' + namespace, function arguments_callee6() {
+                                                $datetimepicker.trigger('close.' + namespace);
+                                                $([document.body, window]).off('mousedown.' + namespace, arguments_callee6);
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         })
                         .on('close.' + namespace, function (event) {
@@ -2257,11 +2300,16 @@
                                 onClose = options.onClose.call($datetimepicker, _datetimepicker_datetime.currentTime, $datetimepicker.data('input'), event);
                             }
                             if (onClose !== false && !options.opened && !options.inline) {
-                                $datetimepicker.hide();
+                                $datetimepicker.transition({
+                                    animation: options.animate + " out",
+                                    duration: '300ms'
+                                });
                             }
                             event.stopPropagation();
-                        })
-                        .on('toggle.' + namespace, function (event) {
+                        }
+                    )
+                        .
+                        on('toggle.' + namespace, function (event) {
                             if ($datetimepicker.is(':visible')) {
                                 $datetimepicker.trigger('close.' + namespace);
                             } else {
@@ -2322,7 +2370,7 @@
                                 _datetimepicker_datetime.setCurrentTime(getCurrentValue());
 
                                 $datetimepicker.trigger('open.' + namespace);
-                            }, 100);
+                            }, 50);
                         })
                         .on('keydown.' + namespace, function (event) {
                             var val = this.value, elementSelector,
@@ -2352,36 +2400,46 @@
                             $input.unmousewheel();
                         }
                     }
-                },
+                }
+
+                ,
                 exist: function () {
                     return $datetimepicker;
-                },
+                }
+                ,
                 show: function () {
                     $module.select().focus();
                     $datetimepicker.trigger('open.' + namespace);
-                },
+                }
+                ,
                 hide: function () {
                     $datetimepicker.trigger('close.' + namespace);
-                },
+                }
+                ,
                 toggle: function () {
                     $datetimepicker.trigger('toggle' + namespace);
-                },
+                }
+                ,
                 destroy: function () {
                     module.destroyDateTimePicker($module);
-                },
+                }
+                ,
                 setOptions: function (options) {
                     $datetimepicker.setOptions(options);
-                },
+                }
+                ,
                 reset: function () {
                     this.value = this.defaultValue;
                     if (!this.value || !$datetimepicker.data('datetimepicker_datetime').isValidDate(Date.parseDate(this.value, options.format))) {
                         $datetimepicker.data('changed', false);
                     }
                     $datetimepicker.data('datetimepicker_datetime').setCurrentTime(this.value);
-                },
+                }
+                ,
                 validate: function () {
                     $datetimepicker.data('input').trigger('blur.' + namespace);
-                },
+                }
+                ,
                 invoke: function (name) {
                     if (module[name]) {
                         return module[name].call($module, queryArguments);
@@ -3018,7 +3076,9 @@
 
             enterLikeTab: true,
             showApplyButton: false,
-            showClearButton: true
+            showClearButton: true,
+
+            animate: 'horizontal flip'
         }
     };
     $.extend({

@@ -18,7 +18,7 @@ $(function () {
                     }
                 });
 
-            $('#prePage,#nextPage').on('click', function () {
+            $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
                 var page = parseInt($article.find('>.ui.divided.items').attr("page")) + 1;
                 $.Lc4eAjax({
                     url: "/?p=" + page,

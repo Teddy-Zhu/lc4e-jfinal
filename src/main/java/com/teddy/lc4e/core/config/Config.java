@@ -6,16 +6,14 @@ import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.JFinalConfig;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.plugin.beetl.Lc4eBeetlRenderFactory;
-import com.teddy.jfinal.plugin.beetl.beetlTool;
+import com.teddy.jfinal.plugin.beetl.BeetlTool;
 import com.teddy.jfinal.plugin.beetl.tag.staticIncludeTag;
 import com.teddy.jfinal.plugin.shiro.ShiroMethod;
 import com.teddy.lc4e.core.web.service.ComVarService;
 import com.teddy.lc4e.core.web.service.MenuService;
 import org.apache.log4j.Logger;
-import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +37,7 @@ public class Config implements JFinalConfig {
 
         groupTemplate.registerFunctionPackage("auth", new ShiroMethod());
 
-        groupTemplate.registerFunctionPackage("tool", new beetlTool());
+        groupTemplate.registerFunctionPackage("tool", new BeetlTool());
 
         groupTemplate.registerTag("staticInclude", staticIncludeTag.class);
         //groupTemplate.registerFunction("i18nFormat", new I18nFormat());

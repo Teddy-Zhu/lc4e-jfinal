@@ -13,7 +13,8 @@
             <div class="ten wide field">
                 <div class="ui icon input">
                     <input id="user.name" class="fieldValue" name="user.name" type="text"
-                           placeholder="login name" data-rules="[{type:'empty'},{type:'minLength[4]'}]"/>
+                           placeholder="login name" data-rules="[{type:'minLength[4]'},{type:'minLength[12]'}]"
+                           data-remote="{url:'/su/user'}"/>
                     <i class="user icon"></i>
                 </div>
             </div>
@@ -25,7 +26,7 @@
             <div class="ten wide field">
                 <div class="ui icon input">
                     <input id="user.password" name="user.password" class="fieldValue" type="password"
-                           placeholder="password" data-rules="[{type:'empty'}]"/>
+                           placeholder="password" data-rules="[{type:'minLength[6]'},{type:'maxLength[20]'}]"/>
                     <i class="eye icon link"></i></div>
             </div>
         </div>
@@ -73,15 +74,16 @@
             <div class="six wide field">
                 <div class="ui input">
                     <input id="captcha" name="captcha" class="fieldValue" type="text"
-                           data-rules="[{type:'empty'},{type:'exactLength[4]'}]"/>
+                           data-rules="[{type:'exactLength[4]'}]"/>
                 </div>
             </div>
             <div class="four wide field">
                 <img id="captchaimg" src="/captcha?rand=<!---print(tool.getTime());--->">
             </div>
         </div>
-        <!---}--->
-
+        <!---}
+        if(!SimpleRegister){
+        --->
         <h4 class="ui horizontal divider header">
             <div id="extendDes" class="linked"><i class="add icon"></i>
                 Description(optional)
@@ -124,6 +126,7 @@
                 </div>
             </div>
         </div>
+        <!--- } --->
 
         <div class="inline fields operatepanel">
             <div class="sixteen wide field ui centered grid">
