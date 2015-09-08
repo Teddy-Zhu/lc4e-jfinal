@@ -4154,7 +4154,7 @@ body {
 #menu .left.menu > .item > .itemBar {
     position: absolute;
     width: 100%;
-    height: 0px;
+    height: 0;
     background: #DADADA;
     transition: height 0.2s ease;
     left: 0;
