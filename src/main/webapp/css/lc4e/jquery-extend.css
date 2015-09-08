@@ -4071,7 +4071,6 @@
     width: 100%;
 }
 
-
 /* for web css*/
 body {
     overflow-x: hidden;
@@ -4331,9 +4330,10 @@ body {
     border-radius: 0.1em;
 }
 
-#floatTools a{
+#floatTools a {
     color: black;
 }
+
 /* media */
 
 @media screen and (min-width: 1200px) {
@@ -4563,4 +4563,8 @@ body {
 
 .ui.popup .nobr {
     white-space: nowrap;
+}
+
+body {
+    -webkit-transform: translate3d(0, 0, 0)
 }
