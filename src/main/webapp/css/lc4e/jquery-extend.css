@@ -4323,11 +4323,8 @@ body {
 
 #floatTools > .tool {
     cursor: pointer;
-    line-height: 50px;
-    font-size: 50px;
-    margin-bottom: 10px;
+    font-size: 3em;
     display: block;
-    border-radius: 0.1em;
 }
 
 #floatTools a {
