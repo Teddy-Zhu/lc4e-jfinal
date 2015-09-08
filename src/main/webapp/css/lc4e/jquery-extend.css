@@ -4361,6 +4361,10 @@ body {
 
 @media screen and ( max-width: 768px) {
 
+    #mainContent{
+        margin: 0;
+    }
+
     #GTTop {
         right: 2%;
         bottom: 6%;

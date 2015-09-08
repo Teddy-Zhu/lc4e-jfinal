@@ -4,7 +4,8 @@
 }
 
 #articlelist {
-    margin-top: .5em;
+    margin: .5em 0 0 0;
+    padding: 0;
 }
 
 #articlebottons:after {
@@ -55,24 +56,20 @@
 
     #mainContent #leftContent {
         width: 100% !important;
+        margin: 0;
+        padding: 0;
     }
 
     #mainContent #rightContent {
         width: 100% !important;
+        margin: 0;
+        padding: 0;
     }
 
     #articlelist > .ui.divided.items > .item {
         padding-left: 1em !important;
         padding-right: 1em !important;
     }
-}
-
-@media screen and ( max-width: 600px) {
-    #articlelist {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
 }
 
 #articlelist > .ui.divided.items > .item {
