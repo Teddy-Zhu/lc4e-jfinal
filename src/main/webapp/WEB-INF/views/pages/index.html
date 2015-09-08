@@ -6,7 +6,7 @@ layout("/template/template.html",{
 }){
 --->
 <div id="leftContent" class="ten wide column">
-    <div id="announcement" class="ui segment">
+    <div id="announcement" class="ui white message">
         <div class="item">
             <div class="ui white label">
                 <i class="announcement icon"></i>
@@ -20,12 +20,18 @@ layout("/template/template.html",{
             </div>
         </div>
     </div>
-    <div id="articlelist" class="ui raised segment">
+    <div class="ui attached message">
+        <div class="header">
+            Welcome to our site!
+        </div>
+        <p>Fill out the form below to sign-up for a new account</p>
+    </div>
+    <div id="articlelist" class="ui attached fluid segment">
         <div class="ui divided items" page="<beetl>page!1</beetl>">
             <!--- if(has(articles) && articles !=null){ layout("/ajax/_article.html",{'lists':articles}){};}--->
         </div>
     </div>
-    <div id="articlebottons" class="ui raised clearing segment">
+    <div id="articlebottons" class="ui clearing segment">
         <div id="prePage" class="ui left floated labeled icon button">
             <i class="angle double left icon"></i>
             Prev
@@ -39,14 +45,14 @@ layout("/template/template.html",{
 
 </div>
 <div id="rightContent" class="four wide column">
-    <div id="todayHot" class="ui raised  segment">
+    <div id="todayHot" class="ui  segment">
         <h4 class="ui horizontal header divider">
             <i class="bar chart icon"></i> Today HotSpot
         </h4>
 
         <div class="ui divided items"></div>
     </div>
-    <div id="yesterdayHot" class="ui raised  segment">
+    <div id="yesterdayHot" class="ui segment">
         <h4 class="ui horizontal header divider">
             <i class="bar chart icon"></i> Yesterday HotSpot
         </h4>

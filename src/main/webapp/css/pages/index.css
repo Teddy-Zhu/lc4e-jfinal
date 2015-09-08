@@ -4,7 +4,6 @@
 }
 
 #articlelist {
-    margin: .5em 0 0 0;
     padding: 0;
 }
 
@@ -159,11 +158,4 @@
 #announcement .ui.text.shape .side {
     word-break: break-all;
     width: 1px;
-}
-
-#articlelist, #articlebottons, #todayHot, #yesterdayHot {
-    border-radius: 0;
-    box-shadow: none;
-    border: none;
-    background-color: transparent;
 }
