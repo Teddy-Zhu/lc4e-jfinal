@@ -156,6 +156,10 @@
     margin-left: .8rem;
     top: .2rem;
 }
+#announcement .ui.text.shape .side {
+    word-break: break-all;
+    width: 1px;
+}
 
 #articlelist, #articlebottons, #todayHot, #yesterdayHot {
     border-radius: 0;
