@@ -779,6 +779,13 @@
             }
         }
     };
+    $.extend(true, {
+        rules: {
+            remote: function (value, text) {
+
+            }
+        }
+    }, $.fn.form.settings);
     $.fn.Lc4eForm = function (parameters) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
@@ -811,9 +818,11 @@
                         var $this = $(this),
                             rules = $this.attr('data-rules'),
                             name = $this.attr('name'),
-                            remote = $this.attr('data-remote');
+                            remote = $this.attr('data-remote'),
+                            optional = $this.attr('data-optional');
                         rules ? (rules = new Function("return " + rules)()) : (rules = []);
                         remote ? (remote = new Function("return " + remote)()) : (remote = {});
+                        optional ? (optional = true) : (optional = false);
                         if (!$.lc4e.isEmptyObject(remote)) {
                             $this.on('blur', function () {
                                 var $that = $(this), id = $that.attr('id');
@@ -838,9 +847,11 @@
                                 }
                             });
                         }
-                        validate[name] = {};
-                        validate[name]['identifier'] = name;
-                        validate[name]['rules'] = rules;
+                        validate[name] = {
+                            identifier: name,
+                            rules: rules
+                        };
+                        optional && (validate[name]['optional'] = true);
                     });
                     data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
                     data["fields"] = validate;

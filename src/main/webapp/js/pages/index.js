@@ -20,7 +20,7 @@ $(function () {
                 });
 
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
-                var page = parseInt($article.find('>.ui.divided.items').attr("page")) + 1;
+                var page = parseInt($article.find('>.ui.divided.items').attr("data-page")) + 1;
                 $.Lc4eAjax({
                     url: "/?p=" + page,
                     data: {art: true},
@@ -39,7 +39,7 @@ $(function () {
                             });
                     },
                     success: function (data) {
-                        $article.find('>.ui.divided.items').attr("page", page);
+                        $article.find('>.ui.divided.items').attr("data-page", page);
                     }
                 })
             });
