@@ -7,7 +7,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.Collection;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -315,13 +315,12 @@ public class StringTool {
      * @param flag
      * @return
      */
-    public static String join(List<String> o, String flag) {
+    public static String join(Collection<String> o, String flag) {
         StringBuffer str_buff = new StringBuffer();
-        for (int i = 0, len = o.size(); i < len; i++) {
-            str_buff.append(o.get(i));
-            if (i < len - 1) str_buff.append(flag);
-        }
-        return str_buff.toString();
+        o.forEach(s -> {
+            str_buff.append(s + flag);
+        });
+        return str_buff.substring(0, str_buff.length() - 1);
     }
 
     public static boolean equalEmpty(String txt) {

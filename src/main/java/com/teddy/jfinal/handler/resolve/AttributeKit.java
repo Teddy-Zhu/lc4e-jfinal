@@ -107,7 +107,7 @@ public class AttributeKit {
             throw new AutoSetterException("No ComVar Record Found in Database or Cache");
         }
         for (Sys_Common_Variable variable : variables) {
-            SetComVar comVar = comVarMap.get(variable.getStr(T_Sys_Common_Variable.value));
+            SetComVar comVar = comVarMap.get(variable.getStr(T_Sys_Common_Variable.name));
             ai.getController().setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
                     .type(), variable.getStr(T_Sys_Common_Variable.value)));
         }

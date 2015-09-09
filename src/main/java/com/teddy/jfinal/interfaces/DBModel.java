@@ -66,7 +66,7 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         for (int i = 0, len = objs.size(); i < len; i++) {
             objStr += "?,";
         }
-        return find("select " + getTbName() + ".* from " + getTbName() + " where " + column + " in(" + objStr.substring(0, objStr.length() - 1) + ")", objs);
+        return find("select " + getTbName() + ".* from " + getTbName() + " where " + column + " in(" + objStr.substring(0, objStr.length() - 1) + ")", objs.toArray());
     }
 
     public boolean getToBoolean(String attr) {

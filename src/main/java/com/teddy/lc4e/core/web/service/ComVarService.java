@@ -25,12 +25,12 @@ public class ComVarService {
 
     @Cache(index = 0)
     public List<Sys_Common_Variable> getComVarsByNames(String[] name) {
-        return Sys_Common_Variable.dao.findInByColumn(name, T_Sys_Common_Variable.VALUE);
+        return Sys_Common_Variable.dao.findInByColumn(name, T_Sys_Common_Variable.NAME);
     }
 
     @Cache(index = 0)
     public List<Sys_Common_Variable> getComVarsByNames(Collection<String> name) {
-        return Sys_Common_Variable.dao.findInByColumn(name, T_Sys_Common_Variable.VALUE);
+        return Sys_Common_Variable.dao.findInByColumn(name, T_Sys_Common_Variable.NAME);
     }
 
     @Cache(index = 0)

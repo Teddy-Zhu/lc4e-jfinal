@@ -14,6 +14,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,8 +38,8 @@ public class CustomInterceptor implements MethodInterceptor {
             cacheKey = cache.index() == -1 ? cache.key() : objects[cache.index()];
             if (cacheKey.getClass().isArray()) {
                 cacheKey = StringTool.join((String[]) cacheKey, ",");
-            } else if (cacheKey instanceof List) {
-                cacheKey = StringTool.join((List<String>) cacheKey, ",");
+            } else if (cacheKey instanceof Collection) {
+                cacheKey = StringTool.join((Collection<String>) cacheKey, ",");
             } else {
                 cacheKey = cacheKey.toString();
             }
