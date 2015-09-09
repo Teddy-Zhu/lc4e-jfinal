@@ -527,7 +527,7 @@
             allowMultiple: false,
             transition: 'horizontal flip',
             inverted: false,
-            blurring: true,
+            blurring: false,
             autoShow: true,
             context: 'body',
             closable: true, /*forbit closing modal by click dimmer*/
@@ -543,7 +543,7 @@
                     name: 'Close',
                     icon: '',
                     content: '',
-                    css: 'basic close'
+                    css: 'basic ok'
                 }
             },
             onShow: function () {
@@ -3444,25 +3444,28 @@
             $('#config-tool').toggleClass('closed');
         });
 
-        $('html').visibility({
-            offset: -1,
+        $('body').visibility({
+            offset: -10,
             observeChanges: false,
             once: false,
             continuous: false,
             onTopPassed: function () {
-                $menu.addClass('fixed');
-                clearTimeout($floatTool.data('timer'));
-                if (!$floatTool.transition('is visible')) {
-                    $floatTool.transition('fade left in');
-                }
+                $.requestAnimationFrame(function () {
+                    $menu.addClass('fixed');
+                    clearTimeout($floatTool.data('timer'));
+                    $floatTool.data('timer', setTimeout(function () {
+                        $floatTool.transition('fade left in');
+                    }, 500));
+                })
             },
             onTopPassedReverse: function () {
-                $menu.removeClass('fixed');
-                clearTimeout($floatTool.data('timer'));
-                $floatTool.data('timer', setTimeout(function () {
-                    $floatTool.transition('fade left out');
-                }, 800));
-
+                $.requestAnimationFrame(function () {
+                    $menu.removeClass('fixed');
+                    clearTimeout($floatTool.data('timer'));
+                    $floatTool.data('timer', setTimeout(function () {
+                        $floatTool.transition('fade left out');
+                    }, 500));
+                });
             }
         });
 

@@ -159,3 +159,7 @@
     word-break: break-all;
     width: 1px;
 }
+
+#sortTopic {
+    float: right;
+}

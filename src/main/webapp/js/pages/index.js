@@ -8,6 +8,7 @@ $(function () {
 
             $announce.shape();
 
+            $('#sortTopic').dropdown();
             $article.find('>.ui.divided.items>.item').
                 transition({
                     animation: 'scale in',

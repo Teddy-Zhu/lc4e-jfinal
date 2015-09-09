@@ -5,7 +5,10 @@ import com.jfinal.plugin.activerecord.Model;
 import com.teddy.jfinal.tools.CustomTool;
 import com.teddy.lc4e.core.config.Key;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by teddy on 2015/7/28.
@@ -38,13 +41,43 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public List<M> findAll() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select ").append(getTbName()).append(".* from " + getTbName());
-        return find(sb.toString());
+        return find("select " + getTbName() + ".* from " + getTbName());
+    }
+
+    public boolean exist(String param, String columnName) {
+        return StrKit.notBlank(param) && findFirst("select count(1)>0 as result from " + getTbName() + " where " + columnName + " =?", param).getToBoolean(Key.RESULT);
+    }
+
+    public List<M> findInByColumn(String[] objs, String column) {
+        if (objs.length == 0) {
+            return new ArrayList<>();
+        }
+        String objStr = "";
+        for (int i = 0, len = objs.length; i < len; i++) {
+            objStr += "?,";
+        }
+        return find("select " + getTbName() + ".* from " + getTbName() + " where " + column + " in(" + objStr.substring(0, objStr.length() - 1) + ")", objs);
+    }
+
+    public List<M> findInByColumn(Collection<String> objs, String column) {
+        if (objs.size() == 0) {
+            return new ArrayList<>();
+        }
+        String objStr = "";
+        for (int i = 0, len = objs.size(); i < len; i++) {
+            objStr += "?,";
+        }
+        return find("select " + getTbName() + ".* from " + getTbName() + " where " + column + " in(" + objStr.substring(0, objStr.length() - 1) + ")", objs);
     }
 
     public boolean getToBoolean(String attr) {
-        return getLong(attr) == 1;
+        Object value = get(attr);
+        if (value instanceof String) {
+            return Integer.valueOf(value.toString()) == 1;
+        } else if (value instanceof Long) {
+            return (Long) value == 1;
+        }
+        return false;
     }
 
     public Integer getToInteger(String attr) {
@@ -64,7 +97,5 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         return Float.valueOf(getStr(attr));
     }
 
-    public boolean exist(String param, String columnName) {
-        return StrKit.notBlank(param) && findFirst("select count(1)>0 as result from " + getTbName() + " where " + columnName + " =?", param).getToBoolean(Key.RESULT);
-    }
+
 }
