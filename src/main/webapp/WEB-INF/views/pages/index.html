@@ -21,7 +21,14 @@ layout("/template/template.html",{
         </div>
     </div>
     <div class="ui attached clearing message">
-        <div id="sortTopic" class="ui right floating dropdown labeled icon basic button">
+        <div class="ui left floated breadcrumb nobox segment">
+            <a class="section"><beetl>SiteName</beetl></a>
+            <span class="divider">/</span>
+            <a class="section">Registration</a>
+            <span class="divider">/</span>
+            <div class="active section">Personal Information</div>
+        </div>
+        <div id="sortTopic" class="ui floating dropdown labeled icon basic button">
             <i class="filter icon"></i>
             <span class="text">Sort</span>
             <div class="menu">
@@ -44,13 +51,6 @@ layout("/template/template.html",{
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="ui breadcrumb nobox segment">
-            <a class="section"><beetl>SiteName</beetl></a>
-            <span class="divider">/</span>
-            <a class="section">Registration</a>
-            <span class="divider">/</span>
-            <div class="active section">Personal Information</div>
         </div>
     </div>
     <div id="articlelist" class="ui attached fluid segment">

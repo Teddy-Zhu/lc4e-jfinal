@@ -72,19 +72,10 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     public boolean getToBoolean(String attr) {
         Object value = get(attr);
         Boolean convertValue = false;
-        if (value instanceof String) {
-            try {
-                convertValue = Boolean.valueOf(value.toString());
-            } catch (Exception e) {
-                try {
-                    convertValue = Integer.valueOf(value.toString()) == 1;
-                } catch (Exception e1) {
-                    convertValue = false;
-                }
-            }
-            return convertValue;
-        } else if (value instanceof Long) {
-            return (Long) value == 1;
+        try {
+            convertValue = Long.valueOf(value.toString()) == 1;
+        } catch (Exception e) {
+            return Boolean.valueOf(value.toString());
         }
         return convertValue;
     }

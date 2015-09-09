@@ -4317,14 +4317,19 @@ html, body {
     background: none;
 }
 
+#floatTools .visible.content {
+    right: +.25em;
+}
+
+#floatTools a {
+    color: orange;
+}
+
 #floatTools > .tool {
     cursor: pointer;
     font-size: 3em;
     display: block;
-}
-
-#floatTools a {
-    color: black;
+    color: orange;
 }
 
 /* media */

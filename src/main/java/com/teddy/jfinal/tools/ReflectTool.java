@@ -399,7 +399,13 @@ public class ReflectTool {
         if (clz == String.class) {
             return String.valueOf(object);
         } else if (clz == Boolean.class) {
-            return Boolean.valueOf(object);
+            Boolean returnVal = null;
+            try {
+                returnVal = Long.valueOf(object) == 1;
+            }catch (Exception e){
+               return Boolean.valueOf(object);
+            }
+            return returnVal;
         } else if (clz == Integer.class) {
             return Integer.valueOf(object);
         } else if (clz == Float.class) {
