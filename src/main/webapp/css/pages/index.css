@@ -42,6 +42,8 @@
     }
 
     #articlelist {
+        width: 100%;
+        max-width: 100%;
         box-shadow: none;
         border: none;
         background-color: transparent;
