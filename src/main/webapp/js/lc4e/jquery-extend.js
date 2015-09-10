@@ -779,10 +779,32 @@
             }
         }
     };
-    $.extend(true, {
+    $.fn.form.settings = $.extend(true, {
         rules: {
             remote: function (value, text) {
-
+                var $this = $(this),
+                    id = $this.attr('id'),
+                    name = $this.attr('name'),
+                    data = {},
+                    $form = $(this.context),
+                    result = true;
+                data[name] = $.trim(value);
+                if (data[name]) {
+                    $.Lc4eAjax({
+                        url: text,
+                        data: data,
+                        async: false,
+                        success: function (data) {
+                            if (data && data.result) {
+                                $form.data('validate', false).data('errorInfos')[id] = data.message;
+                            } else {
+                                delete  $form.data('validate', false).data('errorInfos')[id];
+                            }
+                            result = !data.result;
+                        }
+                    });
+                }
+                return result;
             }
         }
     }, $.fn.form.settings);
@@ -809,44 +831,14 @@
                             $form.data('errorFields')[$this.attr('name')] = $this.attr('prompt') ? $this.attr('prompt') : $field.prev().find('label.fieldName').html();
                         }
                     }, validate = {};
-                    $form.find('input.fieldValue:not([type="checkbox"]):not([type="radio"]):last').on('keydown', function (e) {
-                        if (e.which == 13 || e.keyCode == 13) {
-                            $form.Lc4eForm('submit');
-                        }
-                    });
+
                     $field.each(function () {
                         var $this = $(this),
                             rules = $this.attr('data-rules'),
                             name = $this.attr('name'),
-                            remote = $this.attr('data-remote'),
                             optional = $this.attr('data-optional');
                         rules ? (rules = new Function("return " + rules)()) : (rules = []);
-                        remote ? (remote = new Function("return " + remote)()) : (remote = {});
                         optional ? (optional = true) : (optional = false);
-                        if (!$.lc4e.isEmptyObject(remote)) {
-                            $this.on('blur', function () {
-                                var $that = $(this), id = $that.attr('id');
-                                var val = $.trim($that.val());
-                                if (val) {
-                                    $form.addClass('validating');
-                                    var data = {};
-                                    data[name] = val;
-                                    $.Lc4eAjax($.extend(true, {
-                                        data: data,
-                                        success: function (data) {
-                                            $form.removeClass('validating');
-                                            if (data && data.result) {
-                                                $this.closest('.field').removeClass('success').addClass('error');
-                                                $form.data('validate', false).data('errorInfos')[id] = data.message;
-                                            } else {
-                                                $this.closest('.field').removeClass('error').addClass('success');
-                                                delete  $form.data('validate', false).data('errorInfos')[id];
-                                            }
-                                        }
-                                    }, remote));
-                                }
-                            });
-                        }
                         validate[name] = {
                             identifier: name,
                             rules: rules
@@ -855,6 +847,7 @@
                     });
                     data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
                     data["fields"] = validate;
+                    data["keyboardShortcuts"] = false;
                     $form.form(data).attr('data-content', "please fill the form").popup({
                         inline: true,
                         position: 'right center',
@@ -874,20 +867,26 @@
                     $form.find('button.lc4eSubmit').off('click').on('click', function (event) {
                         var $this = $(this);
                         $this.removeClass('loading').prop('disabled', false);
-                        $form.Lc4eForm('submit', {
+                        $form.Lc4eForm('submit', $.extend(true, {
                             success: function () {
+                                $this.removeClass('loading').prop('disabled', false);
                                 window.location.href = "/";
                             },
                             error: function () {
                                 $this.removeClass('loading').prop('disabled', false);
                             }
-                        })
+                        }, query));
                     });
                     $form.find('button.lc4eReset').off('click').on('click', function (event) {
                         var $this = $(this);
                         $this.addClass('loading').prop('disabled', true);
                         $form.Lc4eForm('reset');
                         $this.removeClass('loading').prop('disabled', false);
+                    });
+                    $form.find('input.fieldValue:not([type="checkbox"]):not([type="radio"]):last').on('keydown', function (e) {
+                        if (e.which == 13 || e.keyCode == 13) {
+                            $form.find('button.lc4eSubmit').trigger('click');
+                        }
                     });
                 },
                 reset: function () {
@@ -900,18 +899,30 @@
                 },
                 submit: function (options) {
                     options = $.extend(true, $.fn.Lc4eForm.settings.config, options);
+                    if ($form.hasClass('isSubmiting')) {
+                        return;
+                    } else {
+                        $form.addClass('isSubmiting');
+                    }
+                    options.start.call($form);
                     if (!$form.hasClass('validating') && $form.form('is valid')) {
                         $form.popup('hide');
                         $.Lc4eAjax({
                                 url: options.url ? options.url : $form.attr('data-url'),
                                 data: $form.form('get values'),
+                                showLoad: $form.attr('data-loading'),
                                 success: function (data) {
                                     $.Lc4eResolveMessage(data, options.success, options.error);
+                                    $form.removeClass('isSubmiting');
+                                },
+                                complete: function () {
+                                    options.complete.call($form);
                                 }
                             }
                         )
                     }
                     else {
+
                         var errorfields = $form.data('errorFields'), errorInfos = $form.data('errorInfos'), content = "";
                         for (var i in errorfields) {
                             content += '<div class="nobr">' + errorfields[i] + ' is invalid</div>\n';
@@ -926,6 +937,8 @@
                                 $form.popup('show');
                             });
                         }
+                        options.complete.call($form);
+
                     }
                 },
                 destroy: function () {
@@ -944,6 +957,10 @@
     };
     $.fn.Lc4eForm.settings = {
         config: {
+            start: function () {
+            },
+            complete: function () {
+            },
             success: function () {
             },
             error: function () {
@@ -952,7 +969,7 @@
     };
     $.fn.Lc4eHover = function (css) {
         return this.each(function () {
-            $(this).addClass('allAnimation');
+            $(this).addClass('animated allAnimation');
             $(this).hover(function () {
                 $(this).addClass(css);
             }, function () {
@@ -962,15 +979,16 @@
     };
     $.fn.Lc4eFocusBlur = function (css) {
         return this.each(function () {
-            $(this).hover(function () {
+            var $this = $(this);
+            $this.on('focus', function () {
                 $.requestAnimationFrame(function () {
-                    $(this).addClass(css);
+                    $this.addClass(css);
                 })
-            }, function () {
+            }).on('blur', function () {
                 $.requestAnimationFrame(function () {
-                    $(this).removeClass(css);
+                    $this.removeClass(css);
                 })
-            })
+            });
         })
     };
     $.fn.Lc4eScroller = function (percent) {
@@ -3258,6 +3276,7 @@
                 pjax: false,
                 target: '',
                 token: false,
+                showLoad: true,
                 options: {}
             }, data);
             if (data.cjson) {
@@ -3284,7 +3303,7 @@
                 data.options["beforeSend"] = data["beforeSend"];
             }
             data.beforeSend = function (xhr, settings) {
-                $.Lc4eLoading({
+                data.showLoad && $.Lc4eLoading({
                     title: data.loading
                 });
                 if (data.token) {
@@ -3364,7 +3383,7 @@
                 if (typeof data.options.complete === "function") {
                     data.options.complete.call(this, xhr, ts);
                 }
-                $.Lc4eLoading('hide');
+                data.showLoad && $.Lc4eLoading('hide');
             };
             return $.ajax(data);
         }
@@ -3383,23 +3402,19 @@
                     }
                 })
             }
-        }
-        ,
+        },
         /**
          * @return {string}
          */
         Lc4eRandom: function () {
             return (Math.random().toString(16) + '000000000').substr(2, 8);
-        }
-        ,
+        },
         Lc4eStars: function (options) {
             return $('body').Lc4eStars(options);
-        }
-        ,
+        },
         Lc4eModal: function (options) {
             return $("body").Lc4eModal(options);
-        }
-        ,
+        },
         Lc4eDimmer: function (options) {
             if (options) {
                 options.type = 'page';
@@ -3407,14 +3422,11 @@
                 options = {type: 'page'}
             }
             return $('body').Lc4eDimmer(options);
-        }
-        ,
+        },
         Lc4eToDate: $.lc4e.Lc4eToDate.unix2human,
         Lc4eProgress: function (option, data) {
             return $("body").Lc4eProgress(option, data);
-        }
-
-        ,
+        },
         requestAnimationFrame: function (callback) {
             var requestAnimation = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
                     window.setTimeout(callback, 0);
@@ -3426,10 +3438,10 @@
     $.lc4e.common = function () {
         var $menu = $('#menu'), $configTool = $('#config-tool-options'), $floatTool = $('#floatTools');
 
-        $menu.find('.left.menu .logo').Lc4eHover('animated infinite spin');
+        $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
 
         $menu.find('div.button[href]').on('click', function (e) {
-                var $this = $(this), href = $this.attr('href'), title = $this.attr('title');
+                var $this = $(this), href = $this.attr('href');
                 e.preventDefault();
                 window.location.href = href;
             }
@@ -3525,7 +3537,6 @@
                 $('#articlelist').toggleClass('nobox');
             }
         });
-
 
         $('#gtop').on('click', function () {
             $.requestAnimationFrame(function () {

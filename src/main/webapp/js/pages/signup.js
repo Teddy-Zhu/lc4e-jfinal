@@ -4,6 +4,7 @@
 $(function () {
     $.lc4e.signup = {
         ready: function () {
+            var $form = $('#signUpForm');
             $('#captchaimg').on('click', function () {
                 if (!$(this).transition('is animating')) {
                     $(this).transition({
@@ -20,7 +21,24 @@ $(function () {
                     })
                 }
             });
-            $('#signUpForm').Lc4eForm();
+            $form.Lc4eForm({
+                start: function () {
+                    $('#signUpLoading').transition('fade down in');
+                    $form.transition('fade down out');
+                },
+                success: function () {
+                    window.location.href = "/";
+                },
+                error: function () {
+                },
+                complete: function () {
+                    $('#signUpLoading').transition('fade down out')
+                    $('#signUpForm').transition('fade down in');
+                    if ($form.popup('is visible')) {
+                        $form.popup('reposition');
+                    }
+                }
+            });
             $('#user\\.password,#user\\.repassword').next('.eye.icon').on({
                 mousedown: function () {
                     $(this).prev('input').attr('type', 'text');

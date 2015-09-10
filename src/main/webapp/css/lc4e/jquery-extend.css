@@ -3338,6 +3338,45 @@
     }
 }
 
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+    to {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes spiny {
+    from {
+        -webkit-transform: rotateY(360deg);
+        transform: rotateY(360deg);
+    }
+    to {
+        -webkit-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+    }
+}
+
+@-webkit-keyframes spiny {
+    from {
+        -webkit-transform: rotateY(360deg);
+        transform: rotateY(360deg);
+    }
+    to {
+        -webkit-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+    }
+}
+
+.spiny {
+    -webkit-animation-name: spiny;
+    animation-timing-function: linear;
+    animation-name: spiny;
+}
+
 .spin {
     -webkit-animation-name: spin;
     animation-timing-function: linear;
@@ -4210,19 +4249,27 @@ html, body {
     background: none;
 }
 
-#menu .left.menu > .item:hover > .itemBar {
-    height: 100%;
+#menu .left.menu > .item:hover:after {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
 }
 
-#menu .left.menu > .item > .itemBar {
+#menu .left.menu > .item:after {
+    content: '';
+    display: block;
     position: absolute;
     width: 100%;
-    height: 0;
+    height: 100%;
+    -webkit-transform: scaleY(0);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    -webkit-transform-origin: bottom;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
     -webkit-border-radius: 0.25em;
     -moz-border-radius: 0.25em;
     border-radius: 0.25em;
     background: #DADADA;
-    transition: height 0.2s ease;
     left: 0;
     top: 0;
     z-index: -1;
@@ -4365,6 +4412,7 @@ html, body {
 
 /*main*/
 #mainContent {
+    margin: 0;
     -webkit-transition: height 0.3s ease, background 0.3s ease, border 0.4s ease, box-shadow 0.4s ease;
     transition: height 0.3s ease, background 0.3s ease, border 0.4s ease, box-shadow 0.4s ease;
 }
@@ -4386,19 +4434,20 @@ html, body {
     background: none;
 }
 
-#floatTools .visible.content {
-    right: +.25em;
-}
-
 #floatTools a {
     color: orange;
 }
 
+#floatTools > .tool:not(.button) {
+    font-size: 3em;
+}
+
 #floatTools > .tool {
     cursor: pointer;
-    font-size: 3em;
     display: block;
     color: orange;
+    margin: auto;
+    line-height: 1em;
 }
 
 /* media */
@@ -4433,10 +4482,6 @@ html, body {
 
     html {
         overflow-x: visible;
-    }
-
-    #mainContent {
-        margin: 0;
     }
 
     #GTTop {

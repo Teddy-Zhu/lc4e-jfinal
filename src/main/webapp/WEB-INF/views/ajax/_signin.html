@@ -5,7 +5,7 @@
         <beetl>SiteName</beetl>
         ,Welcome Back!
     </h2>
-    <div id="signInForm" class="ui form" observe-on="blur" data-url="/member/signin">
+    <div id="signInForm" class="ui form attached segment" observe-on="blur" data-url="/member/signin" data-loading="true">
         <div class="inline fields">
             <div class="four wide field">
                 <label class="fieldName">UserName</label>
@@ -25,7 +25,7 @@
             <div class="ten wide field">
                 <div class="ui icon input">
                     <input id="user.password" name="user.password" class="fieldValue" type="password"
-                           placeholder="your password" data-rules="[{type:'empty'}]"/>
+                           placeholder="your password" data-rules="[{type:'empty'},{type:'minLength[6]'}]"/>
                     <i class="eye icon link"></i></div>
             </div>
         </div>
@@ -67,5 +67,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="ui bottom attached warning message">
+        <i class="warning icon"></i>
+        <a>Lost password? </a> <a>Lost username?</a><a>Lost everyThing</a>
     </div>
 </div>

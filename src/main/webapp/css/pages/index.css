@@ -13,15 +13,15 @@
     display: block;
 }
 
-#articlelist > .ui.divided.items > .item > .image {
+#articleItems > .item > .image {
     width: 5rem;
 }
 
-#articlelist > .ui.divided.items > .item {
+#articleItems > .item {
     transition: background 0.5s ease;
 }
 
-#articlelist > .ui.divided.items > .item:hover {
+#articleItems > .item:hover {
     background: #ECECEC;
 }
 
@@ -49,7 +49,7 @@
         background-color: transparent;
     }
 
-    #articlelist > .ui.divided.items > .item > .image {
+    #articleItems > .item > .image {
         width: 70px !important;
         max-width: 30% !important;
         margin-left: inherit;
@@ -65,7 +65,7 @@
         padding: 0;
     }
 
-    #articlelist > .ui.divided.items > .item {
+    #articleItems > .item {
         padding-left: 1em !important;
         padding-right: 1em !important;
     }
@@ -75,23 +75,23 @@
     }
 }
 
-#articlelist > .ui.divided.items > .item {
+#articleItems > .item {
     padding: 1em 2em !important;
 }
 
-#articlelist > .ui.divided.items > .item > .content {
+#articleItems > .item > .content {
     padding-top: 0.5em;
 }
 
-#articlelist > .ui.divided.items > .item img {
+#articleItems > .item img {
     border-radius: .25rem;
 }
 
-#articlelist > .ui.divided.items > .item > .content > .header > .title {
+#articleItems > .item > .content > .header > .title {
     display: inline-block;
 }
 
-#articlelist > .ui.divided.items > .item > .content > .header:after {
+#articleItems > .item > .content > .header:after {
     width: 100%;
     height: 1.5px;
     background-color: #4183C4;
@@ -106,30 +106,30 @@
     display: block;
 }
 
-#articlelist > .ui.divided.items > .item > .content > .header:hover:after {
+#articleItems > .item > .content > .header:hover:after {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
 }
 
-#articlelist > .ui.divided.items > .item > .content > .header i.icon {
+#articleItems > .item > .content > .header i.icon {
     margin: 0 0 0 0;
 }
 
-#articlelist > .ui.divided.items > .item > .content > .extra > .ui.label .icon {
+#articleItems > .item > .content > .extra > .ui.label .icon {
     margin: 0 .1em 0 0;
 }
 
-#articlelist > .ui.divided.items > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
+#articleItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
     top: .3em;
     padding: .2em .3em .2em .3em;
     left: calc(.49em - 1.2em);
 }
 
-#articlelist > .ui.divided.items > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
+#articleItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
     border-width: 0 0.8em 0.8em 0;
 }
 
-#articlelist > .ui.divided.items > .item > .content > .extra > .ui.label {
+#articleItems > .item > .content > .extra > .ui.label {
     padding: .2em .25em;
     margin: .55rem .2rem 0 0;
 }

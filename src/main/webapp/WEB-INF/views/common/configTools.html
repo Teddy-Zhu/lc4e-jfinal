@@ -1,0 +1,59 @@
+<!-- Slider Bar Start -->
+<div id="config-tool" class="closed">
+    <a id="config-tool-cog"> <i class="large setting loading icon"></i>
+    </a>
+
+    <div id="config-tool-options" class="ui segment">
+        <h4 class="ui header">
+            Area List<i class="linked angle double left icon transition hidden"></i>
+        </h4>
+
+        <div id="menu1" class="ui animated selection list">
+            <div class="item" data-target="#menu2">
+                Fixed Header<i class="angle double right icon"></i>
+            </div>
+            <div class="item">
+                <div class="ui slider checkbox">
+                    <input type="checkbox" name="public"> <label>Fixed Left Menu</label>
+                </div>
+            </div>
+            <div class="item">
+                <div id="fixFooter" class="ui toggle checkbox">
+                    <input type="checkbox" name="public"> <label>Fixed Footer</label>
+                </div>
+            </div>
+            <div class="item">
+                <div id="boxedLayout" class="ui checkbox">
+                    <input type="checkbox" name="public"> <label>Boxed Layout</label>
+                </div>
+            </div>
+            <div class="item">
+                <div id="colorBackground" class="ui checkbox">
+                    <input type="checkbox" name="color"> <label>Colorful background</label>
+                </div>
+            </div>
+            <div class="item">
+                <div class="ui toggle red checkbox">
+                    <input type="checkbox" name="public"> <label>Right-to-Left</label>
+                </div>
+            </div>
+        </div>
+        <div id="menu2" data-parent="#menu1" class="ui animated selection list transition hidden">
+            <div class="item">second select</div>
+            <div class="item">second select</div>
+            <div class="item" data-target="#menu3">
+                third select <i class="angle double right icon"></i>
+            </div>
+        </div>
+        <div id="menu3" data-parent="#menu2" class="ui animated selection list transition hidden">
+            <div class="item">third select11</div>
+        </div>
+        <h4 class="ui header">Skin Color</h4>
+
+        <div class="ui list">
+            <a class="ui red label"></a> <a class="ui teal label"></a> <a class="ui blue label"></a> <a
+                class="ui purple label"></a> <a class="ui green label"></a> <a class="ui red label"></a>
+        </div>
+    </div>
+</div>
+<!-- Slider Bar End -->

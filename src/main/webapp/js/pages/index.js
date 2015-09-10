@@ -4,26 +4,27 @@
 $(function () {
     $.lc4e.index = {
         ready: function () {
-            var $article = $("#articlelist"), $announce = $('#announce');
+            var $article = $("#articlelist"), $articleItems = $('#articleItems'), $announce = $('#announce');
 
             $announce.shape();
 
-            $('#sortTopic').dropdown();
+            $('#sortTopic').dropdown().dropdown('set selected', $articleItems.attr('data-sort'));
+
             $.requestAnimationFrame(function () {
-                $article.find('>.ui.divided.items>.item').
+                $articleItems.find('>.item').
                     transition({
                         animation: 'scale in',
                         duration: 250,
                         interval: 90,
                         onComplete: function () {
-                            $article.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
+                            $articleItems.find('>.item .ui.fluid.image img').popup();
                         }
                     });
             });
 
 
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
-                var page = parseInt($article.find('>.ui.divided.items').attr("data-page")) + 1;
+                var page = parseInt($articleItems.attr("data-page")) + 1;
                 $.Lc4eAjax({
                     url: "/?p=" + page,
                     data: {art: true},
@@ -32,19 +33,19 @@ $(function () {
                     loading: 'loading articles',
                     animate: function () {
                         $.requestAnimationFrame(function () {
-                            $article.find('>.ui.divided.items>.item').
+                            $articleItems.find('>.item').
                                 transition({
                                     animation: 'fade up in',
                                     duration: 250,
                                     interval: 90,
                                     onComplete: function () {
-                                        $article.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
+                                        $articleItems.find('>.item .ui.fluid.image img').popup();
                                     }
                                 });
                         });
                     },
                     success: function (data) {
-                        $article.find('>.ui.divided.items').attr("data-page", page);
+                        $articleItems.attr("data-page", page);
                     }
                 })
             });
@@ -53,6 +54,7 @@ $(function () {
                 $announce.shape('flip down');
                 setTimeout(shape, 10000);
             }
+
             setTimeout(shape, 10000);
         }
     };
