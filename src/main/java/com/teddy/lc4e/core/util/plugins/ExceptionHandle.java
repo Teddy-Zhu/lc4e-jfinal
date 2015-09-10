@@ -29,23 +29,10 @@ public class ExceptionHandle {
         ai.getController().renderText(a + e.getMessage());
     }
 
-    @ExceptionHandler({UnauthenticatedException.class, AuthorizationException.class})
-    @ResponseStatus(Status.ERROR)
-    public void handle(Exception e, Invocation ai) {
-        ai.getController().getResponse().setCharacterEncoding(PropPlugin.getValue(Dict.ENCODING, "utf-8"));
-        String a = "Shiro异常测试";
-        ai.getController().renderText(a + e.getMessage());
-    }
-
     @ExceptionHandler({AuthenticationException.class, UnauthenticatedException.class})
     public void auth(Exception e, Invocation ai) {
         ai.getController().setAttr("message", new Message(e.getMessage()));
         ai.getController().render("pages/exception");
-    }
-
-    @ExceptionHandler({UnknownAccountException.class})
-    public void unknown(Exception e, Invocation ai) {
-        ai.getController().renderJson(new Message("Username is not match password,please check your info"));
     }
 
     @ExceptionHandler({Lc4eException.class})
