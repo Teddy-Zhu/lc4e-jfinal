@@ -9,15 +9,18 @@ $(function () {
             $announce.shape();
 
             $('#sortTopic').dropdown();
-            $article.find('>.ui.divided.items>.item').
-                transition({
-                    animation: 'scale in',
-                    duration: 250,
-                    interval: 90,
-                    onComplete: function () {
-                        $article.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
-                    }
-                });
+            $.requestAnimationFrame(function () {
+                $article.find('>.ui.divided.items>.item').
+                    transition({
+                        animation: 'scale in',
+                        duration: 250,
+                        interval: 90,
+                        onComplete: function () {
+                            $article.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
+                        }
+                    });
+            });
+
 
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
                 var page = parseInt($article.find('>.ui.divided.items').attr("data-page")) + 1;
@@ -28,26 +31,29 @@ $(function () {
                     pjax: true,
                     loading: 'loading articles',
                     animate: function () {
-                        $article.find('>.ui.divided.items>.item').
-                            transition({
-                                animation: 'fade up in',
-                                duration: 250,
-                                interval: 90,
-                                onComplete: function () {
-                                    $article.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
-                                }
-                            });
+                        $.requestAnimationFrame(function () {
+                            $article.find('>.ui.divided.items>.item').
+                                transition({
+                                    animation: 'fade up in',
+                                    duration: 250,
+                                    interval: 90,
+                                    onComplete: function () {
+                                        $article.find('>.ui.divided.items>.item .ui.fluid.image img').popup();
+                                    }
+                                });
+                        });
                     },
                     success: function (data) {
                         $article.find('>.ui.divided.items').attr("data-page", page);
                     }
                 })
             });
-            var interval;
-            clearInterval(interval);
-            interval = setInterval(function () {
+
+            function shape() {
                 $announce.shape('flip down');
-            }, 10000);
+                setTimeout(shape, 10000);
+            }
+            setTimeout(shape, 10000);
         }
     };
     $.lc4e.index.ready();

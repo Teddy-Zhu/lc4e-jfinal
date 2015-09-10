@@ -960,6 +960,19 @@
             })
         })
     };
+    $.fn.Lc4eFocusBlur = function (css) {
+        return this.each(function () {
+            $(this).hover(function () {
+                $.requestAnimationFrame(function () {
+                    $(this).addClass(css);
+                })
+            }, function () {
+                $.requestAnimationFrame(function () {
+                    $(this).removeClass(css);
+                })
+            })
+        })
+    };
     $.fn.Lc4eScroller = function (percent) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
@@ -3427,11 +3440,8 @@
             transition: "horizontal flip",
             on: 'click'
         });
-        $('#searchSite').on('focus', function () {
-            $(this).addClass('expended');
-        }).on('blur', function () {
-            $(this).removeClass('expended')
-        });
+
+        $('#searchSite').Lc4eFocusBlur('expended');
 
         $('#expendHeader').on('click', function () {
             $menu.toggleClass('expended');
@@ -3440,7 +3450,7 @@
         $menu.find('.column div:first a').on('click', function () {
             $menu.find('>.column>.allmenus').transition({
                 animation: "fly down",
-                duration: 500,
+                duration: 300,
                 onComplete: function () {
                     $menu.find('>.column>.allmenus').toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
                 }
@@ -3455,8 +3465,8 @@
             $('#config-tool').toggleClass('closed');
         });
 
-        $('body').visibility({
-            offset: -10,
+        $('html').visibility({
+            offset: -1,
             observeChanges: false,
             once: false,
             continuous: false,
@@ -3494,7 +3504,6 @@
             exclusive: false,
             hideOnScroll: false,
             on: 'click',
-            prefer: 'opposite',
             closable: true,
             onVisible: function (model) {
                 if ($(window).width() <= 768)

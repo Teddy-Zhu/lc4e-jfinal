@@ -19,7 +19,6 @@ import com.teddy.lc4e.core.web.service.ComVarService;
 import com.teddy.lc4e.core.web.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.subject.Subject;
 
 import java.util.Date;
@@ -61,7 +60,6 @@ public class MemberController extends BaseController {
             @ValidateParam(value = "rememberMe", type = Boolean.class)
     })
     @RequestMethod(Method.POST)
-    @RequiresGuest
     public void signin() {
         User user = getModel(User.class, "user");
         Sys_Common_Variable captcha = ComVarService.service.getComVarByName(Key.CAPTCHA);
@@ -70,15 +68,17 @@ public class MemberController extends BaseController {
             return;
         }
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getStr(T_User.name), user.getStr(T_User.password));
-        token.setRememberMe(getParaToBoolean("rememberMe"));
-        subject.login(token);
-        if (subject.isAuthenticated()) {
-            subject.getSession().setAttribute(Lc4eCaptchaRender.captcha_code, Const.DEFAULT_NONE);
-            renderJson(new Message(true, "Login Success"));
-        } else {
-            renderJson(new Message("Login failed"));
+        if (!subject.isAuthenticated()) {
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getStr(T_User.name), user.getStr(T_User.password));
+            token.setRememberMe(getParaToBoolean("rememberMe"));
+            subject.login(token);
+            if (subject.isAuthenticated()) {
+                subject.getSession().setAttribute(Lc4eCaptchaRender.captcha_code, Const.DEFAULT_NONE);
+            } else {
+                renderJson(new Message("Login failed"));
+            }
         }
+        renderJson(new Message(true, "Login Success"));
     }
 
 }

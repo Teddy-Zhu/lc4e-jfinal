@@ -22,21 +22,29 @@ layout("/template/template.html",{
     </div>
     <div class="ui attached clearing message">
         <div class="ui left floated breadcrumb nobox segment">
-            <a class="section"><beetl>SiteName</beetl></a>
+            <a class="section">
+                <beetl>SiteName</beetl>
+            </a>
             <span class="divider">/</span>
             <a class="section">Registration</a>
             <span class="divider">/</span>
+
             <div class="active section">Personal Information</div>
         </div>
         <div id="sortTopic" class="ui floating dropdown labeled icon basic button">
             <i class="filter icon"></i>
             <span class="text">Sort</span>
+
             <div class="menu">
                 <div class="header">
                     <i class="tags icon"></i>
                     Sort Method
                 </div>
                 <div class="scrolling menu">
+                    <option class="item" value="1">
+                        <div class="ui red empty circular label"></div>
+                        Order By System1
+                    </option>
                     <div class="item">
                         <div class="ui red empty circular label"></div>
                         Order By System
