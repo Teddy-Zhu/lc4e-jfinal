@@ -82,7 +82,7 @@ public class AttributeKit {
         }
     }
 
-    public static Map<String, SetComVar> setComVarsBefore(SetComVars comVars) throws AutoSetterException {
+    private static Map<String, SetComVar> setComVarsBefore(SetComVars comVars) throws AutoSetterException {
         Map<String, SetComVar> comVarMap = new HashMap<>();
         for (SetComVar comVar : comVars.value()) {
             if (StringTool.equalEmpty(comVar.value())) {

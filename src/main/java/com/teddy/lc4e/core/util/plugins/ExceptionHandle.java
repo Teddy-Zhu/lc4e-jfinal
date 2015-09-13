@@ -6,13 +6,12 @@ import com.teddy.jfinal.annotation.ExceptionHandlers;
 import com.teddy.jfinal.annotation.ResponseStatus;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.entity.Status;
+import com.teddy.jfinal.exceptions.Lc4eApplicationException;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.tools.WebTool;
 import com.teddy.lc4e.core.entity.Message;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 
 /**
@@ -35,12 +34,14 @@ public class ExceptionHandle {
         ai.getController().render("pages/exception");
     }
 
-    @ExceptionHandler({Lc4eException.class})
-    public void unknown(Lc4eException e, Invocation ai) {
+    @ExceptionHandler({Lc4eException.class, Lc4eApplicationException.class})
+    public void common(Throwable e, Invocation ai) {
         if (WebTool.isAJAX(ai.getController().getRequest())) {
             ai.getController().renderJson(new Message(e.getMessage() == null ? e.toString() : e.getMessage()));
         } else {
             ai.getController().render("pages/exception");
         }
     }
+
+
 }

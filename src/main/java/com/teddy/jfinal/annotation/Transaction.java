@@ -1,5 +1,7 @@
 package com.teddy.jfinal.annotation;
 
+import com.teddy.jfinal.common.Const;
+
 import java.lang.annotation.*;
 
 /**
@@ -10,4 +12,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface Transaction {
+    String value() default Const.DEFAULT_NONE;
 }

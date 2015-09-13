@@ -3,8 +3,11 @@ package com.teddy.lc4e.core.web.service;
 import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.annotation.Transaction;
-import com.teddy.jfinal.exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.Lc4eApplicationException;
+import com.teddy.lc4e.core.config.Key;
+import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.core.database.mapping.T_User;
+import com.teddy.lc4e.core.database.mapping.T_User_Basicinfo;
 import com.teddy.lc4e.core.database.mapping.T_Vw_User_Role_Permission;
 import com.teddy.lc4e.core.database.model.User;
 import com.teddy.lc4e.core.database.model.User_Basicinfo;
@@ -44,16 +47,35 @@ public class UserService {
     }
 
     @Transaction
-    public User createUser(User user, User_Basicinfo basicinfo) throws Lc4eException {
+    public User createUser(User user, User_Basicinfo basicinfo) throws Lc4eApplicationException {
+        //validate exist
+        //username
+        if (validateUserName(user.getStr(T_User.name))) {
+            throw new Lc4eApplicationException("User Name Has been occupied");
+        }
+        //usernick
+        if (validateUserMail(user.getStr(T_User.mail))) {
+            throw new Lc4eApplicationException("Email Has been occupied");
+        }
+        //usermail
+        if (validateUserNick(user.getStr(T_User.nick))) {
+            throw new Lc4eApplicationException("Email Has been occupied");
+        }
         PassDisposer.encryptPassword(user);
         user.remove(T_User.id);
         user.set(T_User.locked, false);
         user.save();
-        if (user.getStr(T_User.id) != null) {
 
-        } else {
-            throw new Lc4eException("CreateUser Error");
+        if (user.getStr(T_User.id) != null) {
+            if (!ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER).getToBoolean(T_Sys_Common_Variable.value)) {
+                basicinfo.remove(T_User_Basicinfo.id);
+                basicinfo.set(T_User_Basicinfo.userId, user.get(T_User.id));
+                basicinfo.save();
+            } else {
+                new User_Basicinfo().enhancer().set(T_User_Basicinfo.userId, user.get(T_User.id)).save();
+            }
         }
+
         return user;
     }
 }

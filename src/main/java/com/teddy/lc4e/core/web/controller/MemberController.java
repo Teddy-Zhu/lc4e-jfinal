@@ -4,7 +4,7 @@ import com.jfinal.kit.StrKit;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.Method;
-import com.teddy.jfinal.exceptions.Lc4eException;
+import com.teddy.jfinal.exceptions.Lc4eApplicationException;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.plugin.beetl.Lc4eCaptchaRender;
 import com.teddy.jfinal.tools.StringTool;
@@ -41,8 +41,8 @@ public class MemberController extends BaseController {
             @ValidateParam(value = "extend.birth", required = false, type = Date.class),
             @ValidateParam(value = "captcha", defaultValue = "@@@@", maxLen = 4, minLen = 4)
     })
-    @ValidateComVar(name = Key.REGISTER, value = "false")
-    public void signup() throws Lc4eException {
+    @ValidateComVar(name = Key.REGISTER, value = "true")
+    public void signup() throws Lc4eApplicationException {
         User user = getModel(User.class, "user").enhancer();
         User_Basicinfo basicInfo = getModel(User_Basicinfo.class, "extend").enhancer();
         UserService.service.createUser(user, basicInfo);

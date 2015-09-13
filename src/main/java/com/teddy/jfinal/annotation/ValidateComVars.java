@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ValidateComVars {
 
-    ValidateComVar[] fields() default {};
+    ValidateComVar[] value() default {};
 }

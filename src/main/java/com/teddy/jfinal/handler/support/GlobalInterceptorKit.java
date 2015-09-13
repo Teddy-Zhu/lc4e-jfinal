@@ -30,13 +30,13 @@ public class GlobalInterceptorKit {
     private GlobalInterceptorKit() {
     }
 
-    public static Object[] resolveParameters(Class<?>[] args, Invocation ai, Exception e) throws Lc4eException {
+    public static Object[] resolveParameters(Class<?>[] args, Invocation ai, Throwable e) throws Lc4eException {
         Object[] params = new Object[args.length];
         for (int i = 0, len = args.length; i < len; i++) {
             Class<?> type = args[i];
             if (Invocation.class == type) {
                 params[i] = ai;
-            } else if (Exception.class.isAssignableFrom(type)) {
+            } else if (Throwable.class.isAssignableFrom(type)) {
                 params[i] = e;
             } else if (type == Controller.class) {
                 params[i] = ai.getController();
@@ -51,7 +51,7 @@ public class GlobalInterceptorKit {
         return params;
     }
 
-    public static void ExceptionHandle(Invocation ai, Exception e) throws Exception {
+    public static void ExceptionHandle(Invocation ai, Throwable e) throws Exception {
         Method method = CustomPlugin.getExceptionsMap().get(e.getClass());
         if (method == null) {
             resolve(ai, e);
@@ -61,7 +61,7 @@ public class GlobalInterceptorKit {
         }
     }
 
-    private static void resolve(Invocation ai, Exception e) {
+    private static void resolve(Invocation ai, Throwable e) {
         if (WebTool.isAJAX(ai.getController().getRequest())) {
             ai.getController().renderJson(new Message(e.getMessage() == null ? e.toString() : e.getMessage()));
         } else {

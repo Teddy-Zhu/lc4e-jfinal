@@ -13,9 +13,9 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by teddy on 2015/7/25.
@@ -60,10 +60,19 @@ public class CustomInterceptor implements MethodInterceptor {
         if (method.isAnnotationPresent(Transaction.class)) {
             Object transObj = TransactionHelper.Proxy(this.target);
             GlobalInterceptorKit.Inject(transObj, clz);
-            returnValue = method.invoke(transObj, objects);
+            try {
+                returnValue = method.invoke(transObj, objects);
+            } catch (InvocationTargetException ex) {
+                throw ex.getTargetException();
+            }
+
         } else {
             GlobalInterceptorKit.Inject(target, clz);
-            returnValue = method.invoke(target, objects);
+            try {
+                returnValue = method.invoke(target, objects);
+            } catch (InvocationTargetException ex) {
+                throw ex.getTargetException();
+            }
         }
         if (useCache) {
             CacheKit.put(cache.cacheName(), cacheKey, returnValue);

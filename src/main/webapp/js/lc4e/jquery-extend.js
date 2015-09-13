@@ -12,12 +12,19 @@
     $.lc4e = $.lc4e || {};
     $.extend($.lc4e, {
         version: '1.0',
-        isEmptyObject: function (obj) {
-            if (!obj) return true;
-            for (var name in obj) {
-                return false;
+        removeArray: function (obj, array) {
+            if (!$.isPlainObject(obj)) {
+                return obj;
+            } else if ($.isArray(array)) {
+                for (var i = 0, len = array.length; i < len; i++) {
+                    delete obj[array[i]];
+                }
+                return obj;
+            } else if (typeof array === 'string') {
+                delete obj[array];
+            } else {
+                return obj;
             }
-            return true;
         },
         popstate: function () {
             window.onpopstate = function (e) {
@@ -795,12 +802,12 @@
                         data: data,
                         async: false,
                         success: function (data) {
-                            if (data && data.result) {
+                            if (data && !data.result) {
                                 $form.data('validate', false).data('errorInfos')[id] = data.message;
                             } else {
                                 delete  $form.data('validate', false).data('errorInfos')[id];
                             }
-                            result = !data.result;
+                            result = !!data.result;
                         }
                     });
                 }
@@ -818,7 +825,7 @@
                 $field = $form.find('.fieldValue');
             module = {
                 initialize: function () {
-                    $form.data('errorFields', {}).data('validate', true).data('errorInfos', {});
+                    $form.data('errorFields', {}).data('validate', true).data('errorInfos', {}).data('ignore', []);
                     var data = {
                         onValid: function () {
                             var $this = $(this), $field = $this.closest('.field');
@@ -836,14 +843,17 @@
                         var $this = $(this),
                             rules = $this.attr('data-rules'),
                             name = $this.attr('name'),
-                            optional = $this.attr('data-optional');
+                            optional = $this.attr('data-optional'),
+                            ignore = $this.attr('data-ignore');
                         rules ? (rules = new Function("return " + rules)()) : (rules = []);
                         optional ? (optional = true) : (optional = false);
+                        ignore ? (ignore = true) : (ignore = false);
                         validate[name] = {
                             identifier: name,
                             rules: rules
                         };
                         optional && (validate[name]['optional'] = true);
+                        ignore && $form.data('ignore').push(name);
                     });
                     data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
                     data["fields"] = validate;
@@ -909,14 +919,14 @@
                         $form.popup('hide');
                         $.Lc4eAjax({
                                 url: options.url ? options.url : $form.attr('data-url'),
-                                data: $form.form('get values'),
+                                data: $.lc4e.removeArray($form.form('get values'), $form.data('ignore')),
                                 showLoad: $form.attr('data-loading'),
                                 success: function (data) {
                                     $.Lc4eResolveMessage(data, options.success, options.error);
-                                    $form.removeClass('isSubmiting');
                                 },
                                 complete: function () {
                                     options.complete.call($form);
+                                    $form.removeClass('isSubmiting');
                                 }
                             }
                         )
@@ -938,7 +948,6 @@
                             });
                         }
                         options.complete.call($form);
-
                     }
                 },
                 destroy: function () {

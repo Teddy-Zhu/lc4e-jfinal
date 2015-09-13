@@ -2,6 +2,7 @@ package com.teddy.jfinal.interfaces;
 
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.TableMapping;
 import com.teddy.jfinal.tools.CustomTool;
 import com.teddy.lc4e.core.config.Key;
 
@@ -34,7 +35,7 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
 
     public String getTbName() {
         if (StrKit.isBlank(this.tableName)) {
-            this.tableName = this.getClass().getAnnotation(com.teddy.jfinal.annotation.Model.class).value();
+            this.tableName = TableMapping.me().getTable(this.getClass()).getName();
         }
         return this.tableName;
     }

@@ -6,6 +6,8 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
 import com.teddy.jfinal.plugin.CustomPlugin;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Created by teddy on 2015/7/19.
  */
@@ -25,7 +27,7 @@ public class GlobalInterceptor implements Interceptor {
             GlobalInterceptorKit.resolveAOPResolver(ai, CustomPlugin.getAfterMethodAnnoHandler().get(ai.getActionKey()));
 
             GlobalInterceptorKit.handleAOPMethods(ai, Const.AFTER_INTERCEPT);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             try {
                 GlobalInterceptorKit.handleAOPMethods(ai, Const.BEFORE_EXCEPTION);
                 GlobalInterceptorKit.ExceptionHandle(ai, e);
@@ -35,5 +37,4 @@ public class GlobalInterceptor implements Interceptor {
             }
         }
     }
-
 }

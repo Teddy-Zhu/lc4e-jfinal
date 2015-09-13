@@ -7,6 +7,7 @@ import com.jfinal.upload.UploadFile;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.FileType;
+import com.teddy.jfinal.exceptions.AutoSetterException;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.exceptions.ValidateException;
 import com.teddy.jfinal.tools.ReflectTool;
@@ -14,6 +15,7 @@ import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.core.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.core.web.service.ComVarService;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.annotation.*;
@@ -24,8 +26,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +34,8 @@ import java.util.regex.Pattern;
  * Created by teddy on 2015/7/29.
  */
 class ValidateKit {
+
+    private static final Logger log = Logger.getLogger(ValidateKit.class);
 
     public static void resolveResponseStaus(ResponseStatus responseStatus, Invocation invocation) {
         if (responseStatus == null) {
@@ -125,12 +128,37 @@ class ValidateKit {
         }
     }
 
-    public static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws ValidateException {
+    private static Map<String, ValidateComVar> validateComVarsBefore(ValidateComVars comVars) throws Lc4eException {
+        Map<String, ValidateComVar> comVarMap = new HashMap<>();
+        for (ValidateComVar comVar : comVars.value()) {
+            if (StringTool.equalEmpty(comVar.value())) {
+                throw new Lc4eException("ComVar Field must be not empty!");
+            }
+            comVarMap.put(comVar.value(), comVar);
+        }
+        return comVarMap;
+    }
+
+    public static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws ValidateException, Lc4eException {
         if (comVars == null) {
             return;
         }
-        for (int i = 0, len = comVars.fields().length; i < len; i++) {
-            resolveComVar(comVars.fields()[i], invocation);
+        Map<String, ValidateComVar> comVarMap = validateComVarsBefore(comVars);
+        Set<String> keys = comVarMap.keySet();
+        List<Sys_Common_Variable> variables = ComVarService.service.getComVarsByNames(keys);
+        if (variables.size() != keys.size()) {
+            log.warn("May lost some ComVars");
+        }
+        if (variables.size() == 0) {
+            throw new ValidateException("No ComVar Record Found in Database or Cache");
+        }
+
+        for (Sys_Common_Variable variable : variables) {
+            ValidateComVar comVar = comVarMap.get(variable.getStr(T_Sys_Common_Variable.name));
+            Class type = ReflectTool.wrapper(comVar.type());
+            if (!ReflectTool.wrapperObject(type, variable.getStr(T_Sys_Common_Variable.value)).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
+                throw new ValidateException(variable.get(T_Sys_Common_Variable.error));
+            }
         }
 
     }
@@ -145,8 +173,11 @@ class ValidateKit {
         Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.name());
         if (variable == null) {
             throw new ValidateException("No ComVar Record Found in Database or Cache");
-        } else if (!variable.get(T_Sys_Common_Variable.value).equals(comVar.value())) {
-            throw new ValidateException(variable.get(T_Sys_Common_Variable.error));
+        } else {
+            Class type = ReflectTool.wrapper(comVar.type());
+            if (!ReflectTool.wrapperObject(type, variable.getStr(T_Sys_Common_Variable.value)).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
+                throw new ValidateException(variable.get(T_Sys_Common_Variable.error));
+            }
         }
     }
 

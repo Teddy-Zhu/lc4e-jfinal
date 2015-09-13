@@ -30,7 +30,7 @@ public class DateSetterHelper implements MethodInterceptor {
                 setMethod.invoke(target, Const.DB_CREATETIME, dt);
             }
         }
-        return methodProxy.invoke(target, objects);
+        return method.invoke(target, objects);
     }
 
 

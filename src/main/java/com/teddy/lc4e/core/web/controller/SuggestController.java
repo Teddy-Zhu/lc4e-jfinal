@@ -34,6 +34,6 @@ public class SuggestController extends BaseController {
             message.append("UserMail");
         }
         message.append(" Has been occupied");
-        renderJson(new Message(exist, exist ? message.toString() : Key.Empty));
+        renderJson(new Message(!exist, exist ? message.toString() : Key.Empty));
     }
 }

@@ -115,8 +115,13 @@
             </div>
             <div class="ten wide field">
                 <div class="ui icon input">
-                    <input id="user.repassword" name="user.repassword" class="fieldValue" type="password"
-                           placeholder="repeat password" data-rules="[{type:'match[user.password]'}]"/>
+                    <input id="user.repassword"
+                           name="user.repassword"
+                           class="fieldValue"
+                           type="password"
+                           placeholder="repeat password"
+                           data-ignore="true"
+                           data-rules="[{type:'match[user.password]'}]"/>
                     <i class="eye icon link"></i></div>
             </div>
         </div>
@@ -207,7 +212,7 @@
         </div>
         <!--- } --->
 
-        <div class="inline fields operatepanel">
+        <div id="signUpAttached" class="inline fields operatepanel">
             <div class="sixteen wide field ui centered grid">
                 <div class="ui buttons">
                     <button class="ui labeled icon lc4eSubmit primary button">
