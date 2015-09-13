@@ -44,7 +44,7 @@ public class CustomPlugin implements IPlugin {
 
     private static Map<Class<? extends Annotation>, Set<Class>> classesMap;
 
-    private static Map<Class<? extends Exception>, Method> exceptionsMap;
+    private static Map<Class<? extends Throwable>, Method> exceptionsMap;
 
     private static Map<Method, List<AnnotationResolver>> exceptionMethodHandler;
 
@@ -433,7 +433,7 @@ public class CustomPlugin implements IPlugin {
                         // resolve @ExceptionHandler add method into ExceptionMap
                         if (method.isAnnotationPresent(ExceptionHandler.class)) {
                             exceptionMethodHandler.put(method, buildAnnotationResolver(buildAnnotation(method, afterMethodRequiredAnnotations)));
-                            for (Class<? extends Exception> exception : method.getAnnotation(ExceptionHandler.class).value()) {
+                            for (Class<? extends Throwable> exception : method.getAnnotation(ExceptionHandler.class).value()) {
                                 exceptionsMap.put(exception, method);
                             }
                         }
@@ -510,7 +510,7 @@ public class CustomPlugin implements IPlugin {
         return aopHandler;
     }
 
-    public static Map<Class<? extends Exception>, Method> getExceptionsMap() {
+    public static Map<Class<? extends Throwable>, Method> getExceptionsMap() {
         return exceptionsMap;
     }
 
