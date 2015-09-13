@@ -7,9 +7,8 @@ import com.jfinal.upload.UploadFile;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.FileType;
-import com.teddy.jfinal.exceptions.AutoSetterException;
 import com.teddy.jfinal.exceptions.Lc4eException;
-import com.teddy.jfinal.exceptions.ValidateException;
+import com.teddy.jfinal.exceptions.Lc4eValidateException;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
@@ -45,10 +44,10 @@ class ValidateKit {
 
     }
 
-    public static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws ValidateException {
+    public static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws Lc4eValidateException {
         if (method != null && !method.value().toString().equals(invocation.getController().getRequest().getMethod().toUpperCase())) {
             // controller.renderError(404);
-            throw new ValidateException("404");
+            throw new Lc4eValidateException("404");
         }
     }
 
@@ -58,9 +57,9 @@ class ValidateKit {
      * @param header
      * @param invocation
      * @throws Lc4eException
-     * @throws ValidateException
+     * @throws Lc4eValidateException
      */
-    public static void resolveRequestHeader(RequestHeader header, Invocation invocation) throws Lc4eException, ValidateException {
+    public static void resolveRequestHeader(RequestHeader header, Invocation invocation) throws Lc4eException, Lc4eValidateException {
         if (header == null) {
             return;
         }
@@ -73,7 +72,7 @@ class ValidateKit {
                 String value = request.getHeader(keys[i].trim());
                 if (StrKit.isBlank(value) || !value.trim().equals(values[i].trim())) {
                     //controller.renderError(404);
-                    throw new ValidateException("Request Header [" + keys[i] + "] must be [" + values[i] + "]");
+                    throw new Lc4eValidateException("Request Header [" + keys[i] + "] must be [" + values[i] + "]");
                 }
             }
         } else {
@@ -81,7 +80,7 @@ class ValidateKit {
         }
     }
 
-    public static void resolveToken(ValidateToken token, Invocation invocation) throws ValidateException {
+    public static void resolveToken(ValidateToken token, Invocation invocation) throws Lc4eValidateException {
         if (token == null) {
             return;
         }
@@ -90,7 +89,7 @@ class ValidateKit {
         String lc4eToken = request.getHeader(Const.LC4E_TOKEN);
 
         if (lc4eToken == null || lc4eToken.trim().equals("")) {
-            throw new ValidateException("Token must be not empty");
+            throw new Lc4eValidateException("Token must be not empty");
         } else {
             String regex = "\\d+", unixTime = "";
             Pattern p = Pattern.compile(regex);
@@ -100,7 +99,7 @@ class ValidateKit {
                 unixTime = m.group();
             }
             if (!unixTime.equals(lc4eToken)) {
-                throw new ValidateException("Token format is error");
+                throw new Lc4eValidateException("Token format is error");
             }
             regex = "\\b" + suf + "(.*)" + pre + "\\b";
             p = Pattern.compile(regex);
@@ -110,12 +109,12 @@ class ValidateKit {
                 unixTime = m.group(1);
             }
             if (unixTime == null || "".equals(unixTime.trim())) {
-                throw new ValidateException("Token format is error");
+                throw new Lc4eValidateException("Token format is error");
             }
             Long now = new Date().getTime();
             Long diff = now - Long.valueOf(unixTime);
             if (diff < 0) {
-                throw new ValidateException("Token is expired");
+                throw new Lc4eValidateException("Token is expired");
             }
             Long day = diff / (1000 * 60 * 60 * 24);
             Long hour = (diff / (60 * 60 * 1000) - day * 24);
@@ -123,7 +122,7 @@ class ValidateKit {
             Long second = (diff / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
 
             if (day > 0 || hour > 0 || min > 0 || second > 10) {
-                throw new ValidateException("Token is expired");
+                throw new Lc4eValidateException("Token is expired");
             }
         }
     }
@@ -139,7 +138,7 @@ class ValidateKit {
         return comVarMap;
     }
 
-    public static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws ValidateException, Lc4eException {
+    public static void resolveComVars(ValidateComVars comVars, Invocation invocation) throws Lc4eValidateException, Lc4eException {
         if (comVars == null) {
             return;
         }
@@ -150,38 +149,38 @@ class ValidateKit {
             log.warn("May lost some ComVars");
         }
         if (variables.size() == 0) {
-            throw new ValidateException("No ComVar Record Found in Database or Cache");
+            throw new Lc4eValidateException("No ComVar Record Found in Database or Cache");
         }
 
         for (Sys_Common_Variable variable : variables) {
             ValidateComVar comVar = comVarMap.get(variable.getStr(T_Sys_Common_Variable.name));
             Class type = ReflectTool.wrapper(comVar.type());
             if (!ReflectTool.wrapperObject(type, variable.getStr(T_Sys_Common_Variable.value)).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
-                throw new ValidateException(variable.get(T_Sys_Common_Variable.error));
+                throw new Lc4eValidateException(variable.get(T_Sys_Common_Variable.error));
             }
         }
 
     }
 
-    public static void resolveComVar(ValidateComVar comVar, Invocation invocation) throws ValidateException {
+    public static void resolveComVar(ValidateComVar comVar, Invocation invocation) throws Lc4eValidateException {
         if (comVar == null) {
             return;
         }
         if (StringTool.equalEmpty(comVar.name()) || StringTool.equalEmpty(comVar.value())) {
-            throw new ValidateException("Parameter field in invalid!");
+            throw new Lc4eValidateException("Parameter field in invalid!");
         }
         Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.name());
         if (variable == null) {
-            throw new ValidateException("No ComVar Record Found in Database or Cache");
+            throw new Lc4eValidateException("No ComVar Record Found in Database or Cache");
         } else {
             Class type = ReflectTool.wrapper(comVar.type());
             if (!ReflectTool.wrapperObject(type, variable.getStr(T_Sys_Common_Variable.value)).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
-                throw new ValidateException(variable.get(T_Sys_Common_Variable.error));
+                throw new Lc4eValidateException(variable.get(T_Sys_Common_Variable.error));
             }
         }
     }
 
-    public static void resolveParameters(ValidateParams params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, ValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
+    public static void resolveParameters(ValidateParams params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, Lc4eValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
         if (params == null) {
             return;
         }
@@ -201,7 +200,7 @@ class ValidateKit {
         }
     }
 
-    private static void resolveParams(ValidateParam[] params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, ValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
+    private static void resolveParams(ValidateParam[] params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, Lc4eValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
         if (params == null) {
             return;
         }
@@ -210,12 +209,12 @@ class ValidateKit {
         }
     }
 
-    public static void resolveParameter(ValidateParam param, Invocation invocation) throws ValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
+    public static void resolveParameter(ValidateParam param, Invocation invocation) throws Lc4eValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
         if (param == null) {
             return;
         }
         if (StringTool.equalEmpty(param.value()) && param.index() == -1) {
-            throw new ValidateException(StringTool.equalEmpty(param.error()) ? "Parameter" : param.error() + " is  invalid");
+            throw new Lc4eValidateException(StringTool.equalEmpty(param.error()) ? "Parameter" : param.error() + " is  invalid");
         }
         Controller controller = invocation.getController();
         Object object;
@@ -235,17 +234,17 @@ class ValidateKit {
         validate(param, controller, type, object, setDefaultFlag);
     }
 
-    public static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws ValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
+    public static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws Lc4eValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
         String error = StringTool.equalEmpty(param.error()) ? "Parameter" : param.error();
         if (String.class == type) {
             validateRequired(param, object, error);
             if (param.required() && object != null) {
                 String tmp = String.valueOf(object.toString());
                 if (param.minLen() != -1 && param.minLen() > tmp.length()) {
-                    throw new ValidateException(error + " length is too short");
+                    throw new Lc4eValidateException(error + " length is too short");
                 }
                 if (param.maxLen() != -1 && param.maxLen() < tmp.length()) {
-                    throw new ValidateException(error + " length is too long");
+                    throw new Lc4eValidateException(error + " length is too long");
                 }
             }
             if (setDefaultFlag) {
@@ -265,10 +264,10 @@ class ValidateKit {
             if (param.required() && object != null) {
                 Integer tmp = Integer.valueOf(object.toString());
                 if (param.minInt() != -1 && param.minInt() > tmp) {
-                    throw new ValidateException(error + " is too small");
+                    throw new Lc4eValidateException(error + " is too small");
                 }
                 if (param.maxInt() != -1 && param.maxInt() < tmp) {
-                    throw new ValidateException(error + " is too large");
+                    throw new Lc4eValidateException(error + " is too large");
                 }
             }
             if (setDefaultFlag) {
@@ -279,10 +278,10 @@ class ValidateKit {
             if (param.required() && object != null) {
                 Long tmp = Long.valueOf(object.toString());
                 if (param.minLong() != -1 && param.minLong() > tmp) {
-                    throw new ValidateException(error + " is too small");
+                    throw new Lc4eValidateException(error + " is too small");
                 }
                 if (param.maxLong() != -1 && param.maxLong() < tmp) {
-                    throw new ValidateException(error + " is too large");
+                    throw new Lc4eValidateException(error + " is too large");
                 }
             }
             if (setDefaultFlag) {
@@ -293,10 +292,10 @@ class ValidateKit {
             if (param.required() && object != null) {
                 Double tmp = Double.valueOf(object.toString());
                 if (param.minDouble() != -1 && param.minDouble() > tmp) {
-                    throw new ValidateException(error + " is too small");
+                    throw new Lc4eValidateException(error + " is too small");
                 }
                 if (param.maxDouble() != -1 && param.maxDouble() < tmp) {
-                    throw new ValidateException(error + " is too large");
+                    throw new Lc4eValidateException(error + " is too large");
                 }
             }
             if (setDefaultFlag) {
@@ -307,10 +306,10 @@ class ValidateKit {
             if (param.required() && object != null) {
                 Float tmp = Float.valueOf(object.toString());
                 if (param.minDouble() != -1 && param.minDouble() > tmp) {
-                    throw new ValidateException(error + " is too small");
+                    throw new Lc4eValidateException(error + " is too small");
                 }
                 if (param.maxDouble() != -1 && param.maxDouble() < tmp) {
-                    throw new ValidateException(error + " is too large");
+                    throw new Lc4eValidateException(error + " is too large");
                 }
             }
             if (setDefaultFlag) {
@@ -322,10 +321,10 @@ class ValidateKit {
             if (param.required() && object != null) {
                 Date tmp = sdf.parse(object.toString());
                 if (!Const.DEFAULT_NONE.equals(param.minDate()) && sdf.parse(param.minDate()).getTime() > tmp.getTime()) {
-                    throw new ValidateException(error + " is too early");
+                    throw new Lc4eValidateException(error + " is too early");
                 }
                 if (!Const.DEFAULT_NONE.equals(param.maxDate()) && sdf.parse(param.maxDate()).getTime() < tmp.getTime()) {
-                    throw new ValidateException(error + " is too late");
+                    throw new Lc4eValidateException(error + " is too late");
                 }
                 object = tmp;
             }
@@ -336,26 +335,26 @@ class ValidateKit {
             UploadFile file = controller.getFile(param.value());
             if (param.required()) {
                 if (file == null) {
-                    throw new ValidateException("Upload File must be not empty!");
+                    throw new Lc4eValidateException("Upload File must be not empty!");
                 }
                 if (param.maxSize() != -1 && file.getFile().length() > param.maxSize()) {
-                    throw new ValidateException("Upload File size is too large!");
+                    throw new Lc4eValidateException("Upload File size is too large!");
                 }
                 if (param.minSize() != -1 && file.getFile().length() < param.maxSize()) {
-                    throw new ValidateException("Upload File size is too small!");
+                    throw new Lc4eValidateException("Upload File size is too small!");
                 }
                 if (!param.fileType().equals(FileType.NONE) && !file.getContentType().contains(param.fileType().toString())) {
-                    throw new ValidateException("Upload File Type must be " + param.fileType().toString() + "!");
+                    throw new Lc4eValidateException("Upload File Type must be " + param.fileType().toString() + "!");
                 }
             }
         } else {
-            throw new ValidateException("Do not support the type [" + type.toString() + "]");
+            throw new Lc4eValidateException("Do not support the type [" + type.toString() + "]");
         }
     }
 
-    private static void validateRequired(ValidateParam param, Object object, String error) throws ValidateException {
+    private static void validateRequired(ValidateParam param, Object object, String error) throws Lc4eValidateException {
         if (param.required() && object == null) {
-            throw new ValidateException(error + " is  invalid");
+            throw new Lc4eValidateException(error + " is  invalid");
         }
     }
 

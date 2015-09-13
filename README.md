@@ -51,10 +51,20 @@
 
 ##Other enhancement
 - `BaseController`：增强Controller 增加isAJAX ，isPJAX等
-- `DBModel`:增加 enhancer发放，增强Model,自动set updateTime，createTime,自动事务，自动Cache
+- `DBModel`:增加 enhancer方法，增强Model,自动set updateTime，createTime,自动事务，自动Cache
 - `Handler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
 - `Interceptor`: interceptor增强，需使用InterceptorHandler载入，新增beforeIntercept，afterIntercept，beforeException，afterException
 - `IPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
+- `SetPJAX`:设置PJAX attribute
+- `SetAJAX`:设置AJAX attribute
+
+## Exception
+Lc4eAutoSetterException:自动设置response attribute 异常
+Lc4eApplicationException: 业务层异常
+Lc4eException:
+Lc4eRuntimeException:Lc4e自定义代码异常
+ReflectException ：ReflectTool 类中异常
+Lc4eValidateException:参数验证过程异常
 
 
 #Important Update#

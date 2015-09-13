@@ -3,14 +3,14 @@ package com.teddy.jfinal.exceptions;
 /**
  * Created by teddy on 2015/7/29.
  */
-public class ValidateException extends Exception {
+public class Lc4eValidateException extends Exception {
     private static final long serialVersionUID = -7936021541494071097L;
 
-    public ValidateException(String message) {
+    public Lc4eValidateException(String message) {
         super(message);
     }
 
-    public ValidateException() {
+    public Lc4eValidateException() {
     }
 
 

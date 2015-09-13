@@ -2,7 +2,7 @@ package com.teddy.jfinal.handler.resolve;
 
 import com.jfinal.aop.Invocation;
 import com.teddy.jfinal.annotation.RequestMethod;
-import com.teddy.jfinal.exceptions.ValidateException;
+import com.teddy.jfinal.exceptions.Lc4eValidateException;
 import com.teddy.jfinal.interfaces.AnnotationResolver;
 
 /**
@@ -13,7 +13,7 @@ public class RequestMethodResolver implements AnnotationResolver {
     private RequestMethod requestMethod;
 
     @Override
-    public void resolve(Invocation invocation) throws ValidateException {
+    public void resolve(Invocation invocation) throws Lc4eValidateException {
         ValidateKit.resolveRequestMethod(requestMethod, invocation);
     }
 

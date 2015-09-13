@@ -4,7 +4,7 @@ import com.jfinal.aop.Invocation;
 import com.jfinal.log.Logger;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
-import com.teddy.jfinal.exceptions.AutoSetterException;
+import com.teddy.jfinal.exceptions.Lc4eAutoSetterException;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.tools.CustomTool;
 import com.teddy.jfinal.tools.ReflectTool;
@@ -29,7 +29,7 @@ public class AttributeKit {
 
     private static final Logger log = getLogger(AttributeKit.class);
 
-    public static void setUIDatas(SetUIDatas uiDatas, Invocation ai) throws Lc4eException, AutoSetterException {
+    public static void setUIDatas(SetUIDatas uiDatas, Invocation ai) throws Lc4eException, Lc4eAutoSetterException {
         if (uiDatas == null) {
             return;
         }
@@ -39,14 +39,14 @@ public class AttributeKit {
 
     }
 
-    public static void setUIData(SetUIData uiData, Invocation ai) throws Lc4eException, AutoSetterException {
+    public static void setUIData(SetUIData uiData, Invocation ai) throws Lc4eException, Lc4eAutoSetterException {
         if (uiData == null) {
             return;
         }
         Object returnValue;
         Method method = ReflectTool.getMethodByClassAndName(uiData.methodClass(), uiData.methodName());
         if (method == null) {
-            throw new AutoSetterException("The method [" + uiData.methodName() + "] can not found in Class [" + uiData.methodClass().toString() + "]");
+            throw new Lc4eAutoSetterException("The method [" + uiData.methodName() + "] can not found in Class [" + uiData.methodClass().toString() + "]");
         }
         try {
             Object obj = uiData.methodClass().newInstance();
@@ -57,43 +57,43 @@ public class AttributeKit {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new AutoSetterException("Call method [" + uiData.methodName() + "] failed");
+            throw new Lc4eAutoSetterException("Call method [" + uiData.methodName() + "] failed");
         }
         if (returnValue != null) {
             ai.getController().setAttr(uiData.attrName(), returnValue);
         } else {
-            throw new AutoSetterException("Auto Set Attribute [" + uiData.attrName() + "] failed!");
+            throw new Lc4eAutoSetterException("Auto Set Attribute [" + uiData.attrName() + "] failed!");
         }
     }
 
-    public static void setComVar(SetComVar comVar, Invocation ai) throws AutoSetterException {
+    public static void setComVar(SetComVar comVar, Invocation ai) throws Lc4eAutoSetterException {
         if (comVar == null) {
             return;
         }
         if (StringTool.equalEmpty(comVar.value())) {
-            throw new AutoSetterException("ComVar Field must be not empty!");
+            throw new Lc4eAutoSetterException("ComVar Field must be not empty!");
         }
         Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.value());
         if (variable == null) {
-            throw new AutoSetterException("No ComVar Record Found in Database or Cache");
+            throw new Lc4eAutoSetterException("No ComVar Record Found in Database or Cache");
         } else {
             ai.getController().setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
                     .type(), variable.getStr(T_Sys_Common_Variable.value)));
         }
     }
 
-    private static Map<String, SetComVar> setComVarsBefore(SetComVars comVars) throws AutoSetterException {
+    private static Map<String, SetComVar> setComVarsBefore(SetComVars comVars) throws Lc4eAutoSetterException {
         Map<String, SetComVar> comVarMap = new HashMap<>();
         for (SetComVar comVar : comVars.value()) {
             if (StringTool.equalEmpty(comVar.value())) {
-                throw new AutoSetterException("ComVar Field must be not empty!");
+                throw new Lc4eAutoSetterException("ComVar Field must be not empty!");
             }
             comVarMap.put(comVar.value(), comVar);
         }
         return comVarMap;
     }
 
-    public static void setComVars(SetComVars comVars, Invocation ai) throws AutoSetterException {
+    public static void setComVars(SetComVars comVars, Invocation ai) throws Lc4eAutoSetterException {
         if (comVars == null) {
             return;
         }
@@ -104,7 +104,7 @@ public class AttributeKit {
             log.warn("May lost some ComVars");
         }
         if (variables.size() == 0) {
-            throw new AutoSetterException("No ComVar Record Found in Database or Cache");
+            throw new Lc4eAutoSetterException("No ComVar Record Found in Database or Cache");
         }
         for (Sys_Common_Variable variable : variables) {
             SetComVar comVar = comVarMap.get(variable.getStr(T_Sys_Common_Variable.name));
