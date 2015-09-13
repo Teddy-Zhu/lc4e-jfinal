@@ -1,6 +1,7 @@
 /*!
  * Lc4e Javascript Library
- * author zhuxi - v1.0.0 (2015-04-09T11:23:51+0800)
+ * author zhuxi - v1.0.0 (2015-04-09T11:23:51+0800 Created)
+ * update 2015-9-13 20:08:53
  * http://www.lc4e.com/ | Released under MIT license
  * 
  * Include jquery (http://jquery.com/) semantic-ui (http://semantic-ui.com/)
@@ -12,6 +13,16 @@
     $.lc4e = $.lc4e || {};
     $.extend($.lc4e, {
         version: '1.0',
+        init: function (options) {
+            var query = arguments[0],
+                methodInvoked = (typeof query == 'string'),
+                queryArguments = [].slice.call(arguments, 1);
+            if (methodInvoked) {
+                $.lc4e[query].run();
+            } else {
+                $.lc4e[query][queryArguments['method']].call();
+            }
+        },
         removeArray: function (obj, array) {
             if (!$.isPlainObject(obj)) {
                 return obj;
@@ -3361,7 +3372,7 @@
                             scrollSpeed: 500
                         });
                     }
-                    $(data.target).empty().html(resValue);
+                    $(data.target).empty().html($(resValue));
                     var state = {
                         target: data.target,
                         data: $(data.target).prop('outerHTML'),
@@ -3444,123 +3455,132 @@
         }
     });
 
-    $.lc4e.common = function () {
-        var $menu = $('#menu'), $configTool = $('#config-tool-options'), $floatTool = $('#floatTools');
+    $.lc4e.common = {
+        variables: {
+            $menu: $('#menu'),
+            $configTool: $('#config-tool-options'),
+            $floatTool: $('#floatTools')
+        },
+        ready: function () {
+            $.lc4e.common.bindEvent();
+        },
+        bindEvent: function () {
+            var $menu = $.lc4e.common.variables.$menu, $configTool = $.lc4e.common.variables.$configTool, $floatTool = $.lc4e.common.variables.$floatTool;
 
-        $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
+            $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
 
-        $menu.find('div.button[href]').on('click', function (e) {
-                var $this = $(this), href = $this.attr('href');
-                e.preventDefault();
-                window.location.href = href;
-            }
-        );
-
-        $menu.find('.ui.dropdown.item').dropdown({
-            action: "nothing",
-            transition: "horizontal flip",
-            on: 'click'
-        });
-
-        $('#searchSite').Lc4eFocusBlur('expended');
-
-        $('#expendHeader').on('click', function () {
-            $menu.toggleClass('expended');
-        });
-
-        $menu.find('.column div:first a').on('click', function () {
-            $menu.find('>.column>.allmenus').transition({
-                animation: "fly down",
-                duration: 300,
-                onComplete: function () {
-                    $menu.find('>.column>.allmenus').toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
+            $menu.find('div.button[href]').on('click', function (e) {
+                    var $this = $(this), href = $this.attr('href');
+                    e.preventDefault();
+                    window.location.href = href;
                 }
-            });
-        });
-        $configTool.find('.angle.double.left.icon').on('click', function () {
-            if ($($configTool.find('.ui.animated.selection.list:not(.hidden)').transition('fade left').attr('data-parent')).transition('fade left').attr('id') == 'menu1') {
-                $(this).addClass('transition hidden');
-            }
-        });
-        $('#config-tool-cog').on('click', function () {
-            $('#config-tool').toggleClass('closed');
-        });
+            );
 
-        $('html').visibility({
-            offset: -1,
-            observeChanges: false,
-            once: false,
-            continuous: false,
-            onTopPassed: function () {
-                $.requestAnimationFrame(function () {
-                    $menu.addClass('fixed');
-                    clearTimeout($floatTool.data('timer'));
-                    $floatTool.data('timer', setTimeout(function () {
-                        $floatTool.transition('fade left in');
-                    }, 500));
-                })
-            },
-            onTopPassedReverse: function () {
-                $.requestAnimationFrame(function () {
-                    $menu.removeClass('fixed');
-                    clearTimeout($floatTool.data('timer'));
-                    $floatTool.data('timer', setTimeout(function () {
-                        $floatTool.transition('fade left out');
-                    }, 500));
+            $menu.find('.ui.dropdown.item').dropdown({
+                action: "nothing",
+                transition: "horizontal flip",
+                on: 'click'
+            });
+
+            $('#searchSite').Lc4eFocusBlur('expended');
+
+            $('#expendHeader').on('click', function () {
+                $menu.toggleClass('expended');
+            });
+
+            $menu.find('.column div:first a').on('click', function () {
+                $menu.find('>.column>.allmenus').transition({
+                    animation: "fly down",
+                    duration: 300,
+                    onComplete: function () {
+                        $menu.find('>.column>.allmenus').toggleClass('menuhidden').removeClass("transition visible hidden").attr('style', '');
+                    }
                 });
-            }
-        });
-
-        $('#fixFooter').checkbox({
-            onChange: function (e) {
-                $('#content').toggleClass('footerFixed');
-                $('.ui.footer').toggleClass('fixed');
-            }
-        });
-
-        $('#userItem').find('img.ui.image').popup({
-            position: 'bottom center',
-            transition: "horizontal flip",
-            popup: $('#userCardPop'),
-            exclusive: false,
-            hideOnScroll: false,
-            on: 'click',
-            closable: true,
-            onVisible: function (model) {
-                if ($(window).width() <= 768)
-                    $(model).popup('reposition');
-            }
-        });
-
-        $('#colorBackground').checkbox({
-            onChange: function (e) {
-                if ($('#colorBackground').checkbox('is checked')) {
-                    $.Lc4eStars();
-                } else {
-                    $.Lc4eStars('destroy');
-                }
-            }
-        });
-        $('#boxedLayout').checkbox({
-            onChange: function (e) {
-                $('#articlelist').toggleClass('nobox');
-            }
-        });
-
-        $('#gtop').on('click', function () {
-            $.requestAnimationFrame(function () {
-                $('html').animatescroll({scrollSpeed: 2000, easing: 'easeOutBounce'})
             });
-        });
+            $configTool.find('.angle.double.left.icon').on('click', function () {
+                if ($($configTool.find('.ui.animated.selection.list:not(.hidden)').transition('fade left').attr('data-parent')).transition('fade left').attr('id') == 'menu1') {
+                    $(this).addClass('transition hidden');
+                }
+            });
+            $('#config-tool-cog').on('click', function () {
+                $('#config-tool').toggleClass('closed');
+            });
 
-        $('.image').visibility({
-            type: 'image',
-            transition: 'vertical flip in',
-            duration: 500
-        });
+            $('html').visibility({
+                offset: -1,
+                observeChanges: false,
+                once: false,
+                continuous: false,
+                onTopPassed: function () {
+                    $.requestAnimationFrame(function () {
+                        $menu.addClass('fixed');
+                        clearTimeout($floatTool.data('timer'));
+                        $floatTool.data('timer', setTimeout(function () {
+                            $floatTool.transition('fade left in');
+                        }, 500));
+                    })
+                },
+                onTopPassedReverse: function () {
+                    $.requestAnimationFrame(function () {
+                        $menu.removeClass('fixed');
+                        clearTimeout($floatTool.data('timer'));
+                        $floatTool.data('timer', setTimeout(function () {
+                            $floatTool.transition('fade left out');
+                        }, 500));
+                    });
+                }
+            });
+
+            $('#fixFooter').checkbox({
+                onChange: function (e) {
+                    $('#content').toggleClass('footerFixed');
+                    $('.ui.footer').toggleClass('fixed');
+                }
+            });
+
+            $('#userItem').find('img.ui.image').popup({
+                position: 'bottom center',
+                transition: "horizontal flip",
+                popup: $('#userCardPop'),
+                exclusive: false,
+                hideOnScroll: false,
+                on: 'click',
+                closable: true,
+                onVisible: function (model) {
+                    if ($(window).width() <= 768)
+                        $(model).popup('reposition');
+                }
+            });
+
+            $('#colorBackground').checkbox({
+                onChange: function (e) {
+                    if ($('#colorBackground').checkbox('is checked')) {
+                        $.Lc4eStars();
+                    } else {
+                        $.Lc4eStars('destroy');
+                    }
+                }
+            });
+            $('#boxedLayout').checkbox({
+                onChange: function (e) {
+                    $('#articlelist').toggleClass('nobox');
+                }
+            });
+
+            $('#gtop').on('click', function () {
+                $.requestAnimationFrame(function () {
+                    $('html').animatescroll({scrollSpeed: 2000, easing: 'easeOutBounce'})
+                });
+            });
+
+            $('.image').visibility({
+                type: 'image',
+                transition: 'vertical flip in',
+                duration: 500
+            });
+        }
     };
-
-    $.lc4e.common.call();
+    $.lc4e.common.ready();
 })
 (jQuery);
 

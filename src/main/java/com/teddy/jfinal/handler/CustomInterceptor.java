@@ -91,9 +91,7 @@ public class CustomInterceptor implements MethodInterceptor {
             en.setSuperclass(targetClass);
             en.setCallback(new CustomInterceptor(targetClass.newInstance()));
             proxy = en.create();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return (T) proxy;
