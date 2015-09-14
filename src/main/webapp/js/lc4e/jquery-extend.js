@@ -39,13 +39,11 @@
         },
         popstate: function () {
             window.onpopstate = function (e) {
-                var state = e.state;
+                var state = e.state, $target = $(state.data);
                 if (state) {
-                    $(state.data).replaceAll($(state.target));
+                    $target.replaceAll($(state.target));
                     document.title = state.title;
-                    if (state.animate) {
-                        $.lc4e.Lc4ePJAX.successFunc[state.target + state.url].call();
-                    }
+                    $target.transition('fade in');
                 }
             }
         },
@@ -351,7 +349,7 @@
                     }
                 },
                 create: function (options) {
-                    if (query.hasOwnProperty('onHide') && typeof query.onHide === 'function') {
+                    if (options.hasOwnProperty('onHide') && typeof options.onHide === 'function') {
                         $module.data('onHide', options.onHide);
                         options.onHide = function (dimmable) {
                             $module.data('onHide').call($module, dimmable);
@@ -377,9 +375,15 @@
                     return $module.dimmer('has dimmer') && $module.data('onHide');
                 },
                 invoke: function (query) {
-                    $module.dimmer(query, queryArguments);
+                    if (typeof module[query] === 'function') {
+                        module[query].call();
+                    } else {
+                        $module.dimmer(query, queryArguments);
+                    }
+
                 },
                 destroy: function () {
+                    $module.dimmer('destroy');
                     if (settings.blurring) {
                         $module.removeClass('blurring');
                     }
@@ -423,7 +427,7 @@
             content: '<div class="ui text loader">Loading</div>',
             on: false,
             blurring: true,
-            transition: 'scale',
+            transition: 'fade',
             useCSS: true,
             onShow: function () {
             },
@@ -3332,8 +3336,7 @@
                 }
                 if (data.pjax) {
                     xhr.setRequestHeader('X-PJAX', true);
-                    var state = window.history.state;
-
+                    var state = window.history.state, $target = $(data.target);
                     if (state) {
                         if (state.target != data.target) {
                             state.target = data.target;
@@ -3352,7 +3355,7 @@
                         $.lc4e.popstate();
                         history.replaceState(state, document.title);
                     }
-
+                    $target.Lc4eDimmer();
                 }
                 if (typeof data.options.beforeSend === "function") {
                     data.options.beforeSend.call(this, xhr, settings);
@@ -3372,26 +3375,26 @@
                             scrollSpeed: 500
                         });
                     }
-                    $(data.target).empty().html($(resValue));
+                    var $target = $(data.target);
+                    $target.Lc4eDimmer('hide').empty().html(resValue);
+                    if (typeof data.options.success === "function") {
+                        data.options.success.call(this, resValue, textStatus);
+                    }
                     var state = {
                         target: data.target,
-                        data: $(data.target).prop('outerHTML'),
+                        data: $target.prop('outerHTML'),
                         title: document.title,
                         url: data.url
                     };
-                    if (typeof data.animate === 'function') {
-                        data.animate.call(this, resValue, textStatus);
-                        $.lc4e.Lc4ePJAX.successFunc[state.target + state.url] = data.animate;
-                        state.animate = true;
-                    }
                     if ($.lc4e.Lc4ePJAX.active) {
                         history.pushState(state, document.title, data.url);
                     } else {
                         history.replaceState(state, document.title);
                         $.lc4e.Lc4ePJAX.active = true;
                     }
-                    if (typeof data.options.success === "function") {
-                        data.options.success.call(this, resValue, textStatus);
+
+                    if (typeof data.animate === 'function') {
+                        data.animate.call(this, $target)
                     }
                 }
 
@@ -3467,6 +3470,12 @@
         bindEvent: function () {
             var $menu = $.lc4e.common.variables.$menu, $configTool = $.lc4e.common.variables.$configTool, $floatTool = $.lc4e.common.variables.$floatTool;
 
+            if (window.history.state) {
+                $.lc4e.Lc4ePJAX.active = true;
+                $.lc4e.popstate();
+            } else {
+                $.lc4e.popstate();
+            }
             $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
 
             $menu.find('div.button[href]').on('click', function (e) {

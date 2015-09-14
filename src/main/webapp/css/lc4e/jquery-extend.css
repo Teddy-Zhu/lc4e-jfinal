@@ -4240,6 +4240,7 @@ html, body {
 }
 
 #menu.fixed {
+    z-index: 1001;
     background-color: #FFFFFF;
     border-bottom: 1px solid #DDDDDD;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.25);
@@ -4269,7 +4270,7 @@ html, body {
     -webkit-border-radius: 0.25em;
     -moz-border-radius: 0.25em;
     border-radius: 0.25em;
-    background: #DADADA;
+    background: #ECECEC;
     left: 0;
     top: 0;
     z-index: -1;
@@ -4423,6 +4424,7 @@ html, body {
     bottom: 13em;
     z-index: 1;
     left: 8%;
+    padding: 0;
     display: none;
 }
 
@@ -4430,7 +4432,6 @@ html, body {
     height: 50px;
     width: 59px;
     border-radius: 0.1em;
-    margin-bottom: 10px;
     background: none;
 }
 
@@ -4442,11 +4443,16 @@ html, body {
     font-size: 3em;
 }
 
+#floatTools > .tool:hover {
+    background: #ECECEC;
+}
+
 #floatTools > .tool {
     cursor: pointer;
     display: block;
     color: orange;
-    margin: auto;
+    margin: 0;
+    width: 100%;
     line-height: 1em;
 }
 

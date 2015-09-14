@@ -13,8 +13,7 @@
             </div>
         </div>
     </div>
-    <div id="attachedHeader" class="ui attached clearing message" data-page="<beetl>page!1</beetl>"
-         data-sort="<beetl>topicSort!1</beetl>">
+    <div id="attachedHeader" class="ui attached clearing message">
         <div class="ui left floated breadcrumb nobox segment">
             <a class="section">
                 <beetl>SiteName</beetl>
@@ -52,7 +51,8 @@
         </div>
     </div>
     <div id="articlelist" class="ui attached fluid segment">
-        <div id="articleItems" class="ui divided items">
+        <div id="articleItems" class="ui divided items" data-page="<beetl>page!1</beetl>"
+             data-sort="<beetl>topicSort!1</beetl>">
             <!--- if(has(articles) && articles !=null){ layout("/ajax/_article.html",{'lists':articles}){};}--->
         </div>
     </div>
