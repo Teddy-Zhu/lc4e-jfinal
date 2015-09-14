@@ -13,15 +13,16 @@
     display: block;
 }
 
-#articleItems > .item > .image {
+#topicItems > .item > .image {
     width: 5rem;
 }
 
-#articleItems > .item {
+#topicItems > .item {
+    padding: 1em 2em !important;
     transition: background 0.5s ease;
 }
 
-#articleItems > .item:hover {
+#topicItems > .item:hover {
     background: #ECECEC;
 }
 
@@ -49,7 +50,7 @@
         background-color: transparent;
     }
 
-    #articleItems > .item > .image {
+    #topicItems > .item > .image {
         width: 70px !important;
         max-width: 30% !important;
         margin-left: inherit;
@@ -65,7 +66,7 @@
         padding: 0;
     }
 
-    #articleItems > .item {
+    #topicItems > .item {
         padding-left: 1em !important;
         padding-right: 1em !important;
     }
@@ -75,23 +76,19 @@
     }
 }
 
-#articleItems > .item {
-    padding: 1em 2em !important;
-}
-
-#articleItems > .item > .content {
+#topicItems > .item > .content {
     padding-top: 0.5em;
 }
 
-#articleItems > .item img {
+#topicItems > .item img {
     border-radius: .25rem;
 }
 
-#articleItems > .item > .content > .header > .title {
+#topicItems > .item > .content > .header > .title {
     display: inline-block;
 }
 
-#articleItems > .item > .content > .header:after {
+#topicItems > .item > .content > .header:after {
     width: 100%;
     height: 1.5px;
     background-color: #4183C4;
@@ -106,30 +103,30 @@
     display: block;
 }
 
-#articleItems > .item > .content > .header:hover:after {
+#topicItems > .item > .content > .header:hover:after {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
 }
 
-#articleItems > .item > .content > .header i.icon {
+#topicItems > .item > .content > .header i.icon {
     margin: 0 0 0 0;
 }
 
-#articleItems > .item > .content > .extra > .ui.label .icon {
+#topicItems > .item > .content > .extra > .ui.label .icon {
     margin: 0 .1em 0 0;
 }
 
-#articleItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
+#topicItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
     top: .3em;
     padding: .2em .3em .2em .3em;
     left: calc(.49em - 1.2em);
 }
 
-#articleItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
+#topicItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
     border-width: 0 0.8em 0.8em 0;
 }
 
-#articleItems > .item > .content > .extra > .ui.label {
+#topicItems > .item > .content > .extra > .ui.label {
     padding: .2em .25em;
     margin: .55rem .2rem 0 0;
 }

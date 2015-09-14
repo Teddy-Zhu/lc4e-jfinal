@@ -10,14 +10,14 @@ $(function () {
         run: function () {
         },
         bindEvent: function () {
-            var $articleItems = $('#articleItems'),
+            var $topicItems = $('#topicItems'),
                 $announce = $('#announce');
 
             $announce.shape();
-            $('#sortTopic').dropdown().dropdown('set selected', $articleItems.attr('data-sort'));
+            $('#sortTopic').dropdown().dropdown('set selected', $topicItems.attr('data-sort'));
 
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
-                var $items = $('#articleItems'), page = parseInt($items.attr("data-page")) + 1;
+                var $items = $('#topicItems'), page = parseInt($items.attr("data-page")) + 1;
                 $.Lc4eAjax({
                     url: "/?p=" + page,
                     data: {art: true},
@@ -36,7 +36,7 @@ $(function () {
                             });
                     },
                     success: function (data) {
-                        $('#articleItems').attr("data-page", page);
+                        $('#topicItems').attr("data-page", page);
                     }
                 })
             });

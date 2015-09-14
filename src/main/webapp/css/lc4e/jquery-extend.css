@@ -4701,3 +4701,10 @@ html, body {
     color: black;
 }
 
+.no.padded.column {
+    padding: 0;
+}
+
+.ui.no.padded.segment {
+    padding: 0;
+}

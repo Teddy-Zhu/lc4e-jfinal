@@ -9,6 +9,7 @@ import com.teddy.lc4e.core.entity.Article;
 import com.teddy.lc4e.core.entity.Message;
 import com.teddy.lc4e.core.entity.Popup;
 import com.teddy.lc4e.core.web.service.ComVarService;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 
@@ -24,6 +25,8 @@ import java.util.Random;
 @Controller("/")
 public class ViewController extends BaseController {
 
+    private static final Logger log = Logger.getLogger(ViewController.class);
+
     @ValidateParams(value = {
             @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
             @ValidateParam(value = "art", type = boolean.class, defaultValue = "false")
@@ -33,7 +36,7 @@ public class ViewController extends BaseController {
         if (isPJAX()) {
             forwardAction("/Articles");
         } else {
-            setAttr("articles", getArticle(getParaToInt("p")));
+            setAttr("topics", getArticle(getParaToInt("p")));
             render("pages/index");
         }
     }
@@ -41,9 +44,21 @@ public class ViewController extends BaseController {
     @RequestMethod(Method.GET)
     @ValidateParam(value = "p", type = int.class, defaultValue = "1")
     public void Articles() {
-        setAttr("lists", getArticle(getParaToInt("p")));
-        render("ajax/_article");
+        setAttr("topics", getArticle(getParaToInt("p")));
+        render("ajax/_topic");
     }
+
+    @RequestMethod(Method.GET)
+    @ValidateParams(
+            @ValidateParam(value = "p", type = int.class, defaultValue = "1")
+            //,@ValidateParam(index = 0, type = String.class, defaultValue = "2222")
+    )
+    public void area() {
+        log.info(getPara(0));
+        setAttr("topics", getArticle(getParaToInt("p")));
+        render("pages/area");
+    }
+
 
     public void captcha() {
         renderCaptcha();
