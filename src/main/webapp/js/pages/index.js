@@ -8,6 +8,11 @@ $(function () {
             $.lc4e.index.run();
         },
         run: function () {
+            var $topicItems = $('#topicItems'),
+                $topicSetting = $topicItems.find('.topicSetting'),
+                $topicPopup = $topicItems.find('>.item .ui.fluid.image img');
+            $topicSetting.dropdown();
+            $topicPopup.popup();
         },
         bindEvent: function () {
             var $topicItems = $('#topicItems'),
@@ -29,13 +34,12 @@ $(function () {
                             transition({
                                 animation: 'fade down in',
                                 duration: 250,
-                                interval: 90,
-                                onComplete: function () {
-                                    $target.find('>.item .ui.fluid.image img').popup();
-                                }
+                                interval: 90
                             });
                     },
-                    success: function (data) {
+                    success: function (data, status, $target) {
+                        $target.find('.topicSetting').dropdown();
+                        $target.find('>.item .ui.fluid.image img').popup();
                         $('#topicItems').attr("data-page", page);
                     }
                 })

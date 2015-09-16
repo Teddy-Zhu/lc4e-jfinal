@@ -4300,6 +4300,11 @@ html, body {
 }
 
 #menu .ui.headered.image {
+    position: relative;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    margin: auto;
     width: 3em;
     border-radius: .25rem;
     -webkit-transition: width 0.2s ease, height 0.2s ease;
@@ -4325,6 +4330,7 @@ html, body {
 }
 
 #userItem > .ui.tiny.attached.label {
+    top: .5em;
     padding: .1em .3em;
 }
 
@@ -4447,7 +4453,12 @@ html, body {
     background: #ECECEC;
 }
 
+#floatTools > .tool :first-child {
+    border-top: none;
+}
+
 #floatTools > .tool {
+    border-top: 1px solid rgba(34, 36, 38, .15);
     cursor: pointer;
     display: block;
     color: orange;
@@ -4658,13 +4669,6 @@ html, body {
     background-color: white;
 }
 
-/* nobox for segment */
-.ui.nobox.segment {
-    box-shadow: none;
-    border: none;
-    background-color: transparent;
-}
-
 /* extend success */
 .ui.form .field.success input[type=text], .ui.form .field.success input[type=password] {
     background-color: #E4F7E1;
@@ -4705,6 +4709,14 @@ html, body {
     padding: 0;
 }
 
-.ui.no.padded.segment {
+.ui.no.padded.segment:not(.left):not(.right) {
     padding: 0;
+}
+
+.ui.no.left.padded.segment {
+    padding-left: 0;
+}
+
+.ui.no.right.padded.segment {
+    padding-right: 0;
 }

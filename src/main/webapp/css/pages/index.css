@@ -18,12 +18,21 @@
 }
 
 #topicItems > .item {
+    position: relative;
     padding: 1em 2em !important;
     transition: background 0.5s ease;
 }
 
 #topicItems > .item:hover {
     background: #ECECEC;
+}
+
+#topicItems > .item:hover .topicQuickTools {
+    opacity: 1;
+}
+
+#topicItems > .item .topicQuickTools > .pointing.label:before {
+    display: none;
 }
 
 #todayHot, #yesterdayHot {
@@ -103,6 +112,20 @@
     display: block;
 }
 
+#topicItems > .item .topicQuickTool > .icon {
+    margin: 0;
+}
+
+#topicItems > .item .topicQuickTools > .topicQuickTool {
+    margin: auto;
+}
+
+#topicItems > .item .topicQuickTools {
+    float: right;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
 #topicItems > .item > .content > .header:hover:after {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
@@ -128,7 +151,7 @@
 
 #topicItems > .item > .content > .extra > .ui.label {
     padding: .2em .25em;
-    margin: .55rem .2rem 0 0;
+    margin: .55rem .5rem 0 0;
 }
 
 #rightContent > .ui.segment > .ui.divided.items > .item > .ui.label {

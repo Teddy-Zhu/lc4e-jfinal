@@ -39,9 +39,10 @@
         },
         popstate: function () {
             window.onpopstate = function (e) {
-                var state = e.state, $target = $(state.data);
+                var state = e.state, $target = $(state.data), $origin = $(state.target);
                 if (state) {
-                    $target.replaceAll($(state.target));
+                    $origin.empty();
+                    $target.replaceAll($origin);
                     document.title = state.title;
                     $target.transition('fade in');
                 }
@@ -623,6 +624,43 @@
         }
     };
 
+    $.fn.Lc4eMessage = function (options) {
+        var query = arguments[0],
+            methodInvoked = (typeof query == 'string'),
+            queryArguments = [].slice.call(arguments, 1);
+        return this.each(function () {
+            var settings = methodInvoked ? $.extend({}, $.fn.Lc4eMessage.settings.config) : $.extend({}, $.fn.Lc4eMessage.settings.config, query),
+                $module = $(this),
+                namespace = $.fn.Lc4eMessage.settings.namespace,
+                module;
+            module = {
+                initialize: function () {
+
+                }
+            }
+
+        });
+    };
+    $.fn.Lc4eMessage.settings = {
+        namespace: 'Lc4eMessage',
+        config: {
+            icon: '',
+            message: '',
+            animation: '',
+            delay: '',
+            position: {
+                of: $("body"),
+                my: 'right top+3em',
+                at: 'right top+3em',
+                collision: 'none none'
+            }
+        },
+        template: {
+            message: function () {
+                return '<div class="ui floating notice message"></div>';
+            }
+        }
+    };
     $.fn.Lc4eProgress = function (option, data) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
@@ -3315,7 +3353,7 @@
             } else if (data.pjax) {
                 data = $.extend(true, {
                     type: 'get',
-                    dataType: "html",
+                    dataType: "html"
                 }, data);
             } else {
                 data = $.extend(true, {
@@ -3378,7 +3416,7 @@
                     var $target = $(data.target);
                     $target.Lc4eDimmer('hide').empty().html(resValue);
                     if (typeof data.options.success === "function") {
-                        data.options.success.call(this, resValue, textStatus);
+                        data.options.success.call(this, resValue, textStatus, $target);
                     }
                     var state = {
                         target: data.target,
@@ -3393,8 +3431,10 @@
                         $.lc4e.Lc4ePJAX.active = true;
                     }
 
-                    if (typeof data.animate === 'function') {
+                    if (data.animate === 'function') {
                         data.animate.call(this, $target)
+                    } else if (data.animation) {
+                        $target.addClass('animated ' + data.animation);
                     }
                 }
 

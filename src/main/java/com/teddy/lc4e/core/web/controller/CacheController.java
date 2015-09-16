@@ -14,7 +14,9 @@ import com.teddy.lc4e.core.entity.Message;
 @Controller("/cache")
 public class CacheController extends BaseController {
 
-    @ValidateParams(value = {@ValidateParam(value = "cacheName", defaultValue = Const.COMVAR), @ValidateParam(value = "key")})
+    @ValidateParams(value = {
+            @ValidateParam(value = "cacheName", defaultValue = Const.COMVAR),
+            @ValidateParam(value = "key")})
     public void clear() {
         String cacheName = getPara("cacheName");
         String key = getPara("key");

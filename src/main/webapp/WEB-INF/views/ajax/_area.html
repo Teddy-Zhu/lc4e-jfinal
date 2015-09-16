@@ -1,18 +1,30 @@
 <div id="topicHotTags" class="two wide column">
-
+    <div class="ui attached message">
+        <div class="header">
+            Description
+        </div>
+    </div>
+    <div class="ui attached fluid segment">
+        <p>Fill out the form below to sign-up for a new account</p>
+    </div>
+    <div class="ui basic no left right padded segment areaButton">
+        <button class="ui primary fluid button">New Topic</button>
+        <button class="ui fluid button">Two</button>
+        <button class="ui fluid button">Three</button>
+    </div>
 </div>
 <div id="topicList" class="twelve wide column">
     <div id="areaSummery" class="ui attached message">
-        <div class="ui row clearing nobox segment">
-            <div class="ui left floated breadcrumb nobox segment">
+        <div class="ui row no padded clearing basic segment">
+            <div class="ui left floated breadcrumb basic segment">
                 <a class="section">
                     <beetl>SiteName</beetl>
                 </a>
                 <span class="divider">/</span>
-                <a class="section">Registration</a>
-                <span class="divider">/</span>
 
-                <div class="active section">Personal Information</div>
+                <div class="active section">
+                    <beetl>curArea</beetl>
+                </div>
             </div>
             <div id="sortTopic" class="ui dropdown labeled icon basic button">
                 <i class="filter icon"></i>
@@ -68,13 +80,21 @@
                 </div>
             </div>
         </div>
-
-
     </div>
     <div id="topicItems" class="ui divided items no padded attached segment"
          data-page="<beetl>page!1</beetl>"
          data-sort="<beetl>topicSort!1</beetl>">
         <!--- if(has(topics) && topics !=null){ layout("/ajax/_topic.html",{'topics':topics}){};}--->
+    </div>
+    <div id="articlebottons" class="ui bottom attached message">
+        <div id="prePage" class="ui left floated basic labeled icon button">
+            <i class="angle double left icon"></i>
+            Prev
+        </div>
+        <div id="nextPage" class="ui right floated basic right labeled icon button">
+            <i class="angle double right icon"></i>
+            Next
+        </div>
     </div>
 </div>
 

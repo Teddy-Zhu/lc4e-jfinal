@@ -49,12 +49,12 @@ public class ViewController extends BaseController {
     }
 
     @RequestMethod(Method.GET)
-    @ValidateParams(
-            @ValidateParam(value = "p", type = int.class, defaultValue = "1")
-            //,@ValidateParam(index = 0, type = String.class, defaultValue = "2222")
-    )
-    public void area() {
-        log.info(getPara(0));
+    @ValidateParams({
+            @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
+            @ValidateParam(index = 0, type = String.class, defaultValue = "NoArea")
+    })
+    public void a() {
+        setAttr("curArea", getPara(0));
         setAttr("topics", getArticle(getParaToInt("p")));
         render("pages/area");
     }
@@ -105,12 +105,13 @@ public class ViewController extends BaseController {
     public List<Article> getArticle(int page) {
         Integer size = Integer.valueOf(ComVarService.service.getComVarValueByName("IndexPageSize"));
         String[] cate = new String[]{"Java", "Obj-C", "C", "C++", "IOS", "Android"};
+        String[] high = new String[]{"TOP", "NOTICE", "OTHER", "SYSTEM", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
         String[] users = new String[]{"Admin", "Test", "Myas", "Liakx", "Google", "vsss"};
         Date now = new Date();
         List<Article> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             list.add(new Article("/images/wireframe/image.png", new Popup("Matt", "Matt has been a member since July 2014"), "The friction between your thoughts and your code" + getPara("p"), cate[new Random().nextInt(cate.length - 1)], users[new Random().nextInt(users.length - 1)], new Random().nextInt(100),
-                    RelativeDate.format(RelativeDate.randomDate("2015-05-11 13:00:00", now), now), users[new Random().nextInt(users.length - 1)]));
+                    RelativeDate.format(RelativeDate.randomDate("2015-05-11 13:00:00", now), now), users[new Random().nextInt(users.length - 1)], high[new Random().nextInt(high.length - 1)]));
         }
         return list;
     }

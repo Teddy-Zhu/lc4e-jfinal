@@ -10,9 +10,14 @@ for(t in topics){
              data-content="<beetl>t.popUp.content</beetl>">
     </div>
     <div class="content">
-        <a class="header"><i class="red protect icon"></i>
+        <a class="header">
+            <div class="signIcons" style="display: inline-block;">
+                <i class="red protect icon"></i>
+                <i class="red lock icon"></i>
+            </div>
             <beetl>t.articleTitle</beetl>
         </a>
+
         <div class="extra">
             <a class="ui blue label hidden-pc">
                 <beetl>t.user</beetl>
@@ -20,6 +25,7 @@ for(t in topics){
             <a class="ui teal label">
                 <beetl>t.category</beetl>
             </a>
+
             <div class="ui transparent label">
                 <i class="calendar icon"></i>
                 <beetl>t.publishTime</beetl>
@@ -34,7 +40,25 @@ for(t in topics){
             <a class="ui label">
                 <beetl>t.lastCommentUser</beetl>
             </a>
+
+            <div class="topicQuickTools">
+                <a class="ui circular topicQuickTool label"><i class="ui yellow star icon"></i></a>
+                <a class="ui circular topicQuickTool topicSetting bottom left dropdown pointing label">
+                    <i class="ui red setting icon"></i>
+
+                    <div class="menu">
+                        <div class="item">Move</div>
+                        <div class="item">Delete</div>
+                        <div class="item">Edit</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
+    <!--- if(!isEmpty(t.statusText)) {--->
+    <div class="ui red top right attached label">
+        <beetl>t.statusText</beetl>
+    </div>
+    <!--- } --->
 </div>
 <!---}--->

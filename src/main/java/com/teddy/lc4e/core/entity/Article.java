@@ -3,99 +3,108 @@ package com.teddy.lc4e.core.entity;
 
 public class Article {
 
-	private String imageUrl;
+    private String imageUrl;
 
-	private Popup popUp;
+    private Popup popUp;
 
-	private String articleTitle;
+    private String articleTitle;
 
-	private String category;
+    private String category;
 
-	private String user;
+    private String user;
 
-	private Integer comments;
+    private Integer comments;
 
-	private String publishTime;
+    private String publishTime;
 
-	private String lastCommentUser;
+    private String lastCommentUser;
 
-	public Article() {
-	}
+    private String statusText;
 
-	public Article(String imageUrl, Popup popUp, String articleTitle, String category, String user, Integer comments, String publishTime, String lastCommentUser) {
-		super();
-		this.imageUrl = imageUrl;
-		this.popUp = popUp;
-		this.articleTitle = articleTitle;
-		this.category = category;
-		this.user = user;
-		this.comments = comments;
-		this.publishTime = publishTime;
-		this.lastCommentUser = lastCommentUser;
-	}
+    public Article() {
+    }
 
-	public String getImageUrl() {
-		return imageUrl;
-	}
+    public String getStatusText() {
+        return statusText;
+    }
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+    public void setStatusText(String statusText) {
+        this.statusText = statusText;
+    }
 
-	public Popup getPopUp() {
-		return popUp;
-	}
+    public Article(String imageUrl, Popup popUp, String articleTitle, String category, String user, Integer comments, String publishTime, String lastCommentUser, String statusText) {
+        this.imageUrl = imageUrl;
+        this.popUp = popUp;
+        this.articleTitle = articleTitle;
+        this.category = category;
+        this.user = user;
+        this.comments = comments;
+        this.publishTime = publishTime;
+        this.lastCommentUser = lastCommentUser;
+        this.statusText = statusText;
+    }
 
-	public void setPopUp(Popup popUp) {
-		this.popUp = popUp;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public String getArticleTitle() {
-		return articleTitle;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	public void setArticleTitle(String articleTitle) {
-		this.articleTitle = articleTitle;
-	}
+    public Popup getPopUp() {
+        return popUp;
+    }
 
-	public String getCategory() {
-		return category;
-	}
+    public void setPopUp(Popup popUp) {
+        this.popUp = popUp;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public String getArticleTitle() {
+        return articleTitle;
+    }
 
-	public String getUser() {
-		return user;
-	}
+    public void setArticleTitle(String articleTitle) {
+        this.articleTitle = articleTitle;
+    }
 
-	public void setUser(String user) {
-		this.user = user;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	public Integer getComments() {
-		return comments;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setComments(Integer comments) {
-		this.comments = comments;
-	}
+    public String getUser() {
+        return user;
+    }
 
-	public String getPublishTime() {
-		return publishTime;
-	}
+    public void setUser(String user) {
+        this.user = user;
+    }
 
-	public void setPublishTime(String publishTime) {
-		this.publishTime = publishTime;
-	}
+    public Integer getComments() {
+        return comments;
+    }
 
-	public String getLastCommentUser() {
-		return lastCommentUser;
-	}
+    public void setComments(Integer comments) {
+        this.comments = comments;
+    }
 
-	public void setLastCommentUser(String lastCommentUser) {
-		this.lastCommentUser = lastCommentUser;
-	}
+    public String getPublishTime() {
+        return publishTime;
+    }
 
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
+    }
+
+    public String getLastCommentUser() {
+        return lastCommentUser;
+    }
+
+    public void setLastCommentUser(String lastCommentUser) {
+        this.lastCommentUser = lastCommentUser;
+    }
 }

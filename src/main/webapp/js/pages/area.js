@@ -12,8 +12,12 @@ $(function () {
 
             },
             bindEvent: function () {
-                var $topicItems = $('#topicItems');
+                var $topicItems = $('#topicItems'),
+                    $topicSetting = $topicItems.find('.topicSetting'),
+                    $topicPopup = $topicItems.find('>.item .ui.fluid.image img');
                 $('#sortTopic').dropdown().dropdown('set selected', $topicItems.attr('data-sort'));
+                $topicSetting.dropdown();
+                $topicPopup.popup();
             }
         }
     });
