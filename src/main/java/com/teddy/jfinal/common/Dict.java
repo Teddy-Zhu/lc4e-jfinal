@@ -80,5 +80,7 @@ public class Dict {
     public static final String SHIRO_SESSION_VALIDATIONINTERVAL = "SHIRO_SESSION_VALIDATIONINTERVAL";
 
     public static final String SHIRO_SESSION_REMEMBER_COOKIENAME = "SHIRO_SESSION_REMEMBER_COOKIENAME";
+
+    public static final String version = "version";
 }
 

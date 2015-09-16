@@ -11,7 +11,7 @@ public class PropPlugin {
 
     private static final Logger LOGGER = Logger.getLogger(PropPlugin.class);
 
-    private static Map<String, Object> paramMap = new HashMap<String, Object>();
+    private static Map<String, Object> paramMap = new HashMap<>();
 
     private Properties properties;
 
@@ -67,7 +67,6 @@ public class PropPlugin {
         return value == null ? defaultValue : Boolean.valueOf(value);
     }
 
-
     public boolean start() {
 
         Field[] fields = new Dict().getClass().getDeclaredFields();
@@ -81,7 +80,7 @@ public class PropPlugin {
         }
         String scan_package = getValue(Dict.SCAN_PACKAGE);
         if (null != scan_package && !scan_package.isEmpty()) {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             String[] pkgs = scan_package.split(";");
             for (String pkg : pkgs) {
                 list.add(pkg.trim());
@@ -93,7 +92,7 @@ public class PropPlugin {
 
         String scan_jar = getValue(Dict.SCAN_JAR);
         if (null != scan_jar && !scan_jar.isEmpty()) {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             String[] jars = scan_jar.split(",");
             for (String jar : jars) {
                 list.add(jar.trim());

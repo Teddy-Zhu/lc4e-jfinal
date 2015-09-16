@@ -2,6 +2,7 @@ package com.teddy.lc4e.core.config;
 
 import com.jfinal.config.*;
 import com.teddy.jfinal.annotation.ConfigHandler;
+import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.JFinalConfig;
 import com.teddy.jfinal.plugin.PropPlugin;
@@ -76,6 +77,7 @@ public class Config implements JFinalConfig {
         Map<String, Object> maps = new HashMap<>();
         maps.put("SiteName", ComVarService.service.getComVarValueByName("SiteName"));
         maps.put("menulist", MenuService.service.getMenuTree());
+        maps.put("version", PropPlugin.getValue(Dict.version));
         Lc4eBeetlRenderFactory.groupTemplate.setSharedVars(maps);
     }
 }
