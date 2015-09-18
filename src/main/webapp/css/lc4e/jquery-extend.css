@@ -42,15 +42,11 @@
 .animated.fast {
     -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
 }
 
 .animated.slow {
     -webkit-animation-duration: 1.5s;
     animation-duration: 1.5s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
 }
 
 .animated {
@@ -1424,6 +1420,39 @@
 .fadeInRight {
     -webkit-animation-name: fadeInRight;
     animation-name: fadeInRight;
+}
+
+@-webkit-keyframes fadeInRightTiny {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(30%, 0, 0);
+        transform: translate3d(30%, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInRightTiny {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(30%, 0, 0);
+        transform: translate3d(30%, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInRightTiny {
+    -webkit-animation-name: fadeInRightTiny;
+    animation-name: fadeInRightTiny;
 }
 
 @-webkit-keyframes fadeInRightBig {

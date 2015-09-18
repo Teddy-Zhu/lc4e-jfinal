@@ -3433,8 +3433,10 @@
 
                     if (data.animate === 'function') {
                         data.animate.call(this, $target)
-                    } else if (data.animation) {
-                        $target.addClass('animated ' + data.animation);
+                    } else if (data.animate) {
+                        $target.addClass('animated ' + data.animate).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                            $target.remove('animated ' + data.animate);
+                        });
                     }
                 }
 

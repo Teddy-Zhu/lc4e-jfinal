@@ -29,14 +29,7 @@ $(function () {
                     target: '#articlelist>.ui.divided.items',
                     pjax: true,
                     loading: 'loading articles',
-                    animate: function ($target) {
-                        $target.
-                            transition({
-                                animation: 'fade down in',
-                                duration: 250,
-                                interval: 90
-                            });
-                    },
+                    animate: 'slow fadeIn',
                     success: function (data, status, $target) {
                         $target.find('.topicSetting').dropdown();
                         $target.find('>.item .ui.fluid.image img').popup();

@@ -34,6 +34,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Created by teddy on 2015/7/18.
@@ -64,6 +65,33 @@ public class CustomPlugin implements IPlugin {
 
     private static List<com.jfinal.handler.Handler> handlers;
 
+
+    //should release
+    private static Map<Class<? extends Annotation>, Function<Annotation, AnnotationResolver>> annotationFunctionMap;
+
+    static {
+        annotationFunctionMap = new HashMap<>();
+        annotationFunctionMap.put(RequestMethod.class, (x) -> new RequestMethodResolver((RequestMethod) x));
+        annotationFunctionMap.put(RequestHeader.class, (x) -> new RequestHeaderResolver((RequestHeader) x));
+        annotationFunctionMap.put(ValidateToken.class, (x) -> new ValidateTokenResolver((ValidateToken) x));
+        annotationFunctionMap.put(RequiresAuthentication.class, (x) -> new RequiresAuthenticationResolver((RequiresAuthentication) x));
+        annotationFunctionMap.put(RequiresUser.class, (x) -> new RequiresUserResolver((RequiresUser) x));
+        annotationFunctionMap.put(RequiresGuest.class, (x) -> new RequiresGuestResolver((RequiresGuest) x));
+        annotationFunctionMap.put(RequiresRoles.class, (x) -> new RequiresRolesResolver((RequiresRoles) x));
+        annotationFunctionMap.put(RequiresPermissions.class, (x) -> new RequiresPermissionsResovler((RequiresPermissions) x));
+        annotationFunctionMap.put(ValidateComVars.class, (x) -> new ValidateComVarsResolver((ValidateComVars) x));
+        annotationFunctionMap.put(ValidateComVar.class, (x) -> new ValidateComVarResolver((ValidateComVar) x));
+        annotationFunctionMap.put(ValidateParams.class, (x) -> new ValidateParamsResolver((ValidateParams) x));
+        annotationFunctionMap.put(ValidateParam.class, (x) -> new ValidateParamResolver((ValidateParam) x));
+        annotationFunctionMap.put(ResponseStatus.class, (x) -> new ResponseStatusResolver((ResponseStatus) x));
+        annotationFunctionMap.put(SetComVar.class, (x) -> new SetComVarResolver((SetComVar) x));
+        annotationFunctionMap.put(SetComVars.class, (x) -> new SetComVarsResolver((SetComVars) x));
+        annotationFunctionMap.put(SetUIDatas.class, (x) -> new SetUIDatasResolver((SetUIDatas) x));
+        annotationFunctionMap.put(SetUIData.class, (x) -> new SetUIDataResolver((SetUIData) x));
+        annotationFunctionMap.put(SetAJAX.class, (x) -> new SetAJAXResolver((SetAJAX) x));
+        annotationFunctionMap.put(SetPJAX.class, (x) -> new SetPJAXResolver((SetPJAX) x));
+
+    }
 
     //the Order is important
     private Class[] methodRequiredAnnotations = new Class[]{RequestMethod.class, RequestHeader.class
@@ -266,47 +294,11 @@ public class CustomPlugin implements IPlugin {
     }
 
     public static AnnotationResolver convertToResolver(Annotation annotation) {
-
-        if (annotation instanceof RequestMethod) {
-            return new RequestMethodResolver((RequestMethod) annotation);
-        } else if (annotation instanceof RequestHeader) {
-            return new RequestHeaderResolver((RequestHeader) annotation);
-        } else if (annotation instanceof ValidateToken) {
-            return new ValidateTokenResolver((ValidateToken) annotation);
-        } else if (annotation instanceof RequiresAuthentication) {
-            return new RequiresAuthenticationResolver((RequiresAuthentication) annotation);
-        } else if (annotation instanceof RequiresUser) {
-            return new RequiresUserResolver((RequiresUser) annotation);
-        } else if (annotation instanceof RequiresGuest) {
-            return new RequiresGuestResolver((RequiresGuest) annotation);
-        } else if (annotation instanceof RequiresRoles) {
-            return new RequiresRolesResolver((RequiresRoles) annotation);
-        } else if (annotation instanceof RequiresPermissions) {
-            return new RequiresPermissionsResovler((RequiresPermissions) annotation);
-        } else if (annotation instanceof ValidateComVars) {
-            return new ValidateComVarsResolver((ValidateComVars) annotation);
-        } else if (annotation instanceof ValidateComVar) {
-            return new ValidateComVarResolver((ValidateComVar) annotation);
-        } else if (annotation instanceof ValidateParams) {
-            return new ValidateParamsResolver((ValidateParams) annotation);
-        } else if (annotation instanceof ValidateParam) {
-            return new ValidateParamResolver((ValidateParam) annotation);
-        } else if (annotation instanceof ResponseStatus) {
-            return new ResponseStatusResolver((ResponseStatus) annotation);
-        } else if (annotation instanceof SetComVar) {
-            return new SetComVarResolver((SetComVar) annotation);
-        } else if (annotation instanceof SetComVars) {
-            return new SetComVarsResolver((SetComVars) annotation);
-        } else if (annotation instanceof SetUIDatas) {
-            return new SetUIDatasResolver((SetUIDatas) annotation);
-        } else if (annotation instanceof SetUIData) {
-            return new SetUIDataResolver((SetUIData) annotation);
-        } else if (annotation instanceof SetAJAX) {
-            return new SetAJAXResolver((SetAJAX) annotation);
-        } else if (annotation instanceof SetPJAX) {
-            return new SetPJAXResolver((SetPJAX) annotation);
+        Class clz = annotation.annotationType();
+        if (annotationFunctionMap.containsKey(clz)) {
+            return annotationFunctionMap.get(clz).apply(annotation);
         } else {
-            throw new RuntimeException("Can not find Annotation[" + annotation.getClass().getName() + "]");
+            throw new RuntimeException("Can not find Annotation[ " + clz.getName() + " ]");
         }
     }
 
@@ -384,11 +376,13 @@ public class CustomPlugin implements IPlugin {
 
 
         //Init Cache
-        if (PropPlugin.getBool(Dict.CACHE_USE, true)) {
+        if (PropPlugin.getBool(Dict.USE_CACHE, true)) {
             plugins.add(new EhCachePlugin(PropPlugin.getValue(Dict.CACHE_CONFIG, Const.CONFIG_CACHE_FILE)));
         }
         //Init Shiro
-        plugins.add(new ShiroPlugin());
+        if (PropPlugin.getBool(Dict.USE_SHIRO, true)) {
+            plugins.add(new ShiroPlugin());
+        }
 
         //Init Other Plugin By @PluginHandler
         Classes = classesMap.get(PluginHandler.class);

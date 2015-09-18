@@ -9,9 +9,43 @@ import com.teddy.jfinal.exceptions.ReflectException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.Function;
 
 public class ReflectTool {
 
+    private static Map<Class, Class> classMap;
+
+    private static Map<Class, Function<String, Object>> functionMap;
+
+    static {
+        classMap = new HashMap<>();
+        classMap.put(boolean.class, Boolean.class);
+        classMap.put(int.class, Integer.class);
+        classMap.put(long.class, Long.class);
+        classMap.put(short.class, Short.class);
+        classMap.put(byte.class, Byte.class);
+        classMap.put(double.class, Double.class);
+        classMap.put(float.class, Float.class);
+        classMap.put(char.class, Character.class);
+        classMap.put(void.class, Void.class);
+
+        functionMap = new HashMap<>();
+        functionMap.put(String.class, String::valueOf);
+        functionMap.put(Boolean.class, (x) -> {
+            Boolean returnVal = null;
+            try {
+                returnVal = Long.valueOf(x) == 1;
+            } catch (Exception e) {
+                return Boolean.valueOf(x);
+            }
+            return returnVal;
+        });
+        functionMap.put(Integer.class, Integer::valueOf);
+        functionMap.put(Float.class, Float::valueOf);
+        functionMap.put(Double.class, Double::valueOf);
+        functionMap.put(Long.class, Boolean::valueOf);
+
+    }
 
     public static ReflectTool on(String name) throws ReflectException {
         return on(forName(name));
@@ -366,57 +400,19 @@ public class ReflectTool {
         }
     }
 
+
     public static Class<?> wrapper(Class<?> type) {
         if (type == null) {
             return null;
         } else if (type.isPrimitive()) {
-            if (boolean.class == type) {
-                return Boolean.class;
-            } else if (int.class == type) {
-                return Integer.class;
-            } else if (long.class == type) {
-                return Long.class;
-            } else if (short.class == type) {
-                return Short.class;
-            } else if (byte.class == type) {
-                return Byte.class;
-            } else if (double.class == type) {
-                return Double.class;
-            } else if (float.class == type) {
-                return Float.class;
-            } else if (char.class == type) {
-                return Character.class;
-            } else if (void.class == type) {
-                return Void.class;
-            }
+            return classMap.get(type);
         }
-
         return type;
     }
 
     public static Object wrapperObject(Class clazz, String object) {
         Class clz = wrapper(clazz);
-        if (clz == String.class) {
-            return String.valueOf(object);
-        } else if (clz == Boolean.class) {
-            Boolean returnVal = null;
-            try {
-                returnVal = Long.valueOf(object) == 1;
-            }catch (Exception e){
-               return Boolean.valueOf(object);
-            }
-            return returnVal;
-        } else if (clz == Integer.class) {
-            return Integer.valueOf(object);
-        } else if (clz == Float.class) {
-            return Float.valueOf(object);
-        } else if (clz == Double.class) {
-            return Double.valueOf(object);
-        } else if (clz == Long.class) {
-            return Long.valueOf(object);
-        } else {
-            return object;
-        }
+        return functionMap.containsKey(clz) ? functionMap.get(clz).apply(object) : object;
     }
 
     /**

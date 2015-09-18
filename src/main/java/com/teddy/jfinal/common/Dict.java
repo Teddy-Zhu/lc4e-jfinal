@@ -54,7 +54,9 @@ public class Dict {
 
     public static final String ENCODING = "ENCODING";
 
-    public static final String CACHE_USE = "CACHE_USE";
+    public static final String USE_CACHE = "USE_CACHE";
+
+    public static final String USE_SHIRO = "USE_SHIRO";
 
     public static final String CACHE_CONFIG = "CACHE_CONFIG";
 

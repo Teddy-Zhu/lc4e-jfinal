@@ -12,7 +12,7 @@ public class ResponseStatusResolver implements AnnotationResolver {
 
     @Override
     public void resolve(Invocation invocation) throws Exception {
-        ValidateKit.resolveResponseStaus(status, invocation);
+        ValidateKit.resolveResponseStatus(status, invocation);
     }
 
     public ResponseStatusResolver(ResponseStatus status) {

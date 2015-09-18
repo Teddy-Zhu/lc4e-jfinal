@@ -22,10 +22,12 @@ import org.apache.shiro.subject.Subject;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,10 +35,11 @@ import java.util.regex.Pattern;
  * Created by teddy on 2015/7/29.
  */
 class ValidateKit {
-
+    static Map<String, Consumer<Annotation>> validateFunctions;
+    
     private static final Logger log = Logger.getLogger(ValidateKit.class);
 
-    public static void resolveResponseStaus(ResponseStatus responseStatus, Invocation invocation) {
+    public static void resolveResponseStatus(ResponseStatus responseStatus, Invocation invocation) {
         if (responseStatus == null) {
             return;
         }
@@ -234,7 +237,7 @@ class ValidateKit {
         validate(param, controller, type, object, setDefaultFlag);
     }
 
-    public static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws Lc4eValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
+    private static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws Lc4eValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
         String error = StringTool.equalEmpty(param.error()) ? "Parameter" : param.error();
         if (String.class == type) {
             validateRequired(param, object, error);
