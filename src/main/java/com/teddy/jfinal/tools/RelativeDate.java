@@ -19,7 +19,7 @@ public class RelativeDate {
 
     public static String format(Date date, Date now) {
         long delta = now.getTime() - date.getTime();
-        if (delta < 1L * ONE_MINUTE) {
+        if (delta < ONE_MINUTE) {
             long seconds = toSeconds(delta);
             if (seconds < 30) {
                 return "now";

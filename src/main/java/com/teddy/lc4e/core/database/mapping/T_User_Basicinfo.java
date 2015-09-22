@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/11.
+ * Created by lc4e Tool on 15/09/22.
  */
 public class T_User_Basicinfo {
     /**
@@ -51,12 +51,12 @@ public class T_User_Basicinfo {
 
     /**
      * 
-     * Type:DECIMAL UNSIGNED
+     * Type:VARCHAR
      * Remarks:
      */
-    public static final String BALANCES = "user_basicinfo.balances";
+    public static final String WEBSITE = "user_basicinfo.webSite";
 
-    public static final String balances = "BALANCES";
+    public static final String webSite = "WEBSITE";
 
     /**
      * 
@@ -66,6 +66,15 @@ public class T_User_Basicinfo {
     public static final String BIRTH = "user_basicinfo.birth";
 
     public static final String birth = "BIRTH";
+
+    /**
+     * 
+     * Type:DECIMAL
+     * Remarks:
+     */
+    public static final String BALANCE = "user_basicinfo.balance";
+
+    public static final String balance = "BALANCE";
 
     /**
      * 

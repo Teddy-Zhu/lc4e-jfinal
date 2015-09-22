@@ -1,5 +1,6 @@
 package com.teddy.lc4e.core.web.controller;
 
+import com.jfinal.kit.StrKit;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.entity.Method;
 import com.teddy.jfinal.interfaces.BaseController;
@@ -29,33 +30,41 @@ public class ViewController extends BaseController {
 
     @ValidateParams(value = {
             @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
-            @ValidateParam(value = "art", type = boolean.class, defaultValue = "false")
+            @ValidateParam(value = "art", type = boolean.class, defaultValue = "false"),
+            @ValidateParam(value = "a", type = String.class, defaultValue = "index"),
+            @ValidateParam(value = "o", type = Integer.class, defaultValue = "1")
     })
     public void index() {
         setAttr("page", getPara("p"));
         if (isPJAX()) {
             forwardAction("/Articles");
         } else {
-            setAttr("topics", getArticle(getParaToInt("p")));
+            setAttr("topics", getArticle(getParaToInt("p"), getParaToInt("o"), getPara("a")));
             render("pages/index");
         }
     }
 
     @RequestMethod(Method.GET)
-    @ValidateParam(value = "p", type = int.class, defaultValue = "1")
+
+    @ValidateParams({
+            @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
+            @ValidateParam(value = "a", type = String.class, defaultValue = "index"),
+            @ValidateParam(value = "o", type = Integer.class, defaultValue = "1")
+    })
     public void Articles() {
-        setAttr("topics", getArticle(getParaToInt("p")));
+        setAttr("topics", getArticle(getParaToInt("p"), getParaToInt("o"), getPara("a")));
         render("ajax/_topic");
     }
 
     @RequestMethod(Method.GET)
     @ValidateParams({
             @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
-            @ValidateParam(index = 0, type = String.class, defaultValue = "NoArea")
+            @ValidateParam(index = 0, type = String.class, defaultValue = "index"),
+            @ValidateParam(value = "o", type = Integer.class, defaultValue = "1")
     })
     public void a() {
         setAttr("curArea", getPara(0));
-        setAttr("topics", getArticle(getParaToInt("p")));
+        setAttr("topics", getArticle(getParaToInt("p"), getParaToInt("o"), getPara(0)));
         render("pages/area");
     }
 
@@ -102,8 +111,16 @@ public class ViewController extends BaseController {
         render("pages/exception");
     }
 
-    public List<Article> getArticle(int page) {
-        Integer size = Integer.valueOf(ComVarService.service.getComVarValueByName("IndexPageSize"));
+    public List<Article> getArticle(int page, int order, String area) {
+        Integer size = 10;
+        if (StrKit.isBlank(area) || "index".equals(area)) {
+            area = "";
+            size = Integer.valueOf(ComVarService.service.getComVarValueByName("IndexPageSize"));
+        } else {
+            size = Integer.valueOf(ComVarService.service.getComVarValueByName("AreaPageSize"));
+        }
+
+
         String[] cate = new String[]{"Java", "Obj-C", "C", "C++", "IOS", "Android"};
         String[] high = new String[]{"TOP", "NOTICE", "OTHER", "SYSTEM", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
         String[] users = new String[]{"Admin", "Test", "Myas", "Liakx", "Google", "vsss"};

@@ -11,10 +11,6 @@ for(t in topics){
     </div>
     <div class="content">
         <a class="header">
-            <div class="signIcons" style="display: inline-block;">
-                <i class="red protect icon"></i>
-                <i class="red lock icon"></i>
-            </div>
             <beetl>t.articleTitle</beetl>
         </a>
 
@@ -55,7 +51,7 @@ for(t in topics){
             </div>
         </div>
     </div>
-    <!--- if(!isEmpty(t.statusText)) {--->
+    <!--- if(!isEmpty(t.statusText) && t.statusText.~size > 0) {--->
     <div class="ui red top right attached label">
         <beetl>t.statusText</beetl>
     </div>

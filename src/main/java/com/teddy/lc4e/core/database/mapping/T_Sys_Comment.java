@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/11.
+ * Created by lc4e Tool on 15/09/22.
  */
 public class T_Sys_Comment {
     /**
@@ -57,15 +57,6 @@ public class T_Sys_Comment {
     public static final String BODY = "sys_comment.body";
 
     public static final String body = "BODY";
-
-    /**
-     * 
-     * Type:VARCHAR
-     * Remarks:
-     */
-    public static final String ATTACHS = "sys_comment.attachs";
-
-    public static final String attachs = "ATTACHS";
 
     /**
      * 

@@ -16,15 +16,16 @@ $(function () {
         },
         bindEvent: function () {
             var $topicItems = $('#topicItems'),
-                $announce = $('#announce');
+                $announce = $('#announce'),
+                $attachedHeader = $('#attachedHeader');
 
             $announce.shape();
             $('#sortTopic').dropdown().dropdown('set selected', $topicItems.attr('data-sort'));
 
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
-                var $items = $('#topicItems'), page = parseInt($items.attr("data-page")) + 1;
+                var $items = $('#topicItems'), page = parseInt($items.attr("data-page")) + 1, sort = parseInt($items.attr('data-sort'));
                 $.Lc4eAjax({
-                    url: "/?p=" + page,
+                    url: "/?p=" + page + "&o=" + sort + "&a=" + $attachedHeader.attr('data-area'),
                     data: {art: true},
                     target: '#articlelist>.ui.divided.items',
                     pjax: true,

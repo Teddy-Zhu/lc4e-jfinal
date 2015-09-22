@@ -1,6 +1,9 @@
 
 package com.teddy.lc4e.core.entity;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Article {
 
     private String imageUrl;
@@ -19,20 +22,13 @@ public class Article {
 
     private String lastCommentUser;
 
-    private String statusText;
+    private List<String> statusText;
 
     public Article() {
     }
 
-    public String getStatusText() {
-        return statusText;
-    }
 
-    public void setStatusText(String statusText) {
-        this.statusText = statusText;
-    }
-
-    public Article(String imageUrl, Popup popUp, String articleTitle, String category, String user, Integer comments, String publishTime, String lastCommentUser, String statusText) {
+    public Article(String imageUrl, Popup popUp, String articleTitle, String category, String user, Integer comments, String publishTime, String lastCommentUser, String... statusText) {
         this.imageUrl = imageUrl;
         this.popUp = popUp;
         this.articleTitle = articleTitle;
@@ -41,6 +37,14 @@ public class Article {
         this.comments = comments;
         this.publishTime = publishTime;
         this.lastCommentUser = lastCommentUser;
+        this.statusText = Arrays.asList(statusText);
+    }
+
+    public List<String> getStatusText() {
+        return statusText;
+    }
+
+    public void setStatusText(List<String> statusText) {
         this.statusText = statusText;
     }
 

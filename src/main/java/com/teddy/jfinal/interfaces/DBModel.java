@@ -33,9 +33,15 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         return CustomTool.transaction((M) this);
     }
 
+
+    private Class getUsefulClass() {
+        Class c = getClass();
+        return !c.getName().contains("EnhancerByCGLIB") ? c : c.getSuperclass();
+    }
+
     public String getTbName() {
         if (StrKit.isBlank(this.tableName)) {
-            this.tableName = TableMapping.me().getTable(this.getClass()).getName();
+            this.tableName = TableMapping.me().getTable(getUsefulClass()).getName();
         }
         return this.tableName;
     }

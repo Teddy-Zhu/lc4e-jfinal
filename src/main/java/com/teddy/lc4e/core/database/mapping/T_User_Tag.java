@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/11.
+ * Created by lc4e Tool on 15/09/22.
  */
 public class T_User_Tag {
     /**
@@ -15,15 +15,6 @@ public class T_User_Tag {
 
     /**
      * 
-     * Type:VARCHAR
-     * Remarks:
-     */
-    public static final String TAGID = "user_tag.tagId";
-
-    public static final String tagId = "TAGID";
-
-    /**
-     * 
      * Type:INT
      * Remarks:
      */
@@ -33,12 +24,21 @@ public class T_User_Tag {
 
     /**
      * 
-     * Type:INT
+     * Type:VARCHAR
      * Remarks:
      */
-    public static final String COUNT = "user_tag.count";
+    public static final String TAGID = "user_tag.tagId";
 
-    public static final String count = "COUNT";
+    public static final String tagId = "TAGID";
+
+    /**
+     * 
+     * Type:DECIMAL
+     * Remarks:
+     */
+    public static final String PW = "user_tag.pw";
+
+    public static final String pw = "PW";
 
     /**
      * 

@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/08/11.
+ * Created by lc4e Tool on 15/09/22.
  */
 public class T_Admin_Log {
     /**
@@ -18,9 +18,9 @@ public class T_Admin_Log {
      * Type:VARCHAR
      * Remarks:
      */
-    public static final String LOGDETAIL = "admin_log.logdetail";
+    public static final String LOGDETAIL = "admin_log.logDetail";
 
-    public static final String logdetail = "LOGDETAIL";
+    public static final String logDetail = "LOGDETAIL";
 
     /**
      * 
