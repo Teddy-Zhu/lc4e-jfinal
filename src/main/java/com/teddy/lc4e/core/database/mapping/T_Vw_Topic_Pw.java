@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/09/22.
+ * Created by lc4e Tool on 15/09/23.
  */
 public class T_Vw_Topic_Pw {
     /**
@@ -45,54 +45,9 @@ public class T_Vw_Topic_Pw {
      * Type:VARCHAR
      * Remarks:
      */
-    public static final String BODY = "vw_topic_pw.body";
-
-    public static final String body = "BODY";
-
-    /**
-     * 
-     * Type:VARCHAR
-     * Remarks:
-     */
     public static final String AUTHOR = "vw_topic_pw.author";
 
     public static final String author = "AUTHOR";
-
-    /**
-     * 
-     * Type:INT
-     * Remarks:
-     */
-    public static final String CURUSERID = "vw_topic_pw.curUserId";
-
-    public static final String curUserId = "CURUSERID";
-
-    /**
-     * 
-     * Type:DECIMAL
-     * Remarks:
-     */
-    public static final String UTPW = "vw_topic_pw.utPw";
-
-    public static final String utPw = "UTPW";
-
-    /**
-     * 
-     * Type:BIGINT
-     * Remarks:
-     */
-    public static final String COUNT = "vw_topic_pw.count";
-
-    public static final String count = "COUNT";
-
-    /**
-     * 
-     * Type:INT
-     * Remarks:
-     */
-    public static final String LASTCOMMENTID = "vw_topic_pw.lastCommentId";
-
-    public static final String lastCommentId = "LASTCOMMENTID";
 
     /**
      * 
@@ -105,21 +60,12 @@ public class T_Vw_Topic_Pw {
 
     /**
      * 
-     * Type:DECIMAL
-     * Remarks:
-     */
-    public static final String TSPW = "vw_topic_pw.tsPw";
-
-    public static final String tsPw = "TSPW";
-
-    /**
-     * 
      * Type:INT
      * Remarks:
      */
-    public static final String LASTUSERID = "vw_topic_pw.lastUserId";
+    public static final String CURTAGUSER = "vw_topic_pw.curTagUser";
 
-    public static final String lastUserId = "LASTUSERID";
+    public static final String curTagUser = "CURTAGUSER";
 
     /**
      * 
@@ -135,9 +81,72 @@ public class T_Vw_Topic_Pw {
      * Type:INT
      * Remarks:
      */
-    public static final String LASTCOMMONORDER = "vw_topic_pw.lastCommonOrder";
+    public static final String LASTUSER = "vw_topic_pw.lastUser";
 
-    public static final String lastCommonOrder = "LASTCOMMONORDER";
+    public static final String lastUser = "LASTUSER";
+
+    /**
+     * 
+     * Type:INT
+     * Remarks:
+     */
+    public static final String LASTCOMMENTORDER = "vw_topic_pw.lastCommentOrder";
+
+    public static final String lastCommentOrder = "LASTCOMMENTORDER";
+
+    /**
+     * 
+     * Type:INT
+     * Remarks:
+     */
+    public static final String LASTCOMMENTID = "vw_topic_pw.lastCommentId";
+
+    public static final String lastCommentId = "LASTCOMMENTID";
+
+    /**
+     * 
+     * Type:DECIMAL
+     * Remarks:
+     */
+    public static final String TSPW = "vw_topic_pw.tsPw";
+
+    public static final String tsPw = "TSPW";
+
+    /**
+     * 
+     * Type:DECIMAL
+     * Remarks:
+     */
+    public static final String UTPW = "vw_topic_pw.utPw";
+
+    public static final String utPw = "UTPW";
+
+    /**
+     * 
+     * Type:BIGINT
+     * Remarks:
+     */
+    public static final String UTVAPW = "vw_topic_pw.utvaPw";
+
+    public static final String utvaPw = "UTVAPW";
+
+    /**
+     * 
+     * Type:BIGINT
+     * Remarks:
+     */
+    public static final String COUNT = "vw_topic_pw.count";
+
+    public static final String count = "COUNT";
+
+    /**
+     * 
+     * Type:VARCHAR
+     * Remarks:
+     */
+    public static final String AVATAR = "vw_topic_pw.avatar";
+
+    public static final String avatar = "AVATAR";
 
     public static final String ALL_FIELDS = "vw_topic_pw.*";
 

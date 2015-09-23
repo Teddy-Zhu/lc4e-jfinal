@@ -2,6 +2,7 @@ package com.teddy.jfinal.handler;
 
 import com.jfinal.handler.Handler;
 import com.teddy.jfinal.common.Const;
+import com.teddy.jfinal.handler.gzip.GZIPResponseWrapper;
 import com.teddy.jfinal.handler.support.GlobalHandlerKit;
 import com.teddy.jfinal.plugin.ShiroPlugin;
 import org.apache.log4j.Logger;
@@ -32,9 +33,19 @@ public class GlobalHandler extends Handler {
         try {
             subject.execute(new Callable() {
                 public Object call() throws Exception {
-                    updateSessionLastAccessTime(request, response);
                     GlobalHandlerKit.handleAOPMethods(target, request, response, isHandled, Const.BEFORE_HANDLER);
-                    nextHandler.handle(target, request, response, isHandled);
+                    updateSessionLastAccessTime(request, response);
+                    String ae = request.getHeader("accept-encoding");
+                    //check if browser support gzip
+                    boolean gzip = ae != null && ae.contains("gzip");
+                    if (gzip) {
+                        logger.debug("GZIP supported, compressing.");
+                        GZIPResponseWrapper wrappedResponse = new GZIPResponseWrapper(response);
+                        nextHandler.handle(target, request, wrappedResponse, isHandled);
+                        wrappedResponse.finishResponse();
+                    } else {
+                        nextHandler.handle(target, request, response, isHandled);
+                    }
                     GlobalHandlerKit.handleAOPMethods(target, request, response, isHandled, Const.AFTER_HANDLER);
                     return null;
                 }

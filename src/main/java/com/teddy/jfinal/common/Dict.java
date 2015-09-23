@@ -58,6 +58,8 @@ public class Dict {
 
     public static final String USE_SHIRO = "USE_SHIRO";
 
+    public static final String XSS = "XSS";
+
     public static final String CACHE_CONFIG = "CACHE_CONFIG";
 
     public static final String SHIRO_CREDENTIALS_MATCHER_HASHALGORITHMNAME = "SHIRO_CREDENTIALS_MATCHER_HASHALGORITHMNAME";

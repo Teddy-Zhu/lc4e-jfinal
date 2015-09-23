@@ -1,4 +1,4 @@
-#Full Name：[Light Community For Everyone](http://www.lc4e.com)
+[Light Community For Everyone](http://www.lc4e.com)
 ###It's a Light Forum.
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
 

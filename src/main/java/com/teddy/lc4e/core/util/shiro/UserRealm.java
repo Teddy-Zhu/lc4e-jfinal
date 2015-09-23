@@ -1,9 +1,11 @@
 package com.teddy.lc4e.core.util.shiro;
 
+import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.lc4e.core.database.mapping.T_User;
 import com.teddy.lc4e.core.database.mapping.T_Vw_User_Role_Permission;
 import com.teddy.lc4e.core.database.model.User;
 import com.teddy.lc4e.core.database.model.Vw_User_Role_Permission;
+import com.teddy.lc4e.core.web.service.CurUserService;
 import com.teddy.lc4e.core.web.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -46,9 +48,12 @@ public class UserRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException();
         }
+
         if (Boolean.TRUE.equals(user.getBoolean(T_Vw_User_Role_Permission.locked))) {
             throw new LockedAccountException();
         }
+
+        CacheKit.put("users", CurUserService.service.getSessionId().toString(), user);
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user.getStr(T_Vw_User_Role_Permission.name), user.getStr(T_Vw_User_Role_Permission.password), ByteSource.Util.bytes(user.getStr(T_User.name) + user.getStr(T_Vw_User_Role_Permission.passsalt)), getName());
         return authenticationInfo;
@@ -61,11 +66,13 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     public void clearCachedAuthenticationInfo(PrincipalCollection principals) {
+        CacheKit.remove("users", CurUserService.service.getSessionId().toString());
         super.clearCachedAuthenticationInfo(principals);
     }
 
     @Override
     public void clearCache(PrincipalCollection principals) {
+        CacheKit.remove("users", CurUserService.service.getSessionId().toString());
         super.clearCache(principals);
     }
 

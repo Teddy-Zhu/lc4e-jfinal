@@ -4,7 +4,7 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/09/22.
+ * Created by lc4e Tool on 15/09/23.
  */
 @Model(value = "admin_log", pk = {"id"})
 public class Admin_Log extends DBModel<Admin_Log> {

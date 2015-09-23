@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/09/22.
+ * Created by lc4e Tool on 15/09/23.
  */
 public class T_User_Topic_View_Attitude {
     /**

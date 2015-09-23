@@ -1,7 +1,7 @@
 <!---
 for(t in topics){
 --->
-<div class="item">
+<div class="item topic">
     <div class="ui fluid tiny image hidden-mb">
         <div class="ui blue ribbon label">
             <beetl>t.user</beetl>
@@ -51,9 +51,9 @@ for(t in topics){
             </div>
         </div>
     </div>
-    <!--- if(!isEmpty(t.statusText) && t.statusText.~size > 0) {--->
-    <div class="ui red top right attached label">
-        <beetl>t.statusText</beetl>
+    <!--- if(!isEmpty(t.statusText) && t.statusText.~size > 0 && !isEmpty(t.statusText[0])) {--->
+    <div class="ui red top right attached label status">
+        <beetl>t.statusText[0]</beetl>
     </div>
     <!--- } --->
 </div>

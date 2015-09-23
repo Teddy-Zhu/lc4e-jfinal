@@ -19,6 +19,7 @@ import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.handler.GlobalInterceptor;
 import com.teddy.jfinal.handler.resolve.*;
+import com.teddy.jfinal.handler.xss.XSSHandler;
 import com.teddy.jfinal.interfaces.AnnotationResolver;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.interfaces.Handler;
@@ -480,6 +481,9 @@ public class CustomPlugin implements IPlugin {
         //Init Core Handler
         handlers.add(new com.teddy.jfinal.handler.GlobalHandler());
 
+        if (PropPlugin.getBool(Dict.XSS)) {
+            handlers.add(new XSSHandler());
+        }
     }
 
     private void resolveMethod(String name, Object me) throws InstantiationException {

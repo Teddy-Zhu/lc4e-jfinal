@@ -187,3 +187,11 @@
 #sortTopic {
     float: right;
 }
+
+.topic .header {
+    font-size: 1.5em;
+}
+
+.topic .status{
+    border-top-right-radius: 0;
+}

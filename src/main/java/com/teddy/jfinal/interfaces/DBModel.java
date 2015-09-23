@@ -87,6 +87,10 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         return convertValue;
     }
 
+    public String getIntToString(String attr) {
+        return getInt(attr).toString();
+    }
+
     public Integer getToInteger(String attr) {
         return Integer.valueOf(getStr(attr));
     }

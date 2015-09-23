@@ -4,7 +4,7 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/09/22.
+ * Created by lc4e Tool on 15/09/23.
  */
 @Model(value = "sys_area", pk = {"id"})
 public class Sys_Area extends DBModel<Sys_Area> {
