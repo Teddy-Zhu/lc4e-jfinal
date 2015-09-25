@@ -65,7 +65,7 @@ public class GlobalInterceptorKit {
         if (WebTool.isAJAX(ai.getController().getRequest())) {
             ai.getController().renderJson(new Message(e.getMessage() == null ? e.toString() : e.getMessage()));
         } else {
-            ai.getController().render("pages/exception");
+            ai.getController().render("/pages/exception");
         }
 
     }

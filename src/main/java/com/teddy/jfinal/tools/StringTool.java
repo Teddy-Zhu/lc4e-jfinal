@@ -300,12 +300,11 @@ public class StringTool {
      * @return
      */
     public static String join(String[] o, String flag) {
-        StringBuffer str_buff = new StringBuffer();
+        StringBuilder str_buff = new StringBuilder();
         for (int i = 0, len = o.length; i < len; i++) {
-            str_buff.append(o[i]);
-            if (i < len - 1) str_buff.append(flag);
+            str_buff.append(o[i]).append(flag);
         }
-        return str_buff.toString();
+        return str_buff.substring(0, str_buff.length() - flag.length());
     }
 
     /**
@@ -316,11 +315,11 @@ public class StringTool {
      * @return
      */
     public static String join(Collection<String> o, String flag) {
-        StringBuffer str_buff = new StringBuffer();
+        StringBuilder str_buff = new StringBuilder();
         o.forEach(s -> {
-            str_buff.append(s + flag);
+            str_buff.append(s).append(flag);
         });
-        return str_buff.substring(0, str_buff.length() - 1);
+        return str_buff.substring(0, str_buff.length() - flag.length());
     }
 
     public static boolean equalEmpty(String txt) {

@@ -18,6 +18,7 @@ import com.teddy.jfinal.entity.Route;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.handler.GlobalInterceptor;
+import com.teddy.jfinal.handler.httpCache.HttpCacheHandler;
 import com.teddy.jfinal.handler.resolve.*;
 import com.teddy.jfinal.handler.xss.XSSHandler;
 import com.teddy.jfinal.interfaces.AnnotationResolver;
@@ -484,6 +485,11 @@ public class CustomPlugin implements IPlugin {
         if (PropPlugin.getBool(Dict.XSS)) {
             handlers.add(new XSSHandler());
         }
+
+        if (PropPlugin.getBool(Dict.USE_HTTP_CACHE)) {
+            handlers.add(new HttpCacheHandler());
+        }
+
     }
 
     private void resolveMethod(String name, Object me) throws InstantiationException {

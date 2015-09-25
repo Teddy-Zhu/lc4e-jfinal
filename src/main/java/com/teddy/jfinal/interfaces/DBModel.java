@@ -2,8 +2,10 @@ package com.teddy.jfinal.interfaces;
 
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.teddy.jfinal.tools.CustomTool;
+import com.teddy.jfinal.tools.SQLTool;
 import com.teddy.lc4e.core.config.Key;
 
 import java.util.ArrayList;
@@ -46,12 +48,20 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         return this.tableName;
     }
 
+    public List<M> find(SQLTool sql) {
+        return find(sql.toString(), sql.getParas());
+    }
+
     public List<M> findAll() {
         return find("select " + getTbName() + ".* from " + getTbName());
     }
 
     public boolean exist(String param, String columnName) {
         return StrKit.notBlank(param) && findFirst("select count(1)>0 as result from " + getTbName() + " where " + columnName + " =?", param).getToBoolean(Key.RESULT);
+    }
+
+    public Page<M> paginate(SQLTool sql, int page, int size) {
+        return paginate(page, size, sql.getSqlSelect(), sql.getSqlExceptSelect(), sql.getParas());
     }
 
     public List<M> findInByColumn(String[] objs, String column) {

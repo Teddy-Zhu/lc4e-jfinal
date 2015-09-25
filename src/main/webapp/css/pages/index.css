@@ -188,10 +188,10 @@
     float: right;
 }
 
-.topic .header {
+.topiclist>.item.topic>.content>a.header.larger {
     font-size: 1.5em;
 }
 
-.topic .status{
+.item.topic>.ui.right.attached.label.status{
     border-top-right-radius: 0;
 }
