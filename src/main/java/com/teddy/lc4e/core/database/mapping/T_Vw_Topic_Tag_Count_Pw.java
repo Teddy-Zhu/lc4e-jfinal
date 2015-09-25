@@ -1,7 +1,7 @@
 package com.teddy.lc4e.core.database.mapping;
 
 /**
- * Created by lc4e Tool on 15/09/23.
+ * Created by lc4e Tool on 15/09/24.
  */
 public class T_Vw_Topic_Tag_Count_Pw {
     /**
@@ -81,15 +81,6 @@ public class T_Vw_Topic_Tag_Count_Pw {
      * Type:INT
      * Remarks:
      */
-    public static final String AUTHORID = "vw_topic_tag_count_pw.authorId";
-
-    public static final String authorId = "AUTHORID";
-
-    /**
-     * 
-     * Type:INT
-     * Remarks:
-     */
     public static final String CURTAGUSER = "vw_topic_tag_count_pw.curTagUser";
 
     public static final String curTagUser = "CURTAGUSER";
@@ -99,9 +90,36 @@ public class T_Vw_Topic_Tag_Count_Pw {
      * Type:VARCHAR
      * Remarks:
      */
-    public static final String AVATAR = "vw_topic_tag_count_pw.avatar";
+    public static final String AUTHORAVATAR = "vw_topic_tag_count_pw.authorAvatar";
 
-    public static final String avatar = "AVATAR";
+    public static final String authorAvatar = "AUTHORAVATAR";
+
+    /**
+     * 
+     * Type:DATETIME
+     * Remarks:
+     */
+    public static final String PUBTIME = "vw_topic_tag_count_pw.pubTime";
+
+    public static final String pubTime = "PUBTIME";
+
+    /**
+     * 
+     * Type:INT
+     * Remarks:
+     */
+    public static final String AREAID = "vw_topic_tag_count_pw.areaId";
+
+    public static final String areaId = "AREAID";
+
+    /**
+     * 
+     * Type:INT
+     * Remarks:
+     */
+    public static final String AUTHORID = "vw_topic_tag_count_pw.authorId";
+
+    public static final String authorId = "AUTHORID";
 
     public static final String ALL_FIELDS = "vw_topic_tag_count_pw.*";
 

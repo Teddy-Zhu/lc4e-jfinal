@@ -27,9 +27,8 @@ public class GenerateDB {
     private static String password;
     private static Connection con = null;
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 
-
+    private void generate() throws ClassNotFoundException, SQLException, IOException {
         Prop prop = PropKit.use(Const.CONFIG_FILE, "utf-8");
 
         url = prop.get(Dict.DATABASE_URL);
@@ -130,4 +129,11 @@ public class GenerateDB {
             out.close();
         }
     }
+
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
+        // new GenerateDB().generate();
+
+
+    }
+
 }

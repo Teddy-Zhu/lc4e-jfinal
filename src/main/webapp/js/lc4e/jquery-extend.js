@@ -3626,8 +3626,8 @@
 
             $('.image').visibility({
                 type: 'image',
-                transition: 'vertical flip in',
-                duration: 500
+                transition: 'fade in',
+                duration: 700
             });
         }
     };

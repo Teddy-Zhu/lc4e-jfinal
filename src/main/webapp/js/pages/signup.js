@@ -22,26 +22,12 @@ $(function () {
                 }
             });
             $form.Lc4eForm({
-                start: function () {
-                    $('#signUpLoading').transition('fade down in');
-                    $form.transition('fade down out');
-                    $('#signUpAttached').transition('fade down out');
-                },
                 success: function () {
                     window.location.href = "/";
                 },
                 error: function () {
                 },
                 complete: function () {
-                    $('#signUpLoading').transition('fade down out')
-                    $('#signUpForm,#signUpAttached').transition({
-                        animation: 'fade down in',
-                        onComplete: function () {
-                            if ($form.popup('is visible')) {
-                                $form.popup('reposition');
-                            }
-                        }
-                    });
                 }
             });
             $('#user\\.password,#user\\.repassword').next('.eye.icon').on({

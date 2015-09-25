@@ -4,7 +4,7 @@ import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.interfaces.DBModel;
 
 /**
- * Created by lc4e Tool on 15/09/23.
+ * Created by lc4e Tool on 15/09/24.
  */
 @Model(value = "vw_user_role_permission")
 public class Vw_User_Role_Permission extends DBModel<Vw_User_Role_Permission> {

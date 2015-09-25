@@ -31,7 +31,7 @@ public class ExceptionHandle {
     @ExceptionHandler({AuthenticationException.class, UnauthenticatedException.class})
     public void auth(Exception e, Invocation ai) {
         ai.getController().setAttr("message", new Message(e.getMessage()));
-        ai.getController().render("pages/exception");
+        ai.getController().render("/pages/exception");
     }
 
     @ExceptionHandler({Lc4eException.class, Lc4eApplicationException.class})
@@ -39,7 +39,7 @@ public class ExceptionHandle {
         if (WebTool.isAJAX(ai.getController().getRequest())) {
             ai.getController().renderJson(new Message(e.getMessage() == null ? e.toString() : e.getMessage()));
         } else {
-            ai.getController().render("pages/exception");
+            ai.getController().render("/pages/exception");
         }
     }
 

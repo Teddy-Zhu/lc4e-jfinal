@@ -1,88 +1,9 @@
-<style type="text/css">
-    .loadingLine {
-        -moz-border-radius: 50% 50% 50% 50%;
-        -webkit-border-radius: 50% 50% 50% 50%;
-        border-radius: 50% 50% 50% 50%;
-        position: absolute;
-        border: 5px solid black;
-        border-right-color: transparent;
-        border-bottom-color: transparent;
-        -webkit-animation: rotateLine 2s infinite;
-        animation: rotateLine 2s infinite;
-    }
-
-    .loadingLine.one {
-        left: 45px;
-        top: 45px;
-        width: 110px;
-        height: 110px;
-        -webkit-animation-delay: 0.6s;
-        animation-delay: 0.6s;
-    }
-
-    .loadingLine.two {
-        left: 55px;
-        top: 55px;
-        width: 90px;
-        height: 90px;
-        -webkit-animation-delay: 0.4s;
-        animation-delay: 0.4s;
-    }
-
-    .loadingLine.three {
-        left: 65px;
-        top: 65px;
-        width: 70px;
-        height: 70px;
-        -webkit-animation-delay: 0.2s;
-        animation-delay: 0.2s;
-    }
-
-    .loadingLine.four {
-        left: 75px;
-        top: 75px;
-        width: 50px;
-        height: 50px;
-    }
-
-    .loadingLingArea {
-        margin-top: 6em;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-left: -100px;
-    }
-
-    @-webkit-keyframes rotateLine {
-        50% {
-            -ms-transform: rotate(360deg) scale(0.8);
-            -webkit-transform: rotate(360deg) scale(0.8);
-            transform: rotate(360deg) scale(0.8);
-        }
-    }
-
-    @keyframes rotateLine {
-        50% {
-            -ms-transform: rotate(360deg) scale(0.8);
-            -webkit-transform: rotate(360deg) scale(0.8);
-            transform: rotate(360deg) scale(0.8);
-        }
-    }
-</style>
 <div class="ui basic padding clearing segment flipInY animated">
     <h2 class="ui center aligned icon header">
         <i class="circular users icon"></i>
         Join in
         <beetl>SiteName</beetl>
     </h2>
-    <div id="signUpLoading" class="ui center aligned clearing basic segment column transition hidden">
-        <div class="loadingLingArea">
-            <div class="loadingLine one"></div>
-            <div class="loadingLine two"></div>
-            <div class="loadingLine three"></div>
-            <div class="loadingLine four"></div>
-        </div>
-    </div>
 
     <div id="signUpForm" class="ui form attached segment" observe-on="blur" data-url="/member/signup" data-loading="">
         <div class="inline fields">
