@@ -131,7 +131,7 @@ public class GenerateDB {
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-        // new GenerateDB().generate();
+        new GenerateDB().generate();
 
 
     }

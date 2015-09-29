@@ -21,7 +21,7 @@ public class TopicService {
      *
      * @return
      */
-    public Page<? extends DBModel> getTopicPw(String userId, int page, int size, double userTagPCT, double topicStatusPCT, double commentCountPCT) {
+    public Page<? extends DBModel> getTopicPw(String userId, int page, int size, double userTagPCT, double topicStatusPCT, double commentCountPCT, double curCommentCountPCT) {
         SQLTool sql = new SQLTool();
         sql.select(T_Vw_Topic_Pw.ID
                 , T_Vw_Topic_Pw.AREAABBR
@@ -33,16 +33,19 @@ public class TopicService {
                 , T_Vw_Topic_Pw.LASTCOMMENTID
                 , T_Vw_Topic_Pw.LASTCOMMENTORDER
                 , T_Vw_Topic_Pw.LASTUSER
-                , T_Vw_Topic_Pw.LASTUSERNICK,
-                T_Vw_Topic_Pw.AUTHORAVATAR)
+                , T_Vw_Topic_Pw.LASTUSERNICK
+                , T_Vw_Topic_Pw.AUTHORAVATAR)
                 .from(T_Vw_Topic_Pw.TABLE_NAME)
+                .leftJoin(T_Sys_Comment.TABLE_NAME)
+                .on(T_Sys_Comment.TOPICID + " = " + T_Vw_Topic_Pw.ID)
                 .where(" AND ",
                         SQLTool.OR("curTagUser = ?", "ISNULL(curTagUser)")
                         , SQLTool.NOTIN(T_Vw_Topic_Pw.ID, SQLTool.SELECT(T_User_Topic_Blocked.TOPICID) + SQLTool.FROM(T_User_Topic_Blocked.TABLE_NAME) + SQLTool.WHERE(T_User_Topic_Blocked.USERID + " = ?"))
-                        , SQLTool.NOTIN(T_Vw_Topic_Pw.AUTHORID, SQLTool.SELECT(T_User_Blocked.BLOCKEDUSERID) + SQLTool.FROM(T_User_Blocked.TABLE_NAME) + SQLTool.WHERE(T_User_Blocked.USERID + " = ?")))
-                .orderByDesc(T_Vw_Topic_Pw.UTPW + " * ? + " + T_Vw_Topic_Pw.TSPW + " * ? + " + T_Vw_Topic_Pw.COUNT + " * ?)")
-                .limit(size, page);
-        sql.addParams(userId, userId, userId, userTagPCT, topicStatusPCT, commentCountPCT);
+                        , SQLTool.NOTIN(T_Vw_Topic_Pw.AUTHORID, SQLTool.SELECT(T_User_Blocked.BLOCKEDUSERID) + SQLTool.FROM(T_User_Blocked.TABLE_NAME) + SQLTool.WHERE(T_User_Blocked.USERID + " = ?"))
+                        , T_Sys_Comment.USERID + " =  ?")
+                .groupBy(T_Vw_Topic_Pw.ID)
+                .orderByDesc(T_Vw_Topic_Pw.UTPW + " * ? + " + T_Vw_Topic_Pw.TSPW + " * ? + " + T_Vw_Topic_Pw.COUNT + " * ? + " + SQLTool.COUNT(T_Sys_Comment.ID) + " * ?");
+        sql.addParams(userId, userId, userId, userId, userTagPCT, topicStatusPCT, commentCountPCT, curCommentCountPCT);
         return Vw_Topic_Pw.dao.paginate(sql, page, size);
     }
 
@@ -54,7 +57,7 @@ public class TopicService {
      *              3: by last reply time
      * @return
      */
-    public Page<? extends DBModel> getTopic(int order, int page, int size, double userTagPCT, double topicStatusPCT, double commentCountPCT) {
+    public Page<? extends DBModel> getTopic(int order, int page, int size, double userTagPCT, double topicStatusPCT, double commentCountPCT, double curCommentCountPCT) {
         boolean isLogin;
         page = page < 1 ? 1 : page;
         String userId = "";
@@ -83,7 +86,7 @@ public class TopicService {
         switch (order) {
             case 1: {
                 if (isLogin) {
-                    return getTopicPw(userId, page, size, userTagPCT, topicStatusPCT, commentCountPCT);
+                    return getTopicPw(userId, page, size, userTagPCT, topicStatusPCT, commentCountPCT, curCommentCountPCT);
                 } else {
                     sql.orderByDesc(T_Vw_Topic.PUBTIME);
                 }

@@ -3518,7 +3518,7 @@
             } else {
                 $.lc4e.popstate();
             }
-            $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
+            //  $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
 
             $menu.find('div.button[href]').on('click', function (e) {
                     var $this = $(this), href = $this.attr('href');

@@ -24,6 +24,7 @@ import com.teddy.jfinal.handler.xss.XSSHandler;
 import com.teddy.jfinal.interfaces.AnnotationResolver;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.interfaces.Handler;
+import com.teddy.jfinal.interfaces.Lc4ePlugin;
 import com.teddy.jfinal.tools.ClassSearcherTool;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
@@ -53,9 +54,8 @@ public class CustomPlugin implements IPlugin {
 
     private static Map<String, Set<Method>> aopHandler;
 
-    private static Map<String, List<AnnotationResolver>> methodAnnotationsHandler;
+    private static Map<String, List<Lc4ePlugin>> pluginAOPHandler;
 
-    private static Map<String, List<AnnotationResolver>> afterMethodAnnoHandler;
 
     private static Class<?> clazz;
 
@@ -67,6 +67,7 @@ public class CustomPlugin implements IPlugin {
 
     private static List<com.jfinal.handler.Handler> handlers;
 
+    private static Set<String> actionKeys;
 
     //should release
     private static Map<Class<? extends Annotation>, Function<Annotation, AnnotationResolver>> annotationFunctionMap;
@@ -121,8 +122,8 @@ public class CustomPlugin implements IPlugin {
         interceptors = new ArrayList<>();
         handlers = new ArrayList<>();
         exceptionMethodHandler = new HashMap<>();
-        methodAnnotationsHandler = new HashMap<>();
-        afterMethodAnnoHandler = new HashMap<>();
+        pluginAOPHandler = new HashMap<>();
+        actionKeys = new HashSet<>();
         List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
         Class[] scanClasses = new Class[]{
                 Job.class, Service.class, PluginHandler.class, ConfigHandler.class, Controller.class, Model.class, ExceptionHandlers.class, InterceptorHandler.class
@@ -264,16 +265,56 @@ public class CustomPlugin implements IPlugin {
                         }
                         String actionKey = createActionKey(controller, method, controllerKey);
                         List<Annotation> methodAns = buildAnnotation(method, methodRequiredAnnotations);
+                        actionKeys.add(actionKey);
                         methodAns.removeAll(controllerAns);
                         methodAns.addAll(controllerAns);
-                        methodAnnotationsHandler.put(actionKey, buildAnnotationResolver(methodAns));
 
-                        afterMethodAnnoHandler.put(actionKey, buildAnnotationResolver(buildAnnotation(method, afterMethodRequiredAnnotations)));
+                        setResolvers(pluginAOPHandler, buildAnnotationResolver(methodAns), actionKey, true);
+                        setResolvers(pluginAOPHandler, buildAnnotationResolver(buildAnnotation(method, afterMethodRequiredAnnotations)), actionKey, false);
+
                     }
                 }
                 LOGGER.debug("Controller Registered : controller = " + controller + ", Mapping URL = " + controllerKey);
             }
         });
+    }
+
+    private void setResolvers(Map<String, List<Lc4ePlugin>> handler, List<AnnotationResolver> resolvers, String actionKey, boolean isBefore) {
+        List<Lc4ePlugin> plugins = handler.get(actionKey);
+        if (plugins == null) {
+            plugins = new ArrayList<>();
+            plugins.add(new AnnotationPlugin());
+
+            handler.put(actionKey, plugins);
+        }
+        AnnotationPlugin annotationPlugin = null;
+        for (Lc4ePlugin lc4ePlugin : plugins) {
+            if (lc4ePlugin instanceof AnnotationPlugin) {
+                annotationPlugin = (AnnotationPlugin) lc4ePlugin;
+                break;
+            }
+        }
+        if (annotationPlugin == null) {
+            annotationPlugin = new AnnotationPlugin();
+            plugins.add(annotationPlugin);
+        }
+        List<AnnotationResolver> annotationResolvers = null;
+        if (isBefore) {
+            annotationResolvers = annotationPlugin.getBeforeAnnotationResolvers();
+        } else {
+            annotationResolvers = annotationPlugin.getAfterAnnotationResolvers();
+        }
+
+        if (annotationResolvers == null) {
+            annotationResolvers = new ArrayList<>();
+            if (isBefore) {
+                annotationPlugin.setBeforeAnnotationResolvers(annotationResolvers);
+            } else {
+                annotationPlugin.setAfterAnnotationResolvers(annotationResolvers);
+            }
+        }
+        annotationResolvers.addAll(resolvers);
+
     }
 
     private List<Annotation> buildAnnotation(Class clz, Class[] requiredAnnotations) {
@@ -522,11 +563,9 @@ public class CustomPlugin implements IPlugin {
         return exceptionMethodHandler;
     }
 
-    public static Map<String, List<AnnotationResolver>> getMethodAnnotationsHandler() {
-        return methodAnnotationsHandler;
+
+    public static Map<String, List<Lc4ePlugin>> getPluginAOPHandler() {
+        return pluginAOPHandler;
     }
 
-    public static Map<String, List<AnnotationResolver>> getAfterMethodAnnoHandler() {
-        return afterMethodAnnoHandler;
-    }
 }

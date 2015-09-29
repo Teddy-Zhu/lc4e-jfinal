@@ -7,6 +7,7 @@ import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.interfaces.AnnotationResolver;
+import com.teddy.jfinal.interfaces.Lc4ePlugin;
 import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.tools.WebTool;
 import com.teddy.lc4e.core.entity.Message;
@@ -56,7 +57,10 @@ public class GlobalInterceptorKit {
         if (method == null) {
             resolve(ai, e);
         } else {
-            resolveAOPResolver(ai, CustomPlugin.getExceptionMethodHandler().get(method));
+            List<AnnotationResolver> annotationResolvers = CustomPlugin.getExceptionMethodHandler().get(method);
+            for (AnnotationResolver annotationResolver : annotationResolvers) {
+                annotationResolver.resolve(ai);
+            }
             method.invoke(Modifier.isStatic(method.getModifiers()) ? null : method.getDeclaringClass().newInstance(), resolveParameters(method.getParameterTypes(), ai, e));
         }
     }
@@ -77,9 +81,15 @@ public class GlobalInterceptorKit {
         }
     }
 
-    public static void resolveAOPResolver(Invocation ai, List<AnnotationResolver> ans) throws Exception {
-        for (int i = 0, len = ans.size(); i < len; i++) {
-            ans.get(i).resolve(ai);
+    public static void resolveBeforeLc4ePlugin(Invocation ai, List<Lc4ePlugin> plugins) throws Exception {
+        for (int i = 0, len = plugins.size(); i < len; i++) {
+            plugins.get(i).beforeController(ai);
+        }
+    }
+
+    public static void resolveAfterLc4ePlugin(Invocation ai, List<Lc4ePlugin> plugins) throws Exception {
+        for (int i = 0, len = plugins.size(); i < len; i++) {
+            plugins.get(i).afterController(ai);
         }
     }
 

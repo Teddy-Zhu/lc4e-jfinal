@@ -1162,34 +1162,6 @@
     }
 }
 
-@keyframes spiny {
-    from {
-        -webkit-transform: rotateY(360deg);
-        transform: rotateY(360deg);
-    }
-    to {
-        -webkit-transform: rotateY(0deg);
-        transform: rotateY(0deg);
-    }
-}
-
-@-webkit-keyframes spiny {
-    from {
-        -webkit-transform: rotateY(360deg);
-        transform: rotateY(360deg);
-    }
-    to {
-        -webkit-transform: rotateY(0deg);
-        transform: rotateY(0deg);
-    }
-}
-
-.spiny {
-    -webkit-animation-name: spiny;
-    animation-timing-function: linear;
-    animation-name: spiny;
-}
-
 .spin {
     -webkit-animation-name: spin;
     animation-timing-function: linear;

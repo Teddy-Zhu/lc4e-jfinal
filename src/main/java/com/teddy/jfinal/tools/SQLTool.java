@@ -92,6 +92,29 @@ public class SQLTool {
         return this;
     }
 
+    public SQLTool join(String direct, String tableName) {
+        this.sql.append(" ").append(direct).append(" join ").append(tableName);
+        return this;
+    }
+
+    public SQLTool leftJoin(String tableName) {
+        return join("left", tableName);
+    }
+
+    public SQLTool rightJoin(String tableName) {
+        return join("right", tableName);
+    }
+
+    public SQLTool on(String condition) {
+        this.sql.append(" on ( ").append(condition).append(" ) ");
+        return this;
+    }
+
+    public SQLTool groupBy(String... columns) {
+        this.sql.append(" group by ").append(StringTool.join(columns, ","));
+        return this;
+    }
+
     public SQLTool orderByDesc(String... columns) {
         return orderBy("DESC", columns);
     }
@@ -124,11 +147,11 @@ public class SQLTool {
     }
 
     public static String SELECT(String... columns) {
-        return StringTool.join(columns, ",");
+        return " select " + StringTool.join(columns, ",");
     }
 
     public static String FROM(String tableName) {
-        return tableName;
+        return " from " + tableName;
     }
 
     public static String WHERE(String logic, String... conditions) {
@@ -147,4 +170,11 @@ public class SQLTool {
         return " ( " + StringTool.join(conditions, " AND ") + " ) ";
     }
 
+    public static String COUNT(String column) {
+        return " count(" + column + ")";
+    }
+
+    public static String AS(String column, String newColumn) {
+        return column + " as " + newColumn;
+    }
 }
