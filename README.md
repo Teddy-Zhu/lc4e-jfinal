@@ -1,21 +1,44 @@
-[Light Community For Everyone](http://www.lc4e.com)
-=============
+[Light Forum](http://www.lc4e.com)
+==========
+
+----------
+
 ###It's a Light Forum.
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
 
 >#### Use Java(`JDK8`),JSP(`HTML5`,`Jquery`,`CSS3`,`Semantic UI`,`animatescroll`,`Animate`)
 
 ----------
+
 # [Demo](http://lc4e.coding.io) #
 ----------
+
 > View [http://lc4e.coding.io/InitDB](http://lc4e.coding.io/InitDB) to initial database 
 
-# Description #
+# Forum Related #
 ----------
->Jfianl Extend 基于Jfinal轻量级框架 
->实现了类似Spring的注解，Serveice，Controller 自动注入等
-##Annotation enhancement 
 
+> 简单论坛系统
+>> 主题
+>>> Markdown支持
+>>> @楼层功能
+>> 用户
+>>> 用户控制权限系统
+>>> 独立自由的用户like,block系统
+>> 插件拓展系统
+>>> 自由定制系统
+>> 用户喜好推荐系统
+>>> 浏览习惯推荐主题
+>待补充。。。
+
+# Jfianl Framework Enhancement Related #
+----------
+
+>Jfianl Extend 基于Jfinal轻量级框架 
+>实现了类似Spring的注解，Serveice，Controller 自动注入
+>注解参数验证等功能
+
+##Annotation enhancement 
 
 - `ConfigHandler [T]`:注解Jfianl Config，可以导入多个Config
 - `PluginHander [T]`:注解插件类 ，自动加载插件无需在Config中手动配置
@@ -53,9 +76,9 @@
 ##Other enhancement
 - `BaseController`：增强Controller 增加isAJAX ，isPJAX等
 - `DBModel`:增加 enhancer方法，增强Model,自动set updateTime，createTime,自动事务，自动Cache
-- `Handler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
-- `Interceptor`: interceptor增强，需使用InterceptorHandler载入，新增beforeIntercept，afterIntercept，beforeException，afterException
-- `IPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
+- `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
+- `IInterceptor`: interceptor增强，需使用InterceptorHandler载入，新增beforeIntercept，afterIntercept，beforeException，afterException
+- `IIPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
 - `SetPJAX`:设置PJAX attribute
 - `SetAJAX`:设置AJAX attribute
 
@@ -67,9 +90,11 @@ Lc4eRuntimeException:Lc4e自定义代码异常
 ReflectException ：ReflectTool 类中异常
 Lc4eValidateException:参数验证过程异常
 
+----------
 
 #Important Update#
 ----------
+
 - 6/13/2015 4:22:59 PM 
 > Remove Mysql . Replaced with MongoDB.
 > Version to V2
