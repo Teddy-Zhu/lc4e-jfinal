@@ -33,26 +33,8 @@ public class Const {
 
     public static final String USE_CACHE = "UseCache";
 
-    public static final String INIT = "init";
-
     public static final String USE_INJECT_TARGET = "useInjectTarget";
 
-    public static final String PLUGIN_INIT_CONSTANTS = "plugin_init_constants";
-
-    public static final String PLUGIN_INIT_ROUTES = "plugin_init_routes";
-
-    public static final String PLUGIN_INIT_PLUGINS = "plugin_init_plugins";
-
-    public static final String PLUGIN_INIT_INTERCEPTOR = "plugin_init_nterceptor";
-
-
-    public static final String PLUGIN_INIT_HANDLER = "plugin_init_handlr";
-
-    public static final String PLUGIN_START = "plugin_start";
-
-    public static final String START = "start";
-    public static final String STOP = "stop";
-    public static final String PLUGIN_STOP = "plugin_stop";
 
     public static final String DB_DAO = "dao";
 

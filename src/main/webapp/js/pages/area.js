@@ -14,8 +14,11 @@ $(function () {
             bindEvent: function () {
                 var $topicItems = $('#topicItems'),
                     $topicSetting = $topicItems.find('.topicSetting'),
-                    $topicPopup = $topicItems.find('>.item .ui.fluid.image img');
-                $('#sortTopic').dropdown().dropdown('set selected', $topicItems.attr('data-sort'));
+                    $topicPopup = $topicItems.find('>.item .ui.fluid.image img'),
+                    sortItem = $topicItems.attr('data-sort'),
+                    $sortTopic = $('#sortTopic');
+                ;
+                $sortTopic.dropdown().dropdown('set selected', sortItem ? sortItem : $sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
                 $topicSetting.dropdown();
                 $topicPopup.popup();
             }

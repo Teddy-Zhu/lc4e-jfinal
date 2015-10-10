@@ -2,7 +2,6 @@ package com.teddy.lc4e.core.config;
 
 import com.jfinal.config.*;
 import com.teddy.jfinal.annotation.ConfigHandler;
-import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.JFinalConfig;
 import com.teddy.jfinal.plugin.PropPlugin;
