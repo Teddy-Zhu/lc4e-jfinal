@@ -2,7 +2,6 @@ package com.teddy.jfinal.handler;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
-import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
 import com.teddy.jfinal.plugin.CustomPlugin;
 
@@ -14,10 +13,11 @@ public class GlobalInterceptor implements Interceptor {
     @Override
     public void intercept(Invocation ai) {
         try {
-            GlobalInterceptorKit.handleAOPMethods(ai, Const.BEFORE_INTERCEPT);
+            GlobalInterceptorKit.resolveBeforeInterceptor(ai);
 
-
-            GlobalInterceptorKit.resolveBeforeLc4ePlugin(ai, CustomPlugin.getPluginAOPHandler().get(ai.getActionKey()));
+            if (!GlobalInterceptorKit.resolveBeforeLc4ePlugin(ai, CustomPlugin.getPluginAOPHandler().get(ai.getActionKey()))) {
+                return;
+            }
 
             GlobalInterceptorKit.handleInject(ai);
 
@@ -26,12 +26,12 @@ public class GlobalInterceptor implements Interceptor {
             // set other attr
             GlobalInterceptorKit.resolveAfterLc4ePlugin(ai, CustomPlugin.getPluginAOPHandler().get(ai.getActionKey()));
 
-            GlobalInterceptorKit.handleAOPMethods(ai, Const.AFTER_INTERCEPT);
+            GlobalInterceptorKit.resolveAfterInterceptor(ai);
         } catch (Throwable e) {
             try {
-                GlobalInterceptorKit.handleAOPMethods(ai, Const.BEFORE_EXCEPTION);
+                GlobalInterceptorKit.resolveBeforeException(ai, e);
                 GlobalInterceptorKit.ExceptionHandle(ai, e);
-                GlobalInterceptorKit.handleAOPMethods(ai, Const.AFTER_EXCEPTION);
+                GlobalInterceptorKit.resolveAfterException(ai, e);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }

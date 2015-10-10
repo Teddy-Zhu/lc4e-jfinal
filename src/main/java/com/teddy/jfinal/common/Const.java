@@ -8,14 +8,6 @@ public class Const {
     private Const() {
     }
 
-    public static final String BEFORE_INTERCEPT = "beforeIntercept";
-
-    public static final String AFTER_INTERCEPT = "afterIntercept";
-
-    public static final String BEFORE_EXCEPTION = "beforeException";
-
-    public static final String AFTER_EXCEPTION = "afterException";
-
     public static final String DEFAULT_NONE = "\n\t\t\n\t\t\n\uE000\uE001\uE002\n\t\t\t\t\n";
 
     public static final String CONFIG_CONSTANT = "configConstant";
@@ -34,10 +26,6 @@ public class Const {
     public static final String CONFIG_HANDLER = "configHandler";
     public static final String AFTER_JFINAL_START = "afterJFinalStart";
     public static final String BEFORE_JFINAL_STOP = "beforeJFinalStop";
-
-    public static final String AFTER_HANDLER = "afterHandler";
-    public static final String BEFORE_HANDLER = "beforeHandler";
-
 
     public static final String COMVAR = "ComVar";
 

@@ -5,6 +5,7 @@ import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.Transaction;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.handler.InternInterceptor.TransactionHelper;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.tools.ReflectTool;

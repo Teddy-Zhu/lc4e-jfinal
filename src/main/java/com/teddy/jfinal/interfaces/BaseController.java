@@ -8,15 +8,16 @@ import com.teddy.jfinal.tools.WebTool;
  * Created by teddy on 2015/7/20.
  */
 public abstract class BaseController extends Controller {
-    public boolean isPJAX() {
+
+    protected boolean isPJAX() {
         return WebTool.isPJAX(getRequest());
     }
 
-    public boolean isAJAX() {
+    protected boolean isAJAX() {
         return WebTool.isAJAX(getRequest());
     }
 
-    public void renderCaptcha() {
+    protected void renderCaptcha() {
         Lc4eCaptchaRender lc4eCaptchaRender = new Lc4eCaptchaRender();
         render(lc4eCaptchaRender);
     }

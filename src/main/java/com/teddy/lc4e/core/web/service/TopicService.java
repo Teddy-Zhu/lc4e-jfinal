@@ -18,8 +18,14 @@ public class TopicService {
 
     /**
      * filter topic with user like by pw calc
-     *
-     * @return
+     * @param userId
+     * @param page
+     * @param size
+     * @param userTagPCT
+     * @param topicStatusPCT
+     * @param commentCountPCT
+     * @param curCommentCountPCT
+     * @return topic page
      */
     public Page<? extends DBModel> getTopicPw(String userId, int page, int size, double userTagPCT, double topicStatusPCT, double commentCountPCT, double curCommentCountPCT) {
         SQLTool sql = new SQLTool();

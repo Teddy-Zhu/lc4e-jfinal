@@ -2114,11 +2114,6 @@ html, body {
     content: initial;
 }
 
-#userItem > .ui.tiny.attached.label {
-    top: .5em;
-    padding: .1em .3em;
-}
-
 #userItem {
     padding: 0 0 0 0;
     margin-left: .5em;
@@ -2149,10 +2144,6 @@ html, body {
 #userItem > img {
     margin-left: auto;
     margin-right: auto;
-}
-
-#userItem > .ui.label {
-    cursor: pointer;
 }
 
 /* header search*/

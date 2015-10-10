@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler;
+package com.teddy.jfinal.handler.InternInterceptor;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
@@ -59,9 +59,7 @@ public class TransactionHelper implements MethodInterceptor {
             en.setSuperclass(targetClass.getClass());
             en.setCallback(new TransactionHelper(targetClass.newInstance()));
             proxy = en.create();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 

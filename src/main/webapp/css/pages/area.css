@@ -1,3 +1,126 @@
 #topicHotTags .areaButton > .button {
     margin-bottom: 1em;
 }
+
+@media only screen and (max-width: 768px) {
+
+    #topicItems > .item > .image {
+        width: 70px !important;
+        max-width: 30% !important;
+        margin-left: inherit;
+    }
+
+    #topicItems > .item {
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+    }
+
+    #topicHotTags {
+        width: 100% !important;
+        padding: 0;
+    }
+
+    #topicList {
+        width: 100% !important;
+        padding: 0;
+    }
+}
+
+#topicItems > .item > .content {
+    padding-top: 0.5em;
+}
+
+#topicItems > .item img {
+    border-radius: .25rem;
+}
+
+#topicItems > .item > .content > .header > .title {
+    display: inline-block;
+}
+
+#topicItems > .item > .content > .header:after {
+    width: 100%;
+    height: 1.5px;
+    background-color: #4183C4;
+    content: '';
+    -webkit-transition: all 0.2s;
+    -webkit-backface-visibility: hidden;
+    transition: all 0.2s;
+    backface-visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    clear: both;
+    display: block;
+}
+
+#topicItems > .item .topicQuickTool > .icon {
+    margin: 0;
+}
+
+#topicItems > .item .topicQuickTools > .topicQuickTool {
+    margin: auto;
+}
+
+#topicItems > .item .topicQuickTools {
+    float: right;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+#topicItems > .item > .content > .header:hover:after {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+}
+
+#topicItems > .item > .content > .header i.icon {
+    margin: 0 0 0 0;
+}
+
+#topicItems > .item > .content > .extra > .ui.label .icon {
+    margin: 0 .1em 0 0;
+}
+
+#topicItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
+    top: .3em;
+    padding: .2em .3em .2em .3em;
+    left: calc(.49em - 1.2em);
+}
+
+#topicItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
+    border-width: 0 0.8em 0.8em 0;
+}
+
+#topicItems > .item > .content > .extra > .ui.label {
+    padding: .2em .25em;
+    margin: .55rem .5rem 0 0;
+}
+
+#topicItems > .item > .image {
+    width: 5rem;
+}
+
+#topicItems > .item {
+    position: relative;
+    padding: 1em 2em !important;
+    transition: background 0.5s ease;
+}
+
+#topicItems > .item:hover {
+    background: #ECECEC;
+}
+
+#topicItems > .item:hover .topicQuickTools {
+    opacity: 1;
+}
+
+#topicItems > .item .topicQuickTools > .pointing.label:before {
+    display: none;
+}
+
+.item.topic > .ui.right.attached.label.status {
+    border-top-right-radius: 0;
+}
+
+#sortTopic {
+    float: right;
+}

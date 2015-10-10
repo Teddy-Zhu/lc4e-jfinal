@@ -17,10 +17,12 @@ $(function () {
         bindEvent: function () {
             var $topicItems = $('#topicItems'),
                 $announce = $('#announce'),
-                $attachedHeader = $('#attachedHeader');
+                $attachedHeader = $('#attachedHeader'),
+                sortItem = $topicItems.attr('data-sort'),
+                $sortTopic = $('#sortTopic');
 
             $announce.shape();
-            $('#sortTopic').dropdown().dropdown('set selected', $topicItems.attr('data-sort'));
+            $sortTopic.dropdown().dropdown('set selected', sortItem ? sortItem : $sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
 
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
                 var $items = $('#topicItems'), page = parseInt($items.attr("data-page")) + 1, sort = parseInt($items.attr('data-sort'));

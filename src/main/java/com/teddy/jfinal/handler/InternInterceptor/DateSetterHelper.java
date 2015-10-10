@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler;
+package com.teddy.jfinal.handler.InternInterceptor;
 
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.tools.ReflectTool;
@@ -43,9 +43,7 @@ public class DateSetterHelper implements MethodInterceptor {
             en.setSuperclass(targetClass);
             en.setCallback(new DateSetterHelper(targetClass.newInstance()));
             proxy = en.create();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return (T) proxy;

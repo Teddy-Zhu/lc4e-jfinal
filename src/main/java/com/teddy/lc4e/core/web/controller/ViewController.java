@@ -45,7 +45,6 @@ public class ViewController extends BaseController {
     }
 
     @RequestMethod(Method.GET)
-
     @ValidateParams({
             @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
             @ValidateParam(value = "a", type = String.class, defaultValue = "index"),

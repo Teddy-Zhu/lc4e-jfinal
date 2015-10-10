@@ -20,28 +20,21 @@ import org.apache.shiro.authz.UnauthenticatedException;
 @ExceptionHandlers
 public class ExceptionHandle {
 
-    @ExceptionHandler({NullPointerException.class})
-    @ResponseStatus(Status.ERROR)
-    public void handle(NullPointerException e, Invocation ai) {
-        ai.getController().getResponse().setCharacterEncoding(PropPlugin.getValue(Dict.ENCODING, "utf-8"));
-        String a = "异常测试";
-        ai.getController().renderText(a + e.getMessage());
-    }
-
     @ExceptionHandler({AuthenticationException.class, UnauthenticatedException.class})
     public void auth(Exception e, Invocation ai) {
         ai.getController().setAttr("message", new Message(e.getMessage()));
         ai.getController().render("/pages/exception");
     }
 
-    @ExceptionHandler({Lc4eException.class, Lc4eApplicationException.class})
+    @ExceptionHandler({Exception.class, Lc4eException.class, Lc4eApplicationException.class})
     public void common(Throwable e, Invocation ai) {
+        Message error = new Message(e.getMessage() == null ? e.toString() : e.getMessage());
         if (WebTool.isAJAX(ai.getController().getRequest())) {
-            ai.getController().renderJson(new Message(e.getMessage() == null ? e.toString() : e.getMessage()));
+            ai.getController().renderJson(error);
         } else {
+            ai.getController().setAttr("message", error);
             ai.getController().render("/pages/exception");
         }
     }
-
 
 }

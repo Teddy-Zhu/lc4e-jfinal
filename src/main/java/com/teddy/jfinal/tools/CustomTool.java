@@ -2,8 +2,8 @@ package com.teddy.jfinal.tools;
 
 import com.teddy.jfinal.annotation.Model;
 import com.teddy.jfinal.handler.CustomInterceptor;
-import com.teddy.jfinal.handler.DateSetterHelper;
-import com.teddy.jfinal.handler.TransactionHelper;
+import com.teddy.jfinal.handler.InternInterceptor.DateSetterHelper;
+import com.teddy.jfinal.handler.InternInterceptor.TransactionHelper;
 
 /**
  * Created by teddy on 2015/7/26.

@@ -5,7 +5,7 @@ import com.jfinal.aop.Invocation;
 /**
  * Created by teddy on 2015/7/20.
  */
-public interface Interceptor {
+public interface IInterceptor {
 
     /**
      * before all controller
@@ -27,7 +27,7 @@ public interface Interceptor {
      * @param ai
      * @param e
      */
-    void beforeException(Invocation ai, Exception e);
+    void beforeException(Invocation ai, Throwable e);
 
     /**
      * before exception handler
@@ -35,5 +35,5 @@ public interface Interceptor {
      * @param ai
      * @param e
      */
-    void afterException(Invocation ai, Exception e);
+    void afterException(Invocation ai, Throwable e);
 }

@@ -1,9 +1,9 @@
 package com.teddy.jfinal.handler;
 
 import com.jfinal.handler.Handler;
-import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.handler.gzip.GZIPResponseWrapper;
-import com.teddy.jfinal.handler.support.GlobalHandlerKit;
+import com.teddy.jfinal.interfaces.IHandler;
+import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.ShiroPlugin;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -17,7 +17,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.Callable;
 
 /**
  * Created by teddy on 2015/7/22.
@@ -31,24 +30,22 @@ public class GlobalHandler extends Handler {
         Throwable t = null;
         final Subject subject = createSubject(request, response);
         try {
-            subject.execute(new Callable() {
-                public Object call() throws Exception {
-                    GlobalHandlerKit.handleAOPMethods(target, request, response, isHandled, Const.BEFORE_HANDLER);
-                    updateSessionLastAccessTime(request, response);
-                    String ae = request.getHeader("accept-encoding");
-                    //check if browser support gzip
-                    boolean gzip = ae != null && ae.contains("gzip");
-                    if (gzip) {
-                        logger.debug("GZIP supported, compressing.");
-                        GZIPResponseWrapper wrappedResponse = new GZIPResponseWrapper(response);
-                        nextHandler.handle(target, request, wrappedResponse, isHandled);
-                        wrappedResponse.finishResponse();
-                    } else {
-                        nextHandler.handle(target, request, response, isHandled);
-                    }
-                    GlobalHandlerKit.handleAOPMethods(target, request, response, isHandled, Const.AFTER_HANDLER);
-                    return null;
+            subject.execute(() -> {
+                resolveBefore(target, request, response, isHandled);
+                updateSessionLastAccessTime(request, response);
+                String ae = request.getHeader("accept-encoding");
+                //check if browser support gzip
+                boolean gzip = ae != null && ae.contains("gzip");
+                if (gzip) {
+                    logger.debug("GZIP supported, compressing.");
+                    GZIPResponseWrapper wrappedResponse = new GZIPResponseWrapper(response);
+                    nextHandler.handle(target, request, wrappedResponse, isHandled);
+                    wrappedResponse.finishResponse();
+                } else {
+                    nextHandler.handle(target, request, response, isHandled);
                 }
+                resolveAfter(target, request, response, isHandled);
+                return null;
             });
         } catch (ExecutionException ex) {
             t = ex.getCause();
@@ -92,6 +89,18 @@ public class GlobalHandler extends Handler {
                     }
                 }
             }
+        }
+    }
+
+    private void resolveBefore(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
+        for (IHandler handler : CustomPlugin.getPluginIhanders()) {
+            handler.beforeHandler(target, request, response, isHandled);
+        }
+    }
+
+    private void resolveAfter(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
+        for (IHandler handler : CustomPlugin.getPluginIhanders()) {
+            handler.afterHandler(target, request, response, isHandled);
         }
     }
 }

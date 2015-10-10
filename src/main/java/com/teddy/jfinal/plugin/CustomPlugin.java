@@ -5,6 +5,7 @@ import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.config.*;
 import com.jfinal.core.ActionKey;
+import com.jfinal.handler.Handler;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
@@ -21,10 +22,7 @@ import com.teddy.jfinal.handler.GlobalInterceptor;
 import com.teddy.jfinal.handler.httpCache.HttpCacheHandler;
 import com.teddy.jfinal.handler.resolve.*;
 import com.teddy.jfinal.handler.xss.XSSHandler;
-import com.teddy.jfinal.interfaces.AnnotationResolver;
-import com.teddy.jfinal.interfaces.BaseController;
-import com.teddy.jfinal.interfaces.Handler;
-import com.teddy.jfinal.interfaces.Lc4ePlugin;
+import com.teddy.jfinal.interfaces.*;
 import com.teddy.jfinal.tools.ClassSearcherTool;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
@@ -33,7 +31,6 @@ import org.apache.shiro.authz.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -56,6 +53,11 @@ public class CustomPlugin implements IPlugin {
 
     private static Map<String, List<Lc4ePlugin>> pluginAOPHandler;
 
+    private static List<IHandler> pluginIhanders;
+
+    private static List<IInterceptor> pluginIinterceptors;
+
+    private static List<com.teddy.jfinal.interfaces.IPlugin> pluginIplugins;
 
     private static Class<?> clazz;
 
@@ -113,10 +115,7 @@ public class CustomPlugin implements IPlugin {
     public boolean init(Properties properties) throws Lc4eException, InstantiationException, NoSuchFieldException, IllegalAccessException {
         new PropPlugin(properties).start();
         exceptionsMap = new HashMap<>();
-        aopHandler = new HashMap<>();
 
-        List<String> list = ReflectTool.getKeyWordConst("PLUGIN_", "AFTER_", "BEFORE_");
-        list.forEach(name -> aopHandler.put(name, new HashSet<>()));
         routes = new ArrayList<>();
         plugins = new ArrayList<>();
         interceptors = new ArrayList<>();
@@ -124,6 +123,9 @@ public class CustomPlugin implements IPlugin {
         exceptionMethodHandler = new HashMap<>();
         pluginAOPHandler = new HashMap<>();
         actionKeys = new HashSet<>();
+        pluginIhanders = new ArrayList<>();
+        pluginIinterceptors = new ArrayList<>();
+        pluginIplugins = new ArrayList<>();
         List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
         Class[] scanClasses = new Class[]{
                 Job.class, Service.class, PluginHandler.class, ConfigHandler.class, Controller.class, Model.class, ExceptionHandlers.class, InterceptorHandler.class
@@ -159,21 +161,13 @@ public class CustomPlugin implements IPlugin {
 
     @Override
     public boolean start() {
-        try {
-            resolveMethod(Const.PLUGIN_START, null);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+        pluginIplugins.forEach(com.teddy.jfinal.interfaces.IPlugin::start);
         return true;
     }
 
     @Override
     public boolean stop() {
-        try {
-            resolveMethod(Const.PLUGIN_STOP, null);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+        pluginIplugins.forEach(com.teddy.jfinal.interfaces.IPlugin::stop);
         return true;
     }
 
@@ -198,27 +192,37 @@ public class CustomPlugin implements IPlugin {
             else
                 me.add(route.getControllerKey(), route.getControllerClass(), route.getViewPath());
         });
-        resolveMethod(Const.PLUGIN_INIT_ROUTES, me);
+        for (com.teddy.jfinal.interfaces.IPlugin plugin : pluginIplugins) {
+            plugin.init(me);
+        }
     }
 
 
     public void init(Plugins me) throws InstantiationException {
         plugins.forEach(me::add);
-        resolveMethod(Const.PLUGIN_INIT_PLUGINS, me);
+        for (com.teddy.jfinal.interfaces.IPlugin plugin : pluginIplugins) {
+            plugin.init(me);
+        }
     }
 
     public void init(Constants me) throws InstantiationException {
-        resolveMethod(Const.PLUGIN_INIT_CONSTANTS, me);
+        for (com.teddy.jfinal.interfaces.IPlugin plugin : pluginIplugins) {
+            plugin.init(me);
+        }
     }
 
     public void init(Interceptors me) throws InstantiationException {
         interceptors.forEach(me::add);
-        resolveMethod(Const.PLUGIN_INIT_INTERCEPTOR, me);
+        for (com.teddy.jfinal.interfaces.IPlugin plugin : pluginIplugins) {
+            plugin.init(me);
+        }
     }
 
     public void init(Handlers me) throws InstantiationException {
         handlers.forEach(me::add);
-        resolveMethod(Const.PLUGIN_INIT_HANDLER, me);
+        for (com.teddy.jfinal.interfaces.IPlugin plugin : pluginIplugins) {
+            plugin.init(me);
+        }
     }
 
     private void initInject() {
@@ -429,15 +433,11 @@ public class CustomPlugin implements IPlugin {
 
         //Init Other Plugin By @PluginHandler
         Classes = classesMap.get(PluginHandler.class);
-        for (Class<?> plugin : Classes) {
+        for (Class plugin : Classes) {
             try {
                 if (com.teddy.jfinal.interfaces.IPlugin.class.isAssignableFrom(plugin)) {
                     //resolve Class implements custom IPlugin
-                    aopHandler.get(Const.PLUGIN_INIT_PLUGINS).add(plugin.getMethod(Const.INIT, Plugins.class));
-                    aopHandler.get(Const.PLUGIN_INIT_ROUTES).add(plugin.getMethod(Const.INIT, Routes.class));
-                    aopHandler.get(Const.PLUGIN_INIT_CONSTANTS).add(plugin.getMethod(Const.INIT, Constants.class));
-                    aopHandler.get(Const.PLUGIN_START).add(ReflectTool.getMethodByClassAndName(plugin, Const.START));
-                    aopHandler.get(Const.PLUGIN_STOP).add(ReflectTool.getMethodByClassAndName(plugin, Const.STOP));
+                    pluginIplugins.add((com.teddy.jfinal.interfaces.IPlugin) plugin.newInstance());
                 } else {
                     //init jfinal plugins
                     plugins.add((IPlugin) plugin.newInstance());
@@ -458,23 +458,14 @@ public class CustomPlugin implements IPlugin {
 
             Method[] methods = exceptionClass.getDeclaredMethods();
             for (Method method : methods) {
-                //if named be before* after* should be handled.
-                switch (method.getName()) {
-                    case Const.BEFORE_EXCEPTION:
-                        aopHandler.get(Const.BEFORE_EXCEPTION).add(method);
-                        break;
-                    case Const.AFTER_EXCEPTION:
-                        aopHandler.get(Const.AFTER_EXCEPTION).add(method);
-                        break;
-                    default:
-                        // resolve @ExceptionHandler add method into ExceptionMap
-                        if (method.isAnnotationPresent(ExceptionHandler.class)) {
-                            exceptionMethodHandler.put(method, buildAnnotationResolver(buildAnnotation(method, afterMethodRequiredAnnotations)));
-                            for (Class<? extends Throwable> exception : method.getAnnotation(ExceptionHandler.class).value()) {
-                                exceptionsMap.put(exception, method);
-                            }
-                        }
+                // resolve @ExceptionHandler add method into ExceptionMap
+                if (method.isAnnotationPresent(ExceptionHandler.class)) {
+                    exceptionMethodHandler.put(method, buildAnnotationResolver(buildAnnotation(method, afterMethodRequiredAnnotations)));
+                    for (Class<? extends Throwable> exception : method.getAnnotation(ExceptionHandler.class).value()) {
+                        exceptionsMap.put(exception, method);
+                    }
                 }
+
             }
         }
 
@@ -484,18 +475,15 @@ public class CustomPlugin implements IPlugin {
         Set<Class> Classes = classesMap.get(InterceptorHandler.class);
         try {
             for (Class interceptor : Classes) {
-                if (com.teddy.jfinal.interfaces.Interceptor.class.isAssignableFrom(interceptor)) {
-                    //custom Interceptor
-                    aopHandler.get(Const.BEFORE_EXCEPTION).add(ReflectTool.getMethodByClassAndName(interceptor, Const.BEFORE_EXCEPTION));
-                    aopHandler.get(Const.BEFORE_INTERCEPT).add(ReflectTool.getMethodByClassAndName(interceptor, Const.BEFORE_INTERCEPT));
-                    aopHandler.get(Const.AFTER_EXCEPTION).add(ReflectTool.getMethodByClassAndName(interceptor, Const.AFTER_EXCEPTION));
-                    aopHandler.get(Const.AFTER_INTERCEPT).add(ReflectTool.getMethodByClassAndName(interceptor, Const.AFTER_INTERCEPT));
+                if (IInterceptor.class.isAssignableFrom(interceptor)) {
+                    //custom IInterceptor
+                    pluginIinterceptors.add((IInterceptor) interceptor.newInstance());
                 } else {
                     //Jfinal Interceptor
                     interceptors.add((Interceptor) interceptor.newInstance());
                 }
             }
-        } catch (InstantiationException | IllegalAccessException | Lc4eException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
@@ -506,17 +494,16 @@ public class CustomPlugin implements IPlugin {
     private void initHanders() {
         Set<Class> Classes = classesMap.get(InterceptorHandler.class);
         try {
-            for (Class<?> handler : Classes) {
-                if (Handler.class.isAssignableFrom(handler)) {
+            for (Class handler : Classes) {
+                if (IHandler.class.isAssignableFrom(handler)) {
                     //custom handler with @GlobalHandler
-                    aopHandler.get(Const.BEFORE_HANDLER).add(ReflectTool.getMethodByClassAndName(handler, Const.BEFORE_HANDLER));
-                    aopHandler.get(Const.AFTER_HANDLER).add(ReflectTool.getMethodByClassAndName(handler, Const.AFTER_HANDLER));
+                    pluginIhanders.add((IHandler) handler.newInstance());
                 } else {
                     //Jfinal handler
-                    handlers.add((com.jfinal.handler.Handler) handler.newInstance());
+                    handlers.add((Handler) handler.newInstance());
                 }
             }
-        } catch (InstantiationException | IllegalAccessException | Lc4eException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
@@ -533,28 +520,6 @@ public class CustomPlugin implements IPlugin {
 
     }
 
-    private void resolveMethod(String name, Object me) throws InstantiationException {
-        boolean result;
-        try {
-            for (Method method : aopHandler.get(name)) {
-                method.setAccessible(true);
-                if (me == null)
-                    result = (boolean) method.invoke(method.getDeclaringClass().newInstance());
-                else
-                    result = (boolean) method.invoke(method.getDeclaringClass().newInstance(), me);
-                if (!result) {
-                    throw new Lc4eException("Start plugin [" + method.getDeclaringClass().getName() + "] failed");
-                }
-            }
-        } catch (IllegalAccessException | InvocationTargetException | Lc4eException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Map<String, Set<Method>> getAopHandler() {
-        return aopHandler;
-    }
-
     public static Map<Class<? extends Throwable>, Method> getExceptionsMap() {
         return exceptionsMap;
     }
@@ -568,4 +533,11 @@ public class CustomPlugin implements IPlugin {
         return pluginAOPHandler;
     }
 
+    public static List<IHandler> getPluginIhanders() {
+        return pluginIhanders;
+    }
+
+    public static List<IInterceptor> getPluginIinterceptors() {
+        return pluginIinterceptors;
+    }
 }
