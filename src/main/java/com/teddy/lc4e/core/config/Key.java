@@ -1,9 +1,14 @@
 package com.teddy.lc4e.core.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by teddy on 2015/7/19.
  */
 public class Key {
+
+    public static Map<String, String> kvs = new HashMap<>();
 
     public static final String Empty = "";
 

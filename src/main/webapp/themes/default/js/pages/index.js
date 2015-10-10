@@ -15,20 +15,19 @@ $(function () {
             $topicPopup.popup();
         },
         bindEvent: function () {
-            var $topicItems = $('#topicItems'),
-                $announce = $('#announce'),
+            var $announce = $('#announce'),
                 $attachedHeader = $('#attachedHeader'),
-                sortItem = $topicItems.attr('data-sort'),
+                sortItem = $('#topicItems').attr('data-sort'),
                 $sortTopic = $('#sortTopic');
-
+            $attachedHeader.attr('data-area', $.cookie('area') ? $.cookie('area') : 'index');
             $announce.shape();
             $sortTopic.dropdown().dropdown('set selected', sortItem ? sortItem : $sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
 
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
-                var $items = $('#topicItems'), page = parseInt($items.attr("data-page")) + 1, sort = parseInt($items.attr('data-sort'));
+                var $items = $('#topicItems'), page = parseInt($items.attr("data-page")) + 1, sort = parseInt($sortTopic.dropdown('get value'));
                 $.Lc4eAjax({
-                    url: "/?p=" + page + "&o=" + sort + "&a=" + $attachedHeader.attr('data-area'),
-                    data: {art: true},
+                    url: "/?p=" + page + "&o=" + sort,
+                    data: {art: true, a: $attachedHeader.attr('data-area')},
                     target: '#articlelist>.ui.divided.items',
                     pjax: true,
                     loading: 'loading articles',

@@ -13,6 +13,7 @@ import com.teddy.lc4e.core.web.service.ComVarService;
 import com.teddy.lc4e.core.web.service.MenuService;
 import org.apache.log4j.Logger;
 import org.beetl.core.GroupTemplate;
+import org.beetl.core.resource.WebAppResourceLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +78,12 @@ public class Config implements JFinalConfig {
         maps.put("SiteName", ComVarService.service.getComVarValueByName("SiteName"));
         maps.put("menulist", MenuService.service.getMenuTree());
         maps.put("version", PropPlugin.getValue(Dict.version));
+        Key.kvs.put("Theme", ComVarService.service.getComVarValueByName("DefaultTheme"));
+        maps.put("Theme", "/themes/" + Key.kvs.get("Theme"));
         Lc4eBeetlRenderFactory.groupTemplate.setSharedVars(maps);
+
+        Lc4eBeetlRenderFactory.groupTemplate.getConf().getResourceMap().put("root", "/WEB-INF/views" + Key.kvs.get("Theme") + "/");
+        WebAppResourceLoader resourceLoader = (WebAppResourceLoader) Lc4eBeetlRenderFactory.groupTemplate.getResourceLoader();
+        resourceLoader.setRoot(resourceLoader.getRoot() + "\\themes\\" + Key.kvs.get("Theme").replace("/", "\\"));
     }
 }

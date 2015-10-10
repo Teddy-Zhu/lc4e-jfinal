@@ -17,7 +17,6 @@ $(function () {
                     $topicPopup = $topicItems.find('>.item .ui.fluid.image img'),
                     sortItem = $topicItems.attr('data-sort'),
                     $sortTopic = $('#sortTopic');
-                ;
                 $sortTopic.dropdown().dropdown('set selected', sortItem ? sortItem : $sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
                 $topicSetting.dropdown();
                 $topicPopup.popup();
