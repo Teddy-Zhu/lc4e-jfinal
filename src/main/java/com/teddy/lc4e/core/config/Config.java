@@ -84,6 +84,6 @@ public class Config implements JFinalConfig {
 
         Lc4eBeetlRenderFactory.groupTemplate.getConf().getResourceMap().put("root", "/WEB-INF/views" + Key.kvs.get("Theme") + "/");
         WebAppResourceLoader resourceLoader = (WebAppResourceLoader) Lc4eBeetlRenderFactory.groupTemplate.getResourceLoader();
-        resourceLoader.setRoot(resourceLoader.getRoot() + "\\themes\\" + Key.kvs.get("Theme").replace("/", "\\"));
+        resourceLoader.setRoot(resourceLoader.getRoot() + "/themes/" + Key.kvs.get("Theme"));
     }
 }
