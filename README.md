@@ -2,6 +2,7 @@
 ==========
 
 ----------
+converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/lc4e-spring)
 
 ###It's a Light Forum.
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
@@ -18,27 +19,27 @@
 # Forum Related #
 ----------
 
-> 简单论坛系统
->> 主题
->>> Markdown支持
->>> @楼层功能
->> 用户
->>> 用户控制权限系统
->>> 独立自由的用户like,block系统
->> 插件拓展系统
->>> 自由定制系统
->> 用户喜好推荐系统
->>> 浏览习惯推荐主题
->待补充。。。
+> ###轻量级论坛系统  
+>1.  主题  
+>  1.Markdown支持  
+>  2.@楼层功能  
+>2. 用户  
+>  1.用户控制权限系统  
+>  2.独立自由的用户like,block系统  
+>3. 插件拓展系统  
+>  1.自由定制系统  
+>4. 用户喜好推荐系统  
+>  1.浏览习惯推荐主题  
+>5. 待补充。。。 
 
 # Jfianl Framework Enhancement Related #
 ----------
 
->Jfianl Extend 基于Jfinal轻量级框架 
->实现了类似Spring的注解，Serveice，Controller 自动注入
+>Jfianl Extend 基于Jfinal轻量级框架   
+>实现了类似Spring的注解，Serveice，Controller 自动注入  
 >注解参数验证等功能
 
-##Annotation enhancement 
+###Annotation enhancement 
 
 - `ConfigHandler [T]`:注解Jfianl Config，可以导入多个Config
 - `PluginHander [T]`:注解插件类 ，自动加载插件无需在Config中手动配置
@@ -65,7 +66,7 @@
 - `ValidateToken[T/M]`:验证TOKEN
 - `Cache[M]`:在Service的方法中注解，可以自动缓存
 
-## Shiro Related
+### Shiro Related
 - `RequireGuest[T/M]`:
 - `RequiresAuthentication[T/M]`:
 - `RequiresPermissions[T/M]`:
@@ -73,7 +74,7 @@
 - `RequiresUser[T/M]`:
 
 
-##Other enhancement
+### Other enhancement
 - `BaseController`：增强Controller 增加isAJAX ，isPJAX等
 - `DBModel`:增加 enhancer方法，增强Model,自动set updateTime，createTime,自动事务，自动Cache
 - `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
@@ -82,13 +83,14 @@
 - `SetPJAX`:设置PJAX attribute
 - `SetAJAX`:设置AJAX attribute
 
-## Exception
-Lc4eAutoSetterException:自动设置response attribute 异常
-Lc4eApplicationException: 业务层异常
-Lc4eException:
-Lc4eRuntimeException:Lc4e自定义代码异常
-ReflectException ：ReflectTool 类中异常
-Lc4eValidateException:参数验证过程异常
+### Exception
+
+- Lc4eAutoSetterException:自动设置response attribute 异常  
+- Lc4eApplicationException: 业务层异常  
+- Lc4eException:  
+- Lc4eRuntimeException:Lc4e自定义代码异常  
+- ReflectException ：ReflectTool 类中异常  
+- Lc4eValidateException:参数验证过程异常  
 
 ----------
 
@@ -100,5 +102,5 @@ Lc4eValidateException:参数验证过程异常
 > Version to V2
 
 - 7/31/2015 1:08:22 PM 
-> Convert Spring to Jfinal
+> Convert Spring to Jfinal [ORIGIN PROJECT](https://github.com/Teddy-Zhu/lc4e-spring)  
 > Rollback MongoDB to MYSQL
