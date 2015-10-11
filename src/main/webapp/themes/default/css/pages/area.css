@@ -27,7 +27,7 @@
 }
 
 #topicItems > .item > .content {
-    padding-top: 0.5em;
+    padding-top: 0.3em;
 }
 
 #topicItems > .item img {
@@ -101,7 +101,7 @@
 
 #topicItems > .item {
     position: relative;
-    padding: 1em 2em !important;
+    padding: .5em 2em !important;
     transition: background 0.5s ease;
 }
 

@@ -7,6 +7,18 @@
     <div class="ui attached fluid segment">
         <p>Fill out the form below to sign-up for a new account</p>
     </div>
+    <div class="ui attached message" style="margin-top: 1em;">
+        <div class="header">
+            Hot Tag
+        </div>
+    </div>
+    <div class="ui attached fluid segment">
+        <div class="ui labels">
+            <a class="ui tag label">New</a>
+            <a class="ui red tag label">Upcoming</a>
+            <a class="ui teal tag label">Featured</a>
+        </div>
+    </div>
     <div class="ui basic no left right padded segment areaButton">
         <button class="ui primary fluid button">New Topic</button>
         <button class="ui fluid button">Two</button>
@@ -88,7 +100,7 @@
          data-sort="<beetl>topicSort!</beetl>">
         <!--- if(has(topics) && topics !=null){ layout("/ajax/_topic.html",{'topics':topics}){};}--->
     </div>
-    <div id="articlebottons" class="ui bottom attached message">
+    <div id="articlebottons" class="ui bottom clearing attached message">
         <div id="prePage" class="ui left floated basic labeled icon button">
             <i class="angle double left icon"></i>
             Prev

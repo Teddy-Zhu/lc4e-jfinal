@@ -14,7 +14,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 # [Demo](http://lc4e.coding.io) #
 ----------
 
-> View [http://lc4e.coding.io/InitDB](http://lc4e.coding.io/InitDB) to initial database 
+> <del>View [http://lc4e.coding.io/InitDB](http://lc4e.coding.io/InitDB) to initial database 
 
 # Forum Related #
 ----------

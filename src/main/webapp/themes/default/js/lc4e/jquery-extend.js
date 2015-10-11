@@ -3521,10 +3521,10 @@
             }
             //  $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
 
-            $menu.find('div.button[href]').on('click', function (e) {
-                    var $this = $(this), href = $this.attr('href');
+            $menu.find('div.button[href],a.item[href]').on('click', function (e) {
+                    var $this = $(this);
+                    window.location.href = $this.attr('href');
                     e.preventDefault();
-                    window.location.href = href;
                 }
             );
 
