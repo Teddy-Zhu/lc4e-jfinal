@@ -13,6 +13,7 @@ import com.teddy.jfinal.tools.StringTool;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,7 +39,7 @@ public class CustomInterceptor implements MethodInterceptor {
         if (useCache) {
             cacheKey = cache.index() == -1 ? cache.key() : objects[cache.index()];
             if (cacheKey.getClass().isArray()) {
-                cacheKey = StringTool.join((String[]) cacheKey, ",");
+                cacheKey = StringUtils.join((String[]) cacheKey, ",");
             } else if (cacheKey instanceof Collection) {
                 cacheKey = StringTool.join((Collection<String>) cacheKey, ",");
             } else {

@@ -26,6 +26,7 @@ import com.teddy.jfinal.interfaces.*;
 import com.teddy.jfinal.tools.ClassSearcherTool;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.*;
 
@@ -401,7 +402,7 @@ public class CustomPlugin implements IPlugin {
                 for (Class modelClass : Classes) {
                     Model modelBind = (Model) modelClass.getAnnotation(Model.class);
                     if (modelBind != null) {
-                        arp.addMapping(Const.DEFAULT_NONE.equals(modelBind.value()) ? modelClass.getName().toLowerCase() : modelBind.value(), StringTool.join(modelBind.pk(), ","), modelClass);
+                        arp.addMapping(Const.DEFAULT_NONE.equals(modelBind.value()) ? modelClass.getName().toLowerCase() : modelBind.value(), StringUtils.join(modelBind.pk(), ","), modelClass);
 
                         Field field = modelClass.getField(Const.DB_DAO);
 

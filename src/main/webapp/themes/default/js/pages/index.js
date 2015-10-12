@@ -26,7 +26,7 @@ $(function () {
             $('#prePage,#nextPage,#ft_next,#ft_prev').on('click', function () {
                 var $items = $('#topicItems'), page = parseInt($items.attr("data-page")) + 1, sort = parseInt($sortTopic.dropdown('get value'));
                 $.Lc4eAjax({
-                    url: "/?p=" + page + "&o=" + sort,
+                    url: "/" + sort + "-" + page,
                     data: {art: true, a: $attachedHeader.attr('data-area')},
                     target: '#articlelist>.ui.divided.items',
                     pjax: true,

@@ -1,0 +1,60 @@
+<!---
+for(t in topics){
+--->
+<div class="item topic">
+    <div class="ui fluid tiny image hidden-mb">
+        <div class="ui blue ribbon label">
+            <beetl>t.user</beetl>
+        </div>
+        <img src="<beetl>t.imageUrl</beetl>" data-title="<beetl>t.popUp.title</beetl>"
+             data-content="<beetl>t.popUp.content</beetl>">
+    </div>
+    <div class="content">
+        <a class="header larger">
+            <beetl>t.articleTitle</beetl>
+        </a>
+
+        <div class="extra">
+            <a class="ui blue label hidden-pc">
+                <beetl>t.user</beetl>
+            </a>
+            <a class="ui teal label">
+                <beetl>t.category</beetl>
+            </a>
+
+            <div class="ui transparent label">
+                <i class="calendar icon"></i>
+                <beetl>t.publishTime</beetl>
+            </div>
+            <div class="ui transparent label">
+                <i class="comments outline icon"></i>
+                <beetl>t.comments</beetl>
+            </div>
+            <div class="ui transparent label">
+                <i class="comment icon"></i>
+            </div>
+            <a class="ui label">
+                <beetl>t.lastCommentUser</beetl>
+            </a>
+
+            <div class="topicQuickTools">
+                <a class="ui circular topicQuickTool label"><i class="ui yellow star icon"></i></a>
+                <a class="ui circular topicQuickTool topicSetting bottom left dropdown pointing label">
+                    <i class="ui red setting icon"></i>
+
+                    <div class="menu">
+                        <div class="item">Move</div>
+                        <div class="item">Delete</div>
+                        <div class="item">Edit</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--- if(!isEmpty(t.statusText) && t.statusText.~size > 0 && !isEmpty(t.statusText[0])) {--->
+    <div class="ui red top right attached label status">
+        <beetl>t.statusText[0]</beetl>
+    </div>
+    <!--- } --->
+</div>
+<!---}--->

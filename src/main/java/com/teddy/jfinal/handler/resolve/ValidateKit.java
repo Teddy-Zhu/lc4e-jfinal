@@ -14,6 +14,7 @@ import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.core.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.core.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.core.web.service.ComVarService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
@@ -36,7 +37,7 @@ import java.util.regex.Pattern;
  */
 class ValidateKit {
     static Map<String, Consumer<Annotation>> validateFunctions;
-    
+
     private static final Logger log = Logger.getLogger(ValidateKit.class);
 
     public static void resolveResponseStatus(ResponseStatus responseStatus, Invocation invocation) {
@@ -223,21 +224,22 @@ class ValidateKit {
         Object object;
         Class type = param.type();
         type = ReflectTool.wrapper(type);
-        boolean setDefaultFlag = false;
-        if (param.index() != -1) {
-            object = controller.getPara(param.index());
-        } else {
+        boolean setDefaultFlag = false, isUrlPara = false;
+        if (param.index() == -1) {
             object = controller.getPara(param.value());
+        } else {
+            object = controller.getPara(param.index());
+            isUrlPara = true;
         }
 
         if (object == null && param.required()) {
             setDefaultFlag = true;
         }
         object = object != null ? object : Const.DEFAULT_NONE.equals(param.defaultValue()) ? object : param.defaultValue();
-        validate(param, controller, type, object, setDefaultFlag);
+        validate(param, controller, type, object, setDefaultFlag, isUrlPara);
     }
 
-    private static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag) throws Lc4eValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
+    private static void validate(ValidateParam param, Controller controller, Class type, Object object, boolean setDefaultFlag, boolean isUrlPara) throws Lc4eValidateException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
         String error = StringTool.equalEmpty(param.error()) ? "Parameter" : param.error();
         if (String.class == type) {
             validateRequired(param, object, error);
@@ -250,18 +252,13 @@ class ValidateKit {
                     throw new Lc4eValidateException(error + " length is too long");
                 }
             }
-            if (setDefaultFlag) {
-                ReflectTool.setParameter(param.value(), object.toString(), controller);
-            }
-
+            setParam(controller, param, object, setDefaultFlag, isUrlPara);
         } else if (Boolean.class == type) {
             validateRequired(param, object, error);
             if (param.required() && object != null) {
                 Boolean.valueOf(object.toString());
             }
-            if (setDefaultFlag) {
-                ReflectTool.setParameter(param.value(), object.toString(), controller);
-            }
+            setParam(controller, param, object, setDefaultFlag, isUrlPara);
         } else if (Integer.class == type) {
             validateRequired(param, object, error);
             if (param.required() && object != null) {
@@ -273,9 +270,7 @@ class ValidateKit {
                     throw new Lc4eValidateException(error + " is too large");
                 }
             }
-            if (setDefaultFlag) {
-                ReflectTool.setParameter(param.value(), object.toString(), controller);
-            }
+            setParam(controller, param, object, setDefaultFlag, isUrlPara);
         } else if (Long.class == type) {
             validateRequired(param, object, error);
             if (param.required() && object != null) {
@@ -287,9 +282,7 @@ class ValidateKit {
                     throw new Lc4eValidateException(error + " is too large");
                 }
             }
-            if (setDefaultFlag) {
-                ReflectTool.setParameter(param.value(), object.toString(), controller);
-            }
+            setParam(controller, param, object, setDefaultFlag, isUrlPara);
         } else if (Double.class == type) {
             validateRequired(param, object, error);
             if (param.required() && object != null) {
@@ -301,9 +294,7 @@ class ValidateKit {
                     throw new Lc4eValidateException(error + " is too large");
                 }
             }
-            if (setDefaultFlag) {
-                ReflectTool.setParameter(param.value(), object.toString(), controller);
-            }
+            setParam(controller, param, object, setDefaultFlag, isUrlPara);
         } else if (Float.class == type) {
             validateRequired(param, object, error);
             if (param.required() && object != null) {
@@ -315,9 +306,7 @@ class ValidateKit {
                     throw new Lc4eValidateException(error + " is too large");
                 }
             }
-            if (setDefaultFlag) {
-                ReflectTool.setParameter(param.value(), object.toString(), controller);
-            }
+            setParam(controller, param, object, setDefaultFlag, isUrlPara);
         } else if (Date.class == type) {
             validateRequired(param, object, error);
             SimpleDateFormat sdf = new SimpleDateFormat(param.DateFormatter());
@@ -331,9 +320,7 @@ class ValidateKit {
                 }
                 object = tmp;
             }
-            if (setDefaultFlag) {
-                ReflectTool.setParameter(param.value(), sdf.format(object), controller);
-            }
+            setParam(controller, param, sdf.format(object), setDefaultFlag, isUrlPara);
         } else if (File.class == type) {
             UploadFile file = controller.getFile(param.value());
             if (param.required()) {
@@ -354,6 +341,28 @@ class ValidateKit {
             throw new Lc4eValidateException("Do not support the type [" + type.toString() + "]");
         }
     }
+
+    private static void setParam(Controller controller, ValidateParam param, Object object, boolean setDefaultFlag, boolean isUrlPara) throws NoSuchFieldException, IllegalAccessException {
+        if (setDefaultFlag) {
+            if (isUrlPara) {
+                String urlPara = controller.getPara();
+                urlPara = urlPara == null ? "" : urlPara;
+                String[] arrayParams = urlPara.split(com.jfinal.core.Const.DEFAULT_URL_PARA_SEPARATOR);
+
+                if (param.index() >= arrayParams.length) {
+                    String[] newUrlPara = StringTool.copyOf(arrayParams, param.index() + 1);
+                    newUrlPara[param.index()] = object.toString();
+                    arrayParams = newUrlPara;
+                } else {
+                    arrayParams[param.index()] = object.toString();
+                }
+                controller.setUrlPara(StringUtils.join(arrayParams, com.jfinal.core.Const.DEFAULT_URL_PARA_SEPARATOR));
+            } else {
+                ReflectTool.setParameter(param.value(), object.toString(), controller);
+            }
+        }
+    }
+
 
     private static void validateRequired(ValidateParam param, Object object, String error) throws Lc4eValidateException {
         if (param.required() && object == null) {
@@ -433,5 +442,14 @@ class ValidateKit {
         if (!SecurityUtils.getSubject().isAuthenticated()) {
             throw new UnauthenticatedException("The current Subject is not authenticated.  Access denied.");
         }
+    }
+
+    public static void main(String[] args) {
+        String a = "--a";
+
+        String b[] = a.split("-");
+
+        String c[] = StringTool.copyOf(b, 5);
+        System.out.println(Arrays.toString(b));
     }
 }

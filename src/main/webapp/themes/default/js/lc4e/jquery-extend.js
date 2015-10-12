@@ -428,7 +428,7 @@
             autoShow: true,
             content: '<div class="ui text loader">Loading</div>',
             on: false,
-            blurring: true,
+            blurring: false,
             transition: 'fade',
             useCSS: true,
             onShow: function () {

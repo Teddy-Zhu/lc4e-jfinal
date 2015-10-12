@@ -1,7 +1,3 @@
-#topicHotTags .areaButton > .button {
-    margin-bottom: 1em;
-}
-
 @media only screen and (max-width: 768px) {
 
     #topicItems > .item > .image {
@@ -13,11 +9,6 @@
     #topicItems > .item {
         padding-left: 1em !important;
         padding-right: 1em !important;
-    }
-
-    #topicHotTags {
-        width: 100% !important;
-        padding: 0;
     }
 
     #topicList {
@@ -40,7 +31,7 @@
 
 #topicItems > .item > .content > .header:after {
     width: 100%;
-    height: 1.5px;
+    height: 2px;
     background-color: #4183C4;
     content: '';
     -webkit-transition: all 0.2s;
@@ -123,4 +114,12 @@
 
 #sortTopic {
     float: right;
+}
+
+#areaDescription {
+    text-transform: none;
+}
+
+#areaLabel {
+    float: left;
 }

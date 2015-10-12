@@ -29,17 +29,17 @@ public class ViewController extends BaseController {
     private static final Logger log = Logger.getLogger(ViewController.class);
 
     @ValidateParams(value = {
-            @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
+            @ValidateParam(index = 1, type = int.class, defaultValue = "1"),
             @ValidateParam(value = "art", type = boolean.class, defaultValue = "false"),
             @ValidateParam(value = "a", type = String.class, defaultValue = "index"),
-            @ValidateParam(value = "o", type = Integer.class, defaultValue = "1")
+            @ValidateParam(index = 0, type = Integer.class, defaultValue = "2")
     })
     public void index() {
-        setAttr("page", getPara("p"));
+        setAttr("page", getPara(1));
         if (isPJAX()) {
             forwardAction("/Articles");
         } else {
-            setAttr("topics", getArticle(getParaToInt("p"), getParaToInt("o"), getPara("a")));
+            setAttr("topics", getArticle(getParaToInt(1), getParaToInt(0), getPara("a")));
             render("pages/index");
         }
     }
@@ -52,18 +52,18 @@ public class ViewController extends BaseController {
     })
     public void Articles() {
         setAttr("topics", getArticle(getParaToInt("p"), getParaToInt("o"), getPara("a")));
-        render("ajax/_topic");
+        render("ajax/_topic_detail");
     }
 
     @RequestMethod(Method.GET)
     @ValidateParams({
-            @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
+            @ValidateParam(index = 2, type = int.class, defaultValue = "1"), //page
             @ValidateParam(index = 0, type = String.class, defaultValue = "index"),
-            @ValidateParam(value = "o", type = Integer.class, defaultValue = "1")
+            @ValidateParam(index = 1, type = Integer.class, defaultValue = "1") //order
     })
     public void a() {
         setAttr("curArea", getPara(0));
-        setAttr("topics", getArticle(getParaToInt("p"), getParaToInt("o"), getPara(0)));
+        setAttr("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)));
         render("pages/area");
     }
 

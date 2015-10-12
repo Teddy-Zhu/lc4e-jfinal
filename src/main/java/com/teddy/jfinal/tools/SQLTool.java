@@ -1,6 +1,7 @@
 package com.teddy.jfinal.tools;
 
 import com.jfinal.kit.StrKit;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,7 @@ public class SQLTool {
     }
 
     public SQLTool select(String... columns) {
-        this.sql.append("select ").append(StringTool.join(columns, ","));
+        this.sql.append("select ").append(StringUtils.join(columns, ","));
         return this;
     }
 
@@ -88,7 +89,7 @@ public class SQLTool {
     }
 
     public SQLTool where(String logic, String... conditions) {
-        this.sql.append(" where ").append(StringTool.join(conditions, logic));
+        this.sql.append(" where ").append(StringUtils.join(conditions, logic));
         return this;
     }
 
@@ -111,7 +112,7 @@ public class SQLTool {
     }
 
     public SQLTool groupBy(String... columns) {
-        this.sql.append(" group by ").append(StringTool.join(columns, ","));
+        this.sql.append(" group by ").append(StringUtils.join(columns, ","));
         return this;
     }
 
@@ -124,7 +125,7 @@ public class SQLTool {
     }
 
     public SQLTool orderBy(String order, String... columns) {
-        this.sql.append(" order by ").append(StringTool.join(columns, " " + order + " ,")).append(" ").append(order).append(" ");
+        this.sql.append(" order by ").append(StringUtils.join(columns, " " + order + " ,")).append(" ").append(order).append(" ");
         return this;
     }
 
@@ -147,7 +148,7 @@ public class SQLTool {
     }
 
     public static String SELECT(String... columns) {
-        return " select " + StringTool.join(columns, ",");
+        return " select " + StringUtils.join(columns, ",");
     }
 
     public static String FROM(String tableName) {
@@ -155,7 +156,7 @@ public class SQLTool {
     }
 
     public static String WHERE(String logic, String... conditions) {
-        return " where ( " + StringTool.join(conditions, " " + logic + " ") + " ) ";
+        return " where ( " + StringUtils.join(conditions, " " + logic + " ") + " ) ";
     }
 
     public static String WHERE(String conditions) {
@@ -163,11 +164,11 @@ public class SQLTool {
     }
 
     public static String OR(String... conditions) {
-        return " ( " + StringTool.join(conditions, " OR ") + " ) ";
+        return " ( " + StringUtils.join(conditions, " OR ") + " ) ";
     }
 
     public static String AND(String... conditions) {
-        return " ( " + StringTool.join(conditions, " AND ") + " ) ";
+        return " ( " + StringUtils.join(conditions, " AND ") + " ) ";
     }
 
     public static String COUNT(String column) {

@@ -2244,15 +2244,10 @@ html, body {
 /* media */
 
 @media screen and (min-width: 1200px) {
-    #mainContent {
-        padding: 1em 8% 1em 8%;
-    }
+
 }
 
 @media screen and (min-width: 992px) and (max-width: 1200px) {
-    #mainContent {
-        padding: 1em 6% 1em 6%;
-    }
 
     #floatTools {
         left: 6%;

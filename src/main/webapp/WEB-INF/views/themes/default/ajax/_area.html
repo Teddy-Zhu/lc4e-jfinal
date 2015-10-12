@@ -1,28 +1,12 @@
-<div id="topicHotTags" class="two wide column animated fast fadeInLeftTiny">
-    <div class="ui attached message">
-        <div class="header">
-            Description
+<div class="ui teal  basic row column segment">
+    <div class="ui large inverted statistic">
+        <div class="value">
+            <i class="info circle icon"></i><br>
+            <beetl>curArea</beetl>
         </div>
-    </div>
-    <div class="ui attached fluid segment">
-        <p>Fill out the form below to sign-up for a new account</p>
-    </div>
-    <div class="ui attached message" style="margin-top: 1em;">
-        <div class="header">
-            Hot Tag
+        <div id="areaDescription" class="label">
+            Fill out the form below to sign-up for a new account
         </div>
-    </div>
-    <div class="ui attached fluid segment">
-        <div class="ui labels">
-            <a class="ui tag label">New</a>
-            <a class="ui red tag label">Upcoming</a>
-            <a class="ui teal tag label">Featured</a>
-        </div>
-    </div>
-    <div class="ui basic no left right padded segment areaButton">
-        <button class="ui primary fluid button">New Topic</button>
-        <button class="ui fluid button">Two</button>
-        <button class="ui fluid button">Three</button>
     </div>
 </div>
 <div id="topicList" class="twelve wide column">
@@ -37,6 +21,11 @@
                 <div class="active section">
                     <beetl>curArea</beetl>
                 </div>
+            </div>
+            <div id="areaLabel" class="ui labels">
+                <a class="ui tag mini label">New</a>
+                <a class="ui red mini tag label">Upcoming</a>
+                <a class="ui teal mini tag label">Featured</a>
             </div>
             <div id="sortTopic" class="ui dropdown labeled icon basic button">
                 <i class="filter icon"></i>
@@ -98,7 +87,7 @@
     <div id="topicItems" class="ui divided items topiclist no padded attached segment animated slow fadeIn"
          data-page="<beetl>page!1</beetl>"
          data-sort="<beetl>topicSort!</beetl>">
-        <!--- if(has(topics) && topics !=null){ layout("/ajax/_topic.html",{'topics':topics}){};}--->
+        <!--- if(has(topics) && topics !=null){ layout("/ajax/_topic_detail.html",{'topics':topics}){};}--->
     </div>
     <div id="articlebottons" class="ui bottom clearing attached message">
         <div id="prePage" class="ui left floated basic labeled icon button">

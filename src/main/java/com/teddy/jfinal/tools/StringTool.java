@@ -4,6 +4,7 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.plugin.PropPlugin;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
@@ -289,22 +290,7 @@ public class StringTool {
         for (int i = 0, len = strings.length; i < len; i++) {
             strings[i] = toUpperCaseFirstOne(strings[i]);
         }
-        return join(strings, "_");
-    }
-
-    /**
-     * Array to String /Join
-     *
-     * @param o
-     * @param flag
-     * @return
-     */
-    public static String join(String[] o, String flag) {
-        StringBuilder str_buff = new StringBuilder();
-        for (int i = 0, len = o.length; i < len; i++) {
-            str_buff.append(o[i]).append(flag);
-        }
-        return str_buff.substring(0, str_buff.length() - flag.length());
+        return StringUtils.join(strings, "_");
     }
 
     /**
@@ -324,5 +310,19 @@ public class StringTool {
 
     public static boolean equalEmpty(String txt) {
         return "".equals(txt.trim()) || Const.DEFAULT_NONE.equals(txt);
+    }
+
+    /**
+     * expend String Array
+     *
+     * @param original
+     * @param newLength
+     * @return
+     */
+    public static String[] copyOf(String[] original, int newLength) {
+        String[] copy = new String[newLength];
+        System.arraycopy(original, 0, copy, 0,
+                Math.min(original.length, newLength));
+        return copy;
     }
 }
