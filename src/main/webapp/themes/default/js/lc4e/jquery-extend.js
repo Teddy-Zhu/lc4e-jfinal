@@ -2388,7 +2388,6 @@
                                         if (options.closeOnWithoutClick) {
                                             $([document.body, window]).on('mousedown.' + namespace, function arguments_callee6() {
                                                 $datetimepicker.trigger('close.' + namespace);
-                                                $([document.body, window]).off('mousedown.' + namespace, arguments_callee6);
                                             });
                                         }
                                     }
@@ -2401,11 +2400,12 @@
                                 .find('.datetimepicker_month,.datetimepicker_year')
                                 .find('.datetimepicker_select')
                                 .hide();
+                            $([document.body, window]).off('mousedown.' + namespace);
                             if (options.onClose && $.isFunction(options.onClose)) {
                                 onClose = options.onClose.call($datetimepicker, _datetimepicker_datetime.currentTime, $datetimepicker.data('input'), event);
                             }
                             if (onClose !== false && !options.opened && !options.inline) {
-                                $datetimepicker.transition({
+                                $datetimepicker.transition('is visible') && $datetimepicker.transition({
                                     animation: options.animate + " out",
                                     duration: '300ms'
                                 });
@@ -3800,7 +3800,8 @@
             // If we can't parse the cookie, ignore it, it's unusable.
             s = decodeURIComponent(s.replace(pluses, ' '));
             return config.json ? JSON.parse(s) : s;
-        } catch(e) {}
+        } catch (e) {
+        }
     }
 
     function read(s, converter) {
@@ -3823,9 +3824,9 @@
             return (document.cookie = [
                 encode(key), '=', stringifyCookieValue(value),
                 options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-                options.path    ? '; path=' + options.path : '',
-                options.domain  ? '; domain=' + options.domain : '',
-                options.secure  ? '; secure' : ''
+                options.path ? '; path=' + options.path : '',
+                options.domain ? '; domain=' + options.domain : '',
+                options.secure ? '; secure' : ''
             ].join(''));
         }
 
@@ -3863,7 +3864,7 @@
 
     $.removeCookie = function (key, options) {
         // Must not alter options, thus extending a fresh object...
-        $.cookie(key, '', $.extend({}, options, { expires: -1 }));
+        $.cookie(key, '', $.extend({}, options, {expires: -1}));
         return !$.cookie(key);
     };
 
