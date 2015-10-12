@@ -624,44 +624,6 @@
             }
         }
     };
-
-    $.fn.Lc4eMessage = function (options) {
-        var query = arguments[0],
-            methodInvoked = (typeof query == 'string'),
-            queryArguments = [].slice.call(arguments, 1);
-        return this.each(function () {
-            var settings = methodInvoked ? $.extend({}, $.fn.Lc4eMessage.settings.config) : $.extend({}, $.fn.Lc4eMessage.settings.config, query),
-                $module = $(this),
-                namespace = $.fn.Lc4eMessage.settings.namespace,
-                module;
-            module = {
-                initialize: function () {
-
-                }
-            }
-
-        });
-    };
-    $.fn.Lc4eMessage.settings = {
-        namespace: 'Lc4eMessage',
-        config: {
-            icon: '',
-            message: '',
-            animation: '',
-            delay: '',
-            position: {
-                of: $("body"),
-                my: 'right top+3em',
-                at: 'right top+3em',
-                collision: 'none none'
-            }
-        },
-        template: {
-            message: function () {
-                return '<div class="ui floating notice message"></div>';
-            }
-        }
-    };
     $.fn.Lc4eProgress = function (option, data) {
         var query = arguments[0],
             methodInvoked = (typeof query == 'string'),
