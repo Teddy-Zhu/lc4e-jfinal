@@ -16,10 +16,20 @@ $(function () {
                     $topicSetting = $topicItems.find('.topicSetting'),
                     $topicPopup = $topicItems.find('>.item .ui.fluid.image img'),
                     sortItem = $topicItems.attr('data-sort'),
-                    $sortTopic = $('#sortTopic');
+                    $sortTopic = $('#sortTopic'),
+                    $areaName = $('#areaName');
                 $sortTopic.dropdown().dropdown('set selected', sortItem ? sortItem : $sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
                 $topicSetting.dropdown();
                 $topicPopup.popup();
+                $areaName.hover(function () {
+                    if (!$areaName.hasClass("animated")) {
+                        $areaName.addClass('animated flip').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                            $areaName.removeClass('animated flip');
+                        })
+                    }
+                }, function () {
+                })
+
             }
         }
     });

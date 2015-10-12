@@ -81,7 +81,7 @@
     border-width: 0 0.8em 0.8em 0;
 }
 
-#topicItems > .item > .content > .extra > .ui.label {
+#topicItems > .item > .content > .extra > .ui.label, #topicItems > .item > .content > .extra > .ui.label > a.ui.label {
     padding: .2em .25em;
     margin: .55rem .5rem 0 0;
 }
