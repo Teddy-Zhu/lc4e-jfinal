@@ -461,14 +461,12 @@
     animation-name: fadeOut;
 }
 
-
 .flipInY {
     -webkit-backface-visibility: visible !important;
     backface-visibility: visible !important;
     -webkit-animation-name: flipInY;
     animation-name: flipInY;
 }
-
 
 @-webkit-keyframes flip {
     from {
