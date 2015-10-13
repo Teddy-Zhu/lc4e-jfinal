@@ -12,6 +12,8 @@ public class Article {
 
     private String articleTitle;
 
+    private String articleUrl;
+
     private String category;
 
     private String user;
@@ -32,6 +34,19 @@ public class Article {
         this.imageUrl = imageUrl;
         this.popUp = popUp;
         this.articleTitle = articleTitle;
+        this.category = category;
+        this.user = user;
+        this.comments = comments;
+        this.publishTime = publishTime;
+        this.lastCommentUser = lastCommentUser;
+        this.statusText = Arrays.asList(statusText);
+    }
+
+    public Article(String imageUrl, Popup popUp, String articleTitle, String articleUrl, String category, String user, Integer comments, String publishTime, String lastCommentUser, String... statusText) {
+        this.imageUrl = imageUrl;
+        this.popUp = popUp;
+        this.articleTitle = articleTitle;
+        this.articleUrl = articleUrl;
         this.category = category;
         this.user = user;
         this.comments = comments;
@@ -110,5 +125,13 @@ public class Article {
 
     public void setLastCommentUser(String lastCommentUser) {
         this.lastCommentUser = lastCommentUser;
+    }
+
+    public String getArticleUrl() {
+        return articleUrl;
+    }
+
+    public void setArticleUrl(String articleUrl) {
+        this.articleUrl = articleUrl;
     }
 }

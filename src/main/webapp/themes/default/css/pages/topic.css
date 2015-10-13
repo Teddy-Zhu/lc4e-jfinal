@@ -1,0 +1,11 @@
+#userOperateButtons .ui.button {
+    margin-bottom: .2em;
+}
+
+.ui.topic.extra.segment {
+    padding: 0;
+}
+
+.ui.topic.extra.segment > .ui.segment.row {
+    padding: .5em;
+}

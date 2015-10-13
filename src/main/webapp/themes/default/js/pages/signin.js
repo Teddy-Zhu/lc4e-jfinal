@@ -4,6 +4,13 @@
 $(function () {
     $.lc4e.signin = {
         ready: function () {
+            $.lc4e.signin.run();
+            $.lc4e.signin.bindEvent();
+        },
+        run: function () {
+
+        },
+        bindEvent: function () {
             var $captchaimg = $('#captchaimg');
             $captchaimg.on('click', function () {
                 if (!$captchaimg.transition('is animating')) {
