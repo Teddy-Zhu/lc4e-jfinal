@@ -154,6 +154,10 @@
     margin: .55rem .5rem 0 0;
 }
 
+#topicItems > .item > .content > .extra {
+    margin: -.5em 0 0 0;
+}
+
 #rightContent > .ui.segment > .ui.divided.items > .item > .ui.label {
     padding: 0.3em .2em;
     text-align: center;

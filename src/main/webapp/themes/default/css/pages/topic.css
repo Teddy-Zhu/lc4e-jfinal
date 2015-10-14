@@ -1,11 +1,83 @@
-#userOperateButtons .ui.button {
+.user.operate.buttons .ui.button {
     margin-bottom: .2em;
 }
 
-.ui.topic.extra.segment {
+#mainArea .ui.topic.extra.segment, #commentArea .ui.topic.extra.segment {
     padding: 0;
+    border-radius: 0;
 }
 
 .ui.topic.extra.segment > .ui.segment.row {
     padding: .5em;
+}
+
+.ui.topic.extra > .ui.segment {
+    padding-bottom: .2em;
+    padding-top: .2em;
+}
+
+#mainArea .topic.content {
+    min-height: 12em;
+}
+
+#commentArea .topic.content {
+    min-height: 9em;
+}
+
+.bottom.message > .ui.buttons > .ui.button {
+    padding-top: .45rem;
+    padding-bottom: .45rem;
+}
+
+.bottom.message > .ui.button {
+    padding: .45rem .2rem;
+    margin-left: .2em;
+}
+
+.bottom.message > .ui.button > i.icon {
+    margin: 0;
+}
+
+.bottom.message > .ui.labels > .ui.label {
+    margin-bottom: 0;
+}
+
+#mainArea .user.info, #commentArea .user.info {
+    padding-right: 0;
+}
+
+#mainArea .user.content, #commentArea .user.content {
+    padding-left: .5rem;
+}
+
+#commentArea .bottom.message {
+    padding-bottom: .4rem;
+    padding-top: .4rem;
+}
+
+#commentArea .ui.card > .content > .header:not(.ui), .ui.cards > .card > .content > .header:not(.ui) {
+    font-size: .9em;
+}
+
+#commentArea .ui.card > .content, .ui.cards > .card > .content {
+    padding-bottom: .2em;
+    padding-top: .5em;
+}
+
+#commentArea .ui.card .meta, .ui.cards > .card .meta {
+    font-size: .45em;
+}
+
+#commentArea .comment.title.ui.segment {
+    line-height: 28px;
+    padding: 0;
+}
+
+.ui.attached.message.comment.title {
+    padding-bottom: .3em;
+    padding-top: .3em;
+}
+
+.extra.topic > .ui.segment {
+    border-top: 1px solid rgba(34, 36, 38, .15);
 }
