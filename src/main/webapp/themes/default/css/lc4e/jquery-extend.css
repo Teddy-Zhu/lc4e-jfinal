@@ -1881,23 +1881,7 @@ html, body {
 }
 
 /* media */
-
-@media screen and (min-width: 1200px) {
-
-}
-
-@media screen and (min-width: 992px) and (max-width: 1200px) {
-
-    #floatTools {
-        left: 6%;
-    }
-}
-
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-
-}
-
-@media screen and ( min-width: 769px) {
+@media only screen and (min-width: 768px) {
     .hidden-pc {
         display: none !important;
     }
@@ -2015,6 +1999,24 @@ html, body {
     }
 }
 
+@media screen and (min-width: 992px) {
+    .ui.tiny.modal {
+        width: 460px;
+        margin: 0 0 0 -230px;
+    }
+
+    #floatTools {
+        left: 6%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .ui.tiny.modal {
+        width: 500px;
+        margin: 0 0 0 -250px;
+    }
+}
+
 /* config tool */
 #config-tool {
     position: fixed;
@@ -2113,6 +2115,14 @@ html, body {
     color: black;
 }
 
+.ui.margin.centered.segment {
+    margin: auto;
+}
+
+.ui.margin.centered.column {
+    margin: auto;
+}
+
 .no.padded.column {
     padding: 0;
 }
@@ -2150,4 +2160,8 @@ html, body {
 
 .right.float {
     float: right;
+}
+
+.height.like.input {
+    line-height: 2.4284em;
 }

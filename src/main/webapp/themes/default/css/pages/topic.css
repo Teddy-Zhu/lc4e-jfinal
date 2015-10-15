@@ -50,7 +50,7 @@
     padding-left: .5rem;
 }
 
-#commentArea .bottom.message {
+#commentArea .ui.attached.message {
     padding-bottom: .4rem;
     padding-top: .4rem;
 }
@@ -73,11 +73,12 @@
     padding: 0;
 }
 
-.ui.attached.message.comment.title {
-    padding-bottom: .3em;
-    padding-top: .3em;
-}
-
 .extra.topic > .ui.segment {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
+
+#replyArea .word.column {
+    margin: auto;
+    padding-left: 2em;
+}
+

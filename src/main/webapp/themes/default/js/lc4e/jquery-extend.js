@@ -353,12 +353,13 @@
                 create: function (options) {
                     if (options.hasOwnProperty('onHide') && typeof options.onHide === 'function') {
                         $module.data('onHide', options.onHide);
-                        options.onHide = function (dimmable) {
-                            $module.data('onHide').call($module, dimmable);
-                            $module.dimmer('destroy');
-                            module.destroy();
-                        }
                     }
+                    options.onHide = function (dimmable) {
+                        if (typeof   $module.data('onHide') === 'function') {
+                            $module.data('onHide').call($module, dimmable);
+                        }
+                        $module.dimmer('destroy');
+                    };
                     $dimmer = $($.fn.Lc4eDimmer.settings.template.dimmer(options));
 
                     $dimmer.append($.fn.Lc4eDimmer.settings.template.content(options));
@@ -482,12 +483,14 @@
                 create: function (options) {
                     if (typeof query.onHidden === 'function') {
                         $module.data('onHidden', options.onHidden);
-                        options.onHidden = function (modal) {
-                            $module.data('onHidden').call($module, modal);
-                            $modal.modal('destroy').remove();
-                            module.destroy();
-                        }
                     }
+                    options.onHidden = function (modal) {
+                        if (typeof  $module.data('onHidden') === 'function') {
+                            $module.data('onHidden').call($module, modal);
+                        }
+                        $modal.modal('destroy').remove();
+                        module.destroy();
+                    };
                     $modal = $($.fn.Lc4eModal.settings.template.modal(options));
 
                     $modal.append($.fn.Lc4eModal.settings.template.close(options))
@@ -539,7 +542,8 @@
             small: 'small',
             large: 'large',
             full: 'fullscreen',
-            long: 'long'
+            long: 'long',
+            tiny: 'tiny'
         },
         config: {
             id: '',

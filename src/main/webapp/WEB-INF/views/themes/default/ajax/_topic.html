@@ -54,8 +54,13 @@
                     <a class="ui red tag label">Upcoming</a>
                     <a class="ui teal tag label">Featured</a>
                 </div>
-                <div class="ui right float button">
+                <div id="topicOperateButton" class="ui right float icon top pointing dropdown button">
                     <i class="caret down icon"></i>
+
+                    <div class="menu">
+                        <div class="item">move</div>
+                        <div class="item">hide</div>
+                    </div>
                 </div>
                 <div class="ui right float buttons">
                     <div class="ui button">
@@ -252,6 +257,22 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="replyArea" class="ui grid">
+        <div class="one wide column word">
+            <label>Title</label>
+        </div>
+        <div class="fifteen wide column">
+            <div class="ui fluid input">
+                <input type="text" placeholder="Search...">
+            </div>
+        </div>
+        <div class="one wide column word">
+            <label>Body</label>
+        </div>
+        <div class="fifteen wide column ui form">
+            <div id="userCommentTextArea"></div>
         </div>
     </div>
 </div>

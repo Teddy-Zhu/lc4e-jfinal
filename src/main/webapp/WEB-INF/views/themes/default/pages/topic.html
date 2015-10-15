@@ -1,7 +1,12 @@
 <!---
+var jsFile = ['/js/pages/topic.js'],cssFile = ['/css/pages/topic.css'];
+if(auth.user()){
+jsFile = array.add(jsFile,'/js/plugins/editor.md/editormd.js');
+cssFile = array.add(cssFile,'/js/plugins/editor.md/css/editormd.min.css');
+}
 layout("/template/template.html",{
-'CSS':['/css/pages/topic.css'],
-'JS':['/js/pages/topic.js'],
+'CSS':cssFile,
+'JS':jsFile,
 'configTools':false,
 'floatTools':true
 }){layout("/ajax/_topic.html",{}){};}

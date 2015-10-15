@@ -13,7 +13,7 @@ layout("/common/main.html",{}){
 if(has(floatTools) && floatTools){layout("/common/floatTools.html",{}){}}
 if(has(configTools) && configTools){layout("/common/configTools.html",{}){}}
 layout("/common/footer.html",{}){}
-print('<script type="text/javascript">$LAB.setOptions({AlwaysPreserveOrder: true}).script("http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js").script("http://cdn.bootcss.com/semantic-ui/2.1.3/semantic.min.js")'
+print('<script type="text/javascript">$LAB.setOptions({AlwaysPreserveOrder: true}).script("http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js").script("http://cdn.bootcss.com/semantic-ui/2.1.4/semantic.min.js")'
 +'.script("'+ Theme +'/js/lc4e/jquery-extend.js")');
 if(has(JS)){for(path in JS){ println('.script("'+ Theme +path+'")');}}
 print('</script>');
