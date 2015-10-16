@@ -21,6 +21,7 @@ $(function () {
                 path: "/themes/default/js/plugins/editor.md/lib/",
                 height: 400,
                 watch: false,
+                autoFocus: false,
                 placeholder: 'input your reply!',
                 editorTheme: 'base16-light',
                 toolbarIcons: function () {

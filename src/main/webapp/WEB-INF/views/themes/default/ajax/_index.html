@@ -1,5 +1,5 @@
 <div id="leftContent" class="nine wide column">
-    <div id="announcement" class="ui white message">
+    <div id="announcement" class="ui white floating message">
         <div class="item">
             <div class="ui white label">
                 <i class="announcement icon"></i>
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div id="attachedHeader" class="ui attached clearing message" data-area="index">
+    <div id="attachedHeader" class="ui attached floating clearing message" data-area="index">
         <div class="ui left floated breadcrumb basic segment">
             <a class="section">
                 <beetl>SiteName</beetl>
@@ -52,13 +52,13 @@
             </div>
         </div>
     </div>
-    <div id="articlelist" class="ui attached fluid segment">
+    <div id="articlelist" class="ui attached fluid raised segment">
         <div id="topicItems" class="ui divided items topiclist animated slow fadeIn" data-page="<beetl>page!1</beetl>"
              data-sort="<beetl>topicSort!</beetl>">
             <!--- if(has(topics) && topics !=null){ layout("/ajax/_topic_detail.html",{'topics':topics}){};}--->
         </div>
     </div>
-    <div id="articlebottons" class="ui bottom attached message">
+    <div id="articlebottons" class="ui bottom attached floating message">
         <div id="prePage" class="ui left floated basic labeled icon button">
             <i class="angle double left icon"></i>
             Prev
@@ -70,14 +70,14 @@
     </div>
 </div>
 <div id="rightContent" class="three wide column animated fadeInRightTiny">
-    <div id="todayHot" class="ui  segment">
+    <div id="todayHot" class="ui raised segment">
         <h4 class="ui horizontal header divider">
             <i class="bar chart icon"></i> Today HotSpot
         </h4>
 
         <div class="ui divided items"></div>
     </div>
-    <div id="yesterdayHot" class="ui segment">
+    <div id="yesterdayHot" class="ui raised segment">
         <h4 class="ui horizontal header divider">
             <i class="bar chart icon"></i> Yesterday HotSpot
         </h4>

@@ -82,3 +82,27 @@
     padding-left: 2em;
 }
 
+#topic {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#mainArea > .column {
+    padding-top: 0;
+}
+
+#mainArea .user.info.column > .ui.fluid.card {
+    margin-top: -100%;
+}
+
+#mainArea .user.info.column > .ui.fluid.card > .content {
+    min-height: 12em;
+}
+
+#topicMaster .ui.middle.aligned.selection.list > .item > .ui.labels > .ui.label {
+    margin-bottom: 0;
+}
+
+#topicMaster .topic.title.value {
+    text-transform: none;
+}
