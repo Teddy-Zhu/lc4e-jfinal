@@ -92,17 +92,21 @@
 }
 
 #mainArea .user.info.column > .ui.fluid.card {
-    margin-top: -100%;
+    margin-top: -50%;
 }
 
 #mainArea .user.info.column > .ui.fluid.card > .content {
     min-height: 12em;
 }
 
-#topicMaster .ui.middle.aligned.selection.list > .item > .ui.labels > .ui.label {
-    margin-bottom: 0;
-}
-
 #topicMaster .topic.title.value {
     text-transform: none;
+}
+
+#topicMaster .topic.time > .item {
+    display: inline-block;
+}
+
+#topicMaster {
+    padding-bottom: 0;
 }
