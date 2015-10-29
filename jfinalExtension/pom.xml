@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lc4e</artifactId>
         <groupId>com.teddy</groupId>
-        <version>0.2.5</version>
+        <version>0.2.6</version>
     </parent>
     <version>1.0</version>
     <modelVersion>4.0.0</modelVersion>
