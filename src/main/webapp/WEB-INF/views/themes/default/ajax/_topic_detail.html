@@ -1,38 +1,39 @@
 <!---
-for(t in topics){
+#options(import="com.teddy.lc4e.entity.Article")
+#for(Article t: topics)
 --->
 <div class="item topic">
     <div class="ui fluid tiny image hidden-mb">
         <div class="ui blue ribbon label">
-            <beetl>t.user</beetl>
+            ${t.user}
         </div>
-        <img src="<beetl>t.imageUrl</beetl>" data-title="<beetl>t.popUp.title</beetl>"
-             data-content="<beetl>t.popUp.content</beetl>">
+        <img src="${t.imageUrl}" data-title="${t.popUp.title}"
+             data-content="${t.popUp.content}">
     </div>
     <div class="content">
-        <a class="header larger" href="<beetl>t.articleUrl</beetl>">
-            <beetl>t.articleTitle</beetl>
+        <a class="header larger" href="${t.articleUrl}">
+            ${t.articleTitle}
         </a>
         <div class="extra">
             <a class="ui blue label hidden-pc">
-                <beetl>t.user</beetl>
+                ${t.user}
             </a>
             <a class="ui teal label">
-                <beetl>t.category</beetl>
+                ${t.category}
             </a>
 
             <div class="ui transparent label">
                 <i class="calendar icon"></i>
-                <beetl>t.publishTime</beetl>
+                ${t.publishTime}
             </div>
             <div class="ui transparent label">
                 <i class="comments outline icon"></i>
-                <beetl>t.comments</beetl>
+                ${t.comments}
             </div>
             <div class="ui transparent label">
                 <i class="comment icon"></i>
                 <a class="ui label">
-                    <beetl>t.lastCommentUser</beetl>
+                    ${t.lastCommentUser}
                 </a>
             </div>
             <div class="topicQuickTools">
@@ -49,10 +50,10 @@ for(t in topics){
             </div>
         </div>
     </div>
-    <!--- if(!isEmpty(t.statusText) && t.statusText.~size > 0 && !isEmpty(t.statusText[0])) {--->
+    <!--- #if(!isEmpty(t.statusText) && t.statusText.size() > 0 && !isEmpty(t.statusText[0])) --->
     <div class="ui red top right attached label status">
-        <beetl>t.statusText[0]</beetl>
+        ${t.statusText[0]}
     </div>
-    <!--- } --->
+    <!---#end--->
 </div>
-<!---}--->
+<!---#end--->

@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!---layout("/common/title.html",{'SiteName':SiteName,'CSS':CSS}){};--->
+    <!--- #include("/common/title.html",{'CSS':CSS}) --->
 </head>
 <body>
+<!--- #include("/common/header.html") --->
+<!-- Content Start -->
+<div id="content">
+    <div id="mainContent" class="ui grid centered">
+        <!--- #include(ContentLayout) --->
+    </div>
+</div>
+<!-- Content  End -->
 <!---
-layout("/common/header.html",{}){}
-layout("/common/main.html",{}){
---->
-<beetl>layoutContent</beetl>
-<!---}
-if(has(floatTools) && floatTools){layout("/common/floatTools.html",{}){}}
-if(has(configTools) && configTools){layout("/common/configTools.html",{}){}}
-layout("/common/footer.html",{}){}
-print('<script type="text/javascript">$LAB.setOptions({AlwaysPreserveOrder: true}).script("http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js").script("http://cdn.bootcss.com/semantic-ui/2.1.4/semantic.min.js")'
-+'.script("'+ Theme +'/js/lc4e/jquery-extend.js")');
-if(has(JS)){for(path in JS){ println('.script("'+ Theme +path+'")');}}
-print('</script>');
+#if (floatTools != null && floatTools )
+ #include("/common/floatTools.html")
+#end
+#if (configTools != null && configTools)
+    #include("/common/configTools.html")
+#end
+#include("/common/footer.html")
+#[[<script type="text/javascript">$LAB.setOptions({AlwaysPreserveOrder: true}).script("http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js").script("http://cdn.bootcss.com/semantic-ui/2.1.4/semantic.min.js").script("]]#${Theme}#[[/js/lc4e/jquery-extend.js")]]#
+#if(JS)
+  #for(String path : JS)
+     #[[.script("]]#${Theme}${path}#[[")]]#
+  #end
+#end
+#[[</script>]]#
 --->
 </body>
 </html>

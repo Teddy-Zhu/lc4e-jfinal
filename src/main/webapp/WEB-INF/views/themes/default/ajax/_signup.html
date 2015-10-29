@@ -1,8 +1,7 @@
 <div class="ui basic padding clearing segment flipInY animated">
     <h2 class="ui center aligned icon header">
         <i class="circular users icon"></i>
-        Join in
-        <beetl>SiteName</beetl>
+        Join in ${SiteName}
     </h2>
 
     <div id="signUpForm" class="ui form attached segment" observe-on="blur" data-url="/member/signup" data-loading="">
@@ -71,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <!---if(Captcha){--->
+        <!--- #if(Captcha) --->
         <div class="inline fields">
             <div class="four wide field">
                 <label class="fieldName">Verification Code</label>
@@ -83,11 +82,11 @@
                 </div>
             </div>
             <div class="four wide field">
-                <img id="captchaimg" src="/captcha?rand=<!---print(tool.getTime());--->">
+                <img id="captchaimg" src="/captcha?rand=${getTime()}">
             </div>
         </div>
-        <!---}
-        if(!SimpleRegister){
+        <!--- #end
+        #if(!SimpleRegister)
         --->
         <h4 class="ui horizontal divider header">
             <div id="extendDes" class="linked"><i class="add icon"></i>
@@ -131,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <!--- } --->
+        <!--- #end --->
 
         <div id="signUpAttached" class="inline fields operatepanel">
             <div class="sixteen wide field ui centered grid">

@@ -1,9 +1,7 @@
 <div class="ui basic padding clearing segment flipInY animated">
     <h2 class="ui center aligned icon header">
         <i class="circular massive home icon"></i>
-        Sign in
-        <beetl>SiteName</beetl>
-        ,Welcome Back!
+        Sign in ${SiteName},Welcome Back!
     </h2>
     <div id="signInForm" class="ui form attached segment" observe-on="blur" data-url="/member/signin" data-loading="true">
         <div class="inline fields">
@@ -29,7 +27,7 @@
                     <i class="eye icon link"></i></div>
             </div>
         </div>
-        <!---if(Captcha){--->
+        <!--- #if(Captcha) --->
         <div class="inline fields">
             <div class="four wide field">
                 <label class="fieldName">Verification Code</label>
@@ -41,10 +39,10 @@
                 </div>
             </div>
             <div class="four wide field">
-                <img id="captchaimg" src="/captcha?rand=<!---print(tool.getTime());--->">
+                <img id="captchaimg" src="/captcha?rand=${getTime()}">
             </div>
         </div>
-        <!---}--->
+        <!--- #end --->
         <div class="inline fields">
             <div class="four wide field">
                 <label class="fieldName">Remember</label>

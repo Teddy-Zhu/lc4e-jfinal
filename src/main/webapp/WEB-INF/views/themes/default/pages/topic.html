@@ -1,13 +1,15 @@
 <!---
-var jsFile = ['/js/pages/topic.js'],cssFile = ['/css/pages/topic.css'];
-if(auth.user()){
-jsFile = array.add(jsFile,'/js/plugins/editor.md/editormd.js');
-cssFile = array.add(cssFile,'/js/plugins/editor.md/css/editormd.min.css');
-}
-layout("/template/template.html",{
-'CSS':cssFile,
-'JS':jsFile,
-'configTools':false,
-'floatTools':true
-}){layout("/ajax/_topic.html",{}){};}
+#if(user())
+   #set(List jsFile = ["/js/pages/topic.js","/js/plugins/editor.md/editormd.js"],List cssFile = ["/css/pages/topic.css","/js/plugins/editor.md/css/editormd.min.css"])
+#else
+   #set(List jsFile = ["/js/pages/topic.js"],List cssFile = ["/css/pages/topic.css"])
+#end
+${debug("user{},js{}",user(),jsFile)}
+#include("/template/template.html",{
+"ContentLayout":"/ajax/_topic.html",
+"CSS":cssFile,
+"JS":jsFile,
+"configTools":false,
+"floatTools":true
+})
 --->

@@ -102,5 +102,8 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 > Version to V2
 
 - 7/31/2015 1:08:22 PM 
-> Convert Spring to Jfinal [ORIGIN PROJECT](https://github.com/Teddy-Zhu/lc4e-spring)  
+> Convert Spring to Jfinal [Origin Project](https://github.com/Teddy-Zhu/lc4e-spring)  
 > Rollback MongoDB to MYSQL
+
+- 10/29/2015 13:46:26 PM 
+> Convert View Render from Beelt to Jetbrick 

@@ -16,7 +16,7 @@
     <div id="attachedHeader" class="ui attached floating clearing message" data-area="index">
         <div class="ui left floated breadcrumb basic segment">
             <a class="section">
-                <beetl>SiteName</beetl>
+                ${SiteName}
             </a>
             <span class="divider">/</span>
             <a class="section">Registration</a>
@@ -34,12 +34,12 @@
                     Sort Method
                 </div>
                 <div class="scrolling menu">
-                    <!--- if(auth.user()){  --->
+                    <!--- #if(user())  --->
                     <div class="item" data-value="1">
                         <div class="ui red empty circular label"></div>
                         Order By System
                     </div>
-                    <!--- } --->
+                    <!--- #end --->
                     <div class="item" data-value="2">
                         <div class="ui blue empty circular label"></div>
                         Order By Date
@@ -53,9 +53,13 @@
         </div>
     </div>
     <div id="articlelist" class="ui attached fluid raised segment">
-        <div id="topicItems" class="ui divided items topiclist animated slow fadeIn" data-page="<beetl>page!1</beetl>"
-             data-sort="<beetl>topicSort!</beetl>">
-            <!--- if(has(topics) && topics !=null){ layout("/ajax/_topic_detail.html",{'topics':topics}){};}--->
+        <div id="topicItems" class="ui divided items topiclist animated slow fadeIn" data-page="${page?!1}"
+             data-sort="${topicSort?!1}">
+            <!---
+            #if(topics !=null)
+               #include("/ajax/_topic_detail.html",{"topics":topics});
+            #end
+            --->
         </div>
     </div>
     <div id="articlebottons" class="ui bottom attached floating message">

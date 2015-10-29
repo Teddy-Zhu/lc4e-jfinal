@@ -1,20 +1,20 @@
 <!---
-for(curMenu in menus){
-    if(curMenu.CHILDS.~size > 0){
-        println('<div class="ui dropdown link item">');
-        if(curMenu.ICON !=null && !isEmpty(curMenu.ICON)){
-            print('<i class="'+ curMenu.ICON +' icon"></i>');
-        }
-        print('<span class="text">'+ curMenu.NAME +'</span><i class="dropdown icon"></i><div class="menu">');
-        layout("/common/menudropdown.html",{'menus':curMenu.CHILDS}){};
-        println('</div>');
-        println('<div class="itemBar"></div></div>');
-    }else{
-        print('<a class="item linked" title="'+ curMenu.NAME +'" href="'+ curMenu.ABBR +'">');
-        if(curMenu.ICON != null && !isEmpty(curMenu.ICON)){
-             print('<i class="'+ curMenu.ICON +' icon"></i>');
-        }
-        print(curMenu.NAME +'<div class="itemBar"></div></a>');
-    }
-}
+#options(import="com.teddy.lc4e.database.model.Sys_Menu")
+#for(Sys_Menu curMenu: menus)
+    #if(curMenu.CHILDS.size() > 0)
+        #[[<div class="ui dropdown link item">]]#
+        #if(curMenu.ICON !=null && !isEmpty(curMenu.ICON) )
+            #[[<i class="]]#${curMenu.ICON}#[[ icon"></i>]]#
+        #end
+        #[[<span class="text">]]#${curMenu.NAME}#[[</span><i class="dropdown icon"></i><div class="menu">]]#
+        #include("/common/menudropdown.html",{'menus':curMenu.CHILDS})
+        #[[</div><div class="itemBar"></div></div>]]#
+    #else
+        #[[<a class="item linked" title="]]#${curMenu.NAME}#[[" href="]]#${curMenu.ABBR}#[[">]]#
+        #if(curMenu.ICON != null && !isEmpty(curMenu.ICON))
+             #[[<i class="]]#${curMenu.ICON}#[[ icon"></i>]]#
+        #end
+        ${curMenu.NAME}#[[<div class="itemBar"></div></a>]]#
+    #end
+#end
 --->

@@ -3,9 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
-    <version>0.2.5</version>
+    <version>0.2.6</version>
+    <modules>
+        <module>jfinalExtension</module>
+    </modules>
     <groupId>com.teddy</groupId>
     <artifactId>lc4e</artifactId>
 
@@ -56,9 +59,9 @@
 
         <!-- view render -->
         <dependency>
-            <groupId>org.beetl</groupId>
-            <artifactId>beetl-core</artifactId>
-            <version>2.2.3</version>
+            <groupId>com.github.subchen</groupId>
+            <artifactId>jetbrick-template-jfinal</artifactId>
+            <version>2.0.10</version>
         </dependency>
 
         <!-- security -->
@@ -120,6 +123,13 @@
             <version>3.0-alpha-1</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.teddy</groupId>
+            <artifactId>jfinalExtension</artifactId>
+            <version>1.0</version>
+        </dependency>
+
 
     </dependencies>
     <build>
