@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by teddy on 2015/9/25.
  */
 public class HttpCacheHandler extends Handler{
-    private static final long MAX_AGE = 2592000L;
+    private static final long MAX_AGE = 2764800L;
 
     @Override
     public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
