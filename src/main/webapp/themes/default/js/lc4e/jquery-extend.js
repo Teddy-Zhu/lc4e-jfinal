@@ -24,6 +24,31 @@
                 $.lc4e[query][queryArguments['method']].call();
             }
         },
+        convertArray: function (obj, value, newValue) {
+            if (!$.isPlainObject(obj)) {
+                return obj;
+            } else if ($.isPlainObject(value)) {
+                var replaceArray = [];
+                for (var v in value) {
+                    replaceArray.push(v);
+                }
+                for (var p in obj) {
+                    if (replaceArray.indexOf(obj[p]) > -1) {
+                        obj[p] = value[obj[p]];
+                    }
+                }
+                return obj;
+            } else if (newValue) {
+                for (var p in obj) {
+                    if (obj[p] == value) {
+                        obj[p] = newValue;
+                    }
+                }
+                return obj;
+            } else {
+                return obj;
+            }
+        },
         removeArray: function (obj, array) {
             if (!$.isPlainObject(obj)) {
                 return obj;
@@ -939,7 +964,10 @@
                         $form.popup('hide');
                         $.Lc4eAjax({
                                 url: options.url ? options.url : $form.attr('data-url'),
-                                data: $.lc4e.removeArray($form.form('get values'), $form.data('ignore')),
+                                data: $.lc4e.convertArray($.lc4e.removeArray($form.form('get values'), $form.data('ignore')), {
+                                    'on': true,
+                                    'off': false
+                                }),
                                 showLoad: $form.attr('data-loading'),
                                 success: function (data) {
                                     $.Lc4eResolveMessage(data, options.success, options.error);

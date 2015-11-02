@@ -3,12 +3,14 @@
 #for(Article t: topics)
 --->
 <div class="item topic">
-    <div class="ui fluid tiny image hidden-mb">
-        <div class="ui blue ribbon label">
-            ${t.user}
+    <div class="ui user picture">
+        <div class="ui fluid tiny image hidden-mb">
+            <div class="ui blue ribbon label">
+                ${t.user}
+            </div>
+            <img src="${t.imageUrl}" data-title="${t.popUp.title}"
+                 data-content="${t.popUp.content}">
         </div>
-        <img src="${t.imageUrl}" data-title="${t.popUp.title}"
-             data-content="${t.popUp.content}">
     </div>
     <div class="content">
         <a class="header larger" href="${t.articleUrl}">

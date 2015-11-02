@@ -2876,23 +2876,22 @@
         },
 
         link: function () {
-            var cm = this.cm;
-            var selection = cm.getSelection();
-            var editor = this.editor;
+            var cm = this.cm, selection = cm.getSelection(), editor = this.editor, lang = this.lang, linkLang = lang.dialog.link;
 
             $.Lc4eModal({
-                title: 'Add Link',
-                content: '<div class="ui center aligned grid"><div class="ui ten wide column grid">' +
-                '<div class="two wide column"><div class="height like input">Url</div></div>' +
-                '<div class="fourteen wide column"><div class="ui input"><input id="editorUrl" type="text" value="http://"></div></div>' +
-                '<div class="two wide column"><div class="height like input">Name</div></div>' +
-                '<div class="fourteen wide column"><div class="ui input"><input type="text" id="editorUrlName" value="' + selection + '"></div></div></div></div>',
+                title: linkLang.title,
+                content: '<div class="ui center aligned grid"><div class="ui sixteen wide column grid">' +
+                '<div class="five wide column"><div class="height like input">' + linkLang.url + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input id="editorUrl" type="text" value="http://"></div></div>' +
+                '<div class="five wide column"><div class="height like input">' + linkLang.urlTitle + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input type="text" id="editorUrlName" value="' + selection + '"></div></div></div></div>',
                 size: 'tiny',
                 onApprove: function ($el) {
-                    var url = $('#editorUrl').val(), name = $('#editorUrlName').val(), str;
+                    var $this = $(this), url = $this.find('#editorUrl').val(), name = $this.find('#editorUrlName').val(), str;
                     if (!url) {
                         $.Lc4eModal({
-                            content: 'url can not be empty'
+                            allowMultiple: true,
+                            content: linkLang.urlEmpty
                         });
                         return false;
                     } else {
@@ -2908,14 +2907,14 @@
                 buttons: {
                     'OK': {
                         id: '',
-                        name: 'OK',
+                        name: lang.buttons.enter,
                         icon: '',
                         content: '',
                         css: 'primary ok'
                     },
                     'Cancel': {
                         id: '',
-                        name: 'Cancel',
+                        name: lang.buttons.cancel,
                         icon: '',
                         content: '',
                         css: 'basic cancel'
@@ -2927,7 +2926,77 @@
         },
 
         "reference-link": function () {
-            this.executePlugin("referenceLinkDialog", "reference-link-dialog/reference-link-dialog");
+            var cm = this.cm, selection = cm.getSelection(), editor = this.editor, ReLinkId = editor.data('relinkid'), lang = this.lang, dialogLang = lang.dialog.referenceLink, cursor = cm.getCursor();
+            ReLinkId = ReLinkId ? ReLinkId : 1;
+            $.Lc4eModal({
+                title: dialogLang.title,
+                content: '<div class="ui center aligned grid"><div class="ui sixteen wide column grid">' +
+                '<div class="five wide column"><div class="height like input">' + dialogLang.name + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input id="reLinkName" type="text" value="[' + ReLinkId + ']"></div></div>' +
+                '<div class="five wide column"><div class="height like input">' + dialogLang.urlId + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input id="reLinkUrlId" type="text"></div></div>' +
+                '<div class="five wide column"><div class="height like input">' + dialogLang.url + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input id="reLinkUrl" type="text" value="http://"></div></div>' +
+                '<div class="five wide column"><div class="height like input">' + dialogLang.urlTitle + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input type="text" id="reLinkUrlTitle" value="' + selection + '"></div></div></div></div>',
+                size: 'tiny',
+                onApprove: function ($el) {
+                    var $this = $(this), name = $this.find('#reLinkName').val(), url = $this.find('#reLinkUrlId').val(), rid = $this.find('#reLinkUrl').val(), title = $this.find('#reLinkUrlTitle').val();
+
+                    if (name === "") {
+                        $.Lc4eModal({
+                            allowMultiple: true,
+                            content: dialogLang.nameEmpty
+                        });
+                        return false;
+                    }
+
+                    if (rid === "") {
+                        $.Lc4eModal({
+                            allowMultiple: true,
+                            content: dialogLang.idEmpty
+                        });
+                        return false;
+                    }
+
+                    if (url === "http://" || url === "") {
+                        $.Lc4eModal({
+                            allowMultiple: true,
+                            content: dialogLang.urlEmpty
+                        });
+                        return false;
+                    }
+
+                    cm.replaceSelection("[" + name + "][" + rid + "]");
+
+                    if (selection === "") {
+                        cm.setCursor(cursor.line, cursor.ch + 1);
+                    }
+
+                    title = (title === "") ? "" : " \"" + title + "\"";
+
+                    cm.setValue(cm.getValue() + "\n[" + rid + "]: " + url + title + "");
+                    editor.data('relinkid', ++ReLinkId);
+                    return true;
+                },
+                buttons: {
+                    'OK': {
+                        id: '',
+                        name: lang.buttons.enter,
+                        icon: '',
+                        content: '',
+                        css: 'primary ok'
+                    },
+                    'Cancel': {
+                        id: '',
+                        name: lang.buttons.cancel,
+                        icon: '',
+                        content: '',
+                        css: 'basic cancel'
+                    }
+                }
+            })
+
         },
 
         pagebreak: function () {
@@ -2943,7 +3012,80 @@
         },
 
         image: function () {
-            this.executePlugin("imageDialog", "image-dialog/image-dialog");
+            var cm = this.cm,
+                lang = this.lang,
+                editor = this.editor,
+                settings = this.settings,
+                cursor = cm.getCursor(),
+                selection = cm.getSelection(),
+                imageLang = lang.dialog.image,
+                isUploaded = settings.imageUpload,
+                classPrefix = this.classPrefix,
+                iframeName = classPrefix + "image-iframe",
+                dialogContent;
+
+            var guid = (new Date).getTime();
+            var action = settings.imageUploadURL + (settings.imageUploadURL.indexOf("?") >= 0 ? "&" : "?") + "guid=" + guid;
+
+            if (settings.crossDomainUpload) {
+                action += "&callback=" + settings.uploadCallbackURL + "&dialog_id=editormd-image-dialog-" + guid;
+            }
+            dialogContent = '<div class="ui center aligned grid"><div class="ui sixteen wide column grid">' +
+                '<div class="five wide column"><div class="height like input">' + imageLang.url + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input id="editorUrl" type="text" ></div></div>' +
+                '<div class="five wide column"><div class="height like input">' + imageLang.alt + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input type="text" id="editorAlt" ></div></div>' +
+                '<div class="five wide column"><div class="height like input">' + imageLang.link + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><input type="text" id="editorLink" value="http://"></div></div>' +
+                '</div></div>';
+            $.Lc4eModal({
+                title: imageLang.title,
+                content: dialogContent,
+                size: 'tiny',
+                onApprove: function ($el) {
+                    var $this = $(this), url = $this.find('#editorUrl').val(), alt = $this.find('#editorAlt').val(), link = $this.find("[data-link]").val();
+
+                    if (url === "") {
+                        $.Lc4eModal({
+                            allowMultiple: true,
+                            content: imageLang.imageURLEmpty
+                        });
+                        return false;
+                    }
+
+                    var altAttr = (alt !== "") ? " \"" + alt + "\"" : "";
+
+                    if (link === "" || link === "http://") {
+                        cm.replaceSelection("![" + alt + "](" + url + altAttr + ")");
+                    }
+                    else {
+                        cm.replaceSelection("[![" + alt + "](" + url + altAttr + ")](" + link + altAttr + ")");
+                    }
+
+                    if (alt === "") {
+                        cm.setCursor(cursor.line, cursor.ch + 2);
+                    }
+
+                    return true;
+                },
+                buttons: {
+                    'OK': {
+                        id: '',
+                        name: lang.buttons.enter,
+                        icon: '',
+                        content: '',
+                        css: 'primary ok'
+                    },
+                    'Cancel': {
+                        id: '',
+                        name: lang.buttons.cancel,
+                        icon: '',
+                        content: '',
+                        css: 'basic cancel'
+                    }
+                }
+            })
+
         },
 
         code: function () {

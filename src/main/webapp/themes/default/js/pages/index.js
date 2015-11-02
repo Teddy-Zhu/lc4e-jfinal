@@ -17,7 +17,8 @@ $(function () {
         bindEvent: function () {
             var $announce = $('#announce'),
                 $attachedHeader = $('#attachedHeader'),
-                sortItem = $('#topicItems').attr('data-sort'),
+                $topicItems = $('#topicItems'),
+                sortItem = $topicItems.attr('data-sort'),
                 $sortTopic = $('#sortTopic');
             $attachedHeader.attr('data-area', $.cookie('area') ? $.cookie('area') : 'index');
             $announce.shape();
@@ -40,6 +41,16 @@ $(function () {
                 })
             });
 
+            $topicItems.on('click', function (e) {
+                var $target = $(e.target);
+                if ($target.hasClass('extra')) {
+                    window.location.href = $target.prev('a').attr('href');
+                } else if ($target.hasClass('topic') || $target.hasClass('content')) {
+                    window.location.href = $target.find('a.header').attr('href');
+                } else if ($target.hasClass('header')) {
+                    window.location.href = $target.attr('href');
+                }
+            });
             setTimeout(function () {
                 $.lc4e.index.shape($announce);
             }, 10000);

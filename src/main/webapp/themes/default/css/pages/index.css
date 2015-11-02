@@ -13,17 +13,28 @@
     display: block;
 }
 
-#topicItems > .item > .image {
+#topicItems > .item > .user.picture > .image {
     width: 5rem;
 }
 
 #topicItems > .item {
+    cursor: pointer;
     position: relative;
-    padding: 1em 2em !important;
+    padding: 0;
     transition: background 0.5s ease;
 }
 
-#topicItems > .item:hover {
+#topicItems > .item > .user.picture {
+    padding: 1em 2em !important;
+    border-right: 1px solid rgba(34, 36, 38, .15);
+}
+
+#topicItems > .item > .content {
+    padding:  1em 2em !important;
+}
+
+
+#topicItems > .item > .user.picture:hover, #topicItems > .item > .content:hover {
     background: #ECECEC;
 }
 
@@ -59,7 +70,7 @@
         background-color: transparent;
     }
 
-    #topicItems > .item > .image {
+    #topicItems > .item > .user.picture > .image {
         width: 70px !important;
         max-width: 30% !important;
         margin-left: inherit;
@@ -139,24 +150,28 @@
     margin: 0 .1em 0 0;
 }
 
-#topicItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
+#topicItems > .item > .user.picture > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label {
     top: .3em;
     padding: .2em .3em .2em .3em;
     left: calc(.49em - 1.2em);
 }
 
-#topicItems > .item > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
+#topicItems > .item > .user.picture > .ui.card .image > .ribbon.label, .ui.image > .ui.ribbon.label:after {
     border-width: 0 0.8em 0.8em 0;
 }
 
 #topicItems > .item > .content > .extra > .ui.label, #topicItems > .item > .content > .extra > .ui.label > a.ui.label {
     padding: .2em .25em;
-    margin: .55rem .5rem 0 0;
 }
 
 #topicItems > .item > .content > .extra {
-    margin: -.5em 0 0 0;
+    margin: 0;
 }
+
+#topicItems > .item > .content > .header:not(.ui) {
+    margin-top: .3em;
+}
+
 
 #rightContent > .ui.segment > .ui.divided.items > .item > .ui.label {
     padding: 0.3em .2em;

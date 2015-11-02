@@ -1,10 +1,9 @@
 <!---
 #if(user())
-   #set(List jsFile = ["/js/pages/topic.js","/js/plugins/editor.md/editormd.js"],List cssFile = ["/css/pages/topic.css","/js/plugins/editor.md/css/editormd.min.css"])
+   #set(List jsFile = ["/js/plugins/editor.md/editormd.js","/js/pages/topic.js"],List cssFile = ["/js/plugins/editor.md/css/editormd.min.css","/css/pages/topic.css"])
 #else
    #set(List jsFile = ["/js/pages/topic.js"],List cssFile = ["/css/pages/topic.css"])
 #end
-${debug("user{},js{}",user(),jsFile)}
 #include("/template/template.html",{
 "ContentLayout":"/ajax/_topic.html",
 "CSS":cssFile,
