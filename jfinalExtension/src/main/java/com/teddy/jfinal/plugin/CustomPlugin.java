@@ -245,7 +245,7 @@ public class CustomPlugin implements IPlugin {
         Set<Class> Classes = classesMap.get(Service.class);
         Classes.addAll(classesMap.get(Controller.class));
         Classes.forEach(service -> {
-            List<Field> fieldList = new ArrayList<Field>();
+            List<Field> fieldList = new ArrayList<>();
             Field[] fields = service.getFields();
             for (Field fieldTmp : fields) {
                 if (Modifier.isStatic(fieldTmp.getModifiers()) && fieldTmp.getName().equals(Const.INJECT_SERVICE)) {
@@ -331,7 +331,7 @@ public class CustomPlugin implements IPlugin {
             annotationPlugin = new AnnotationPlugin();
             plugins.add(annotationPlugin);
         }
-        List<AnnotationResolver> annotationResolvers = null;
+        List<AnnotationResolver> annotationResolvers;
         if (isBefore) {
             annotationResolvers = annotationPlugin.getBeforeAnnotationResolvers();
         } else {
@@ -363,9 +363,7 @@ public class CustomPlugin implements IPlugin {
 
     private List<AnnotationResolver> buildAnnotationResolver(List<Annotation> annotations) {
         List<AnnotationResolver> resolvers = new ArrayList<>();
-        annotations.forEach(annotation -> {
-            resolvers.add(convertToResolver(annotation));
-        });
+        annotations.forEach(annotation -> resolvers.add(convertToResolver(annotation)));
         return resolvers;
     }
 

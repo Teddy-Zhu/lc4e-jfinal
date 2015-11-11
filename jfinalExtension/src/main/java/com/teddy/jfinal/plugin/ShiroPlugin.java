@@ -81,8 +81,6 @@ public class ShiroPlugin implements IPlugin {
         defaultWebSecurityManager = new DefaultWebSecurityManager(realm);
         defaultWebSecurityManager.setCacheManager(ehCacheManager);
         defaultWebSecurityManager.setRememberMeManager(rememberMeManager);
-
-        // defaultWebSecurityManager.setRealm(realm);
         defaultWebSecurityManager.setSessionManager(sessionManager);
 
 

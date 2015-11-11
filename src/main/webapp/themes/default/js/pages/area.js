@@ -22,14 +22,9 @@ $(function () {
                 $topicSetting.dropdown();
                 $topicPopup.popup();
                 $topicItems.on('click', function (e) {
-                    e.preventDefault();
                     var $target = $(e.target);
-                    if ($target.hasClass('extra')) {
-                        window.location.href = $target.prev('a').attr('href');
-                    } else if ($target.hasClass('topic') || $target.hasClass('content')) {
+                    if ($target.hasClass('content')) {
                         window.location.href = $target.find('a.header').attr('href');
-                    } else if ($target.hasClass('header')) {
-                        window.location.href = $target.attr('href');
                     }
                 });
                 $areaName.hover(function () {

@@ -7,11 +7,11 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 ###It's a Light Forum.
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
 
->#### Use Java(`JDK8`),JSP(`HTML5`,`Jquery`,`CSS3`,`Semantic UI`,`animatescroll`,`Animate`)
+>#### Use Java(`JDK8`),Jetbrick Template(`HTML5`,`Jquery`,`CSS3`,`Semantic UI`,`animatescroll`,`Animate`)
 
 ----------
 
-# [Demo](http://lc4e.coding.io) #
+# [Demo](http://www.lc4e.com) #
 ----------
 
 > <del>View [http://lc4e.coding.io/InitDB](http://lc4e.coding.io/InitDB) to initial database 
