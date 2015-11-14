@@ -2,15 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId>com.teddy</groupId>
-    <version>1.1</version>
+    <version>${project-version}</version>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>jfinalExtension</artifactId>
-    <properties>
-        <java-version>1.8</java-version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <artifactId>lc4e-extend</artifactId>
+
     <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.teddy</groupId>
+        <artifactId>lc4e</artifactId>
+        <version>1.0</version>
+    </parent>
+
     <dependencies>
 
         <!-- mvc framework -->
@@ -18,7 +21,6 @@
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
             <version>2.0</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- cache -->
@@ -26,7 +28,6 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <version>2.10.0</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- log print -->
@@ -34,13 +35,11 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.12</version>
-            <scope>provided</scope>
         </dependency>
 
         <!--  mysql -->
@@ -48,14 +47,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.0.15</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.36</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- view render -->
@@ -63,7 +60,6 @@
             <groupId>com.github.subchen</groupId>
             <artifactId>jetbrick-template-jfinal</artifactId>
             <version>2.0.10</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- security -->
@@ -71,22 +67,18 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>bouncycastle</groupId>
             <artifactId>bcprov-jdk16</artifactId>
             <version>140</version>
-            <scope>provided</scope>
         </dependency>
-
 
         <!-- shiro -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
             <version>1.2.4</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -97,19 +89,16 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-quartz</artifactId>
             <version>1.2.4</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- plan -->
@@ -117,7 +106,6 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>2.2.1</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- for tomcat run-->
@@ -132,7 +120,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>
