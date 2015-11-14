@@ -16,19 +16,21 @@ $(function () {
                 on: 'hover'
             });
             $('#topicOperateButton').dropdown();
+            if ($('#userCardPop').length > 0) {
+                var editor = editormd("userCommentTextArea", {
+                    path: "/themes/default/js/plugins/editor.md/lib/",
+                    height: 400,
+                    watch: false,
+                    autoFocus: false,
+                    placeholder: 'input your reply!',
+                    editorTheme: 'base16-light',
+                    toolbarIcons: function () {
+                        return ['undo', 'redo', 'bold', 'del', 'italic', 'quote', 'uppercase', 'h1', 'h2', 'h3', 'h4', 'h5',
+                            'h6', "list-ul", "list-ol", 'hr', 'link', "reference-link", 'image', 'code', "preformatted-text", "code-block", 'table', 'datetime', 'emoji', "html-entities", 'pagebreak', 'watch']
+                    }
+                });
+            }
 
-            var editor = editormd("userCommentTextArea", {
-                path: "/themes/default/js/plugins/editor.md/lib/",
-                height: 400,
-                watch: false,
-                autoFocus: false,
-                placeholder: 'input your reply!',
-                editorTheme: 'base16-light',
-                toolbarIcons: function () {
-                    return ['undo', 'redo', 'bold', 'del', 'italic', 'quote', 'uppercase', 'h1', 'h2', 'h3', 'h4', 'h5',
-                        'h6', "list-ul", "list-ol", 'hr', 'link', "reference-link", 'image', 'code', "preformatted-text", "code-block", 'table', 'datetime', 'emoji', "html-entities", 'pagebreak', 'watch']
-                }
-            });
         }
     };
     $.lc4e.topic.ready();

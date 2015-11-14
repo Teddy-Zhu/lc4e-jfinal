@@ -48,11 +48,15 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public List<M> find(SQLTool sql) {
-        return find(sql.toString(), sql.getParas());
+        return sql.getParas().length > 0 ? find(sql.toString(), sql.getParas()) : find(sql.toString());
     }
 
     public List<M> findAll() {
         return find("select " + getTbName() + ".* from " + getTbName());
+    }
+
+    public M findFirst(SQLTool sql) {
+        return sql.getParas().length > 0 ? findFirst(sql.toString(), sql.getParas()) : findFirst(sql.toString());
     }
 
     public boolean exist(String param, String columnName) {
@@ -78,16 +82,14 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         if (objs.size() == 0) {
             return new ArrayList<>();
         }
-        String objStr = "";
-        for (int i = 0, len = objs.size(); i < len; i++) {
-            objStr += "?,";
-        }
+        final StringBuilder objStr = new StringBuilder();
+        objs.forEach(obj -> objStr.append("?,"));
         return find("select " + getTbName() + ".* from " + getTbName() + " where " + column + " in(" + objStr.substring(0, objStr.length() - 1) + ")", objs.toArray());
     }
 
     public boolean getToBoolean(String attr) {
         Object value = get(attr);
-        Boolean convertValue = false;
+        Boolean convertValue;
         try {
             convertValue = Long.valueOf(value.toString()) == 1;
         } catch (Exception e) {

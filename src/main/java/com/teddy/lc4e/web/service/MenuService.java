@@ -3,6 +3,7 @@ package com.teddy.lc4e.web.service;
 import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.common.Const;
+import com.teddy.jfinal.tools.SQLTool;
 import com.teddy.lc4e.database.mapping.T_Sys_Menu;
 import com.teddy.lc4e.database.model.Sys_Menu;
 
@@ -18,12 +19,10 @@ public class MenuService {
 
     @Cache(cacheName = Const.UIDATA, key = "menus")
     public List<Sys_Menu> getMenuTree() {
-        StringBuffer sql = new StringBuffer();
         Sys_Menu menuTree;
-        sql.append("select ").append(T_Sys_Menu.ALL_FIELDS).append(" From ")
-                .append(T_Sys_Menu.TABLE_NAME).append(" ORDER BY ").append(T_Sys_Menu.PARENTID)
-                .append(" ASC ,").append(T_Sys_Menu.ORDER).append(" ASC");
-        List<Sys_Menu> allMenus = Sys_Menu.dao.find(sql.toString());
+        SQLTool sql = new SQLTool().select(T_Sys_Menu.ALL_FIELDS)
+                .from(T_Sys_Menu.TABLE_NAME).orderByAsc(T_Sys_Menu.PARENTID).orderByAsc(T_Sys_Menu.ORDER);
+        List<Sys_Menu> allMenus = Sys_Menu.dao.find(sql);
 
         if (allMenus == null || allMenus.isEmpty()) {
             return new ArrayList<>();

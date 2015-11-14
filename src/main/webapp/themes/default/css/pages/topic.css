@@ -96,7 +96,7 @@
 }
 
 #mainArea .user.info.column > .ui.fluid.card > .content {
-    min-height: 12em;
+    min-height: 5em;
 }
 
 #topicMaster .topic.title.value {

@@ -4,6 +4,7 @@ import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.annotation.Transaction;
 import com.teddy.jfinal.exceptions.Lc4eApplicationException;
+import com.teddy.jfinal.tools.SQLTool;
 import com.teddy.lc4e.config.Key;
 import com.teddy.lc4e.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.database.mapping.T_User;
@@ -26,12 +27,22 @@ public class UserService {
 
     @Cache(index = 0)
     public List<Vw_User_Role_Permission> findUserRolesAndPermission(String username) {
-        return Vw_User_Role_Permission.dao.find("select " + T_Vw_User_Role_Permission.ALL_FIELDS + " from " + T_Vw_User_Role_Permission.TABLE_NAME + " where " + T_Vw_User_Role_Permission.ROLEAVAILABLE + "=1" + " AND " + T_Vw_User_Role_Permission.PERMISSIONAVAILABLE + "=1" + " AND " + T_Vw_User_Role_Permission.ROLEENDTIME + ">NOW()" + " AND " + T_Vw_User_Role_Permission.name + "=?", username);
+        SQLTool sql = new SQLTool().select(T_Vw_User_Role_Permission.ALL_FIELDS)
+                .from(T_Vw_User_Role_Permission.TABLE_NAME)
+                .where(" AND ", T_Vw_User_Role_Permission.ROLEAVAILABLE + "=1",
+                        T_Vw_User_Role_Permission.PERMISSIONAVAILABLE + "=1",
+                        T_Vw_User_Role_Permission.ROLEENDTIME + ">NOW()",
+                        T_Vw_User_Role_Permission.name + "=?");
+        sql.addParam(username);
+        return Vw_User_Role_Permission.dao.find(sql);
     }
 
     @Cache(index = 0)
     public User findUserFullInfo(String username) {
-        return User.dao.findFirst("select " + T_User.ALL_FIELDS + " from " + T_User.TABLE_NAME + " where " + T_User.name + "=?", username);
+        SQLTool sql = new SQLTool().select(T_User.ALL_FIELDS)
+                .from(T_User.TABLE_NAME).where(T_User.name + "=?");
+        sql.addParam(username);
+        return User.dao.findFirst(sql);
     }
 
     public boolean validateUserName(String name) {

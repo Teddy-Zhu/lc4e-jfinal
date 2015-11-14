@@ -18,6 +18,7 @@ public class TopicService {
 
     /**
      * filter topic with user like by pw calc
+     *
      * @param userId
      * @param page
      * @param size
@@ -49,7 +50,17 @@ public class TopicService {
                         , SQLTool.NOTIN(T_Vw_Topic_Pw.ID, SQLTool.SELECT(T_User_Topic_Blocked.TOPICID) + SQLTool.FROM(T_User_Topic_Blocked.TABLE_NAME) + SQLTool.WHERE(T_User_Topic_Blocked.USERID + " = ?"))
                         , SQLTool.NOTIN(T_Vw_Topic_Pw.AUTHORID, SQLTool.SELECT(T_User_Blocked.BLOCKEDUSERID) + SQLTool.FROM(T_User_Blocked.TABLE_NAME) + SQLTool.WHERE(T_User_Blocked.USERID + " = ?"))
                         , T_Sys_Comment.USERID + " =  ?")
-                .groupBy(T_Vw_Topic_Pw.ID)
+                .groupBy(T_Vw_Topic_Pw.ID, T_Vw_Topic_Pw.AREAABBR
+                        , T_Vw_Topic_Pw.AREANAME
+                        , T_Vw_Topic_Pw.TITLE
+                        , T_Vw_Topic_Pw.AUTHOR
+                        , T_Vw_Topic_Pw.AUTHORID
+                        , T_Vw_Topic_Pw.COUNT
+                        , T_Vw_Topic_Pw.LASTCOMMENTID
+                        , T_Vw_Topic_Pw.LASTCOMMENTORDER
+                        , T_Vw_Topic_Pw.LASTUSER
+                        , T_Vw_Topic_Pw.LASTUSERNICK
+                        , T_Vw_Topic_Pw.AUTHORAVATAR)
                 .orderByDesc(T_Vw_Topic_Pw.UTPW + " * ? + " + T_Vw_Topic_Pw.TSPW + " * ? + " + T_Vw_Topic_Pw.COUNT + " * ? + " + SQLTool.COUNT(T_Sys_Comment.ID) + " * ?");
         sql.addParams(userId, userId, userId, userId, userTagPCT, topicStatusPCT, commentCountPCT, curCommentCountPCT);
         return Vw_Topic_Pw.dao.paginate(sql, page, size);
@@ -80,9 +91,9 @@ public class TopicService {
         ).from(T_Vw_Topic.TABLE_NAME);
         if (isLogin) {
             sql.where(" AND ", SQLTool.NOTIN(T_Vw_Topic.ID,
-                            SQLTool.SELECT(T_User_Topic_Blocked.TOPICID)
-                                    + SQLTool.FROM(T_User_Topic_Blocked.TABLE_NAME)
-                                    + SQLTool.WHERE(T_User_Topic_Blocked.USERID + " = ? ")),
+                    SQLTool.SELECT(T_User_Topic_Blocked.TOPICID)
+                            + SQLTool.FROM(T_User_Topic_Blocked.TABLE_NAME)
+                            + SQLTool.WHERE(T_User_Topic_Blocked.USERID + " = ? ")),
                     SQLTool.NOTIN(T_Vw_Topic.AUTHORID,
                             SQLTool.SELECT(T_User_Blocked.BLOCKEDUSERID)
                                     + SQLTool.FROM(T_User_Blocked.TABLE_NAME)

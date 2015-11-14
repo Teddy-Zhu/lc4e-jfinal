@@ -45,6 +45,8 @@ $(function () {
                 var $target = $(e.target);
                 if ($target.hasClass('content')) {
                     window.location.href = $target.find('a.header').attr('href');
+                } else if ($target.hasClass('extra')) {
+                    window.location.href = $target.prev().attr('href');
                 }
             });
             setTimeout(function () {

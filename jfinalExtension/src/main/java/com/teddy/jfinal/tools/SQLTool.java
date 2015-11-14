@@ -125,7 +125,12 @@ public class SQLTool {
     }
 
     public SQLTool orderBy(String order, String... columns) {
-        this.sql.append(" order by ").append(StringUtils.join(columns, " " + order + " ,")).append(" ").append(order).append(" ");
+        if(this.sql.toString().contains("order by")){
+            this.sql.append(" , ");
+        }else{
+            this.sql.append(" order by ");
+        }
+        this.sql.append(StringUtils.join(columns, " " + order + " ,")).append(" ").append(order).append(" ");
         return this;
     }
 

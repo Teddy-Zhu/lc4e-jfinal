@@ -2,6 +2,7 @@ package com.teddy.lc4e.web.service;
 
 import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.Service;
+import com.teddy.jfinal.tools.SQLTool;
 import com.teddy.lc4e.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.database.model.Sys_Common_Variable;
 
@@ -19,7 +20,11 @@ public class ComVarService {
 
     @Cache(index = 0)
     public Sys_Common_Variable getComVarByName(String name) {
-        return Sys_Common_Variable.dao.findFirst("select " + T_Sys_Common_Variable.ALL_FIELDS + " from " + T_Sys_Common_Variable.TABLE_NAME + " Where " + T_Sys_Common_Variable.NAME + " = ?", name);
+        SQLTool sql = new SQLTool().select(T_Sys_Common_Variable.ALL_FIELDS)
+                .from(T_Sys_Common_Variable.TABLE_NAME)
+                .where(T_Sys_Common_Variable.NAME + " = ? ");
+        sql.addParam(name);
+        return Sys_Common_Variable.dao.findFirst(sql);
     }
 
 

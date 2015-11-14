@@ -2907,16 +2907,16 @@
                 buttons: {
                     'OK': {
                         id: '',
-                        name: lang.buttons.enter,
+                        name: 'OK',
                         icon: '',
-                        content: '',
+                        content: lang.buttons.enter,
                         css: 'primary ok'
                     },
                     'Cancel': {
                         id: '',
-                        name: lang.buttons.cancel,
+                        name: 'Cancel',
                         icon: '',
-                        content: '',
+                        content: lang.buttons.cancel,
                         css: 'basic cancel'
                     }
                 }
@@ -2984,14 +2984,14 @@
                         id: '',
                         name: lang.buttons.enter,
                         icon: '',
-                        content: '',
+                        content: lang.buttons.enter,
                         css: 'primary ok'
                     },
                     'Cancel': {
                         id: '',
                         name: lang.buttons.cancel,
                         icon: '',
-                        content: '',
+                        content: lang.buttons.cancel,
                         css: 'basic cancel'
                     }
                 }
@@ -3043,7 +3043,7 @@
                 content: dialogContent,
                 size: 'tiny',
                 onApprove: function ($el) {
-                    var $this = $(this), url = $this.find('#editorUrl').val(), alt = $this.find('#editorAlt').val(), link = $this.find("[data-link]").val();
+                    var $this = $(this), url = $this.find('#editorUrl').val(), alt = $this.find('#editorAlt').val(), link = $this.find("#editorLink").val();
 
                     if (url === "") {
                         $.Lc4eModal({
