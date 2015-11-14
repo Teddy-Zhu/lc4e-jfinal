@@ -319,7 +319,8 @@
                     selectDefaultText: "请选择代码语言",
                     otherLanguage: "其他语言",
                     unselectedLanguageAlert: "错误：请选择代码所属的语言类型。",
-                    codeEmptyAlert: "错误：请填写代码内容。"
+                    codeEmptyAlert: "错误：请填写代码内容。",
+                    codeAreaLabel: '代码段'
                 },
                 htmlEntities: {
                     title: "HTML 实体字符"
@@ -3073,14 +3074,14 @@
                         id: '',
                         name: lang.buttons.enter,
                         icon: '',
-                        content: '',
+                        content: lang.buttons.enter,
                         css: 'primary ok'
                     },
                     'Cancel': {
                         id: '',
                         name: lang.buttons.cancel,
                         icon: '',
-                        content: '',
+                        content: lang.buttons.cancel,
                         css: 'basic cancel'
                     }
                 }
@@ -3101,7 +3102,101 @@
         },
 
         "code-block": function () {
-            this.executePlugin("codeBlockDialog", "code-block-dialog/code-block-dialog");
+            var codeLanguages = {
+                    asp: ["ASP", "vbscript"],
+                    actionscript: ["ActionScript(3.0)/Flash/Flex", "clike"],
+                    bash: ["Bash/Bat", "shell"],
+                    css: ["CSS", "css"],
+                    c: ["C", "clike"],
+                    cpp: ["C++", "clike"],
+                    csharp: ["C#", "clike"],
+                    coffeescript: ["CoffeeScript", "coffeescript"],
+                    d: ["D", "d"],
+                    dart: ["Dart", "dart"],
+                    delphi: ["Delphi/Pascal", "pascal"],
+                    erlang: ["Erlang", "erlang"],
+                    go: ["Golang", "go"],
+                    groovy: ["Groovy", "groovy"],
+                    html: ["HTML", "text/html"],
+                    java: ["Java", "clike"],
+                    json: ["JSON", "text/json"],
+                    javascript: ["Javascript", "javascript"],
+                    lua: ["Lua", "lua"],
+                    less: ["LESS", "css"],
+                    markdown: ["Markdown", "gfm"],
+                    "objective-c": ["Objective-C", "clike"],
+                    php: ["PHP", "php"],
+                    perl: ["Perl", "perl"],
+                    python: ["Python", "python"],
+                    r: ["R", "r"],
+                    rst: ["reStructedText", "rst"],
+                    ruby: ["Ruby", "ruby"],
+                    sql: ["SQL", "sql"],
+                    sass: ["SASS/SCSS", "sass"],
+                    shell: ["Shell", "shell"],
+                    scala: ["Scala", "clike"],
+                    swift: ["Swift", "clike"],
+                    vb: ["VB/VBScript", "vb"],
+                    xml: ["XML", "text/xml"],
+                    yaml: ["YAML", "yaml"]
+                },
+                dialogName = classPrefix + pluginName,
+                dialog,
+                dialogLang = lang.dialog.codeBlock,
+                cm = this.cm,
+                lang = this.lang,
+                editor = this.editor,
+                settings = this.settings,
+                cursor = cm.getCursor(),
+                selection = cm.getSelection();
+            $.Lc4eModal({
+                title: dialogLang.title,
+                content: '<div class="ui center aligned grid"><div class="ui sixteen wide column grid">' +
+                '<div class="five wide column"><div class="height like input">' + dialogLang.selectLabel + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><select><option selected value="">' + dialogLang.selectDefaultText + '</option></select></div></div>' +
+                '<div class="five wide column"><div class="height like input">' + dialogLang.codeAreaLabel + '</div></div>' +
+                '<div class="eleven wide column"><div class="ui fluid input"><textarea placeholder="coding now..." style="display: none;">' + selection + '</textarea></div></div></div></div>',
+                size: 'small',
+                onShow: function () {
+
+                },
+                onApprove: function ($el) {
+                    var $this = $(this), url = $this.find('#editorUrl').val(), name = $this.find('#editorUrlName').val(), str;
+                    if (!url) {
+                        $.Lc4eModal({
+                            allowMultiple: true,
+                            content: linkLang.urlEmpty
+                        });
+                        return false;
+                    } else {
+                        if (name) {
+                            str = "[" + name + "](" + url + " \"" + name + "\")";
+                        } else {
+                            str = "[" + url + "](" + url + ")";
+                        }
+                        cm.replaceSelection(str);
+                        return true;
+                    }
+                },
+                buttons: {
+                    'OK': {
+                        id: '',
+                        name: 'OK',
+                        icon: '',
+                        content: lang.buttons.enter,
+                        css: 'primary ok'
+                    },
+                    'Cancel': {
+                        id: '',
+                        name: 'Cancel',
+                        icon: '',
+                        content: lang.buttons.cancel,
+                        css: 'basic cancel'
+                    }
+                }
+            })
+
+
         },
 
         "preformatted-text": function () {

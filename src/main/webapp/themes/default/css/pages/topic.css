@@ -1,5 +1,7 @@
 .user.operate.buttons .ui.button {
+    padding-top: 0.3em;
     margin-bottom: .2em;
+    padding-bottom: 0.3em;
 }
 
 #mainArea .ui.topic.extra.segment, #commentArea .ui.topic.extra.segment {
@@ -93,10 +95,6 @@
 
 #mainArea .user.info.column > .ui.fluid.card {
     margin-top: -50%;
-}
-
-#mainArea .user.info.column > .ui.fluid.card > .content {
-    min-height: 5em;
 }
 
 #topicMaster .topic.title.value {
