@@ -1,4 +1,4 @@
-package com.teddy.jfinal.tools.generate;
+package com.teddy.lc4e.database.generate;
 
 import java.util.List;
 

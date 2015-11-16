@@ -1,4 +1,4 @@
-package com.teddy.jfinal.tools.generate;
+package com.teddy.lc4e.database.generate;
 
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
@@ -38,10 +38,10 @@ public class GenerateDB {
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(url, username, password);
 
-        List<DatabaseModel> list = new ArrayList<>();
+        List<DatabaseModel> list = new ArrayList<DatabaseModel>();
         ResultSet rs = con.getMetaData().getTables(null, null, "", new String[]{"TABLE", "VIEW"});
         while (rs.next()) {
-            list.add(new DatabaseModel(rs.getString("TABLE_NAME"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+            list.add(new DatabaseModel(rs.getString("TABLE_NAME"), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>()));
         }
         DatabaseMetaData metaData = con.getMetaData();
         for (DatabaseModel model : list) {
@@ -78,14 +78,14 @@ public class GenerateDB {
 
             StringBuffer sb = new StringBuffer();
             sb.append(header);
-            sb.append("public class T_" + className + " {\n");
+            sb.append("public class T_").append(className).append(" {\n");
             for (int i = 0, len = model.getFields().size(); i < len; i++) {
                 sb.append(model.getRemarks().get(i));
-                sb.append("    public static final String " + model.getFields().get(i).toUpperCase() + " = \"" + model.getTableName() + "." + model.getFields().get(i) + "\";\n\n");
-                sb.append("    public static final String " + model.getFields().get(i) + " = \"" + model.getFields().get(i).toUpperCase() + "\";\n\n");
+                sb.append("    public static final String ").append(model.getFields().get(i).toUpperCase()).append(" = \"").append(model.getTableName()).append(".").append(model.getFields().get(i)).append("\";\n\n");
+                sb.append("    public static final String ").append(model.getFields().get(i)).append(" = \"").append(model.getFields().get(i).toUpperCase()).append("\";\n\n");
             }
-            sb.append("    public static final String ALL_FIELDS = \"" + model.getTableName() + ".*\";\n\n");
-            sb.append("    public static final String TABLE_NAME = \"" + model.getTableName() + "\";\n\n");
+            sb.append("    public static final String ALL_FIELDS = \"").append(model.getTableName()).append(".*\";\n\n");
+            sb.append("    public static final String TABLE_NAME = \"").append(model.getTableName()).append("\";\n\n");
 
             sb.append("}");
             out.write(sb.toString().getBytes("utf-8"));
@@ -130,10 +130,10 @@ public class GenerateDB {
         }
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-        new GenerateDB().generate();
-
-
-    }
+//    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
+//        new GenerateDB().generate();
+//
+//
+//    }
 
 }

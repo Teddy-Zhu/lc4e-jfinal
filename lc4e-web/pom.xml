@@ -30,6 +30,7 @@
             <artifactId>lc4e-extend</artifactId>
             <version>${project-version}</version>
         </dependency>
+
     </dependencies>
     <build>
         <finalName>lc4e-web</finalName>

@@ -41,7 +41,7 @@ public class T_Sys_Comment {
     public static final String order = "ORDER";
 
     /**
-     * 
+     *
      * Type:VARCHAR
      * Remarks:
      */

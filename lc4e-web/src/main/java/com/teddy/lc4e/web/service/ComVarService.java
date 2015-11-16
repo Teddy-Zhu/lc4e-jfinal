@@ -1,10 +1,10 @@
 package com.teddy.lc4e.web.service;
 
+import com.teddy.lc4e.database.mapping.T_Sys_Common_Variable;
+import com.teddy.lc4e.database.model.Sys_Common_Variable;
 import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.tools.SQLTool;
-import com.teddy.lc4e.database.mapping.T_Sys_Common_Variable;
-import com.teddy.lc4e.database.model.Sys_Common_Variable;
 
 import java.util.Collection;
 import java.util.List;

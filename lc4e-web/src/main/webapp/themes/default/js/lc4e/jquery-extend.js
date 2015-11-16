@@ -524,6 +524,7 @@
                         .append($.fn.Lc4eModal.settings.template.button(options));
                     $(options['context']).append($modal);
                     $modal.modal(options);
+                    $modal.data(namespace, module);
                 },
                 instantiate: function () {
                     instance = module;
@@ -547,7 +548,7 @@
                 if (instance === undefined) {
                     module.initialize();
                 }
-                module.invoke(query);
+                instance.invoke(query);
             }
             else {
                 module.initialize();
@@ -560,14 +561,14 @@
     $.fn.Lc4eModal.settings = {
         namespace: 'Lc4eModal',
         type: {
-            stand: 'standard',
+            stand: '',
             basic: 'basic'
         },
         size: {
             small: 'small',
             large: 'large',
             full: 'fullscreen',
-            long: 'long',
+            long: 'long scrolling',
             tiny: 'tiny'
         },
         config: {
@@ -799,7 +800,7 @@
                 },
                 destroy: function () {
                     $context.removeClass('fullStars').
-                        removeData(namespace);
+                    removeData(namespace);
                     $lc4eStar && $lc4eStar.remove();
                 }
             };
@@ -1882,22 +1883,22 @@
                             _datetimepicker_datetime.setCurrentTime(0);
                             $datetimepicker.trigger('afterOpen.' + namespace);
                         }).on('dblclick.' + namespace, function () {
-                            var currentDate = _datetimepicker_datetime.getCurrentTime(), minDate, maxDate;
-                            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-                            minDate = _datetimepicker_datetime.strToDate(options.minDate);
-                            minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-                            if (currentDate < minDate) {
-                                return;
-                            }
-                            maxDate = _datetimepicker_datetime.strToDate(options.maxDate);
-                            maxDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
-                            if (currentDate > maxDate) {
-                                return;
-                            }
-                            $module.val(_datetimepicker_datetime.str());
-                            $module.trigger('change');
-                            $datetimepicker.trigger('close.' + namespace);
-                        });
+                        var currentDate = _datetimepicker_datetime.getCurrentTime(), minDate, maxDate;
+                        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                        minDate = _datetimepicker_datetime.strToDate(options.minDate);
+                        minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+                        if (currentDate < minDate) {
+                            return;
+                        }
+                        maxDate = _datetimepicker_datetime.strToDate(options.maxDate);
+                        maxDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+                        if (currentDate > maxDate) {
+                            return;
+                        }
+                        $module.val(_datetimepicker_datetime.str());
+                        $module.trigger('change');
+                        $datetimepicker.trigger('close.' + namespace);
+                    });
                     mounth_picker
                         .find('.datetimepicker_prev,.datetimepicker_next')
                         .on('mousedown.' + namespace, function () {
@@ -2389,24 +2390,24 @@
                             }
                         })
                         .on('close.' + namespace, function (event) {
-                            var onClose = true;
-                            mounth_picker
-                                .find('.datetimepicker_month,.datetimepicker_year')
-                                .find('.datetimepicker_select')
-                                .hide();
-                            $([document.body, window]).off('mousedown.' + namespace);
-                            if (options.onClose && $.isFunction(options.onClose)) {
-                                onClose = options.onClose.call($datetimepicker, _datetimepicker_datetime.currentTime, $datetimepicker.data('input'), event);
+                                var onClose = true;
+                                mounth_picker
+                                    .find('.datetimepicker_month,.datetimepicker_year')
+                                    .find('.datetimepicker_select')
+                                    .hide();
+                                $([document.body, window]).off('mousedown.' + namespace);
+                                if (options.onClose && $.isFunction(options.onClose)) {
+                                    onClose = options.onClose.call($datetimepicker, _datetimepicker_datetime.currentTime, $datetimepicker.data('input'), event);
+                                }
+                                if (onClose !== false && !options.opened && !options.inline) {
+                                    $datetimepicker.transition('is visible') && $datetimepicker.transition({
+                                        animation: options.animate + " out",
+                                        duration: '300ms'
+                                    });
+                                }
+                                event.stopPropagation();
                             }
-                            if (onClose !== false && !options.opened && !options.inline) {
-                                $datetimepicker.transition('is visible') && $datetimepicker.transition({
-                                    animation: options.animate + " out",
-                                    duration: '300ms'
-                                });
-                            }
-                            event.stopPropagation();
-                        }
-                    )
+                        )
                         .
                         on('toggle.' + namespace, function (event) {
                             if ($datetimepicker.is(':visible')) {
@@ -3286,9 +3287,9 @@
                                 'animation-delay': '0s'
                             })
                         ).append($('<div class="cube"/>').css({
-                                '-webkit-animation-delay': '0.9s',
-                                'animation-delay': '0.9s'
-                            }));
+                            '-webkit-animation-delay': '0.9s',
+                            'animation-delay': '0.9s'
+                        }));
                     }
                     ,
                     squirm: function ($Square) {
@@ -3637,7 +3638,7 @@
     }(function (a) {
         function b(b) {
             var g = b || window.event, h = i.call(arguments, 1), j = 0, l = 0, m = 0, n = 0, o = 0, p = 0;
-            if (b = a.event.fix(g), b.type = "mousewheel", "detail"in g && (m = -1 * g.detail), "wheelDelta"in g && (m = g.wheelDelta), "wheelDeltaY"in g && (m = g.wheelDeltaY), "wheelDeltaX"in g && (l = -1 * g.wheelDeltaX), "axis"in g && g.axis === g.HORIZONTAL_AXIS && (l = -1 * m, m = 0), j = 0 === m ? l : m, "deltaY"in g && (m = -1 * g.deltaY, j = m), "deltaX"in g && (l = g.deltaX, 0 === m && (j = -1 * l)), 0 !== m || 0 !== l) {
+            if (b = a.event.fix(g), b.type = "mousewheel", "detail" in g && (m = -1 * g.detail), "wheelDelta" in g && (m = g.wheelDelta), "wheelDeltaY" in g && (m = g.wheelDeltaY), "wheelDeltaX" in g && (l = -1 * g.wheelDeltaX), "axis" in g && g.axis === g.HORIZONTAL_AXIS && (l = -1 * m, m = 0), j = 0 === m ? l : m, "deltaY" in g && (m = -1 * g.deltaY, j = m), "deltaX" in g && (l = g.deltaX, 0 === m && (j = -1 * l)), 0 !== m || 0 !== l) {
                 if (1 === g.deltaMode) {
                     var q = a.data(this, "mousewheel-line-height");
                     j *= q, m *= q, l *= q
@@ -3661,7 +3662,7 @@
             return k.settings.adjustOldDeltas && "mousewheel" === a.type && b % 120 === 0
         }
 
-        var e, f, g = ["wheel", "mousewheel", "DOMMouseScroll", "MozMousePixelScroll"], h = "onwheel"in document || document.documentMode >= 9 ? ["wheel"] : ["mousewheel", "DomMouseScroll", "MozMousePixelScroll"], i = Array.prototype.slice;
+        var e, f, g = ["wheel", "mousewheel", "DOMMouseScroll", "MozMousePixelScroll"], h = "onwheel" in document || document.documentMode >= 9 ? ["wheel"] : ["mousewheel", "DomMouseScroll", "MozMousePixelScroll"], i = Array.prototype.slice;
         if (a.event.fixHooks)for (var j = g.length; j;)a.event.fixHooks[g[--j]] = a.event.mouseHooks;
         var k = a.event.special.mousewheel = {
             version: "3.1.12", setup: function () {
@@ -3671,7 +3672,7 @@
                 if (this.removeEventListener)for (var c = h.length; c;)this.removeEventListener(h[--c], b, !1); else this.onmousewheel = null;
                 a.removeData(this, "mousewheel-line-height"), a.removeData(this, "mousewheel-page-height")
             }, getLineHeight: function (b) {
-                var c = a(b), d = c["offsetParent"in a.fn ? "offsetParent" : "parent"]();
+                var c = a(b), d = c["offsetParent" in a.fn ? "offsetParent" : "parent"]();
                 return d.length || (d = a("body")), parseInt(d.css("fontSize"), 10) || parseInt(c.css("fontSize"), 10) || 16
             }, getPageHeight: function (b) {
                 return a(b).height()

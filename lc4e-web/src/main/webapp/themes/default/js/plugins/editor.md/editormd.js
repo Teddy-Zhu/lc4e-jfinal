@@ -8,6 +8,7 @@
  * @author      Pandao
  * {@link       https://github.com/pandao/editor.md}
  * @updateTime  2015-06-09
+ * @modifiedTime 2015-11-16 09:50:18
  */
 
 ;
@@ -190,46 +191,46 @@
             }
         },
         toolbarCustomIcons: {               // using html tag create toolbar icon, unused default <a> tag.
-            lowercase: "<a href=\"javascript:;\" title=\"Lowercase\" unselectable=\"on\"><i class=\"fa\" name=\"lowercase\" style=\"font-size:24px;margin-top: -10px;\">a</i></a>",
-            "ucwords": "<a href=\"javascript:;\" title=\"ucwords\" unselectable=\"on\"><i class=\"fa\" name=\"ucwords\" style=\"font-size:20px;margin-top: -3px;\">Aa</i></a>"
+            lowercase: "<a href=\"javascript:;\" title=\"Lowercase\" unselectable=\"on\"><i class=\"icon\" name=\"lowercase\" style=\"font-size:24px;margin-top: -10px;\">a</i></a>",
+            "ucwords": "<a href=\"javascript:;\" title=\"ucwords\" unselectable=\"on\"><i class=\"icon\" name=\"ucwords\" style=\"font-size:20px;margin-top: -3px;\">Aa</i></a>"
         },
         toolbarIconsClass: {
-            undo: "fa-undo",
-            redo: "fa-repeat",
-            bold: "fa-bold",
-            del: "fa-strikethrough",
-            italic: "fa-italic",
-            quote: "fa-quote-left",
-            uppercase: "fa-font",
+            undo: "undo",
+            redo: "repeat",
+            bold: "bold",
+            del: "strikethrough",
+            italic: "italic",
+            quote: "quote left",
+            uppercase: "font",
             h1: editormd.classPrefix + "bold",
             h2: editormd.classPrefix + "bold",
             h3: editormd.classPrefix + "bold",
             h4: editormd.classPrefix + "bold",
             h5: editormd.classPrefix + "bold",
             h6: editormd.classPrefix + "bold",
-            "list-ul": "fa-list-ul",
-            "list-ol": "fa-list-ol",
-            hr: "fa-minus",
-            link: "fa-link",
-            "reference-link": "fa-anchor",
-            image: "fa-picture-o",
-            code: "fa-code",
-            "preformatted-text": "fa-file-code-o",
-            "code-block": "fa-file-code-o",
-            table: "fa-table",
-            datetime: "fa-clock-o",
-            emoji: "fa-smile-o",
-            "html-entities": "fa-copyright",
-            pagebreak: "fa-newspaper-o",
-            "goto-line": "fa-terminal", // fa-crosshairs
-            watch: "fa-eye-slash",
-            unwatch: "fa-eye",
-            preview: "fa-desktop",
-            search: "fa-search",
-            fullscreen: "fa-arrows-alt",
-            clear: "fa-eraser",
-            help: "fa-question-circle",
-            info: "fa-info-circle"
+            "list-ul": "list ul",
+            "list-ol": "list ol",
+            hr: "minus",
+            link: "linkify",
+            "reference-link": "anchor",
+            image: "picture o",
+            code: "code",
+            "preformatted-text": "file code o",
+            "code-block": "file code o",
+            table: "table",
+            datetime: "clock o",
+            emoji: "smile o",
+            "html-entities": "copyright",
+            pagebreak: "newspaper o",
+            "goto-line": "terminal", // fa-crosshairs
+            watch: "eye slash",
+            unwatch: "eye",
+            preview: "desktop",
+            search: "search",
+            fullscreen: "arrows alt",
+            clear: "eraser",
+            help: "question circle",
+            info: "info circle"
         },
         toolbarIconTexts: {},
 
@@ -419,7 +420,7 @@
             }
 
             var appendElements = [
-                (!settings.readOnly) ? "<a href=\"javascript:;\" class=\"fa fa-close " + classPrefix + "preview-close-btn\"></a>" : "",
+                (!settings.readOnly) ? "<a href=\"javascript:;\" class=\"close icon " + classPrefix + "preview-close-btn\"></a>" : "",
                 ( (settings.saveHTMLToTextarea) ? "<textarea class=\"" + classNames.textarea.html + "\" name=\"" + id + "-html-code\"></textarea>" : "" ),
                 "<div class=\"" + classPrefix + "preview\"><div class=\"markdown-body " + classPrefix + "preview-container\"></div></div>",
                 "<div class=\"" + classPrefix + "container-mask\" style=\"display:block;\"></div>",
@@ -1128,7 +1129,7 @@
                     }
                     else {
                         menuItem += "<a href=\"javascript:;\" title=\"" + title + "\" unselectable=\"on\">";
-                        menuItem += "<i class=\"fa " + iconClass + "\" name=\"" + name + "\" unselectable=\"on\">" + ((isHeader) ? name.toUpperCase() : ( (iconClass === "") ? iconTexts : "") ) + "</i>";
+                        menuItem += "<i class=\"" + iconClass + " icon\" name=\"" + name + "\" unselectable=\"on\">" + ((isHeader) ? name.toUpperCase() : ( (iconClass === "") ? iconTexts : "") ) + "</i>";
                         menuItem += "</a>";
                     }
 
@@ -1178,7 +1179,7 @@
 
             toolbarIcons.bind(editormd.mouseOrTouch("click", "touchend"), function (event) {
 
-                var icon = $(this).children(".fa");
+                var icon = $(this).children(".icon");
                 var name = icon.attr("name");
                 var cursor = cm.getCursor();
                 var selection = cm.getSelection();
@@ -1239,10 +1240,10 @@
                 "<div class=\"" + classPrefix + "dialog-container\">",
                 "<h1><i class=\"editormd-logo editormd-logo-lg editormd-logo-color\"></i> " + editormd.title + "<small>v" + editormd.version + "</small></h1>",
                 "<p>" + this.lang.description + "</p>",
-                "<p style=\"margin: 10px 0 20px 0;\"><a href=\"" + editormd.homePage + "\" target=\"_blank\">" + editormd.homePage + " <i class=\"fa fa-external-link\"></i></a></p>",
+                "<p style=\"margin: 10px 0 20px 0;\"><a href=\"" + editormd.homePage + "\" target=\"_blank\">" + editormd.homePage + " <i class=\"external link icon\"></i></a></p>",
                 "<p style=\"font-size: 0.85em;\">Copyright &copy; 2015 <a href=\"https://github.com/pandao\" target=\"_blank\" class=\"hover-link\">Pandao</a>, The <a href=\"https://github.com/pandao/editor.md/blob/master/LICENSE\" target=\"_blank\" class=\"hover-link\">MIT</a> License.</p>",
                 "</div>",
-                "<a href=\"javascript:;\" class=\"fa fa-close " + classPrefix + "dialog-close\"></a>",
+                "<a href=\"javascript:;\" class=\"close icon " + classPrefix + "dialog-close\"></a>",
                 "</div>"
             ].join("\n");
 
@@ -3140,11 +3141,10 @@
                     xml: ["XML", "text/xml"],
                     yaml: ["YAML", "yaml"]
                 },
-                dialogName = classPrefix + pluginName,
-                dialog,
+                lang = this.lang,
+                dialogName = this.classPrefix + "code-block-dialog",
                 dialogLang = lang.dialog.codeBlock,
                 cm = this.cm,
-                lang = this.lang,
                 editor = this.editor,
                 settings = this.settings,
                 cursor = cm.getCursor(),
@@ -3152,31 +3152,101 @@
             $.Lc4eModal({
                 title: dialogLang.title,
                 content: '<div class="ui center aligned grid"><div class="ui sixteen wide column grid">' +
-                '<div class="five wide column"><div class="height like input">' + dialogLang.selectLabel + '</div></div>' +
-                '<div class="eleven wide column"><div class="ui fluid input"><select><option selected value="">' + dialogLang.selectDefaultText + '</option></select></div></div>' +
-                '<div class="five wide column"><div class="height like input">' + dialogLang.codeAreaLabel + '</div></div>' +
-                '<div class="eleven wide column"><div class="ui fluid input"><textarea placeholder="coding now..." style="display: none;">' + selection + '</textarea></div></div></div></div>',
-                size: 'small',
-                onShow: function () {
+                '<div class="four wide column"><div class="height like input">' + dialogLang.selectLabel + '</div></div>' +
+                '<div class="twelve wide column"><div class="ui fluid input"><select class="ui search selection dropdown" id="codeSelect"><option selected value="">' + dialogLang.selectDefaultText + '</option></select></div></div>' +
+                '<div class="four wide column"><div class="height like input">' + dialogLang.codeAreaLabel + '</div></div>' +
+                '<div class="twelve wide column"><div class="ui fluid input"><textarea id="codeArea" placeholder="coding now..." style="display: none;">' + selection + '</textarea></div></div></div></div>',
+                size: 'long',
+                onShow: function ($model) {
+                    var $model = $(this), $select = $('#codeSelect', $model), mode, cmEditor, cmObj, $codeArea = $('#codeArea', $model);
+                    for (var key in codeLanguages) {
+                        var codeLang = codeLanguages[key];
+                        $select.append("<option value=\"" + key + "\" mode=\"" + codeLang[1] + "\">" + codeLang[0] + "</option>");
+                    }
 
+                    $select.append("<option value=\"other\">" + dialogLang.otherLanguage + "</option>");
+
+                    mode = $select.find("option:selected").attr("mode");
+
+                    var cmConfig = {
+                        mode: (mode) ? mode : "text/html",
+                        theme: settings.theme,
+                        tabSize: 4,
+                        autofocus: true,
+                        autoCloseTags: true,
+                        indentUnit: 4,
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        extraKeys: {
+                            "Ctrl-Q": function (cm) {
+                                cm.foldCode(cm.getCursor());
+                            }
+                        },
+                        foldGutter: true,
+                        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                        matchBrackets: true,
+                        indentWithTabs: true,
+                        styleActiveLine: true,
+                        styleSelectedText: true,
+                        autoCloseBrackets: true,
+                        showTrailingSpace: true,
+                        highlightSelectionMatches: true
+                    };
+
+                    cmEditor = editormd.$CodeMirror.fromTextArea($codeArea[0], cmConfig);
+                    cmObj = $model.find(".CodeMirror");
+
+                    cmObj.css({
+                        "float": "none",
+                        margin: "8px 0",
+                        border: "1px solid #ddd",
+                        fontSize: settings.fontSize,
+                        width: "100%",
+                        height: "310px",
+                        'text-align': 'left'
+                    });
+
+                    cmEditor.on("change", function (cm) {
+                        $codeArea.val(cm.getValue());
+                    });
+
+
+                    $select.dropdown({
+                        onChange: function (value, text, $selectedItem) {
+                            var _mode = $selectedItem.attr("mode");
+                            cmEditor.setOption("mode", _mode);
+                        }
+                    });
+
+                    $model.Lc4eModal('refresh');
                 },
                 onApprove: function ($el) {
-                    var $this = $(this), url = $this.find('#editorUrl').val(), name = $this.find('#editorUrlName').val(), str;
-                    if (!url) {
+                    var codeTexts = $("#codeArea").val(), langName = $("#codeSelect").val();
+
+                    if (langName === "") {
                         $.Lc4eModal({
-                            allowMultiple: true,
-                            content: linkLang.urlEmpty
+                            content: lang.dialog.codeBlock.unselectedLanguageAlert,
+                            allowMultiple: true
                         });
                         return false;
-                    } else {
-                        if (name) {
-                            str = "[" + name + "](" + url + " \"" + name + "\")";
-                        } else {
-                            str = "[" + url + "](" + url + ")";
-                        }
-                        cm.replaceSelection(str);
-                        return true;
                     }
+
+                    if (codeTexts === "") {
+                        $.Lc4eModal({
+                            content: lang.dialog.codeBlock.codeEmptyAlert,
+                            allowMultiple: true
+                        });
+                        return false;
+                    }
+
+                    langName = (langName === "other") ? "" : langName;
+
+                    cm.replaceSelection(["```" + langName, codeTexts, "```"].join("\n"));
+
+                    if (langName === "") {
+                        cm.setCursor(cursor.line, cursor.ch + 3);
+                    }
+                    return true;
                 },
                 buttons: {
                     'OK': {
@@ -3200,7 +3270,112 @@
         },
 
         "preformatted-text": function () {
-            this.executePlugin("preformattedTextDialog", "preformatted-text-dialog/preformatted-text-dialog");
+            var _this = this,
+                cm = this.cm,
+                lang = this.lang,
+                editor = this.editor,
+                settings = this.settings,
+                cursor = cm.getCursor(),
+                selection = cm.getSelection(),
+                classPrefix = this.classPrefix,
+                dialogLang = lang.dialog.preformattedText;
+
+
+            $.Lc4eModal({
+                title: dialogLang.title,
+                content: '<div class="ui center aligned grid"><div class="ui sixteen wide column grid">' +
+                '<div class="sixteen wide column"> </div><textarea id="codeArea" placeholder="coding now..." style="display: none;">' + selection + '</textarea></div></div>',
+                size: 'long',
+                onShow: function ($model) {
+                    var $model = $(this), mode, cmObj, cmEditor, $codeArea = $('#codeArea', $model);
+
+                    var cmConfig = {
+                        mode: "text/html",
+                        theme: settings.theme,
+                        tabSize: 4,
+                        autofocus: true,
+                        autoCloseTags: true,
+                        indentUnit: 4,
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        extraKeys: {
+                            "Ctrl-Q": function (cm) {
+                                cm.foldCode(cm.getCursor());
+                            }
+                        },
+                        foldGutter: true,
+                        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                        matchBrackets: true,
+                        indentWithTabs: true,
+                        styleActiveLine: true,
+                        styleSelectedText: true,
+                        autoCloseBrackets: true,
+                        showTrailingSpace: true,
+                        highlightSelectionMatches: true
+                    };
+
+                    cmEditor = editormd.$CodeMirror.fromTextArea($codeArea[0], cmConfig);
+                    cmObj = $model.find(".CodeMirror");
+
+                    cmObj.css({
+                        "float": "none",
+                        margin: "0 0 5px",
+                        border: "1px solid #ddd",
+                        fontSize: settings.fontSize,
+                        width: "100%",
+                        height: "350px",
+                        'text-align': 'left',
+                        padding: '0'
+                    });
+
+                    cmEditor.on("change", function (cm) {
+                        $codeArea.val(cm.getValue());
+                    });
+
+                    $model.Lc4eModal('refresh');
+                },
+                onApprove: function ($el) {
+                    var codeTexts = $("#codeArea").val();
+
+                    if (codeTexts === "") {
+                        alert(dialogLang.emptyAlert);
+                        return false;
+                    }
+
+                    codeTexts = codeTexts.split("\n");
+
+                    for (var i in codeTexts) {
+                        codeTexts[i] = "    " + codeTexts[i];
+                    }
+
+                    codeTexts = codeTexts.join("\n");
+
+                    if (cursor.ch !== 0) {
+                        codeTexts = "\r\n\r\n" + codeTexts;
+                    }
+
+                    cm.replaceSelection(codeTexts);
+
+                    return true;
+                },
+                buttons: {
+                    'OK': {
+                        id: '',
+                        name: 'OK',
+                        icon: '',
+                        content: lang.buttons.enter,
+                        css: 'primary ok'
+                    },
+                    'Cancel': {
+                        id: '',
+                        name: 'Cancel',
+                        icon: '',
+                        content: lang.buttons.cancel,
+                        css: 'basic cancel'
+                    }
+                }
+            })
+
         },
 
         table: function () {
@@ -3428,10 +3603,10 @@
         atLink: /@(\w+)/g,
         email: /(\w+)@(\w+)\.(\w+)\.?(\w+)?/g,
         emailLink: /(mailto:)?([\w\.\_]+)@(\w+)\.(\w+)\.?(\w+)?/g,
-        emoji: /:([\w\+-]+):/g,
+        emoji: /:([\s+\w\+-]+):/g,
         emojiDatetime: /(\d{2}:\d{2}:\d{2})/g,
         twemoji: /:(tw-([\w]+)-?(\w+)?):/g,
-        fontAwesome: /:(fa-([\w]+)(-(\w+)){0,}):/g,
+        fontAwesome: /:(se-([\w]+)(-(\w+))*):/g,
         editormdLogo: /:(editormd-logo-?(\w+)?):/g,
         pageBreak: /^\[[=]{8,}\]$/
     };
@@ -3511,7 +3686,7 @@
                         for (var fa = 0, len1 = faMatchs.length; fa < len1; fa++) {
                             var faName = faMatchs[fa].replace(/:/g, "");
 
-                            return "<i class=\"fa " + faName + " fa-emoji\" title=\"" + faName.replace("fa-", "") + "\"></i>";
+                            return "<i class=\"" + faName.replace('se-','') + " icon\" title=\"" + faName.replace('se-','') + "\"></i>";
                         }
                     }
                     else {
@@ -3794,7 +3969,7 @@
         tocMenus.each(function () {
             var $this = $(this);
             var toc = $this.children(".markdown-toc");
-            var icon = "<i class=\"fa fa-angle-down\"></i>";
+            var icon = "<i class=\"angle down icon\"></i>";
             var btn = "<a href=\"javascript:;\" class=\"toc-menu-btn\">" + icon + tocTitle + "</a>";
             var menu = toc.children("ul");
             var list = menu.find("li");
@@ -4279,7 +4454,7 @@
         }
 
         if (options.closed) {
-            html += "<a href=\"javascript:;\" class=\"fa fa-close " + classPrefix + "dialog-close\"></a>";
+            html += "<a href=\"javascript:;\" class=\"close icon " + classPrefix + "dialog-close\"></a>";
         }
 
         html += "<div class=\"" + classPrefix + "dialog-container\">" + options.content;
