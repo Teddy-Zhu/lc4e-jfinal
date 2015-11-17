@@ -3203,7 +3203,8 @@
                         fontSize: settings.fontSize,
                         width: "100%",
                         height: "310px",
-                        'text-align': 'left'
+                        'text-align': 'left',
+                        'border-radius':'.28571429rem'
                     });
 
                     cmEditor.on("change", function (cm) {
@@ -3325,7 +3326,8 @@
                         width: "100%",
                         height: "350px",
                         'text-align': 'left',
-                        padding: '0'
+                        padding: '0',
+                        'border-radius':'.28571429rem'
                     });
 
                     cmEditor.on("change", function (cm) {

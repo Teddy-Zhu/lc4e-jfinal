@@ -15,6 +15,10 @@ $(function () {
             $topicArea.find('.ui.card .image').dimmer({
                 on: 'hover'
             });
+            $('#mainArea').find('.overlay').visibility({
+                type: 'fixed',
+                offset: 80
+            });
             $('#topicOperateButton').dropdown();
             if ($('#userCardPop').length > 0) {
                 var editor = editormd("userCommentTextArea", {

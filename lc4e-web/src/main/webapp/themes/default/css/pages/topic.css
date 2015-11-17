@@ -23,7 +23,8 @@
 }
 
 #commentArea .topic.content {
-    min-height: 9em;
+    padding-top: .1em;
+    padding-bottom: .1em;
 }
 
 .bottom.message > .ui.buttons > .ui.button {
@@ -93,8 +94,17 @@
     padding-top: 0;
 }
 
-#mainArea .user.info.column > .ui.fluid.card {
+#mainArea .overlay.fixed > .ui.fluid.card {
+    margin-top: auto;
+    width: 67%;
+    right: -380%;
+}
+
+#mainArea .overlay > .ui.fluid.card {
     margin-top: -50%;
+    right: 0;
+    z-index: 1;
+    transition: right 0.5s ease;
 }
 
 #topicMaster .topic.title.value {
