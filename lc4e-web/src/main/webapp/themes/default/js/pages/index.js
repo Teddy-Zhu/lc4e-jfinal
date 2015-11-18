@@ -19,8 +19,9 @@ $(function () {
                 $attachedHeader = $('#attachedHeader'),
                 $topicItems = $('#topicItems'),
                 sortItem = $topicItems.attr('data-sort'),
+                area = localStorage.getItem('area'),
                 $sortTopic = $('#sortTopic');
-            $attachedHeader.attr('data-area', $.cookie('area') ? $.cookie('area') : 'index');
+            $attachedHeader.attr('data-area', area ? area : 'index');
             $announce.shape();
             $sortTopic.dropdown().dropdown('set selected', sortItem ? sortItem : $sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
 

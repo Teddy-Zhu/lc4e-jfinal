@@ -284,7 +284,7 @@ public class CustomPlugin implements IPlugin {
                 String controllerKey = controllerBind.value();
                 String controllerView = controllerBind.views();
                 if (controllerKey.equals("")) {
-                    LOGGER.error(controller.getName() + "Path must not be empty");
+                    LOGGER.error(controller.getName() + " Path must not be empty");
                     return;
                 }
                 routes.add(new Route(controllerKey, controller, controllerView));
