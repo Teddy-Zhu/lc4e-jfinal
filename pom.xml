@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <project-version>0.2.7</project-version>
+        <project-version>0.2.8</project-version>
         <java-version>1.8</java-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

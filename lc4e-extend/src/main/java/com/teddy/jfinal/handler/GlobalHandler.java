@@ -50,7 +50,7 @@ public class GlobalHandler extends Handler {
 
                 if (target.indexOf(".") > 0) {
                     response.setHeader("Cache-Control", "max-age=" + MAX_AGE);
-                    response.addDateHeader("Expires", now + MAX_AGE);
+                    response.addDateHeader("Expires", now + MAX_AGE * 1000);
                     response.addDateHeader("Last-Modified", now);
                 }
 
