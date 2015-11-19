@@ -19,7 +19,6 @@ import com.teddy.jfinal.entity.Route;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.handler.GlobalInterceptor;
-import com.teddy.jfinal.handler.httpCache.HttpCacheHandler;
 import com.teddy.jfinal.handler.resolve.*;
 import com.teddy.jfinal.interfaces.*;
 import com.teddy.jfinal.tools.ClassSearcherTool;
@@ -29,6 +28,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.*;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -535,7 +539,7 @@ public class CustomPlugin implements IPlugin {
         }
 
         if (PropPlugin.getBool(Dict.USE_HTTP_CACHE)) {
-            handlers.add(new HttpCacheHandler());
+            //handlers.add(new HttpCacheHandler());
         }
 
         //Init Core Handler

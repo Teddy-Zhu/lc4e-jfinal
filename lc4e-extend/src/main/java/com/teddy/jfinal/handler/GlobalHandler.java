@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by teddy on 2015/7/22.
  */
 public class GlobalHandler extends Handler {
-
+    private static final long MAX_AGE = 2764800L;
     private static final Logger logger = Logger.getLogger(GlobalHandler.class);
 
     @Override
@@ -33,17 +33,27 @@ public class GlobalHandler extends Handler {
             subject.execute(() -> {
                 resolveBefore(target, request, response, isHandled);
                 updateSessionLastAccessTime(request, response);
-                String ae = request.getHeader("accept-encoding");
-                //check if browser support gzip
-                boolean gzip = ae != null && ae.contains("gzip");
-                if (gzip) {
-                    logger.debug("GZIP supported, compressing.");
-                    GZIPResponseWrapper wrappedResponse = new GZIPResponseWrapper(response);
-                    nextHandler.handle(target, request, wrappedResponse, isHandled);
-                    wrappedResponse.finishResponse();
-                } else {
-                    nextHandler.handle(target, request, response, isHandled);
+
+                long now = 0;
+                if (target.indexOf(".") > 0) {
+                    // 最后修改时间
+                    long ims = request.getDateHeader("If-Modified-Since");
+                    now = System.currentTimeMillis();
+                    // 如果header头没有过期
+                    if (ims + MAX_AGE > now) {
+                        isHandled[0] = true;
+                        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                        return null;
+                    }
                 }
+                nextHandler.handle(target, request, response, isHandled);
+
+                if (target.indexOf(".") > 0) {
+                    response.setHeader("Cache-Control", "max-age=" + MAX_AGE);
+                    response.addDateHeader("Expires", now + MAX_AGE);
+                    response.addDateHeader("Last-Modified", now);
+                }
+
                 resolveAfter(target, request, response, isHandled);
                 return null;
             });
