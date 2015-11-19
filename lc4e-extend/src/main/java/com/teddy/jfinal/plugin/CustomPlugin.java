@@ -534,6 +534,10 @@ public class CustomPlugin implements IPlugin {
             e.printStackTrace();
         }
 
+        if (PropPlugin.getBool(Dict.USE_HTTP_CACHE)) {
+            handlers.add(new HttpCacheHandler());
+        }
+
         //Init Core Handler
         handlers.add(new com.teddy.jfinal.handler.GlobalHandler());
 
@@ -541,9 +545,6 @@ public class CustomPlugin implements IPlugin {
             //     handlers.add(new XSSHandler());
         }
 
-        if (PropPlugin.getBool(Dict.USE_HTTP_CACHE)) {
-            handlers.add(new HttpCacheHandler());
-        }
 
     }
 
