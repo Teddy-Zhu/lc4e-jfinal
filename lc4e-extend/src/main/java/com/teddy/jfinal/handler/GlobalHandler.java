@@ -27,48 +27,44 @@ public class GlobalHandler extends Handler {
 
     @Override
     public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
-        Throwable t = null;
-        final Subject subject = createSubject(request, response);
-        try {
-            subject.execute(() -> {
-                resolveBefore(target, request, response, isHandled);
-                updateSessionLastAccessTime(request, response);
 
-                long now = 0;
-                if (target.indexOf(".") > 0) {
-                    // 最后修改时间
-                    long ims = request.getDateHeader("If-Modified-Since");
-                    now = System.currentTimeMillis();
-                    // 如果header头没有过期
-                    if (ims + MAX_AGE > now) {
-                        isHandled[0] = true;
-                        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                        return null;
-                    }
-                }
-                nextHandler.handle(target, request, response, isHandled);
-
-                if (target.indexOf(".") > 0) {
-                    response.setHeader("Cache-Control", "max-age=" + MAX_AGE);
-                    response.addDateHeader("Expires", now + MAX_AGE * 1000);
-                    response.addDateHeader("Last-Modified", now);
-                }
-
-                resolveAfter(target, request, response, isHandled);
-                return null;
-            });
-        } catch (ExecutionException ex) {
-            t = ex.getCause();
-        } catch (Throwable throwable) {
-            t = throwable;
-        }
-
-        if (t != null) {
-            if (t instanceof Exception) {
-                t.printStackTrace();
+        long now = 0;
+        if (target.indexOf(".") > 0) {
+            long ims = request.getDateHeader("If-Modified-Since");
+            now = System.currentTimeMillis();
+            if (ims + MAX_AGE > now) {
+                isHandled[0] = true;
+                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                return;
             }
-            //otherwise it's not one of the two exceptions expected by the filter method signature - wrap it in one:
-            logger.error("Filtered request failed.");
+            response.setHeader("Cache-Control", "max-age=" + MAX_AGE);
+            response.addDateHeader("Expires", now + MAX_AGE * 1000);
+            response.addDateHeader("Last-Modified", now);
+            nextHandler.handle(target, request, response, isHandled);
+        } else {
+            Throwable t = null;
+            final Subject subject = createSubject(request, response);
+            try {
+                subject.execute(() -> {
+                    resolveBefore(target, request, response, isHandled);
+                    updateSessionLastAccessTime(request, response);
+                    nextHandler.handle(target, request, response, isHandled);
+                    resolveAfter(target, request, response, isHandled);
+                    return null;
+                });
+            } catch (ExecutionException ex) {
+                t = ex.getCause();
+            } catch (Throwable throwable) {
+                t = throwable;
+            }
+
+            if (t != null) {
+                if (t instanceof Exception) {
+                    t.printStackTrace();
+                }
+                //otherwise it's not one of the two exceptions expected by the filter method signature - wrap it in one:
+                logger.error("Filtered request failed.");
+            }
         }
     }
 
