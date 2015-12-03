@@ -9,7 +9,7 @@ import com.teddy.jfinal.annotation.SetComVars;
  */
 public interface AttributeKitI {
 
-    public void setComVar(SetComVar comVar, Invocation ai) throws Exception;
+    void setComVar(SetComVar comVar, Invocation ai) throws Exception;
 
-    public void setComVars(SetComVars comVars, Invocation ai) throws Exception;
+    void setComVars(SetComVars comVars, Invocation ai) throws Exception;
 }

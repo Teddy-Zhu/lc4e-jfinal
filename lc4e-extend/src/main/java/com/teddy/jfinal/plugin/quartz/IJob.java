@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface IJob {
 
-    public List<? extends DBModel> getAllJobs();
+    List<? extends DBModel> getAllJobs();
 
-    public String getClassName();
+    String getClassName();
 
-    public String getName();
+    String getName();
 
-    public String getCron();
+    String getCron();
 }

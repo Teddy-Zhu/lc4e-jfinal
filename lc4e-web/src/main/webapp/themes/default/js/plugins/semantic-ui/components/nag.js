@@ -204,7 +204,7 @@ $.fn.nag = function(parameters) {
             }
             else {
               module.error(error.noCookieStorage);
-              return;
+
             }
           },
           get: function(key, value) {

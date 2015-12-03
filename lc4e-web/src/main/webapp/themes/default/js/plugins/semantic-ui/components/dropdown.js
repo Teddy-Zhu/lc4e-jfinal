@@ -1363,7 +1363,7 @@ $.fn.dropdown = function(parameters) {
             if( module.can.activate( $(this) ) ) {
               module.set.selected(value, $(this));
               if(module.is.multiple() && !module.is.allFiltered()) {
-                return;
+
               }
               else {
                 module.hideAndClear();

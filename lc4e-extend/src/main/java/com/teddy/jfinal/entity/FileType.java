@@ -12,7 +12,7 @@ public enum FileType {
 
     private final String value;
 
-    private FileType(String value) {
+    FileType(String value) {
         this.value = value;
     }
 

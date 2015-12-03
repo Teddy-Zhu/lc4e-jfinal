@@ -63,6 +63,7 @@ public class ViewController extends BaseController {
     })
     public void a() {
         setAttr("curArea", getPara(0));
+        
         setAttr("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)));
         render("pages/area.html");
     }

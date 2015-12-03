@@ -1,6 +1,5 @@
 package com.teddy.lc4e.util.shiro;
 
-import com.teddy.lc4e.database.mapping.T_User;
 import com.teddy.lc4e.database.model.User;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -16,10 +15,10 @@ public class PassDisposer {
 
     public static void encryptPassword(User user) {
 
-        user.set(T_User.passsalt, randomNumberGenerator.nextBytes().toHex());
+        user.set(User.S_PASSSALT, randomNumberGenerator.nextBytes().toHex());
 
-        String newPassword = new SimpleHash(algorithmName, user.getStr(T_User.password), ByteSource.Util.bytes(user.getStr(T_User.name) + user.getStr(T_User.passsalt)), hashIterations).toHex();
+        String newPassword = new SimpleHash(algorithmName, user.getStr(User.S_PASSWORD), ByteSource.Util.bytes(user.getStr(User.S_NAME) + user.getStr(User.S_PASSSALT)), hashIterations).toHex();
 
-        user.set(T_User.password, newPassword);
+        user.set(User.S_PASSWORD, newPassword);
     }
 }

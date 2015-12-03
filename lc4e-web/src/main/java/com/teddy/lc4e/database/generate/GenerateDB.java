@@ -56,7 +56,9 @@ public class GenerateDB {
                 model.getPks().add(pkRSet.getString("COLUMN_NAME"));
             }
         }
-
+        //Generate Model
+        String imports = "import com.teddy.jfinal.annotation.Model;\n" +
+                "import com.teddy.jfinal.interfaces.DBModel;\n\n";
         String header = "/**\n" +
                 " * Created by lc4e Tool on " + new SimpleDateFormat("yy/MM/dd").format(new Date()) + ".\n" +
                 " */\n";
@@ -64,12 +66,12 @@ public class GenerateDB {
         for (DatabaseModel model : list) {
             String className = StringTool.toUpperCaseFirstOne(model.getTableName(), "_");
             LOGGER.info("[start]:" + model.getTableName());
-            File file = new File("E:\\Desktop\\Table\\mapping");
+            File file = new File("./Model");
 
             if (!file.exists()) {
                 file.mkdirs();
             }
-            file = new File("E:\\Desktop\\Table\\mapping\\T_" + className + ".java");
+            file = new File("./Model/" + className + ".java");
             if (file.exists())
                 file.delete();
 
@@ -78,11 +80,16 @@ public class GenerateDB {
 
             StringBuffer sb = new StringBuffer();
             sb.append(header);
-            sb.append("public class T_").append(className).append(" {\n");
+            sb.append(imports).append(header).append("@Model(value = \"" + model.getTableName() + "\"" + (model.getPks().size() > 0 ? ", pk = {\"" + StringTool.join(model.getPks(), ",") + "\"}" : "") + ")\n");
+
+            sb.append("public class " + className + " extends DBModel<" + className + "> {\n");
+
+            sb.append("    public static final " + className + " dao = new " + className + "();\n\n");
+//
             for (int i = 0, len = model.getFields().size(); i < len; i++) {
                 sb.append(model.getRemarks().get(i));
-                sb.append("    public static final String ").append(model.getFields().get(i).toUpperCase()).append(" = \"").append(model.getTableName()).append(".").append(model.getFields().get(i)).append("\";\n\n");
-                sb.append("    public static final String ").append(model.getFields().get(i)).append(" = \"").append(model.getFields().get(i).toUpperCase()).append("\";\n\n");
+                sb.append("    public static final String F_").append(model.getFields().get(i).toUpperCase()).append(" = \"").append(model.getTableName()).append(".").append(model.getFields().get(i)).append("\";\n\n");
+                sb.append("    public static final String S_").append(model.getFields().get(i).toUpperCase()).append(" = \"").append(model.getFields().get(i).toUpperCase()).append("\";\n\n");
             }
             sb.append("    public static final String ALL_FIELDS = \"").append(model.getTableName()).append(".*\";\n\n");
             sb.append("    public static final String TABLE_NAME = \"").append(model.getTableName()).append("\";\n\n");
@@ -92,48 +99,11 @@ public class GenerateDB {
             out.close();
         }
 
-        //Generate Model
-        String imports = "import com.teddy.jfinal.annotation.Model;\n" +
-                "import com.teddy.jfinal.interfaces.DBModel;\n\n";
-
-        for (DatabaseModel model : list) {
-            LOGGER.info("[start]:" + model.getTableName());
-            String className = StringTool.toUpperCaseFirstOne(model.getTableName(), "_");
-            File file = new File("E:\\Desktop\\Table\\model");
-
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            file = new File("E:\\Desktop\\Table\\model\\" + className + ".java");
-            if (file.exists())
-                file.delete();
-
-            file.createNewFile();
-            FileOutputStream out = new FileOutputStream(file, true);
-
-            StringBuffer sb = new StringBuffer();
-            sb.append(imports).append(header).append("@Model(value = \"" + model.getTableName() + "\"" + (model.getPks().size() > 0 ? ", pk = {\"" + StringTool.join(model.getPks(), ",") + "\"}" : "") + ")\n");
-            //sb.append(imports).append(header).append("@Model\n");
-
-            sb.append("public class " + className + " extends DBModel<" + className + "> {\n");
-
-            sb.append("    public static final " + className + " dao = new " + className + "();\n\n");
-//
-//            for (String pk : model.getPks()) {
-//                sb.append("    public " + className + " get" + className + "By" + StringTool.toUpperCaseFirstOne(pk) + " () " + ";\n\n");
-//
-//            }
-
-            sb.append("}");
-            out.write(sb.toString().getBytes("utf-8"));
-            out.close();
-        }
     }
 
-//    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-//        new GenerateDB().generate();
-//
-//
-//    }
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
+        new GenerateDB().generate();
+
+    }
 
 }

@@ -2,7 +2,7 @@ package com.teddy.lc4e.util.plugins;
 
 import com.teddy.jfinal.interfaces.DBModel;
 import com.teddy.jfinal.plugin.quartz.IJob;
-import com.teddy.lc4e.database.mapping.T_Sys_Job;
+import com.teddy.lc4e.database.model.Sys_Job;
 import com.teddy.lc4e.web.service.JobService;
 
 import java.util.List;
@@ -18,16 +18,16 @@ public class Lc4eJob implements IJob {
 
     @Override
     public String getClassName() {
-        return T_Sys_Job.className;
+        return Sys_Job.S_CLASSNAME;
     }
 
     @Override
     public String getName() {
-        return T_Sys_Job.name;
+        return Sys_Job.S_NAME;
     }
 
     @Override
     public String getCron() {
-        return T_Sys_Job.cron;
+        return Sys_Job.S_CRON;
     }
 }

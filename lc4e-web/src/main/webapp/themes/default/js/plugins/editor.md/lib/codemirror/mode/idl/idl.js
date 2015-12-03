@@ -13,8 +13,7 @@
 
   function wordRegexp(words) {
     return new RegExp('^((' + words.join(')|(') + '))\\b', 'i');
-  };
-
+  }
   var builtinArray = [
     'a_correlate', 'abs', 'acos', 'adapt_hist_equal', 'alog',
     'alog2', 'alog10', 'amoeba', 'annotate', 'app_user_dir',
@@ -276,8 +275,7 @@
     // Handle non-detected items
     stream.next();
     return null;
-  };
-
+  }
   CodeMirror.defineMode('idl', function() {
     return {
       token: function(stream) {

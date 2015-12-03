@@ -278,6 +278,6 @@ public class Lc4eCaptchaRender extends Render {
     }
 
     public void setCasesensitive(boolean casesensitive) {
-        this.casesensitive = casesensitive;
+        Lc4eCaptchaRender.casesensitive = casesensitive;
     }
 }

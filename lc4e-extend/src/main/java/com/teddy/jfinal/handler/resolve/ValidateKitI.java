@@ -9,8 +9,8 @@ import com.teddy.jfinal.annotation.ValidateComVars;
  */
 public interface ValidateKitI {
 
-    public void resolveComVars(ValidateComVars comVars, Invocation invocation) throws Exception;
+    void resolveComVars(ValidateComVars comVars, Invocation invocation) throws Exception;
 
-    public void resolveComVar(ValidateComVar comVars, Invocation invocation) throws Exception;
+    void resolveComVar(ValidateComVar comVars, Invocation invocation) throws Exception;
 
 }

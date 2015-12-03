@@ -28,7 +28,7 @@ public class PropPlugin {
 
 
     public static String getValue(String key) {
-        return paramMap.containsKey(key) ? (String) paramMap.get(key) : (String) null;
+        return paramMap.containsKey(key) ? (String) paramMap.get(key) : null;
     }
 
     public static String getValue(String key, String defaultValue) {

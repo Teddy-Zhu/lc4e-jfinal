@@ -1,9 +1,6 @@
 package com.teddy.lc4e.web.service;
 
-import com.teddy.lc4e.database.mapping.T_Sys_Common_Variable;
-import com.teddy.lc4e.database.mapping.T_User;
-import com.teddy.lc4e.database.mapping.T_User_Basicinfo;
-import com.teddy.lc4e.database.mapping.T_Vw_User_Role_Permission;
+import com.teddy.lc4e.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.database.model.User;
 import com.teddy.lc4e.database.model.User_Basicinfo;
 import com.teddy.lc4e.database.model.Vw_User_Role_Permission;
@@ -27,63 +24,64 @@ public class UserService {
 
     @Cache(index = 0)
     public List<Vw_User_Role_Permission> findUserRolesAndPermission(String username) {
-        SQLTool sql = new SQLTool().select(T_Vw_User_Role_Permission.ALL_FIELDS)
-                .from(T_Vw_User_Role_Permission.TABLE_NAME)
-                .where(" AND ", T_Vw_User_Role_Permission.ROLEAVAILABLE + "=1",
-                        T_Vw_User_Role_Permission.PERMISSIONAVAILABLE + "=1",
-                        T_Vw_User_Role_Permission.ROLEENDTIME + ">NOW()",
-                        T_Vw_User_Role_Permission.name + "=?");
+        SQLTool sql = new SQLTool().select(Vw_User_Role_Permission.ALL_FIELDS)
+                .from(Vw_User_Role_Permission.TABLE_NAME)
+                .where(" AND ", Vw_User_Role_Permission.F_ROLEAVAILABLE + "=1",
+                        Vw_User_Role_Permission.F_PERMISSIONAVAILABLE + "=1",
+                        Vw_User_Role_Permission.F_ROLEENDTIME + ">NOW()",
+                        Vw_User_Role_Permission.F_NAME + "=?");
         sql.addParam(username);
         return Vw_User_Role_Permission.dao.find(sql);
     }
 
     @Cache(index = 0)
     public User findUserFullInfo(String username) {
-        SQLTool sql = new SQLTool().select(T_User.ALL_FIELDS)
-                .from(T_User.TABLE_NAME).where(T_User.name + "=?");
+        SQLTool sql = new SQLTool().select(User.ALL_FIELDS)
+                .from(User.TABLE_NAME).where(User.F_NAME + "=?");
         sql.addParam(username);
         return User.dao.findFirst(sql);
     }
 
+    // to do simply
     public boolean validateUserName(String name) {
-        return User.dao.exist(name, T_User.NAME);
+        return User.dao.exist(name, User.F_NAME);
     }
 
     public boolean validateUserNick(String nick) {
-        return User.dao.exist(nick, T_User.NICK);
+        return User.dao.exist(nick, User.F_NICK);
     }
 
     public boolean validateUserMail(String mail) {
-        return User.dao.exist(mail, T_User.MAIL);
+        return User.dao.exist(mail, User.F_MAIL);
     }
 
     @Transaction
     public User createUser(User user, User_Basicinfo basicinfo) throws Lc4eApplicationException {
         //validate exist
         //username
-        if (validateUserName(user.getStr(T_User.name))) {
+        if (validateUserName(user.getStr(User.S_NAME))) {
             throw new Lc4eApplicationException("User Name Has been occupied");
         }
         //usernick
-        if (validateUserMail(user.getStr(T_User.mail))) {
+        if (validateUserMail(user.getStr(User.S_MAIL))) {
             throw new Lc4eApplicationException("Email Has been occupied");
         }
         //usermail
-        if (validateUserNick(user.getStr(T_User.nick))) {
+        if (validateUserNick(user.getStr(User.S_NICK))) {
             throw new Lc4eApplicationException("Email Has been occupied");
         }
         PassDisposer.encryptPassword(user);
-        user.remove(T_User.id);
-        user.set(T_User.locked, false);
+        user.remove(User.S_ID);
+        user.set(User.S_LOCKED, false);
         user.save();
 
-        if (user.getStr(T_User.id) != null) {
-            if (!ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER).getToBoolean(T_Sys_Common_Variable.value)) {
-                basicinfo.remove(T_User_Basicinfo.id);
-                basicinfo.set(T_User_Basicinfo.userId, user.get(T_User.id));
+        if (user.getStr(User.S_ID) != null) {
+            if (!ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER).getToBoolean(Sys_Common_Variable.S_VALUE)) {
+                basicinfo.remove(User_Basicinfo.S_ID);
+                basicinfo.set(User_Basicinfo.S_USERID, user.get(User.S_ID));
                 basicinfo.save();
             } else {
-                new User_Basicinfo().enhancer().set(T_User_Basicinfo.userId, user.get(T_User.id)).save();
+                new User_Basicinfo().enhancer().set(User_Basicinfo.S_USERID, user.get(User.S_ID)).save();
             }
         }
 

@@ -7,5 +7,5 @@ import com.jfinal.aop.Invocation;
  */
 public interface AnnotationResolver {
 
-    public void resolve(Invocation invocation) throws Exception;
+    void resolve(Invocation invocation) throws Exception;
 }

@@ -50,7 +50,7 @@ public class WebTool {
         Map<String, String> map = new HashMap<String, String>();
         Enumeration<String> enume = request.getParameterNames();
         while (enume.hasMoreElements()) {
-            String name = (String) enume.nextElement();
+            String name = enume.nextElement();
             map.put(name, request.getParameter(name));
         }
         return map;
@@ -82,7 +82,7 @@ public class WebTool {
         Map<String, Cookie> cookieMap = WebTool.readCookieMap(request);
 
         if (cookieMap.containsKey(name)) {
-            Cookie cookie = (Cookie) cookieMap.get(name);
+            Cookie cookie = cookieMap.get(name);
             return cookie.getValue();
         } else {
             return null;
@@ -94,7 +94,7 @@ public class WebTool {
         Map<String, Cookie> cookieMap = readCookieMap(request);
 
         if (cookieMap.containsKey(name)) {
-            Cookie cookie = (Cookie) cookieMap.get(name);
+            Cookie cookie = cookieMap.get(name);
             return cookie;
         } else {
             return null;

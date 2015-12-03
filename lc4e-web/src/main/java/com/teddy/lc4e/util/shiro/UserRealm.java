@@ -1,8 +1,6 @@
 package com.teddy.lc4e.util.shiro;
 
 import com.jfinal.plugin.ehcache.CacheKit;
-import com.teddy.lc4e.database.mapping.T_User;
-import com.teddy.lc4e.database.mapping.T_Vw_User_Role_Permission;
 import com.teddy.lc4e.database.model.User;
 import com.teddy.lc4e.database.model.Vw_User_Role_Permission;
 import com.teddy.lc4e.web.service.CurUserService;
@@ -29,8 +27,8 @@ public class UserRealm extends AuthorizingRealm {
         List<Vw_User_Role_Permission> user = UserService.service.findUserRolesAndPermission(username);
         Set<String> roles = new HashSet<>(), permissions = new HashSet<>();
         user.forEach(u -> {
-            roles.add(u.getStr(T_Vw_User_Role_Permission.roleAbbr));
-            permissions.add(u.getStr(T_Vw_User_Role_Permission.permissionAbbr));
+            roles.add(u.getStr(Vw_User_Role_Permission.S_ROLEABBR));
+            permissions.add(u.getStr(Vw_User_Role_Permission.S_PERMISSIONABBR));
         });
 
         authorizationInfo.setRoles(roles);
@@ -49,14 +47,13 @@ public class UserRealm extends AuthorizingRealm {
             throw new UnknownAccountException();
         }
 
-        if (Boolean.TRUE.equals(user.getBoolean(T_Vw_User_Role_Permission.locked))) {
+        if (Boolean.TRUE.equals(user.getBoolean(Vw_User_Role_Permission.S_LOCKED))) {
             throw new LockedAccountException();
         }
 
-        CacheKit.put("users", CurUserService.service.getSessionId().toString(), user);
+        CacheKit.put("users", CurUserService.service.getSessionId(), user);
 
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user.getStr(T_Vw_User_Role_Permission.name), user.getStr(T_Vw_User_Role_Permission.password), ByteSource.Util.bytes(user.getStr(T_User.name) + user.getStr(T_Vw_User_Role_Permission.passsalt)), getName());
-        return authenticationInfo;
+        return new SimpleAuthenticationInfo(user.getStr(Vw_User_Role_Permission.S_NAME), user.getStr(Vw_User_Role_Permission.S_PASSSALT), ByteSource.Util.bytes(user.getStr(User.S_NAME) + user.getStr(Vw_User_Role_Permission.S_PASSSALT)), getName());
     }
 
     @Override
@@ -66,13 +63,13 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     public void clearCachedAuthenticationInfo(PrincipalCollection principals) {
-        CacheKit.remove("users", CurUserService.service.getSessionId().toString());
+        CacheKit.remove("users", CurUserService.service.getSessionId());
         super.clearCachedAuthenticationInfo(principals);
     }
 
     @Override
     public void clearCache(PrincipalCollection principals) {
-        CacheKit.remove("users", CurUserService.service.getSessionId().toString());
+        CacheKit.remove("users", CurUserService.service.getSessionId());
         super.clearCache(principals);
     }
 

@@ -9,8 +9,6 @@ import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.plugin.jetbrick.Lc4eCaptchaRender;
 import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.config.Key;
-import com.teddy.lc4e.database.mapping.T_Sys_Common_Variable;
-import com.teddy.lc4e.database.mapping.T_User;
 import com.teddy.lc4e.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.database.model.User;
 import com.teddy.lc4e.database.model.User_Basicinfo;
@@ -46,7 +44,7 @@ public class MemberController extends BaseController {
         User user = getModel(User.class, "user").enhancer();
         User_Basicinfo basicInfo = getModel(User_Basicinfo.class, "extend").enhancer();
         UserService.service.createUser(user, basicInfo);
-        if (StrKit.notBlank(user.getStr(T_User.id))) {
+        if (StrKit.notBlank(user.getStr(User.S_ID))) {
             renderJson(new Message(true, "register successfully"));
         } else {
             renderJson(new Message("register failed"));
@@ -63,13 +61,13 @@ public class MemberController extends BaseController {
     public void signin() {
         User user = getModel(User.class, "user");
         Sys_Common_Variable captcha = ComVarService.service.getComVarByName(Key.CAPTCHA);
-        if (captcha != null && captcha.getToBoolean(T_Sys_Common_Variable.value) && !Lc4eCaptchaRender.validate(getRequest(), getPara("captcha"))) {
-            renderJson(new Message(captcha.getStr(T_Sys_Common_Variable.error)));
+        if (captcha != null && captcha.getToBoolean(Sys_Common_Variable.S_VALUE) && !Lc4eCaptchaRender.validate(getRequest(), getPara("captcha"))) {
+            renderJson(new Message(captcha.getStr(Sys_Common_Variable.S_ERROR)));
             return;
         }
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            UsernamePasswordToken token = new UsernamePasswordToken(user.getStr(T_User.name), user.getStr(T_User.password));
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getStr(User.S_NAME), user.getStr(User.S_PASSWORD));
             token.setRememberMe(getParaToBoolean("rememberMe"));
             subject.login(token);
             if (subject.isAuthenticated()) {

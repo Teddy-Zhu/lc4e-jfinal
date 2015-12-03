@@ -8,7 +8,6 @@ import com.teddy.jfinal.exceptions.Lc4eAutoSetterException;
 import com.teddy.jfinal.handler.resolve.AttributeKitI;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
-import com.teddy.lc4e.database.mapping.T_Sys_Common_Variable;
 import com.teddy.lc4e.database.model.Sys_Common_Variable;
 import com.teddy.lc4e.web.service.ComVarService;
 
@@ -34,7 +33,7 @@ public class AttributeKit implements AttributeKitI {
             throw new Lc4eAutoSetterException("No ComVar Record Found in Database or Cache");
         } else {
             ai.getController().setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
-                    .type(), variable.getStr(T_Sys_Common_Variable.value)));
+                    .type(), variable.getStr(Sys_Common_Variable.S_VALUE)));
         }
     }
 
@@ -64,9 +63,9 @@ public class AttributeKit implements AttributeKitI {
             throw new Lc4eAutoSetterException("No ComVar Record Found in Database or Cache");
         }
         for (Sys_Common_Variable variable : variables) {
-            SetComVar comVar = comVarMap.get(variable.getStr(T_Sys_Common_Variable.name));
+            SetComVar comVar = comVarMap.get(variable.getStr(Sys_Common_Variable.S_NAME));
             ai.getController().setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
-                    .type(), variable.getStr(T_Sys_Common_Variable.value)));
+                    .type(), variable.getStr(Sys_Common_Variable.S_VALUE)));
         }
     }
 

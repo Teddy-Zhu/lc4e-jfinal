@@ -37,10 +37,7 @@ public class ClassSearcherTool {
     @SuppressWarnings("unchecked")
     public static boolean isValiPkg() {
         List<String> pkgs = (List<String>) PropPlugin.getObject(Dict.SCAN_PACKAGE);
-        if (pkgs.size() > 0) {
-            return true;
-        }
-        return false;
+        return pkgs.size() > 0;
     }
 
 
@@ -59,10 +56,7 @@ public class ClassSearcherTool {
     @SuppressWarnings("unchecked")
     public static boolean isValiJar() {
         List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
-        if (jars.size() > 0) {
-            return true;
-        }
-        return false;
+        return jars.size() > 0;
     }
 
 
@@ -150,7 +144,6 @@ public class ClassSearcherTool {
     private boolean includeAllJarsInLib = false;
 
     private List<String> includeJars = new ArrayList<String>();
-    ;
 
     private String libDir = PathKit.getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib";
 
