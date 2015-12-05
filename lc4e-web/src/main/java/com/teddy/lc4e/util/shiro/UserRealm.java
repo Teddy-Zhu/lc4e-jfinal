@@ -53,7 +53,7 @@ public class UserRealm extends AuthorizingRealm {
 
         CacheKit.put("users", CurUserService.service.getSessionId(), user);
 
-        return new SimpleAuthenticationInfo(user.getStr(Vw_User_Role_Permission.S_NAME), user.getStr(Vw_User_Role_Permission.S_PASSSALT), ByteSource.Util.bytes(user.getStr(User.S_NAME) + user.getStr(Vw_User_Role_Permission.S_PASSSALT)), getName());
+        return new SimpleAuthenticationInfo(user.getStr(Vw_User_Role_Permission.S_NAME), user.getStr(Vw_User_Role_Permission.S_PASSWORD), ByteSource.Util.bytes(user.getStr(Vw_User_Role_Permission.S_NAME) + user.getStr(Vw_User_Role_Permission.S_PASSSALT)), getName());
     }
 
     @Override

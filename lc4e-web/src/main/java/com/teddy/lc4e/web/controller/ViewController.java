@@ -137,4 +137,8 @@ public class ViewController extends BaseController {
         return list;
     }
 
+
+    public void vue(){
+        render("");
+    }
 }
