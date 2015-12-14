@@ -14,7 +14,7 @@
 }
 
 #topicItems > .item > .user.picture > .image {
-    width: 5rem;
+    width: 4rem;
 }
 
 #topicItems > .item {
@@ -25,12 +25,12 @@
 }
 
 #topicItems > .item > .user.picture {
-    padding: 1em 2em !important;
+    padding: .5em .7em;
     border-right: 1px solid rgba(34, 36, 38, .15);
 }
 
 #topicItems > .item > .content {
-    padding:  1em 2em !important;
+    padding: .5em .7em 0em 1em;
 }
 
 
@@ -168,11 +168,6 @@
     margin: 0;
 }
 
-#topicItems > .item > .content > .header:not(.ui) {
-    margin-top: .3em;
-}
-
-
 #rightContent > .ui.segment > .ui.divided.items > .item > .ui.label {
     padding: 0.3em .2em;
     text-align: center;
@@ -208,9 +203,10 @@
 }
 
 .topiclist > .item.topic > .content > a.header.larger {
-    font-size: 1.5em;
+    font-size: 1.1em;
 }
 
 .item.topic > .ui.right.attached.label.status {
     border-top-right-radius: 0;
+    padding: .5em;
 }

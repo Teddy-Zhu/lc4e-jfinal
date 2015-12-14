@@ -29,6 +29,17 @@
             <groupId>com.teddy</groupId>
             <artifactId>lc4e-extend</artifactId>
             <version>${project-version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>cglib-nodep</artifactId>
+                    <groupId>cglib</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.2.0</version>
         </dependency>
 
     </dependencies>

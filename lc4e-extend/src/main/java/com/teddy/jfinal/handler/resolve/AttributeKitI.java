@@ -1,6 +1,6 @@
 package com.teddy.jfinal.handler.resolve;
 
-import com.jfinal.aop.Invocation;
+import com.jfinal.core.Controller;
 import com.teddy.jfinal.annotation.SetComVar;
 import com.teddy.jfinal.annotation.SetComVars;
 
@@ -9,7 +9,7 @@ import com.teddy.jfinal.annotation.SetComVars;
  */
 public interface AttributeKitI {
 
-    void setComVar(SetComVar comVar, Invocation ai) throws Exception;
+    void setComVar(SetComVar comVar, Controller ai) throws Exception;
 
-    void setComVars(SetComVars comVars, Invocation ai) throws Exception;
+    void setComVars(SetComVars comVars,Controller ai) throws Exception;
 }

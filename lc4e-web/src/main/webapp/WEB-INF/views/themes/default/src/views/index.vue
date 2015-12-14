@@ -1,0 +1,120 @@
+<template>
+    <div id="leftContent" class="nine wide column">
+        <div id="announcement" class="ui white floating message">
+            <div class="item">
+                <div class="ui white label">
+                    <i class="announcement icon"></i>
+                </div>
+                <div id="announce" class="ui text shape">
+                    <div class="sides">
+                        <div class="active ui header side">Did you know? This side starts visible.</div>
+                        <div class="ui header side">Help, its another side!</div>
+                        <div class="ui header side">This is the last side</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="attachedHeader" class="ui attached floating clearing message" data-area="index">
+            <div class="ui left floated breadcrumb basic segment">
+                <a class="section">
+                    {{siteName}}
+                </a>
+                <span class="divider">/</span>
+                <a class="section">Registration</a>
+                <span class="divider">/</span>
+
+                <div class="active section">Personal Information</div>
+            </div>
+            <div id="sortTopic" class="ui dropdown labeled icon basic button">
+                <i class="filter icon"></i>
+                <span class="text">Sort</span>
+
+                <div class="menu">
+                    <div class="header">
+                        <i class="tags icon"></i>
+                        Sort Method
+                    </div>
+                    <div class="scrolling menu">
+                        <template v-if="isLogin">
+                            <div class="item" data-value="1">
+                                <div class="ui red empty circular label"></div>
+                                Order By System
+                            </div>
+                        </template>
+                        <div class="item" data-value="2">
+                            <div class="ui blue empty circular label"></div>
+                            Order By Date
+                        </div>
+                        <div class="item" data-value="3">
+                            <div class="ui black empty circular label"></div>
+                            Order By Last Reply
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="articlelist" class="ui attached fluid raised segment">
+            <div id="topicItems" class="ui divided items topiclist animated slow fadeIn" data-page="{{page}}"
+                 data-sort="{{sort}}">
+                <topic-list :topics="topicsList"></topic-list>
+            </div>
+        </div>
+        <div id="articlebottons" class="ui bottom attached floating message">
+            <div id="prePage" class="ui left floated basic labeled icon button">
+                <i class="angle double left icon"></i>
+                Prev
+            </div>
+            <div id="nextPage" class="ui right floated basic right labeled icon button">
+                <i class="angle double right icon"></i>
+                Next
+            </div>
+        </div>
+    </div>
+    <div id="rightContent" class="three wide column animated fadeInRightTiny">
+        <div id="todayHot" class="ui raised segment">
+            <h4 class="ui horizontal header divider">
+                <i class="bar chart icon"></i> Today HotSpot
+            </h4>
+
+            <div class="ui divided items"></div>
+        </div>
+        <div id="yesterdayHot" class="ui raised segment">
+            <h4 class="ui horizontal header divider">
+                <i class="bar chart icon"></i> Yesterday HotSpot
+            </h4>
+
+            <div class="ui divided items"></div>
+        </div>
+        <div class="ui vertical rectangle test ad" data-text="Advertisement"></div>
+    </div>
+</template>
+<script type="text/javascript">
+require('../../../../../../themes/default/css/pages/index.css');
+module.exports = {
+    name: 'index',
+    data: function () {
+        return {
+            isLogin: this.$root.$data.isLogin,
+            siteName: this.$root.$data.siteName,
+            themePath: this.$root.$data.themePath,
+            sort: this.$root.$data.sort,
+            page: this.$root.$data.page,
+            topicsList: this.$root.$data.topics
+        }
+    },
+    components: {
+        "topic-list": require('../components/topicList.vue')
+    },
+    ready: function () {
+        $.lc4e.index.ready();
+    },
+    created: function () {
+    },
+    methods: {
+        loadJquery: function () {
+            'use strict';
+            console.log(this.user);
+        }
+    }
+}
+</script>

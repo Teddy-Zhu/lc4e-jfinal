@@ -1,5 +1,6 @@
 package com.teddy.lc4e.web.controller;
 
+import com.jfinal.kit.JsonKit;
 import com.jfinal.kit.StrKit;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.entity.Method;
@@ -7,6 +8,7 @@ import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.tools.RelativeDate;
 import com.teddy.lc4e.config.Key;
 import com.teddy.lc4e.entity.Article;
+import com.teddy.lc4e.entity.Data;
 import com.teddy.lc4e.entity.Message;
 import com.teddy.lc4e.entity.Popup;
 import com.teddy.lc4e.web.service.ComVarService;
@@ -36,36 +38,31 @@ public class ViewController extends BaseController {
     })
     public void index() {
         setAttr("page", getPara(1));
-        if (isPJAX()) {
-            forwardAction("/Articles");
-        } else {
-            setAttr("topics", getArticle(getParaToInt(1), getParaToInt(0), getPara("a")));
-            render("pages/index.html");
-        }
+        setAttr("topicsString", JsonKit.toJson(getArticle(getParaToInt(1), getParaToInt(0), getPara("a"))));
+        render("index.html");
     }
 
-    @RequestMethod(Method.GET)
     @ValidateParams({
             @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
-            @ValidateParam(value = "a", type = String.class, defaultValue = "index"),
+            @ValidateParam(value = "a", type = String.class, defaultValue = "all"),
             @ValidateParam(value = "o", type = Integer.class, defaultValue = "1")
     })
     public void Articles() {
-        setAttr("topics", getArticle(getParaToInt("p"), getParaToInt("o"), getPara("a")));
-        render("ajax/_topic_detail.html");
     }
 
-    @RequestMethod(Method.GET)
+
     @ValidateParams({
             @ValidateParam(index = 2, type = int.class, defaultValue = "1"), //page
-            @ValidateParam(index = 0, type = String.class, defaultValue = "index"),
+            @ValidateParam(index = 0, type = String.class, defaultValue = "all"),
             @ValidateParam(index = 1, type = Integer.class, defaultValue = "1") //order
     })
     public void a() {
-        setAttr("curArea", getPara(0));
-        
-        setAttr("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)));
-        render("pages/area.html");
+        if (isPOST()) {
+            renderJson(new Message(true, new Data("curArea", getPara(0)), new Data("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)))));
+        } else {
+            setAttr("curArea", getPara(0)).setAttr("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)));
+            render("pages/area.html");
+        }
     }
 
 
@@ -118,7 +115,7 @@ public class ViewController extends BaseController {
 
     public List<Article> getArticle(int page, int order, String area) {
         Integer size = 10;
-        if (StrKit.isBlank(area) || "index".equals(area)) {
+        if (StrKit.isBlank(area) || "all".equals(area)) {
             area = "";
             size = Integer.valueOf(ComVarService.service.getComVarValueByName("IndexPageSize"));
         } else {
@@ -138,7 +135,8 @@ public class ViewController extends BaseController {
     }
 
 
-    public void vue(){
-        render("");
+    public void vue() {
+        setAttr("page", getPara(1)).setAttr("topicsString", JsonKit.toJson(getArticle(getParaToInt(1), getParaToInt(0), getPara("a"))));
+        render("index.html");
     }
 }

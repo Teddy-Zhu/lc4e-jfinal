@@ -1,6 +1,7 @@
 package com.teddy.lc4e.util.plugins;
 
 import com.jfinal.aop.Invocation;
+import com.jfinal.core.Controller;
 import com.teddy.jfinal.annotation.SetComVar;
 import com.teddy.jfinal.annotation.SetComVars;
 import com.teddy.jfinal.common.Const;
@@ -21,7 +22,7 @@ import java.util.Set;
  */
 public class AttributeKit implements AttributeKitI {
     @Override
-    public void setComVar(SetComVar comVar, Invocation ai) throws Lc4eAutoSetterException {
+    public void setComVar(SetComVar comVar, Controller controller) throws Lc4eAutoSetterException {
         if (comVar == null) {
             return;
         }
@@ -32,7 +33,7 @@ public class AttributeKit implements AttributeKitI {
         if (variable == null) {
             throw new Lc4eAutoSetterException("No ComVar Record Found in Database or Cache");
         } else {
-            ai.getController().setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
+            controller.setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
                     .type(), variable.getStr(Sys_Common_Variable.S_VALUE)));
         }
     }
@@ -49,7 +50,7 @@ public class AttributeKit implements AttributeKitI {
     }
 
     @Override
-    public void setComVars(SetComVars comVars, Invocation ai) throws Lc4eAutoSetterException {
+    public void setComVars(SetComVars comVars, Controller controller) throws Lc4eAutoSetterException {
         if (comVars == null) {
             return;
         }
@@ -64,7 +65,7 @@ public class AttributeKit implements AttributeKitI {
         }
         for (Sys_Common_Variable variable : variables) {
             SetComVar comVar = comVarMap.get(variable.getStr(Sys_Common_Variable.S_NAME));
-            ai.getController().setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
+            controller.setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
                     .type(), variable.getStr(Sys_Common_Variable.S_VALUE)));
         }
     }

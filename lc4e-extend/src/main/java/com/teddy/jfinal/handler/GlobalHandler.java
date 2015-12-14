@@ -6,6 +6,7 @@ import com.teddy.jfinal.interfaces.IHandler;
 import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.ShiroPlugin;
 import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.util.StreamUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.ExecutionException;
@@ -28,7 +29,7 @@ public class GlobalHandler extends Handler {
     @Override
     public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
 
-        long now = 0;
+        long now;
         if (target.indexOf(".") > 0) {
             long ims = request.getDateHeader("If-Modified-Since");
             now = System.currentTimeMillis();
@@ -45,11 +46,12 @@ public class GlobalHandler extends Handler {
             Throwable t = null;
             final Subject subject = createSubject(request, response);
             try {
+                final String finalTarget = target;
                 subject.execute(() -> {
-                    resolveBefore(target, request, response, isHandled);
+                    resolveBefore(finalTarget, request, response, isHandled);
                     updateSessionLastAccessTime(request, response);
-                    nextHandler.handle(target, request, response, isHandled);
-                    resolveAfter(target, request, response, isHandled);
+                    nextHandler.handle(finalTarget, request, response, isHandled);
+                    resolveAfter(finalTarget, request, response, isHandled);
                     return null;
                 });
             } catch (ExecutionException ex) {
@@ -62,7 +64,6 @@ public class GlobalHandler extends Handler {
                 if (t instanceof Exception) {
                     t.printStackTrace();
                 }
-                //otherwise it's not one of the two exceptions expected by the filter method signature - wrap it in one:
                 logger.error("Filtered request failed.");
             }
         }

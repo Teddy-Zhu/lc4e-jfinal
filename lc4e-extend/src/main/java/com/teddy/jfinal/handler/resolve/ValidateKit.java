@@ -47,8 +47,8 @@ class ValidateKit {
 
     }
 
-    public static void resolveRequestMethod(RequestMethod method, Invocation invocation) throws Lc4eValidateException {
-        if (method != null && !method.value().toString().equals(invocation.getController().getRequest().getMethod().toUpperCase())) {
+    public static void resolveRequestMethod(RequestMethod method, Controller controller) throws Lc4eValidateException {
+        if (method != null && !method.value().toString().equals(controller.getRequest().getMethod().toUpperCase())) {
             // controller.renderError(404);
             throw new Lc4eValidateException("404");
         }
@@ -58,15 +58,15 @@ class ValidateKit {
      * validate request header
      *
      * @param header
-     * @param invocation
+     * @param controller
      * @throws Lc4eException
      * @throws Lc4eValidateException
      */
-    public static void resolveRequestHeader(RequestHeader header, Invocation invocation) throws Lc4eException, Lc4eValidateException {
+    public static void resolveRequestHeader(RequestHeader header, Controller controller) throws Lc4eException, Lc4eValidateException {
         if (header == null) {
             return;
         }
-        HttpServletRequest request = invocation.getController().getRequest();
+        HttpServletRequest request = controller.getRequest();
 
         String[] keys = header.key();
         String[] values = header.value();
@@ -83,11 +83,11 @@ class ValidateKit {
         }
     }
 
-    public static void resolveToken(ValidateToken token, Invocation invocation) throws Lc4eValidateException {
+    public static void resolveToken(ValidateToken token, Controller controller) throws Lc4eValidateException {
         if (token == null) {
             return;
         }
-        HttpServletRequest request = invocation.getController().getRequest();
+        HttpServletRequest request = controller.getRequest();
         String suf = String.valueOf(request.getRequestURI().length() - 2), pre = String.valueOf(request.getRequestURI().length());
         String lc4eToken = request.getHeader(Const.LC4E_TOKEN);
 
@@ -130,43 +130,42 @@ class ValidateKit {
         }
     }
 
-    public static void resolveParameters(ValidateKitI validateKit, ValidateParams params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, Lc4eValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
+    public static void resolveParameters(ValidateKitI validateKit, ValidateParams params, Controller controller) throws InvocationTargetException, NoSuchMethodException, Lc4eValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
         if (params == null) {
             return;
         }
-        resolveParams(params.value(), invocation);
+        resolveParams(params.value(), controller);
         boolean isTrue;
         if (params.select()) {
             try {
-                validateKit.resolveComVar(params.condition(), invocation);
+                validateKit.resolveComVar(params.condition(), controller);
                 isTrue = true;
             } catch (Exception e) {
                 isTrue = false;
-                resolveParams(params.falseFields(), invocation);
+                resolveParams(params.falseFields(), controller);
             }
             if (isTrue) {
-                resolveParams(params.trueFields(), invocation);
+                resolveParams(params.trueFields(), controller);
             }
         }
     }
 
-    private static void resolveParams(ValidateParam[] params, Invocation invocation) throws InvocationTargetException, NoSuchMethodException, Lc4eValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
+    private static void resolveParams(ValidateParam[] params, Controller controller) throws InvocationTargetException, NoSuchMethodException, Lc4eValidateException, NoSuchFieldException, IllegalAccessException, ParseException {
         if (params == null) {
             return;
         }
         for (ValidateParam param : params) {
-            resolveParameter(param, invocation);
+            resolveParameter(param, controller);
         }
     }
 
-    public static void resolveParameter(ValidateParam param, Invocation invocation) throws Lc4eValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
+    public static void resolveParameter(ValidateParam param, Controller controller) throws Lc4eValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
         if (param == null) {
             return;
         }
         if (StringTool.equalEmpty(param.value()) && param.index() == -1) {
             throw new Lc4eValidateException(StringTool.equalEmpty(param.error()) ? "Parameter" : param.error() + " is  invalid");
         }
-        Controller controller = invocation.getController();
         Object object;
         Class type = param.type();
         type = ReflectTool.wrapper(type);

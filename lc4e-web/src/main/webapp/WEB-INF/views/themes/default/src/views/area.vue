@@ -1,0 +1,140 @@
+<template>
+    <div class="ui teal  basic row column segment">
+        <div class="ui large inverted statistic">
+            <div class="value">
+                <i class="info circle icon"></i> <br/>
+
+                <div id="areaName" class="value" v-html="curArea"></div>
+            </div>
+            <div id="areaDescription" class="label">
+                Fill out the form below to sign-up for a new account
+            </div>
+        </div>
+    </div>
+    <div id="topicList" class="twelve wide column">
+        <div id="areaSummery" class="ui attached floating message">
+            <div class="ui row no padded clearing basic segment">
+                <div class="ui left floated breadcrumb basic segment">
+                    <a class="section" v-html="siteName"></a>
+                    <span class="divider">/</span>
+
+                    <div class="active section" v-html="curArea"></div>
+                </div>
+                <div id="areaLabel" class="ui labels">
+                    <a class="ui tag mini label">New</a>
+                    <a class="ui red mini tag label">Upcoming</a>
+                    <a class="ui teal mini tag label">Featured</a>
+                </div>
+                <div id="sortTopic" class="ui dropdown labeled icon basic button">
+                    <i class="filter icon"></i>
+                    <span class="text">Sort</span>
+
+                    <div class="menu">
+                        <div class="header">
+                            <i class="tags icon"></i>
+                            Sort Method
+                        </div>
+                        <div class="scrolling menu">
+                            <template v-if="isLogin">
+                                <div class="item" data-value="1">
+                                    <div class="ui red empty circular label"></div>
+                                    Order By System
+                                </div>
+                            </template>
+                            <div class="item" data-value="2">
+                                <div class="ui blue empty circular label"></div>
+                                Order By Date
+                            </div>
+                            <div class="item" data-value="3">
+                                <div class="ui black empty circular label"></div>
+                                Order By Last Reply
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui header">
+                <div class="ui three statistics">
+                    <div class="statistic">
+                        <div class="value">
+                            22
+                        </div>
+                        <div class="label">
+                            Stars
+                        </div>
+                    </div>
+                    <div class="statistic">
+                        <div class="value">
+                            31,200
+                        </div>
+                        <div class="label">
+                            Topics
+                        </div>
+                    </div>
+                    <div class="statistic">
+                        <div class="value">
+                            22
+                        </div>
+                        <div class="label">
+                            Comments
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="topicItemsArea"
+             class="ui divided items topiclist no padded attached raised segment animated slow fadeIn"
+             data-page="{{page}}"
+             data-sort="{{topicSort}}">
+            <topic-list :topics="topics"></topic-list>
+        </div>
+        <div id="articlebottons" class="ui bottom clearing floating attached message">
+            <div id="prePage" class="ui left floated basic labeled icon button">
+                <i class="angle double left icon"></i>
+                Prev
+            </div>
+            <div id="nextPage" class="ui right floated basic right labeled icon button">
+                <i class="angle double right icon"></i>
+                Next
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+require('../../../../../../themes/default/css/pages/area.css');
+module.exports = {
+    name: "area",
+    data: function () {
+        return {
+            params: {},
+            isLogin: this.$root.$data.isLogin,
+            siteName: this.$root.$data.siteName,
+            sort: this.$root.$data.sort,
+            page: this.$root.$data.page,
+            topics: [],
+            curArea: ''
+        };
+    },
+    route: {
+        waitForData: true,
+        data: function (transition) {
+            console.log(transition.to.params);
+            this.$http.post('/a/' + transition.to.params.any, function (result, status, request) {
+                console.log(result);
+                transition.next(result.data);
+            }).error(function (data, status, request) {
+                // handle error
+            })
+        }
+    },
+    ready: function () {
+        $.lc4e.area.ready();
+        console.log(this.$root);
+    },
+    components: {
+        "topic-list": require('../components/topicList.vue')
+    }
+}
+
+</script>

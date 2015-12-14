@@ -5,6 +5,7 @@ import com.jfinal.core.Controller;
 import com.teddy.jfinal.annotation.Inject;
 import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.exceptions.Lc4eException;
+import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.interfaces.AnnotationResolver;
 import com.teddy.jfinal.interfaces.IInterceptor;
 import com.teddy.jfinal.interfaces.Lc4ePlugin;
@@ -56,10 +57,6 @@ public class GlobalInterceptorKit {
         if (method == null) {
             resolve(ai, e);
         } else {
-            List<AnnotationResolver> annotationResolvers = CustomPlugin.getExceptionMethodHandler().get(method);
-            for (AnnotationResolver annotationResolver : annotationResolvers) {
-                annotationResolver.resolve(ai);
-            }
             method.invoke(Modifier.isStatic(method.getModifiers()) ? null : method.getDeclaringClass().newInstance(), resolveParameters(method.getParameterTypes(), ai, e));
         }
     }
@@ -121,16 +118,16 @@ public class GlobalInterceptorKit {
     }
 
     public static void Inject(Object obj, Class clz) {
-        List<Field> fields = CustomPlugin.getInjectFields().get(clz.getName());
-        Map<String, Object> injectObjs = CustomPlugin.getInjectObjs();
-        fields.forEach(field -> {
+
+        Map<Field, Object> injectObjs = CustomPlugin.getInjectObjs().get(clz);
+
+        injectObjs.forEach((key, value) -> {
             try {
-                Class clzss = field.getType();
-                if (clzss.isAnnotationPresent(Service.class) && field.isAnnotationPresent(Inject.class) && !Modifier.isStatic(field.getModifiers())) {
-                    String name = clzss.getName();
-                    if (field.get(obj) == null) {
-                        field.set(obj, injectObjs.get(name));
-                    }
+                Object fieldValue = key.get(obj);
+                if (fieldValue == null) {
+                    key.set(obj, value);
+                } else if (!fieldValue.getClass().getName().contains("EnhancerByCGLIB")) {
+                    key.set(obj, CustomInterceptor.Proxy(fieldValue));
                 }
             } catch (IllegalAccessException e) {
                 LOGGER.error("Inject error in Class [" + clz.getName() + "]");

@@ -8,6 +8,7 @@ import com.jfinal.core.JFinalPublic;
 import com.jfinal.handler.Handler;
 import com.jfinal.log.Logger;
 import com.teddy.jfinal.handler.gzip.GZIPResponseWrapper;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

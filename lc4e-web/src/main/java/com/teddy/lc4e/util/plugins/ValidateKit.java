@@ -1,6 +1,7 @@
 package com.teddy.lc4e.util.plugins;
 
 import com.jfinal.aop.Invocation;
+import com.jfinal.core.Controller;
 import com.teddy.jfinal.annotation.ValidateComVar;
 import com.teddy.jfinal.annotation.ValidateComVars;
 import com.teddy.jfinal.exceptions.Lc4eException;
@@ -22,7 +23,7 @@ import java.util.Set;
 public class ValidateKit implements ValidateKitI {
 
     @Override
-    public void resolveComVars(ValidateComVars comVars, Invocation invocation) throws Lc4eValidateException, Lc4eException {
+    public void resolveComVars(ValidateComVars comVars, Controller controller) throws Lc4eValidateException, Lc4eException {
         if (comVars == null) {
             return;
         }
@@ -47,7 +48,7 @@ public class ValidateKit implements ValidateKitI {
     }
 
     @Override
-    public void resolveComVar(ValidateComVar comVar, Invocation invocation) throws Lc4eValidateException {
+    public void resolveComVar(ValidateComVar comVar, Controller controller) throws Lc4eValidateException {
         if (comVar == null) {
             return;
         }

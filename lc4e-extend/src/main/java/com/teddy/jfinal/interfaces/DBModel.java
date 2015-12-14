@@ -3,12 +3,17 @@ package com.teddy.jfinal.interfaces;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
+import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.tools.CustomTool;
+import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.SQLTool;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,23 +22,7 @@ import java.util.List;
 public abstract class DBModel<M extends DBModel> extends Model<M> {
     private static final long serialVersionUID = -101956006715745792L;
 
-    private String tableName;
-
-    @SuppressWarnings("unchecked")
-    public M enhancer() {
-        return CustomTool.auto((M) this);
-    }
-
-    @SuppressWarnings("unchecked")
-    public M custom() {
-        return CustomTool.custom((M) this);
-    }
-
-    @SuppressWarnings("unchecked")
-    public M transaction() {
-        return CustomTool.transaction((M) this);
-    }
-
+    private Table me;
 
     private Class getUsefulClass() {
         Class c = getClass();
@@ -41,10 +30,13 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public String getTbName() {
-        if (StrKit.isBlank(this.tableName)) {
-            this.tableName = TableMapping.me().getTable(getUsefulClass()).getName();
-        }
-        return this.tableName;
+        return getTable().getName();
+    }
+
+    public Table getTable() {
+        if (me == null)
+            me = TableMapping.me().getTable(getUsefulClass());
+        return me;
     }
 
     public List<M> find(SQLTool sql) {
@@ -119,5 +111,20 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
         return Float.valueOf(getStr(attr));
     }
 
+
+    @Override
+    public boolean save() {
+        Date dt = new Date();
+        if (getTable().hasColumnLabel(Const.DB_UPDATETIME)) this.set(Const.DB_UPDATETIME, dt);
+        if (getTable().hasColumnLabel(Const.DB_CREATETIME)) this.set(Const.DB_CREATETIME, dt);
+        return super.save();
+    }
+
+    @Override
+    public boolean update() {
+        Date dt = new Date();
+        if (getTable().hasColumnLabel(Const.DB_UPDATETIME)) this.set(Const.DB_UPDATETIME, dt);
+        return super.update();
+    }
 
 }

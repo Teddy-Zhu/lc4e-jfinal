@@ -41,8 +41,8 @@ public class MemberController extends BaseController {
     })
     @ValidateComVar(name = Key.REGISTER, value = "true")
     public void signup() throws Lc4eApplicationException {
-        User user = getModel(User.class, "user").enhancer();
-        User_Basicinfo basicInfo = getModel(User_Basicinfo.class, "extend").enhancer();
+        User user = getModel(User.class, "user");
+        User_Basicinfo basicInfo = getModel(User_Basicinfo.class, "extend");
         UserService.service.createUser(user, basicInfo);
         if (StrKit.notBlank(user.getStr(User.S_ID))) {
             renderJson(new Message(true, "register successfully"));

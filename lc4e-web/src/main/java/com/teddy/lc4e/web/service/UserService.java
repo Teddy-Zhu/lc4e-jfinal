@@ -68,7 +68,7 @@ public class UserService {
         }
         //usermail
         if (validateUserNick(user.getStr(User.S_NICK))) {
-            throw new Lc4eApplicationException("Email Has been occupied");
+            throw new Lc4eApplicationException("Nick Has been occupied");
         }
         PassDisposer.encryptPassword(user);
         user.remove(User.S_ID);
@@ -81,7 +81,7 @@ public class UserService {
                 basicinfo.set(User_Basicinfo.S_USERID, user.get(User.S_ID));
                 basicinfo.save();
             } else {
-                new User_Basicinfo().enhancer().set(User_Basicinfo.S_USERID, user.get(User.S_ID)).save();
+                new User_Basicinfo().set(User_Basicinfo.S_USERID, user.get(User.S_ID)).save();
             }
         }
 

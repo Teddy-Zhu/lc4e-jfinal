@@ -1,6 +1,7 @@
 package com.teddy.jfinal.tools;
 
 import com.jfinal.kit.StrKit;
+import com.teddy.jfinal.entity.Method;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.Cookie;
@@ -203,4 +204,15 @@ public class WebTool {
         return StrKit.notBlank(ajax) && "XMLHttpRequest".equals(ajax);
     }
 
+    public static boolean isPOST(HttpServletRequest request) {
+        return isMethod(request, Method.POST);
+    }
+
+    public static boolean isGET(HttpServletRequest request) {
+        return isMethod(request, Method.GET);
+    }
+
+    public static boolean isMethod(HttpServletRequest request, Method method) {
+        return request.getMethod().toUpperCase().equals(method.toString());
+    }
 }

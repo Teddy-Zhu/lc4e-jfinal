@@ -1,8 +1,9 @@
 /**
  * Created by teddy on 2015/8/30.
  */
-$(function () {
-    $.lc4e.index = {
+
+$.extend($.lc4e, {
+    index: {
         ready: function () {
             $.lc4e.index.bindEvent();
             $.lc4e.index.run();
@@ -60,6 +61,5 @@ $(function () {
                 $.lc4e.index.shape($announce)
             }, 10000);
         }
-    };
-    $.lc4e.index.ready();
+    }
 });

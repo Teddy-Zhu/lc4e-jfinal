@@ -1,23 +1,14 @@
 package com.teddy.jfinal.handler;
 
-import com.jfinal.plugin.ehcache.CacheKit;
-import com.teddy.jfinal.annotation.Cache;
-import com.teddy.jfinal.annotation.Transaction;
-import com.teddy.jfinal.common.Const;
-import com.teddy.jfinal.common.Dict;
-import com.teddy.jfinal.handler.InternInterceptor.TransactionHelper;
+import com.jfinal.aop.Invocation;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
-import com.teddy.jfinal.plugin.PropPlugin;
-import com.teddy.jfinal.tools.ReflectTool;
-import com.teddy.jfinal.tools.StringTool;
+import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.CustomPlugin;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
 
 /**
  * Created by teddy on 2015/7/25.
@@ -25,60 +16,32 @@ import java.util.Collection;
 public class CustomInterceptor implements MethodInterceptor {
     private Object target;
 
+    private boolean isClass = false;
+
+
     public CustomInterceptor(Object target) {
         this.target = target;
     }
 
+    public CustomInterceptor(Object target, boolean isClass) {
+        this.target = target;
+        this.isClass = isClass;
+    }
+
     @Override
     public Object intercept(Object obj, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+        boolean[] isHandled = new boolean[]{false};
+
         Object returnValue;
-        boolean useCache;
-        Object cacheKey = null;
-        Cache cache = ReflectTool.getAnnotationByMethod(method, Cache.class);
-        useCache = cache != null && PropPlugin.getBool(Dict.USE_CACHE, true) && cache.index() < objects.length;
-        if (useCache) {
-            cacheKey = cache.index() == -1 ? cache.key() : objects[cache.index()];
-            if (cacheKey.getClass().isArray()) {
-                cacheKey = StringUtils.join((String[]) cacheKey, ",");
-            } else if (cacheKey instanceof Collection) {
-                cacheKey = StringTool.join((Collection<String>) cacheKey, ",");
-            } else {
-                cacheKey = cacheKey.toString();
-            }
-
-            cacheKey = method.getName() + cacheKey;
-
-            returnValue = CacheKit.get(cache.cacheName(), cacheKey);
-            if (returnValue != null) {
-                return returnValue;
-            } else if (!cache.defaultValue().equals(Const.DEFAULT_NONE)) {
-                CacheKit.put(cache.cacheName(), cacheKey, cache.defaultValue());
-                return cache.defaultValue();
-            }
-        }
         //resolve Inject
         Class clz = target.getClass();
 
-        if (method.isAnnotationPresent(Transaction.class)) {
-            Object transObj = TransactionHelper.Proxy(this.target);
-            GlobalInterceptorKit.Inject(transObj, clz);
-            try {
-                returnValue = method.invoke(transObj, objects);
-            } catch (InvocationTargetException ex) {
-                throw ex.getTargetException();
-            }
+        AnnotationPluginResolver resolver = new AnnotationPluginResolver(isHandled, target, method, objects, methodProxy, isClass ? CustomPlugin.getClassAnnotationMap().get(target.getClass()) : CustomPlugin.getMethodAnnotationMap().get(method));
 
-        } else {
-            GlobalInterceptorKit.Inject(target, clz);
-            try {
-                returnValue = method.invoke(target, objects);
-            } catch (InvocationTargetException ex) {
-                throw ex.getTargetException();
-            }
-        }
-        if (useCache) {
-            CacheKit.put(cache.cacheName(), cacheKey, returnValue);
-        }
+        GlobalInterceptorKit.Inject(target, clz);
+
+        returnValue = resolver.invoke();
+
 
         return returnValue;
     }
@@ -99,6 +62,7 @@ public class CustomInterceptor implements MethodInterceptor {
         return (T) proxy;
     }
 
+
     @SuppressWarnings("unchecked")
     public static <T> T Proxy(T target) {
         if (null == target) return null;
@@ -112,4 +76,17 @@ public class CustomInterceptor implements MethodInterceptor {
         return (T) proxy;
     }
 
+
+    @SuppressWarnings("unchecked")
+    public static <T> T Proxy(T target, boolean isClass) {
+        if (null == target) return null;
+        Object proxy = null;
+
+        Enhancer en = new Enhancer();
+        en.setSuperclass(target.getClass());
+        en.setCallback(new CustomInterceptor(target, isClass));
+        proxy = en.create();
+
+        return (T) proxy;
+    }
 }

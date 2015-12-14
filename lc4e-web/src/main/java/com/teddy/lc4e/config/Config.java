@@ -1,9 +1,11 @@
 package com.teddy.lc4e.config;
 
 import com.jfinal.config.*;
+import com.jfinal.kit.JsonKit;
 import com.teddy.jfinal.annotation.ConfigHandler;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.JFinalConfig;
+import com.teddy.jfinal.handler.GlobalHandler;
 import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.plugin.ShiroPlugin;
@@ -95,11 +97,13 @@ public class Config implements JFinalConfig {
 
         globalContext.set(String.class, "SiteName", ComVarService.service.getComVarValueByName("SiteName"));
         globalContext.set(List.class, "menulist", MenuService.service.getMenuTree());
+        globalContext.set(String.class, "menusString", JsonKit.toJson(MenuService.service.getMenuTree()));
         globalContext.set(String.class, "version", PropPlugin.getValue(Dict.version));
         globalContext.set(String.class, "Theme", "/themes/" + ComVarService.service.getComVarValueByName("DefaultTheme"));
 
         Key.kvs.put("Theme", ComVarService.service.getComVarValueByName("DefaultTheme"));
-        Field field = null, field1 = null;
+
+        Field field, field1;
         try {
 
             field = JetConfig.class.getDeclaredField("templateSuffix");
