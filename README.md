@@ -14,13 +14,10 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 ----------
 
 # 计划ING(2015-12-19 started)
-> 前端使用 vuejs
-> 
-> 前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI
-> 
-> 抛弃Jquery (同上,Render效率较低)
-> 
-> 本项目会暂缓更新,等待新的UI完成
+> 前端使用 vuejs	
+> 前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI	
+> 抛弃Jquery (同上,Render效率较低)	
+> 本项目会暂缓更新,等待新的UI完成(SUI [https://github.com/Teddy-Zhu/sui]() )
 
 
 # [Demo](http://www.lc4e.com) #
@@ -67,10 +64,8 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 - `Inject [F]`: 自动注入，须在Serivce 或者 Controller中。
 
 ##Custom Annotation Plugins
-> 自定义注解插件,除了系统初始化级别的注解外,`Controller ` 以及`Service ` 内的注解均可以通过此插件进行拓展.
-> 
-> 用法(Usage): 具体参考系统一有注解
-> 
+> 自定义注解插件,除了系统初始化级别的注解外,`Controller ` 以及`Service ` 内的注解均可以通过此插件进行拓展.	
+> 用法(Usage): 具体参考系统一有注解	
 > example
 
 ```Java
@@ -140,13 +135,16 @@ public class customAn extend CustomAnnotationPlugin {
 #Important Update#
 ----------
 
-- 6/13/2015 4:22:59 PM 
+- 6/13/2015 4:22:59
 > Remove Mysql . Replaced with MongoDB.
 > Version to V2
 
-- 7/31/2015 1:08:22 PM 
+- 7/31/2015 1:08:22
 > Convert Spring to Jfinal [Origin Project](https://github.com/Teddy-Zhu/lc4e-spring)  
 > Rollback MongoDB to MYSQL
 
-- 10/29/2015 13:46:26 PM 
+- 10/29/2015 13:46:26
 > Convert View Render from Beelt to Jetbrick 
+
+- 12/21/2015 19:13:16
+>stop woking on the project and wait for sui finished
