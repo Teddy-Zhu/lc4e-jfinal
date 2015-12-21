@@ -152,7 +152,7 @@
 
 <script>
 require('../../../../../themes/default/css/lc4e/jquery-extend.css');
-require('./components/lc4e.js');
+require('./lc4e.js');
 module.exports = {
     name: 'app',
     data: function () {

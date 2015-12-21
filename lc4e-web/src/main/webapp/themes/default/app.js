@@ -48,20 +48,24 @@
 	 * Created by teddyzhu on 15/12/5.
 	 */
 	
-	var Vue = __webpack_require__(6);
-	var VueRouter = __webpack_require__(8);
-	var VueResource = __webpack_require__(9);
-	Vue.use(VueRouter);
-	Vue.use(VueResource);
+	var Vue = __webpack_require__(6),
+	    Vueplugins = {
+	    VueRouter: __webpack_require__(8),
+	    VueResource: __webpack_require__(9),
+	    SeTransition: __webpack_require__(17)
+	};
+	for (var index in Vueplugins) {
+	    Vue.use(Vueplugins[index]);
+	}
 	
-	var router = new VueRouter({
-	  history: true
+	var router = new Vueplugins.VueRouter({
+	    history: false
 	});
 	
-	router.map(__webpack_require__(17));
+	router.map(__webpack_require__(18));
 	
 	Vue.config.debug = true;
-	router.start(__webpack_require__(33), '#lc4eApp');
+	router.start(__webpack_require__(34), '#lc4eApp');
 
 /***/ },
 /* 1 */,
@@ -12920,6 +12924,80 @@
 
 /***/ },
 /* 17 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by teddyzhu on 15/12/18.
+	 */
+	
+	module.exports = function (Vue, options) {
+	    var duration = (options || {}).duration || 1000,
+	        transitions = {
+	        defineEmphasis: function (name, duration) {
+	            return {
+	                css: false,
+	                beforeEnter: function (el) {
+	                    $(el).show();
+	                },
+	
+	                enter: function (el, done) {
+	                    $(el).transition(name, duration, done);
+	
+	                    return function () {
+	                        $(el).transition('stop');
+	                    };
+	                },
+	
+	                leave: function (el, done) {
+	                    $(el).transition('reset').transition(name, duration, done).hide();
+	
+	                    return function () {
+	                        $(el).transition('stop');
+	                    };
+	                }
+	            };
+	        },
+	        defineAppearance: function (name, duration) {
+	
+	            return {
+	                css: false,
+	                enter: function (el, done) {
+	                    $(el).transition('reset').transition(name + ' in', duration, done);
+	
+	                    return function () {
+	                        $(el).transition('stop');
+	                    };
+	                },
+	
+	                leave: function (el, done) {
+	                    $(el).transition('reset').transition(name + ' out', duration, done);
+	
+	                    return function () {
+	                        $(el).transition('stop');
+	                    };
+	                }
+	            };
+	        }
+	    },
+	        emphasis = ['flash', 'shake', 'pulse', 'tada', 'bounce'],
+	        appearance = ['slide up', 'slide down', 'vertical flip', 'horizontal flip', 'fade', 'fade up', 'fade down', 'scale', 'drop', 'browse'];
+	
+	    emphasis.forEach(function (animation) {
+	        var definition = transitions.defineEmphasis(animation, duration);
+	
+	        Vue.transition(animation, definition);
+	    });
+	
+	    appearance.forEach(function (animation) {
+	        var definition = transitions.defineAppearance(animation, duration);
+	        var id = animation.split(' ').join('-');
+	
+	        Vue.transition(id, definition);
+	    });
+	};
+
+/***/ },
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -12927,27 +13005,27 @@
 	 */
 	module.exports = {
 	    '/': {
-	        component: __webpack_require__(18)
+	        component: __webpack_require__(19)
 	    },
 	    "/all": {
-	        component: __webpack_require__(18)
+	        component: __webpack_require__(19)
 	    },
 	    "/a/*any": {
-	        component: __webpack_require__(28)
+	        component: __webpack_require__(29)
 	    },
 	    '*': {
-	        component: __webpack_require__(18)
+	        component: __webpack_require__(19)
 	    }
 	};
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(19)
+	module.exports = __webpack_require__(20)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(27)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(28)
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -12961,7 +13039,7 @@
 	})()}
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13022,7 +13100,7 @@
 	//             </div>
 	//         </div>
 	//         <div id="articlelist" class="ui attached fluid raised segment">
-	//             <div id="topicItems" class="ui divided items topiclist animated slow fadeIn" data-page="{{page}}"
+	//             <div id="topicItems" class="ui divided items topiclist" data-page="{{page}}"
 	//                  data-sort="{{sort}}">
 	//                 <topic-list :topics="topicsList"></topic-list>
 	//             </div>
@@ -13057,7 +13135,7 @@
 	//     </div>
 	// </template>
 	// <script type="text/javascript">
-	__webpack_require__(20);
+	__webpack_require__(21);
 	module.exports = {
 	    name: 'index',
 	    data: function data() {
@@ -13071,10 +13149,10 @@
 	        };
 	    },
 	    components: {
-	        "topic-list": __webpack_require__(24)
+	        "topic-list": __webpack_require__(25)
 	    },
 	    ready: function ready() {
-	        $.lc4e.index.ready();
+	        $.lc4e.index.bindEvent();
 	    },
 	    created: function created() {},
 	    methods: {
@@ -13088,22 +13166,22 @@
 	// </script>
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(25)
+	module.exports = __webpack_require__(26)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(26)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(27)
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -13117,68 +13195,64 @@
 	})()}
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
 	// <template>
-	//     <template v-for="topic in topics">
-	//         <div class="item topic">
-	//             <div class="ui user picture">
-	//                 <div class="ui fluid tiny image hidden-mb">
-	//                     <img v-bind:src="topic.imageUrl" data-title="{{topic.popUp.title}}"
-	//                          data-content="{{topic.popUp.content}}"/>
-	//                 </div>
+	//     <div class="item topic" v-for="topic in topics" transition="fade">
+	//         <div class="ui user picture">
+	//             <div class="ui fluid tiny image hidden-mb">
+	//                 <img v-bind:src="topic.imageUrl" data-title="{{topic.popUp.title}}"
+	//                      data-content="{{topic.popUp.content}}"/>
 	//             </div>
-	//             <div class="content">
-	//                 <a class="header larger" href="{{topic.articleUrl}}">
-	//                     {{topic.articleTitle}}
+	//         </div>
+	//         <div class="content">
+	//             <a class="header larger" href="{{topic.articleUrl}}">
+	//                 {{topic.articleTitle}}
+	//             </a>
+	
+	//             <div class="extra">
+	//                 <a class="ui blue label">
+	//                     {{topic.user}}
+	//                 </a>
+	//                 <a class="ui teal label">
+	//                     {{topic.category}}
 	//                 </a>
 	
-	//                 <div class="extra">
-	//                     <a class="ui blue label">
-	//                         {{topic.user}}
+	//                 <div class="ui transparent label">
+	//                     <i class="calendar icon"></i>
+	//                     {{topic.publishTime}}
+	//                 </div>
+	//                 <div class="ui transparent label">
+	//                     <i class="comments outline icon"></i>
+	//                     {{topic.comments}}
+	//                 </div>
+	//                 <div class="ui transparent label">
+	//                     <i class="comment icon"></i>
+	//                     <a class="ui label">
+	//                         {{topic.lastCommentUser}}
 	//                     </a>
-	//                     <a class="ui teal label">
-	//                         {{topic.category}}
+	//                 </div>
+	//                 <div class="topicQuickTools">
+	//                     <a class="ui circular topicQuickTool label"><i class="ui yellow star icon"></i></a>
+	//                     <a class="ui circular topicQuickTool topicSetting bottom left dropdown pointing label">
+	//                         <i class="ui red setting icon"></i>
+	
+	//                         <div class="menu">
+	//                             <div class="item">Move</div>
+	//                             <div class="item">Delete</div>
+	//                             <div class="item">Edit</div>
+	//                         </div>
 	//                     </a>
-	
-	//                     <div class="ui transparent label">
-	//                         <i class="calendar icon"></i>
-	//                         {{topic.publishTime}}
-	//                     </div>
-	//                     <div class="ui transparent label">
-	//                         <i class="comments outline icon"></i>
-	//                         {{topic.comments}}
-	//                     </div>
-	//                     <div class="ui transparent label">
-	//                         <i class="comment icon"></i>
-	//                         <a class="ui label">
-	//                             {{topic.lastCommentUser}}
-	//                         </a>
-	//                     </div>
-	//                     <div class="topicQuickTools">
-	//                         <a class="ui circular topicQuickTool label"><i class="ui yellow star icon"></i></a>
-	//                         <a class="ui circular topicQuickTool topicSetting bottom left dropdown pointing label">
-	//                             <i class="ui red setting icon"></i>
-	
-	//                             <div class="menu">
-	//                                 <div class="item">Move</div>
-	//                                 <div class="item">Delete</div>
-	//                                 <div class="item">Edit</div>
-	//                             </div>
-	//                         </a>
-	//                     </div>
 	//                 </div>
 	//             </div>
-	//             <template v-if="topic.statusText && topic.statusText[0]">
-	//                 <div class="ui red top right attached label status">
-	//                     {{topic.statusText[0]}}
-	//                 </div>
-	//             </template>
 	//         </div>
-	//     </template>
+	//         <div class="ui red top right attached label status" v-if="topic.statusText && topic.statusText[0]">
+	//             {{topic.statusText[0]}}
+	//         </div>
+	//     </div>
 	// </template>
 	
 	// <script>
@@ -13188,30 +13262,31 @@
 	        topics: {
 	            type: Array
 	        }
-	    }
+	    },
+	    ready: function ready() {}
 	};
 	// </script>
-
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	module.exports = "<template v-for=\"topic in topics\">\n        <div class=\"item topic\">\n            <div class=\"ui user picture\">\n                <div class=\"ui fluid tiny image hidden-mb\">\n                    <img v-bind:src=\"topic.imageUrl\" data-title=\"{{topic.popUp.title}}\"\n                         data-content=\"{{topic.popUp.content}}\"/>\n                </div>\n            </div>\n            <div class=\"content\">\n                <a class=\"header larger\" href=\"{{topic.articleUrl}}\">\n                    {{topic.articleTitle}}\n                </a>\n\n                <div class=\"extra\">\n                    <a class=\"ui blue label\">\n                        {{topic.user}}\n                    </a>\n                    <a class=\"ui teal label\">\n                        {{topic.category}}\n                    </a>\n\n                    <div class=\"ui transparent label\">\n                        <i class=\"calendar icon\"></i>\n                        {{topic.publishTime}}\n                    </div>\n                    <div class=\"ui transparent label\">\n                        <i class=\"comments outline icon\"></i>\n                        {{topic.comments}}\n                    </div>\n                    <div class=\"ui transparent label\">\n                        <i class=\"comment icon\"></i>\n                        <a class=\"ui label\">\n                            {{topic.lastCommentUser}}\n                        </a>\n                    </div>\n                    <div class=\"topicQuickTools\">\n                        <a class=\"ui circular topicQuickTool label\"><i class=\"ui yellow star icon\"></i></a>\n                        <a class=\"ui circular topicQuickTool topicSetting bottom left dropdown pointing label\">\n                            <i class=\"ui red setting icon\"></i>\n\n                            <div class=\"menu\">\n                                <div class=\"item\">Move</div>\n                                <div class=\"item\">Delete</div>\n                                <div class=\"item\">Edit</div>\n                            </div>\n                        </a>\n                    </div>\n                </div>\n            </div>\n            <template v-if=\"topic.statusText && topic.statusText[0]\">\n                <div class=\"ui red top right attached label status\">\n                    {{topic.statusText[0]}}\n                </div>\n            </template>\n        </div>\n    </template>";
 
 /***/ },
 /* 27 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"leftContent\" class=\"nine wide column\">\n        <div id=\"announcement\" class=\"ui white floating message\">\n            <div class=\"item\">\n                <div class=\"ui white label\">\n                    <i class=\"announcement icon\"></i>\n                </div>\n                <div id=\"announce\" class=\"ui text shape\">\n                    <div class=\"sides\">\n                        <div class=\"active ui header side\">Did you know? This side starts visible.</div>\n                        <div class=\"ui header side\">Help, its another side!</div>\n                        <div class=\"ui header side\">This is the last side</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"attachedHeader\" class=\"ui attached floating clearing message\" data-area=\"index\">\n            <div class=\"ui left floated breadcrumb basic segment\">\n                <a class=\"section\">\n                    {{siteName}}\n                </a>\n                <span class=\"divider\">/</span>\n                <a class=\"section\">Registration</a>\n                <span class=\"divider\">/</span>\n\n                <div class=\"active section\">Personal Information</div>\n            </div>\n            <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                <i class=\"filter icon\"></i>\n                <span class=\"text\">Sort</span>\n\n                <div class=\"menu\">\n                    <div class=\"header\">\n                        <i class=\"tags icon\"></i>\n                        Sort Method\n                    </div>\n                    <div class=\"scrolling menu\">\n                        <template v-if=\"isLogin\">\n                            <div class=\"item\" data-value=\"1\">\n                                <div class=\"ui red empty circular label\"></div>\n                                Order By System\n                            </div>\n                        </template>\n                        <div class=\"item\" data-value=\"2\">\n                            <div class=\"ui blue empty circular label\"></div>\n                            Order By Date\n                        </div>\n                        <div class=\"item\" data-value=\"3\">\n                            <div class=\"ui black empty circular label\"></div>\n                            Order By Last Reply\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"articlelist\" class=\"ui attached fluid raised segment\">\n            <div id=\"topicItems\" class=\"ui divided items topiclist animated slow fadeIn\" data-page=\"{{page}}\"\n                 data-sort=\"{{sort}}\">\n                <topic-list :topics=\"topicsList\"></topic-list>\n            </div>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom attached floating message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>\n    <div id=\"rightContent\" class=\"three wide column animated fadeInRightTiny\">\n        <div id=\"todayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Today HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div id=\"yesterdayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Yesterday HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div class=\"ui vertical rectangle test ad\" data-text=\"Advertisement\"></div>\n    </div>";
+	module.exports = "<div class=\"item topic\" v-for=\"topic in topics\" transition=\"fade\">\n        <div class=\"ui user picture\">\n            <div class=\"ui fluid tiny image hidden-mb\">\n                <img v-bind:src=\"topic.imageUrl\" data-title=\"{{topic.popUp.title}}\"\n                     data-content=\"{{topic.popUp.content}}\"/>\n            </div>\n        </div>\n        <div class=\"content\">\n            <a class=\"header larger\" href=\"{{topic.articleUrl}}\">\n                {{topic.articleTitle}}\n            </a>\n\n            <div class=\"extra\">\n                <a class=\"ui blue label\">\n                    {{topic.user}}\n                </a>\n                <a class=\"ui teal label\">\n                    {{topic.category}}\n                </a>\n\n                <div class=\"ui transparent label\">\n                    <i class=\"calendar icon\"></i>\n                    {{topic.publishTime}}\n                </div>\n                <div class=\"ui transparent label\">\n                    <i class=\"comments outline icon\"></i>\n                    {{topic.comments}}\n                </div>\n                <div class=\"ui transparent label\">\n                    <i class=\"comment icon\"></i>\n                    <a class=\"ui label\">\n                        {{topic.lastCommentUser}}\n                    </a>\n                </div>\n                <div class=\"topicQuickTools\">\n                    <a class=\"ui circular topicQuickTool label\"><i class=\"ui yellow star icon\"></i></a>\n                    <a class=\"ui circular topicQuickTool topicSetting bottom left dropdown pointing label\">\n                        <i class=\"ui red setting icon\"></i>\n\n                        <div class=\"menu\">\n                            <div class=\"item\">Move</div>\n                            <div class=\"item\">Delete</div>\n                            <div class=\"item\">Edit</div>\n                        </div>\n                    </a>\n                </div>\n            </div>\n        </div>\n        <div class=\"ui red top right attached label status\" v-if=\"topic.statusText && topic.statusText[0]\">\n            {{topic.statusText[0]}}\n        </div>\n    </div>";
 
 /***/ },
 /* 28 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"leftContent\" class=\"nine wide column\">\n        <div id=\"announcement\" class=\"ui white floating message\">\n            <div class=\"item\">\n                <div class=\"ui white label\">\n                    <i class=\"announcement icon\"></i>\n                </div>\n                <div id=\"announce\" class=\"ui text shape\">\n                    <div class=\"sides\">\n                        <div class=\"active ui header side\">Did you know? This side starts visible.</div>\n                        <div class=\"ui header side\">Help, its another side!</div>\n                        <div class=\"ui header side\">This is the last side</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"attachedHeader\" class=\"ui attached floating clearing message\" data-area=\"index\">\n            <div class=\"ui left floated breadcrumb basic segment\">\n                <a class=\"section\">\n                    {{siteName}}\n                </a>\n                <span class=\"divider\">/</span>\n                <a class=\"section\">Registration</a>\n                <span class=\"divider\">/</span>\n\n                <div class=\"active section\">Personal Information</div>\n            </div>\n            <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                <i class=\"filter icon\"></i>\n                <span class=\"text\">Sort</span>\n\n                <div class=\"menu\">\n                    <div class=\"header\">\n                        <i class=\"tags icon\"></i>\n                        Sort Method\n                    </div>\n                    <div class=\"scrolling menu\">\n                        <template v-if=\"isLogin\">\n                            <div class=\"item\" data-value=\"1\">\n                                <div class=\"ui red empty circular label\"></div>\n                                Order By System\n                            </div>\n                        </template>\n                        <div class=\"item\" data-value=\"2\">\n                            <div class=\"ui blue empty circular label\"></div>\n                            Order By Date\n                        </div>\n                        <div class=\"item\" data-value=\"3\">\n                            <div class=\"ui black empty circular label\"></div>\n                            Order By Last Reply\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"articlelist\" class=\"ui attached fluid raised segment\">\n            <div id=\"topicItems\" class=\"ui divided items topiclist\" data-page=\"{{page}}\"\n                 data-sort=\"{{sort}}\">\n                <topic-list :topics=\"topicsList\"></topic-list>\n            </div>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom attached floating message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>\n    <div id=\"rightContent\" class=\"three wide column animated fadeInRightTiny\">\n        <div id=\"todayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Today HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div id=\"yesterdayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Yesterday HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div class=\"ui vertical rectangle test ad\" data-text=\"Advertisement\"></div>\n    </div>";
+
+/***/ },
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(29)
+	module.exports = __webpack_require__(30)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(32)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(33)
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -13225,7 +13300,7 @@
 	})()}
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13315,7 +13390,7 @@
 	//             </div>
 	//         </div>
 	//         <div id="topicItemsArea"
-	//              class="ui divided items topiclist no padded attached raised segment animated slow fadeIn"
+	//              class="ui divided items topiclist no padded attached raised segment"
 	//              data-page="{{page}}"
 	//              data-sort="{{topicSort}}">
 	//             <topic-list :topics="topics"></topic-list>
@@ -13334,7 +13409,7 @@
 	// </template>
 	
 	// <script>
-	__webpack_require__(30);
+	__webpack_require__(31);
 	module.exports = {
 	    name: "area",
 	    data: function data() {
@@ -13349,12 +13424,11 @@
 	        };
 	    },
 	    route: {
-	        waitForData: true,
-	        data: function data(transition) {
-	            console.log(transition.to.params);
-	            this.$http.post('/a/' + transition.to.params.any, function (result, status, request) {
-	                console.log(result);
-	                transition.next(result.data);
+	        data: function data() {
+	            this.$http.post('/a/' + this.$route.params.any, function (result, status, request) {
+	                for (var index in result.data) {
+	                    this.$set(index, result.data[index]);
+	                }
 	            }).error(function (data, status, request) {
 	                // handle error
 	            });
@@ -13362,36 +13436,35 @@
 	    },
 	    ready: function ready() {
 	        $.lc4e.area.ready();
-	        console.log(this.$root);
 	    },
 	    components: {
-	        "topic-list": __webpack_require__(24)
+	        "topic-list": __webpack_require__(25)
 	    }
 	};
 	
 	// </script>
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 31 */,
-/* 32 */
+/* 32 */,
+/* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui teal  basic row column segment\">\n        <div class=\"ui large inverted statistic\">\n            <div class=\"value\">\n                <i class=\"info circle icon\"></i> <br/>\n\n                <div id=\"areaName\" class=\"value\" v-html=\"curArea\"></div>\n            </div>\n            <div id=\"areaDescription\" class=\"label\">\n                Fill out the form below to sign-up for a new account\n            </div>\n        </div>\n    </div>\n    <div id=\"topicList\" class=\"twelve wide column\">\n        <div id=\"areaSummery\" class=\"ui attached floating message\">\n            <div class=\"ui row no padded clearing basic segment\">\n                <div class=\"ui left floated breadcrumb basic segment\">\n                    <a class=\"section\" v-html=\"siteName\"></a>\n                    <span class=\"divider\">/</span>\n\n                    <div class=\"active section\" v-html=\"curArea\"></div>\n                </div>\n                <div id=\"areaLabel\" class=\"ui labels\">\n                    <a class=\"ui tag mini label\">New</a>\n                    <a class=\"ui red mini tag label\">Upcoming</a>\n                    <a class=\"ui teal mini tag label\">Featured</a>\n                </div>\n                <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                    <i class=\"filter icon\"></i>\n                    <span class=\"text\">Sort</span>\n\n                    <div class=\"menu\">\n                        <div class=\"header\">\n                            <i class=\"tags icon\"></i>\n                            Sort Method\n                        </div>\n                        <div class=\"scrolling menu\">\n                            <template v-if=\"isLogin\">\n                                <div class=\"item\" data-value=\"1\">\n                                    <div class=\"ui red empty circular label\"></div>\n                                    Order By System\n                                </div>\n                            </template>\n                            <div class=\"item\" data-value=\"2\">\n                                <div class=\"ui blue empty circular label\"></div>\n                                Order By Date\n                            </div>\n                            <div class=\"item\" data-value=\"3\">\n                                <div class=\"ui black empty circular label\"></div>\n                                Order By Last Reply\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"ui header\">\n                <div class=\"ui three statistics\">\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Stars\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            31,200\n                        </div>\n                        <div class=\"label\">\n                            Topics\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Comments\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"topicItemsArea\"\n             class=\"ui divided items topiclist no padded attached raised segment animated slow fadeIn\"\n             data-page=\"{{page}}\"\n             data-sort=\"{{topicSort}}\">\n            <topic-list :topics=\"topics\"></topic-list>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom clearing floating attached message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>";
+	module.exports = "<div class=\"ui teal  basic row column segment\">\n        <div class=\"ui large inverted statistic\">\n            <div class=\"value\">\n                <i class=\"info circle icon\"></i> <br/>\n\n                <div id=\"areaName\" class=\"value\" v-html=\"curArea\"></div>\n            </div>\n            <div id=\"areaDescription\" class=\"label\">\n                Fill out the form below to sign-up for a new account\n            </div>\n        </div>\n    </div>\n    <div id=\"topicList\" class=\"twelve wide column\">\n        <div id=\"areaSummery\" class=\"ui attached floating message\">\n            <div class=\"ui row no padded clearing basic segment\">\n                <div class=\"ui left floated breadcrumb basic segment\">\n                    <a class=\"section\" v-html=\"siteName\"></a>\n                    <span class=\"divider\">/</span>\n\n                    <div class=\"active section\" v-html=\"curArea\"></div>\n                </div>\n                <div id=\"areaLabel\" class=\"ui labels\">\n                    <a class=\"ui tag mini label\">New</a>\n                    <a class=\"ui red mini tag label\">Upcoming</a>\n                    <a class=\"ui teal mini tag label\">Featured</a>\n                </div>\n                <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                    <i class=\"filter icon\"></i>\n                    <span class=\"text\">Sort</span>\n\n                    <div class=\"menu\">\n                        <div class=\"header\">\n                            <i class=\"tags icon\"></i>\n                            Sort Method\n                        </div>\n                        <div class=\"scrolling menu\">\n                            <template v-if=\"isLogin\">\n                                <div class=\"item\" data-value=\"1\">\n                                    <div class=\"ui red empty circular label\"></div>\n                                    Order By System\n                                </div>\n                            </template>\n                            <div class=\"item\" data-value=\"2\">\n                                <div class=\"ui blue empty circular label\"></div>\n                                Order By Date\n                            </div>\n                            <div class=\"item\" data-value=\"3\">\n                                <div class=\"ui black empty circular label\"></div>\n                                Order By Last Reply\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"ui header\">\n                <div class=\"ui three statistics\">\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Stars\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            31,200\n                        </div>\n                        <div class=\"label\">\n                            Topics\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Comments\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"topicItemsArea\"\n             class=\"ui divided items topiclist no padded attached raised segment\"\n             data-page=\"{{page}}\"\n             data-sort=\"{{topicSort}}\">\n            <topic-list :topics=\"topics\"></topic-list>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom clearing floating attached message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>";
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(34)
+	module.exports = __webpack_require__(35)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(44)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(45)
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -13405,7 +13478,7 @@
 	})()}
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13563,8 +13636,8 @@
 	// </template>
 	
 	// <script>
-	__webpack_require__(35);
-	__webpack_require__(37);
+	__webpack_require__(36);
+	__webpack_require__(38);
 	module.exports = {
 	    name: 'app',
 	    data: function data() {
@@ -13574,28 +13647,28 @@
 	        $.lc4e.common.ready();
 	    },
 	    components: {
-	        "menu-tree": __webpack_require__(41)
+	        "menu-tree": __webpack_require__(42)
 	    }
 	};
 	// </script>
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 36 */,
-/* 37 */
+/* 37 */,
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(38);
 	__webpack_require__(39);
 	__webpack_require__(40);
+	__webpack_require__(41);
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports) {
 
 	/*!
@@ -13661,19 +13734,6 @@
 	        } else {
 	            return obj;
 	        }
-	    },
-	    popstate: function () {
-	        window.onpopstate = function (e) {
-	            var state = e.state,
-	                $target = $(state.data),
-	                $origin = $(state.target);
-	            if (state) {
-	                $origin.empty();
-	                $target.replaceAll($origin);
-	                document.title = state.title;
-	                $target.transition('fade in');
-	            }
-	        };
 	    },
 	    Lc4eToDate: {
 	        unix2human: function (unixtime) {
@@ -16772,7 +16832,6 @@
 	    Lc4eAjax: function (data) {
 	        data = $.extend(true, {
 	            cjson: false,
-	            pjax: false,
 	            target: '',
 	            token: false,
 	            showLoad: true,
@@ -16786,11 +16845,6 @@
 	                type: "post",
 	                dataType: "json",
 	                contentType: "application/json"
-	            }, data);
-	        } else if (data.pjax) {
-	            data = $.extend(true, {
-	                type: 'get',
-	                dataType: "html"
 	            }, data);
 	        } else {
 	            data = $.extend(true, {
@@ -16812,30 +16866,6 @@
 	                    t = new Date().getTime().toString();
 	                xhr.setRequestHeader(tk, lsuf + t + lpre);
 	            }
-	            if (data.pjax) {
-	                xhr.setRequestHeader('X-PJAX', true);
-	                var state = window.history.state,
-	                    $target = $(data.target);
-	                if (state) {
-	                    if (state.target != data.target) {
-	                        state.target = data.target;
-	                        state.animate = false;
-	                        state.data = $(data.target).prop('outerHTML');
-	                        history.replaceState(state, document.title);
-	                    }
-	                } else {
-	                    state = {
-	                        target: data.target,
-	                        data: $(data.target).prop('outerHTML'),
-	                        title: document.title,
-	                        url: window.location.pathname
-	                    };
-	                    $.lc4e.Lc4ePJAX.active = true;
-	                    $.lc4e.popstate();
-	                    history.replaceState(state, document.title);
-	                }
-	                $target.Lc4eDimmer();
-	            }
 	            if (typeof data.options.beforeSend === "function") {
 	                data.options.beforeSend.call(this, xhr, settings);
 	            }
@@ -16844,43 +16874,6 @@
 	            data.options["success"] = data["success"];
 	        }
 	
-	        if (data.pjax && data.target) {
-	            if (!$.lc4e.Lc4ePJAX.active) {
-	                $.lc4e.popstate();
-	            }
-	            data.success = function (resValue, textStatus) {
-	                if (data.pjax) {
-	                    $('body').animatescroll({
-	                        scrollSpeed: 500
-	                    });
-	                }
-	                var $target = $(data.target);
-	                $target.Lc4eDimmer('hide').empty().html(resValue);
-	                if (typeof data.options.success === "function") {
-	                    data.options.success.call(this, resValue, textStatus, $target);
-	                }
-	                var state = {
-	                    target: data.target,
-	                    data: $target.prop('outerHTML'),
-	                    title: document.title,
-	                    url: data.url
-	                };
-	                if ($.lc4e.Lc4ePJAX.active) {
-	                    history.pushState(state, document.title, data.url);
-	                } else {
-	                    history.replaceState(state, document.title);
-	                    $.lc4e.Lc4ePJAX.active = true;
-	                }
-	
-	                if (data.animate === 'function') {
-	                    data.animate.call(this, $target);
-	                } else if (data.animate) {
-	                    $target.addClass('animated ' + data.animate).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
-	                        $target.remove('animated ' + data.animate);
-	                    });
-	                }
-	            };
-	        }
 	        if (data.hasOwnProperty("complete") && typeof data.complete === "function") {
 	            data.options["complete"] = data["complete"];
 	        }
@@ -16949,21 +16942,6 @@
 	            var $menu = $('#menu'),
 	                $configTool = $('#config-tool-options'),
 	                $floatTool = $('#floatTools');
-	
-	            if (window.history.state) {
-	                $.lc4e.Lc4ePJAX.active = true;
-	                $.lc4e.popstate();
-	            } else {
-	                $.lc4e.popstate();
-	            }
-	            //  $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
-	            //
-	            //$menu.find('div.button[href],a.item[href]').on('click', function (e) {
-	            //        var $this = $(this);
-	            //        window.location.href = $this.attr('href');
-	            //        e.preventDefault();
-	            //    }
-	            //);
 	
 	            $menu.find('.ui.dropdown.item').dropdown({
 	                action: "nothing",
@@ -17071,7 +17049,7 @@
 	});
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports) {
 
 	/**
@@ -17143,7 +17121,7 @@
 	});
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	/**
@@ -17186,13 +17164,13 @@
 	});
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(42)
+	module.exports = __webpack_require__(43)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(43)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(44)
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -17206,7 +17184,7 @@
 	})()}
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17249,13 +17227,13 @@
 	// </script>
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = "<template v-for=\"menu in menus\">\n        <template v-if=\"size(menu)\">\n            <div class=\"ui dropdown link item\">\n                <i v-if=\"menu.ICON\" v-bind:class=\"[menu.ICON,'icon']\"></i>\n                <span class=\"text\">{{menu.NAME}}</span><i class=\"dropdown icon\"></i>\n\n                <div class=\"menu\">\n                    <menu-tree :menus=\"menu.CHILDS\"></menu-tree>\n                </div>\n            </div>\n        </template>\n        <template v-else>\n            <a class=\"item linked\" title=\"{{menu.NAME}}\" v-link=\"menu.ABBR\">\n                <i v-bind:class=\"[menu.ICON,'icon']\" v-if=\"menu.ICON\"></i>\n                {{menu.NAME}}\n            </a>\n        </template>\n    </template>";
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=\"menu\" class=\"ui menu\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" v-bind:src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\">\n                            <img class=\"ui headered linked image\" v-bind:src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" href=\"/SignUp\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" href=\"/SignIn\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}}{{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"https://www.digitalocean.com/?refcode=f7bf7094acd9\">DigitalOcean</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>";

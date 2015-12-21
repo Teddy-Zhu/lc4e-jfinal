@@ -55,10 +55,6 @@ public class CustomPlugin implements IPlugin {
 
     private static Map<Class<? extends Throwable>, Method> exceptionsMap;
 
-    private static Map<String, Set<Method>> aopHandler;
-
-    private static Map<String, List<Lc4ePlugin>> pluginAOPHandler;
-
     private static List<IHandler> pluginIhanders;
 
     private static List<IInterceptor> pluginIinterceptors;
@@ -103,7 +99,6 @@ public class CustomPlugin implements IPlugin {
         plugins = new ArrayList<>();
         interceptors = new ArrayList<>();
         handlers = new ArrayList<>();
-        pluginAOPHandler = new HashMap<>();
         actionKeys = new HashSet<>();
         pluginIhanders = new ArrayList<>();
         pluginIinterceptors = new ArrayList<>();
@@ -541,18 +536,9 @@ public class CustomPlugin implements IPlugin {
         return exceptionsMap;
     }
 
-    public static Map<String, List<Lc4ePlugin>> getPluginAOPHandler() {
-        return pluginAOPHandler;
-    }
-
     public static List<IHandler> getPluginIhanders() {
         return pluginIhanders;
     }
-
-    public static List<IInterceptor> getPluginIinterceptors() {
-        return pluginIinterceptors;
-    }
-
 
     public static void setValidateKit(ValidateKitI validateKit) {
         CustomPlugin.validateKit = validateKit;

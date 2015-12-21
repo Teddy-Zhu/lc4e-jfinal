@@ -20,17 +20,17 @@
 </template>
 
 <script>
-module.exports = {
-    name: 'menu-tree',
-    props: {
-        menus: {
-            type: Array
-        }
-    },
-    methods: {
-        size: function (obj) {
-            return obj.CHILDS.length > 0;
+    module.exports = {
+        name: 'menu-tree',
+        props: {
+            menus: {
+                type: Array
+            }
+        },
+        methods: {
+            size: function (obj) {
+                return obj.CHILDS.length > 0;
+            }
         }
     }
-}
 </script>

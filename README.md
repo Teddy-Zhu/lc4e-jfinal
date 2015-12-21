@@ -6,10 +6,22 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 
 ###It's a Light Forum.
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
-
->#### Use Java(`JDK8`),Jetbrick Template(`HTML5`,`Jquery`,`CSS3`,`Semantic UI`,`animatescroll`,`Animate`)
+>#### Use Java(`JDK8`),
+>###Jetbrick Template(`HTML5`,`VueJs`,`CSS3`,`Ant-Design`)
+>### LESS 构建 CSS
+>### Webpack 构建前端组建
 
 ----------
+
+# 计划ING(2015-12-19 started)
+> 前端使用 vuejs
+> 
+> 前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI
+> 
+> 抛弃Jquery (同上,Render效率较低)
+> 
+> 本项目会暂缓更新,等待新的UI完成
+
 
 # [Demo](http://www.lc4e.com) #
 ----------
@@ -23,6 +35,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 >1.  主题  
 >  1.Markdown支持  
 >  2.@楼层功能  
+>  3.等...
 >2. 用户  
 >  1.用户控制权限系统  
 >  2.独立自由的用户like,block系统  
@@ -39,7 +52,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 >实现了类似Spring的注解，Serveice，Controller 自动注入  
 >注解参数验证等功能
 
-###Annotation enhancement 
+#Annotation enhancement 
 
 - `ConfigHandler [T]`:注解Jfianl Config，可以导入多个Config
 - `PluginHander [T]`:注解插件类 ，自动加载插件无需在Config中手动配置
@@ -52,19 +65,50 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 - `Service [T]`: 自动注入Service层,需配合 Inject注解，Service 方法加入Transaction 注解 即可自动事物
 - `Model [T]`：结合ActiveRecord，自动Mapping数据库， 结合Tools 可以自动生成Dao 与 Mapping数据
 - `Inject [F]`: 自动注入，须在Serivce 或者 Controller中。
+
+##Custom Annotation Plugins
+> 自定义注解插件,除了系统初始化级别的注解外,`Controller ` 以及`Service ` 内的注解均可以通过此插件进行拓展.
+> 
+> 用法(Usage): 具体参考系统一有注解
+> 
+> example
+
+```Java
+@CustomAnnotation
+public class customAn extend CustomAnnotationPlugin {
+            // 插件生效顺序[future]暂未实现
+           public int getOrder() {
+                return 0;
+            }
+            // 需要自定义的注解class
+            public abstract Class<? extends Annotation> getAnnotation();
+            //处理此注解的事件
+            //参数说明 
+            //annotation 为当前注解的实例
+            //resolver 处理完事件调用原函数,resolver.invoke()
+            // objects 拦截方法的参数
+            // target 调用的实例
+            // method 拦截的方法
+            // isHandled 需要直接返回不处理剩余直接或者其本身事件时,isHandled[0] = true
+            public abstract Object intercept(Annotation annotation, AnnotationPluginResolver resolver, Object[] objects, Object target, Method method, boolean[] isHandled) throws Throwable;
+}
+```
+###基于CustonAnnotation的注解插件
 - `Transaction [M]`:在方法上注入，可以自动事物
 - `RequestHeader[T/M]`:request Header 验证
-- `RequestMethod[T/M]`:request 类型验证，实现restful
+- `RequestMethod[T/M]`:request 类型验证，实现restful风格的Controller
 - `ResponseStatus[T/M]`:强制设置返回状态码
 - `SetComVar[M]`:设置数据库配置项，预设值
 - `SetUIDate[M]`:设置动态UI变量,可指定方法
 - `SetUIDates[M]`:批量SetUIDate
 - `ValidateComVar[M]`:验证数据库配置值，预设值
 - `ValidateComVars[M]`:批量ValidateComVar
-- `ValidateParam[M]`:参数验证,支持String Integer,Long,Double,Float,Date,File,POJO等验证，同时设置默认值
-- `ValidateParams[M]`:批量参数验证
+- `ValidateParam[M]`:参数验证,支持String Integer,Long,Double,Float,Date,File,ActiveRecord等验证，同时设置默认值
+- `ValidateParams[M]`:批量参数验证,当参数过多时推荐使用
 - `ValidateToken[T/M]`:验证TOKEN
 - `Cache[M]`:在Service的方法中注解，可以自动缓存
+- `SetPJAX`:设置PJAX attribute
+- `SetAJAX`:设置AJAX attribute
 
 ### Shiro Related
 - `RequireGuest[T/M]`:
@@ -80,10 +124,9 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 - `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
 - `IInterceptor`: interceptor增强，需使用InterceptorHandler载入，新增beforeIntercept，afterIntercept，beforeException，afterException
 - `IIPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
-- `SetPJAX`:设置PJAX attribute
-- `SetAJAX`:设置AJAX attribute
 
-### Exception
+
+## Exception(待整理)
 
 - Lc4eAutoSetterException:自动设置response attribute 异常  
 - Lc4eApplicationException: 业务层异常  

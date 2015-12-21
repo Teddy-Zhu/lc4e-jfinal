@@ -62,17 +62,6 @@ $.extend($.lc4e, {
             return obj;
         }
     },
-    popstate: function () {
-        window.onpopstate = function (e) {
-            var state = e.state, $target = $(state.data), $origin = $(state.target);
-            if (state) {
-                $origin.empty();
-                $target.replaceAll($origin);
-                document.title = state.title;
-                $target.transition('fade in');
-            }
-        }
-    },
     Lc4eToDate: {
         unix2human: function (unixtime) {
             var dateObj = new Date(unixtime);
@@ -3580,7 +3569,6 @@ $.extend({
     Lc4eAjax: function (data) {
         data = $.extend(true, {
             cjson: false,
-            pjax: false,
             target: '',
             token: false,
             showLoad: true,
@@ -3594,11 +3582,6 @@ $.extend({
                 type: "post",
                 dataType: "json",
                 contentType: "application/json"
-            }, data);
-        } else if (data.pjax) {
-            data = $.extend(true, {
-                type: 'get',
-                dataType: "html"
             }, data);
         } else {
             data = $.extend(true, {
@@ -3617,29 +3600,6 @@ $.extend({
                 var tk = 'l' + 'c' + '4' + 'e' + '-' + 't' + 'o' + 'k' + 'e' + 'n', lsuf = (data.url.length - 1).toString(), lpre = (data.url.length + 1).toString(), t = new Date().getTime().toString();
                 xhr.setRequestHeader(tk, lsuf + t + lpre);
             }
-            if (data.pjax) {
-                xhr.setRequestHeader('X-PJAX', true);
-                var state = window.history.state, $target = $(data.target);
-                if (state) {
-                    if (state.target != data.target) {
-                        state.target = data.target;
-                        state.animate = false;
-                        state.data = $(data.target).prop('outerHTML');
-                        history.replaceState(state, document.title);
-                    }
-                } else {
-                    state = {
-                        target: data.target,
-                        data: $(data.target).prop('outerHTML'),
-                        title: document.title,
-                        url: window.location.pathname
-                    };
-                    $.lc4e.Lc4ePJAX.active = true;
-                    $.lc4e.popstate();
-                    history.replaceState(state, document.title);
-                }
-                $target.Lc4eDimmer();
-            }
             if (typeof data.options.beforeSend === "function") {
                 data.options.beforeSend.call(this, xhr, settings);
             }
@@ -3648,44 +3608,6 @@ $.extend({
             data.options["success"] = data["success"];
         }
 
-        if (data.pjax && data.target) {
-            if (!$.lc4e.Lc4ePJAX.active) {
-                $.lc4e.popstate();
-            }
-            data.success = function (resValue, textStatus) {
-                if (data.pjax) {
-                    $('body').animatescroll({
-                        scrollSpeed: 500
-                    });
-                }
-                var $target = $(data.target);
-                $target.Lc4eDimmer('hide').empty().html(resValue);
-                if (typeof data.options.success === "function") {
-                    data.options.success.call(this, resValue, textStatus, $target);
-                }
-                var state = {
-                    target: data.target,
-                    data: $target.prop('outerHTML'),
-                    title: document.title,
-                    url: data.url
-                };
-                if ($.lc4e.Lc4ePJAX.active) {
-                    history.pushState(state, document.title, data.url);
-                } else {
-                    history.replaceState(state, document.title);
-                    $.lc4e.Lc4ePJAX.active = true;
-                }
-
-                if (data.animate === 'function') {
-                    data.animate.call(this, $target)
-                } else if (data.animate) {
-                    $target.addClass('animated ' + data.animate).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
-                        $target.remove('animated ' + data.animate);
-                    });
-                }
-            }
-
-        }
         if (data.hasOwnProperty("complete") && typeof data.complete === "function") {
             data.options["complete"] = data["complete"];
         }
@@ -3752,21 +3674,6 @@ $.extend($.lc4e, {
         },
         bindEvent: function () {
             var $menu = $('#menu'), $configTool = $('#config-tool-options'), $floatTool = $('#floatTools');
-
-            if (window.history.state) {
-                $.lc4e.Lc4ePJAX.active = true;
-                $.lc4e.popstate();
-            } else {
-                $.lc4e.popstate();
-            }
-            //  $menu.find('.left.menu .logo').Lc4eHover('infinite spiny');
-            //
-            //$menu.find('div.button[href],a.item[href]').on('click', function (e) {
-            //        var $this = $(this);
-            //        window.location.href = $this.attr('href');
-            //        e.preventDefault();
-            //    }
-            //);
 
             $menu.find('.ui.dropdown.item').dropdown({
                 action: "nothing",

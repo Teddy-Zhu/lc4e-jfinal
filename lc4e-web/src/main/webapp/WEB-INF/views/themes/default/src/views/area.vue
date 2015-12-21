@@ -83,7 +83,7 @@
             </div>
         </div>
         <div id="topicItemsArea"
-             class="ui divided items topiclist no padded attached raised segment animated slow fadeIn"
+             class="ui divided items topiclist no padded attached raised segment"
              data-page="{{page}}"
              data-sort="{{topicSort}}">
             <topic-list :topics="topics"></topic-list>
@@ -117,20 +117,18 @@ module.exports = {
         };
     },
     route: {
-        waitForData: true,
-        data: function (transition) {
-            console.log(transition.to.params);
-            this.$http.post('/a/' + transition.to.params.any, function (result, status, request) {
-                console.log(result);
-                transition.next(result.data);
+        data: function () {
+            this.$http.post('/a/' + this.$route.params.any, function (result, status, request) {
+                for(var index in result.data){
+                    this.$set(index,result.data[index]);
+                }
             }).error(function (data, status, request) {
                 // handle error
-            })
+            });
         }
     },
     ready: function () {
         $.lc4e.area.ready();
-        console.log(this.$root);
     },
     components: {
         "topic-list": require('../components/topicList.vue')

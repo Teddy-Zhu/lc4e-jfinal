@@ -54,7 +54,7 @@
             </div>
         </div>
         <div id="articlelist" class="ui attached fluid raised segment">
-            <div id="topicItems" class="ui divided items topiclist animated slow fadeIn" data-page="{{page}}"
+            <div id="topicItems" class="ui divided items topiclist" data-page="{{page}}"
                  data-sort="{{sort}}">
                 <topic-list :topics="topicsList"></topic-list>
             </div>
@@ -106,7 +106,7 @@ module.exports = {
         "topic-list": require('../components/topicList.vue')
     },
     ready: function () {
-        $.lc4e.index.ready();
+        $.lc4e.index.bindEvent();
     },
     created: function () {
     },
