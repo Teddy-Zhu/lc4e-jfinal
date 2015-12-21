@@ -17,7 +17,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 > 前端使用 vuejs	
 > 前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI	
 > 抛弃Jquery (同上,Render效率较低)	
-> 本项目会暂缓更新,等待新的UI完成(SUI [https://github.com/Teddy-Zhu/sui]() )
+> 本项目会暂缓更新,等待新的UI完成(SUI [https://github.com/Teddy-Zhu/sui](https://github.com/Teddy-Zhu/sui) )
 
 
 # [Demo](http://www.lc4e.com) #
