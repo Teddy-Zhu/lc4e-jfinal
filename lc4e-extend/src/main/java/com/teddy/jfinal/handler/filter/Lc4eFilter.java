@@ -6,7 +6,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.core.JFinalFilter;
 import com.jfinal.core.JFinalPublic;
 import com.jfinal.handler.Handler;
-import com.jfinal.log.Logger;
+import com.jfinal.log.Log;
 import com.teddy.jfinal.handler.gzip.GZIPResponseWrapper;
 import com.teddy.jfinal.plugin.CustomPlugin;
 
@@ -23,8 +23,8 @@ public class Lc4eFilter implements Filter {
     private String encoding;
     private JFinalConfig jfinalConfig;
     private Constants constants;
+    private static Log log;
     private static final JFinal jfinal = JFinal.me();
-    private static Logger log;
     private int contextPathLength;
     private static final JFinalPublic pub = new JFinalPublic();
 
@@ -98,7 +98,4 @@ public class Lc4eFilter implements Filter {
             throw new RuntimeException("Can not create instance of class: " + configClass + ". Please check the config in web.xml");
     }
 
-    static void initLogger() {
-        log = Logger.getLogger(JFinalFilter.class);
-    }
 }

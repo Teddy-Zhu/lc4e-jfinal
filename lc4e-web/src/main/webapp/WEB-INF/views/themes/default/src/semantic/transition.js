@@ -7,53 +7,25 @@ module.exports = function (Vue, options) {
         transitions = {
             defineEmphasis: function (name, duration) {
                 return {
-                    css: false,
                     beforeEnter: function (el) {
-                        $(el).show();
                     },
-
-                    enter: function (el, done) {
-                        $(el).transition(name, duration, done);
-
-                        return function() {
-                            $(el).transition('stop');
-                        }
+                    enter: function (el) {
+                        $(el).addClass('animating transition ' + name + ' in', duration, done);
                     },
-
-                    leave: function (el, done) {
-                        $(el)
-                            .transition('reset')
-                            .transition(name, duration, done)
-                            .hide();
-
-                        return function() {
-                            $(el).transition('stop');
-                        }
+                    leave: function (el) {
+                        $(el).removeClass('in').addClass('out');
                     }
                 };
             },
             defineAppearance: function (name, duration) {
 
                 return {
-                    css: false,
-                    enter: function (el, done) {
-                        $(el)
-                            .transition('reset')
-                            .transition(name + ' in', duration, done);
-
-                        return function() {
-                            $(el).transition('stop');
-                        }
+                    enter: function (el) {
+                        $(el).addClass('animating transition ' + name + ' in', duration, done);
                     },
 
-                    leave: function (el, done) {
-                        $(el)
-                            .transition('reset')
-                            .transition(name + ' out', duration, done);
-
-                        return function() {
-                            $(el).transition('stop');
-                        }
+                    leave: function (el) {
+                        $(el).removeClass('in').addClass('out');
                     }
                 };
             }

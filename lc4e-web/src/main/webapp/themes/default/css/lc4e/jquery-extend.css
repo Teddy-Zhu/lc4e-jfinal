@@ -2173,3 +2173,19 @@ html, body {
 .shadow-5 {
     box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22) !important;
 }
+
+.fade-enter {
+    animation: fadeIn 800ms ease;
+}
+
+.fade-leave {
+    animation: fadeOut 800ms ease;
+}
+
+.fadeInDown-enter {
+    animation: fadeInDown 800ms ease;
+}
+
+.fadeInDown-leave {
+    animation: fadeOutDown 800ms ease;
+}

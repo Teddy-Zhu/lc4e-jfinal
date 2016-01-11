@@ -1,6 +1,7 @@
 package com.teddy.jfinal.plugin;
 
-import com.jfinal.log.Logger;
+
+import com.jfinal.log.Log;
 import com.jfinal.plugin.IPlugin;
 import com.teddy.jfinal.interfaces.DBModel;
 import com.teddy.jfinal.plugin.quartz.IJob;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 public class QuartzPlugin implements IPlugin {
-    private final Logger logger = Logger.getLogger(getClass());
+    private static Log log;
     private Set<Lc4eJob> jobs;
     private SchedulerFactory sf;
     private Scheduler scheduler;
@@ -87,7 +88,7 @@ public class QuartzPlugin implements IPlugin {
             triggerBuilder = ReflectTool.on(temp).call("build").get();
 
             Date ft = ReflectTool.on(scheduler).call("scheduleJob", jobBuilder, triggerBuilder).get();
-            logger.debug(ReflectTool.on(jobBuilder).call("getKey") + " has been scheduled to run at: " + ft + " " +
+            log.debug(ReflectTool.on(jobBuilder).call("getKey") + " has been scheduled to run at: " + ft + " " +
                     "and repeat based on expression: " + ReflectTool.on(triggerBuilder).call("getCronExpression"));
         });
 

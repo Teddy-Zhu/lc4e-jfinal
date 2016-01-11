@@ -51,21 +51,49 @@
 	var Vue = __webpack_require__(6),
 	    Vueplugins = {
 	    VueRouter: __webpack_require__(8),
-	    VueResource: __webpack_require__(9),
-	    SeTransition: __webpack_require__(17)
+	    VueResource: __webpack_require__(9)
 	};
 	for (var index in Vueplugins) {
 	    Vue.use(Vueplugins[index]);
 	}
 	
+	Vue.transition('fade', {
+	
+	    beforeEnter: function (el) {
+	        console.log("beforeEnter");
+	    },
+	    enter: function (el) {
+	        console.log("enter");
+	    },
+	    afterEnter: function (el) {
+	        console.log("afterEnter");
+	    },
+	    enterCancelled: function (el) {
+	        console.log("enterCancelled");
+	    },
+	
+	    beforeLeave: function (el) {
+	        console.log("beforeLeave");
+	    },
+	    leave: function (el) {
+	        console.log("leave");
+	    },
+	    afterLeave: function (el) {
+	        console.log("afterLeave");
+	    },
+	    leaveCancelled: function (el) {
+	        console.log("leaveCancelled");
+	    }
+	});
+	
 	var router = new Vueplugins.VueRouter({
 	    history: false
 	});
 	
-	router.map(__webpack_require__(18));
+	router.map(__webpack_require__(28));
 	
 	Vue.config.debug = true;
-	router.start(__webpack_require__(34), '#lc4eApp');
+	router.start(__webpack_require__(44), '#lc4eApp');
 
 /***/ },
 /* 1 */,
@@ -77,7 +105,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/*!
-	 * Vue.js v1.0.10
+	 * Vue.js v1.0.12
 	 * (c) 2015 Evan You
 	 * Released under the MIT License.
 	 */
@@ -107,6 +135,7 @@
 	      vm._digest();
 	    }
 	  }
+	  return val;
 	}
 	
 	/**
@@ -638,6 +667,7 @@
 	var str;
 	var dir;
 	var c;
+	var prev;
 	var i;
 	var l;
 	var lastFilterIndex;
@@ -723,13 +753,14 @@
 	  dir = {};
 	
 	  for (i = 0, l = str.length; i < l; i++) {
+	    prev = c;
 	    c = str.charCodeAt(i);
 	    if (inSingle) {
 	      // check single quote
-	      if (c === 0x27) inSingle = !inSingle;
+	      if (c === 0x27 && prev !== 0x5C) inSingle = !inSingle;
 	    } else if (inDouble) {
 	      // check double quote
-	      if (c === 0x22) inDouble = !inDouble;
+	      if (c === 0x22 && prev !== 0x5C) inDouble = !inDouble;
 	    } else if (c === 0x7C && // pipe
 	    str.charCodeAt(i + 1) !== 0x7C && str.charCodeAt(i - 1) !== 0x7C) {
 	      if (dir.expression == null) {
@@ -922,10 +953,22 @@
 	  }
 	}
 	
+	/**
+	 * Replace all interpolation tags in a piece of text.
+	 *
+	 * @param {String} text
+	 * @return {String}
+	 */
+	
+	function removeTags(text) {
+	  return text.replace(tagRE, '');
+	}
+	
 	var text$1 = Object.freeze({
 	  compileRegex: compileRegex,
 	  parseText: parseText,
-	  tokensToExp: tokensToExp
+	  tokensToExp: tokensToExp,
+	  removeTags: removeTags
 	});
 	
 	var delimiters = ['{{', '}}'];
@@ -1200,6 +1243,18 @@
 	}
 	
 	/**
+	 * Check the presence of a bind attribute.
+	 *
+	 * @param {Node} node
+	 * @param {String} name
+	 * @return {Boolean}
+	 */
+	
+	function hasBindAttr(node, name) {
+	  return node.hasAttribute(name) || node.hasAttribute(':' + name) || node.hasAttribute('v-bind:' + name);
+	}
+	
+	/**
 	 * Insert el before target
 	 *
 	 * @param {Element} el
@@ -1289,10 +1344,29 @@
 	}
 	
 	/**
+	 * In IE9, setAttribute('class') will result in empty class
+	 * if the element also has the :class attribute; However in
+	 * PhantomJS, setting `className` does not work on SVG elements...
+	 * So we have to do a conditional check here.
+	 *
+	 * @param {Element} el
+	 * @param {String} cls
+	 */
+	
+	function setClass(el, cls) {
+	  /* istanbul ignore if */
+	  if (isIE9 && !(el instanceof SVGElement)) {
+	    el.className = cls;
+	  } else {
+	    el.setAttribute('class', cls);
+	  }
+	}
+	
+	/**
 	 * Add class with compatibility for IE & SVG
 	 *
 	 * @param {Element} el
-	 * @param {Strong} cls
+	 * @param {String} cls
 	 */
 	
 	function addClass(el, cls) {
@@ -1301,7 +1375,7 @@
 	  } else {
 	    var cur = ' ' + (el.getAttribute('class') || '') + ' ';
 	    if (cur.indexOf(' ' + cls + ' ') < 0) {
-	      el.setAttribute('class', (cur + cls).trim());
+	      setClass(el, (cur + cls).trim());
 	    }
 	  }
 	}
@@ -1310,7 +1384,7 @@
 	 * Remove class with compatibility for IE & SVG
 	 *
 	 * @param {Element} el
-	 * @param {Strong} cls
+	 * @param {String} cls
 	 */
 	
 	function removeClass(el, cls) {
@@ -1322,7 +1396,7 @@
 	    while (cur.indexOf(tar) >= 0) {
 	      cur = cur.replace(tar, ' ');
 	    }
-	    el.setAttribute('class', cur.trim());
+	    setClass(el, cur.trim());
 	  }
 	  if (!el.className) {
 	    el.removeAttribute('class');
@@ -1482,6 +1556,7 @@
 	}
 	
 	var commonTagRE = /^(div|p|span|img|a|b|i|br|ul|ol|li|h1|h2|h3|h4|h5|h6|code|pre|table|th|td|tr|form|label|input|select|option|nav|article|section|header|footer)$/;
+	var reservedTagRE = /^(slot|partial|component)$/;
 	
 	/**
 	 * Check if an element is a component, if yes return its
@@ -1495,7 +1570,7 @@
 	function checkComponentAttr(el, options) {
 	  var tag = el.tagName.toLowerCase();
 	  var hasAttrs = el.hasAttributes();
-	  if (!commonTagRE.test(tag) && tag !== 'component') {
+	  if (!commonTagRE.test(tag) && !reservedTagRE.test(tag)) {
 	    if (resolveAsset(options, 'components', tag)) {
 	      return { id: tag };
 	    } else {
@@ -1546,6 +1621,7 @@
 	
 	function initProp(vm, prop, value) {
 	  var key = prop.path;
+	  value = coerceProp(prop, value);
 	  vm[key] = vm._data[key] = assertProp(prop, value) ? value : undefined;
 	}
 	
@@ -1601,6 +1677,23 @@
 	    }
 	  }
 	  return true;
+	}
+	
+	/**
+	 * Force parsing value with coerce option.
+	 *
+	 * @param {*} value
+	 * @param {Object} options
+	 * @return {*}
+	 */
+	
+	function coerceProp(prop, value) {
+	  var coerce = prop.options.coerce;
+	  if (!coerce) {
+	    return value;
+	  }
+	  // coerce is a function
+	  return coerce(value);
 	}
 	
 	function formatType(val) {
@@ -1788,8 +1881,8 @@
 	    var ids = Object.keys(components);
 	    for (var i = 0, l = ids.length; i < l; i++) {
 	      var key = ids[i];
-	      if (commonTagRE.test(key)) {
-	        process.env.NODE_ENV !== 'production' && warn('Do not use built-in HTML elements as component ' + 'id: ' + key);
+	      if (commonTagRE.test(key) || reservedTagRE.test(key)) {
+	        process.env.NODE_ENV !== 'production' && warn('Do not use built-in or reserved HTML elements as component ' + 'id: ' + key);
 	        continue;
 	      }
 	      def = components[key];
@@ -2196,7 +2289,7 @@
 	  var ob;
 	  if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
 	    ob = value.__ob__;
-	  } else if ((isArray(value) || isPlainObject(value)) && !Object.isFrozen(value) && !value._isVue) {
+	  } else if ((isArray(value) || isPlainObject(value)) && Object.isExtensible(value) && !value._isVue) {
 	    ob = new Observer(value);
 	  }
 	  if (ob && vm) {
@@ -2301,6 +2394,7 @@
 		inDoc: inDoc,
 		getAttr: getAttr,
 		getBindAttr: getBindAttr,
+		hasBindAttr: hasBindAttr,
 		before: before,
 		after: after,
 		remove: remove,
@@ -2308,6 +2402,7 @@
 		replace: replace,
 		on: on$1,
 		off: off,
+		setClass: setClass,
 		addClass: addClass,
 		removeClass: removeClass,
 		extractContent: extractContent,
@@ -2323,7 +2418,9 @@
 		checkComponentAttr: checkComponentAttr,
 		initProp: initProp,
 		assertProp: assertProp,
+		coerceProp: coerceProp,
 		commonTagRE: commonTagRE,
+		reservedTagRE: reservedTagRE,
 		get warn () { return warn; }
 	});
 	
@@ -2774,11 +2871,11 @@
 	
 	var wsRE = /\s/g;
 	var newlineRE = /\n/g;
-	var saveRE = /[\{,]\s*[\w\$_]+\s*:|('[^']*'|"[^"]*")|new |typeof |void /g;
+	var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")|new |typeof |void /g;
 	var restoreRE = /"(\d+)"/g;
-	var pathTestRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
-	var pathReplaceRE = /[^\w$\.]([A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\])*)/g;
-	var booleanLiteralRE = /^(true|false)$/;
+	var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
+	var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
+	var booleanLiteralRE = /^(?:true|false)$/;
 	
 	/**
 	 * Save / Rewrite / Restore
@@ -2861,7 +2958,7 @@
 	  var body = exp.replace(saveRE, save).replace(wsRE, '');
 	  // rewrite all paths
 	  // pad 1 space here becaue the regex matches 1 extra char
-	  body = (' ' + body).replace(pathReplaceRE, rewrite).replace(restoreRE, restore);
+	  body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
 	  return makeGetterFn(body);
 	}
 	
@@ -3251,11 +3348,11 @@
 	  if (this.active) {
 	    var value = this.get();
 	    if (value !== this.value ||
-	    // Deep watchers and Array watchers should fire even
+	    // Deep watchers and watchers on Object/Arrays should fire even
 	    // when the value is the same, because the value may
 	    // have mutated; but only do so if this is a
 	    // non-shallow update (caused by a vm digest).
-	    (isArray(value) || this.deep) && !this.shallow) {
+	    (isObject(value) || this.deep) && !this.shallow) {
 	      // set new value
 	      var oldValue = this.value;
 	      this.value = value;
@@ -3501,13 +3598,12 @@
 	var xlinkNS = 'http://www.w3.org/1999/xlink';
 	var xlinkRE = /^xlink:/;
 	
-	// these input element attributes should also set their
-	// corresponding properties
-	var inputProps = {
-	  value: 1,
-	  checked: 1,
-	  selected: 1
-	};
+	// check for attributes that prohibit interpolations
+	var disallowedInterpAttrRE = /^v-|^:|^@|^(is|transition|transition-mode|debounce|track-by|stagger|enter-stagger|leave-stagger)$/;
+	
+	// these attributes should also set their corresponding properties
+	// because they only affect the initial state of the element
+	var attrWithPropsRE = /^(value|checked|selected|muted)$/;
 	
 	// these attributes should set a hidden property for
 	// binding v-model to object values
@@ -3516,9 +3612,6 @@
 	  'true-value': '_trueValue',
 	  'false-value': '_falseValue'
 	};
-	
-	// check for attributes that prohibit interpolations
-	var disallowedInterpAttrRE = /^v-|^:|^@|^(is|transition|transition-mode|debounce|track-by|stagger|enter-stagger|leave-stagger)$/;
 	
 	var bind = {
 	
@@ -3572,9 +3665,9 @@
 	  handleObject: style.handleObject,
 	
 	  handleSingle: function handleSingle(attr, value) {
-	    if (inputProps[attr] && attr in this.el) {
-	      this.el[attr] = attr === 'value' ? value || '' : // IE9 will set input.value to "null" for null...
-	      value;
+	    if (!this.descriptor.interp && attrWithPropsRE.test(attr) && attr in this.el) {
+	      this.el[attr] = attr === 'value' ? value == null // IE9 will set input.value to "null" for null...
+	      ? '' : value : value;
 	    }
 	    // set model props
 	    var modelProp = modelProps[attr];
@@ -3755,7 +3848,7 @@
 	    };
 	
 	    this.on('change', this.listener);
-	    if (el.checked) {
+	    if (el.hasAttribute('checked')) {
 	      this.afterBind = this.listener;
 	    }
 	  },
@@ -3901,7 +3994,7 @@
 	    };
 	    this.on('change', this.listener);
 	
-	    if (el.checked) {
+	    if (el.hasAttribute('checked')) {
 	      this.afterBind = this.listener;
 	    }
 	  },
@@ -3955,13 +4048,18 @@
 	      });
 	      this.on('blur', function () {
 	        self.focused = false;
-	        self.listener();
+	        // do not sync value after fragment removal (#2017)
+	        if (!self._frag || self._frag.inserted) {
+	          self.rawListener();
+	        }
 	      });
 	    }
 	
 	    // Now attach the main listener
-	    this.listener = function () {
-	      if (composing) return;
+	    this.listener = this.rawListener = function () {
+	      if (composing || !self._bound) {
+	        return;
+	      }
 	      var val = number || isRange ? toNumber(el.value) : el.value;
 	      self.set(val);
 	      // force update on next tick to avoid lock & same value
@@ -4125,9 +4223,14 @@
 	  },
 	
 	  apply: function apply(el, value) {
-	    applyTransition(el, value ? 1 : -1, function () {
+	    if (inDoc(el)) {
+	      applyTransition(el, value ? 1 : -1, toggle, this.vm);
+	    } else {
+	      toggle();
+	    }
+	    function toggle() {
 	      el.style.display = value ? '' : 'none';
-	    }, this.vm);
+	    }
 	  }
 	};
 	
@@ -4162,7 +4265,7 @@
 	}
 	
 	var tagRE$1 = /<([\w:]+)/;
-	var entityRE = /&\w+;|&#\d+;|&#x[\dA-F]+;/;
+	var entityRE = /&#?\w+?;/;
 	
 	/**
 	 * Convert a string template to a DocumentFragment.
@@ -5697,6 +5800,7 @@
 	    var twoWay = prop.mode === bindingModes.TWO_WAY;
 	
 	    var parentWatcher = this.parentWatcher = new Watcher(parent, parentKey, function (val) {
+	      val = coerceProp(prop, val);
 	      if (assertProp(prop, val)) {
 	        child[childKey] = val;
 	      }
@@ -5864,6 +5968,9 @@
 	    if (activateHook && !cached) {
 	      this.waitingFor = newComponent;
 	      activateHook.call(newComponent, function () {
+	        if (self.waitingFor !== newComponent) {
+	          return;
+	        }
 	        self.waitingFor = null;
 	        self.transition(newComponent, cb);
 	      });
@@ -6148,7 +6255,7 @@
 	var empty = {};
 	
 	// regexes
-	var identRE = /^[$_a-zA-Z]+[\w$]*$/;
+	var identRE$1 = /^[$_a-zA-Z]+[\w$]*$/;
 	var settablePathRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\[\]]+\])*$/;
 	
 	/**
@@ -6178,7 +6285,7 @@
 	    // interpreted as minus calculations by the parser
 	    // so we need to camelize the path here
 	    path = camelize(name);
-	    if (!identRE.test(path)) {
+	    if (!identRE$1.test(path)) {
 	      process.env.NODE_ENV !== 'production' && warn('Invalid prop key: "' + name + '". Prop keys ' + 'must be valid identifiers.');
 	      continue;
 	    }
@@ -6786,6 +6893,11 @@
 	function checkElementDirectives(el, options) {
 	  var tag = el.tagName.toLowerCase();
 	  if (commonTagRE.test(tag)) return;
+	  // special case: give named slot a higher priority
+	  // than unnamed slots
+	  if (tag === 'slot' && hasBindAttr(el, 'name')) {
+	    tag = '_namedSlot';
+	  }
 	  var def = resolveAsset(options, 'elementDirectives', tag);
 	  if (def) {
 	    return makeTerminalNodeLinkFn(el, tag, '', options, def);
@@ -6924,8 +7036,12 @@
 	    // attribute interpolations
 	    if (tokens) {
 	      value = tokensToExp(tokens);
-	      arg = name;
-	      pushDir('bind', publicDirectives.bind, true);
+	      if (name === 'class') {
+	        pushDir('class', internalDirectives['class'], true);
+	      } else {
+	        arg = name;
+	        pushDir('bind', publicDirectives.bind, true);
+	      }
 	      // warn against mixing mustaches with v-bind
 	      if (process.env.NODE_ENV !== 'production') {
 	        if (name === 'class' && Array.prototype.some.call(attrs, function (attr) {
@@ -7126,7 +7242,7 @@
 	      // non-element template
 	      replacer.nodeType !== 1 ||
 	      // single nested component
-	      tag === 'component' || resolveAsset(options, 'components', tag) || replacer.hasAttribute('is') || replacer.hasAttribute(':is') || replacer.hasAttribute('v-bind:is') ||
+	      tag === 'component' || resolveAsset(options, 'components', tag) || hasBindAttr(replacer, 'is') ||
 	      // element directive
 	      resolveAsset(options, 'elementDirectives', tag) ||
 	      // for block
@@ -7662,7 +7778,13 @@
 	  // remove attribute
 	  if ((name !== 'cloak' || this.vm._isCompiled) && this.el && this.el.removeAttribute) {
 	    var attr = descriptor.attr || 'v-' + name;
-	    this.el.removeAttribute(attr);
+	    if (attr !== 'class') {
+	      this.el.removeAttribute(attr);
+	    } else {
+	      // for class interpolations, only remove the parts that
+	      // need to be interpolated.
+	      setClass(this.el, removeTags(this.el.getAttribute('class')).trim().replace(/\s+/g, ' '));
+	    }
 	  }
 	
 	  // copy def properties
@@ -7680,6 +7802,7 @@
 	  if (this.bind) {
 	    this.bind();
 	  }
+	  this._bound = true;
 	
 	  if (this.literal) {
 	    this.update && this.update(descriptor.raw);
@@ -7715,7 +7838,6 @@
 	      this.update(watcher.value);
 	    }
 	  }
-	  this._bound = true;
 	};
 	
 	/**
@@ -7936,6 +8058,11 @@
 	    el = transclude(el, options);
 	    this._initElement(el);
 	
+	    // handle v-pre on root node (#2026)
+	    if (el.nodeType === 1 && getAttr(el, 'v-pre') !== null) {
+	      return;
+	    }
+	
 	    // root is always compiled per-instance, because
 	    // container attrs and props can be different every time.
 	    var contextOptions = this._context && this._context.$options;
@@ -8033,6 +8160,30 @@
 	      }
 	      return;
 	    }
+	
+	    var destroyReady;
+	    var pendingRemoval;
+	
+	    var self = this;
+	    // Cleanup should be called either synchronously or asynchronoysly as
+	    // callback of this.$remove(), or if remove and deferCleanup are false.
+	    // In any case it should be called after all other removing, unbinding and
+	    // turning of is done
+	    var cleanupIfPossible = function cleanupIfPossible() {
+	      if (destroyReady && !pendingRemoval && !deferCleanup) {
+	        self._cleanup();
+	      }
+	    };
+	
+	    // remove DOM element
+	    if (remove && this.$el) {
+	      pendingRemoval = true;
+	      this.$remove(function () {
+	        pendingRemoval = false;
+	        cleanupIfPossible();
+	      });
+	    }
+	
 	    this._callHook('beforeDestroy');
 	    this._isBeingDestroyed = true;
 	    var i;
@@ -8066,15 +8217,9 @@
 	    if (this.$el) {
 	      this.$el.__vue__ = null;
 	    }
-	    // remove DOM element
-	    var self = this;
-	    if (remove && this.$el) {
-	      this.$remove(function () {
-	        self._cleanup();
-	      });
-	    } else if (!deferCleanup) {
-	      this._cleanup();
-	    }
+	
+	    destroyReady = true;
+	    cleanupIfPossible();
 	  };
 	
 	  /**
@@ -8255,6 +8400,12 @@
 	      return extendOptions._Ctor;
 	    }
 	    var name = extendOptions.name || Super.options.name;
+	    if (process.env.NODE_ENV !== 'production') {
+	      if (!/^[a-zA-Z][\w-]+$/.test(name)) {
+	        warn('Invalid component name: ' + name);
+	        name = null;
+	      }
+	    }
 	    var Sub = createClass(name || 'VueComponent');
 	    Sub.prototype = Object.create(Super.prototype);
 	    Sub.prototype.constructor = Sub;
@@ -8339,8 +8490,8 @@
 	      } else {
 	        /* istanbul ignore if */
 	        if (process.env.NODE_ENV !== 'production') {
-	          if (type === 'component' && commonTagRE.test(id)) {
-	            warn('Do not use built-in HTML elements as component ' + 'id: ' + id);
+	          if (type === 'component' && (commonTagRE.test(id) || reservedTagRE.test(id))) {
+	            warn('Do not use built-in or reserved HTML elements as component ' + 'id: ' + id);
 	          }
 	        }
 	        if (type === 'component' && isPlainObject(definition)) {
@@ -8372,7 +8523,9 @@
 	      if (asStatement && !isSimplePath(exp)) {
 	        var self = this;
 	        return function statementHandler() {
+	          self.$arguments = toArray(arguments);
 	          res.get.call(self, self);
+	          self.$arguments = null;
 	        };
 	      } else {
 	        try {
@@ -8429,6 +8582,7 @@
 	    }
 	    var watcher = new Watcher(vm, expOrFn, cb, {
 	      deep: options && options.deep,
+	      sync: options && options.sync,
 	      filters: parsed && parsed.filters
 	    });
 	    if (options && options.immediate) {
@@ -9236,55 +9390,46 @@
 	// instance being stored as `$options._content` during
 	// the transclude phase.
 	
+	// We are exporting two versions, one for named and one
+	// for unnamed, because the unnamed slots must be compiled
+	// AFTER all named slots have selected their content. So
+	// we need to give them different priorities in the compilation
+	// process. (See #1965)
+	
 	var slot = {
 	
 	  priority: 1750,
 	
-	  params: ['name'],
-	
 	  bind: function bind() {
 	    var host = this.vm;
 	    var raw = host.$options._content;
-	    var content;
 	    if (!raw) {
 	      this.fallback();
 	      return;
 	    }
 	    var context = host._context;
-	    var slotName = this.params.name;
+	    var slotName = this.params && this.params.name;
 	    if (!slotName) {
-	      // Default content
-	      var self = this;
-	      var compileDefaultContent = function compileDefaultContent() {
-	        self.compile(extractFragment(raw.childNodes, raw, true), context, host);
-	      };
-	      if (!host._isCompiled) {
-	        // defer until the end of instance compilation,
-	        // because the default outlet must wait until all
-	        // other possible outlets with selectors have picked
-	        // out their contents.
-	        host.$once('hook:compiled', compileDefaultContent);
-	      } else {
-	        compileDefaultContent();
-	      }
+	      // Default slot
+	      this.tryCompile(extractFragment(raw.childNodes, raw, true), context, host);
 	    } else {
+	      // Named slot
 	      var selector = '[slot="' + slotName + '"]';
 	      var nodes = raw.querySelectorAll(selector);
 	      if (nodes.length) {
-	        content = extractFragment(nodes, raw);
-	        if (content.hasChildNodes()) {
-	          this.compile(content, context, host);
-	        } else {
-	          this.fallback();
-	        }
+	        this.tryCompile(extractFragment(nodes, raw), context, host);
 	      } else {
 	        this.fallback();
 	      }
 	    }
 	  },
 	
-	  fallback: function fallback() {
-	    this.compile(extractContent(this.el, true), this.vm);
+	  tryCompile: function tryCompile(content, context, host) {
+	    if (content.hasChildNodes()) {
+	      this.compile(content, context, host);
+	    } else {
+	      this.fallback();
+	    }
 	  },
 	
 	  compile: function compile(content, context, host) {
@@ -9299,12 +9444,21 @@
 	    }
 	  },
 	
+	  fallback: function fallback() {
+	    this.compile(extractContent(this.el, true), this.vm);
+	  },
+	
 	  unbind: function unbind() {
 	    if (this.unlink) {
 	      this.unlink();
 	    }
 	  }
 	};
+	
+	var namedSlot = extend(extend({}, slot), {
+	  priority: slot.priority + 1,
+	  params: ['name']
+	});
 	
 	/**
 	 * Extract qualified content nodes from a node list.
@@ -9345,10 +9499,11 @@
 	
 	var elementDirectives = {
 	  slot: slot,
+	  _namedSlot: namedSlot, // same as slot but with higher priority
 	  partial: partial
 	};
 	
-	Vue.version = '1.0.10';
+	Vue.version = '1.0.12';
 	
 	/**
 	 * Vue and every constructor that extends Vue has an
@@ -9371,9 +9526,11 @@
 	
 	// devtools global hook
 	/* istanbul ignore if */
-	if (process.env.NODE_ENV !== 'production') {
-	  if (inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+	if (process.env.NODE_ENV !== 'production' && inBrowser) {
+	  if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
 	    window.__VUE_DEVTOOLS_GLOBAL_HOOK__.emit('init', Vue);
+	  } else if (/Chrome\/\d+/.test(navigator.userAgent)) {
+	    console.log('Download the Vue Devtools for a better development experience:\n' + 'https://github.com/vuejs/vue-devtools');
 	  }
 	}
 	
@@ -12029,8 +12186,9 @@
 	    var _ = __webpack_require__(10)(Vue);
 	
 	    Vue.url = __webpack_require__(11)(_);
-	    Vue.http = __webpack_require__(12)(_);
-	    Vue.resource = __webpack_require__(16)(_);
+	    Vue.http = __webpack_require__(13)(_);
+	    Vue.resource = __webpack_require__(27)(_);
+	    Vue.promise = __webpack_require__(14)(_);
 	
 	    Object.defineProperties(Vue.prototype, {
 	
@@ -12061,6 +12219,7 @@
 	
 	module.exports = install;
 
+
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
@@ -12071,7 +12230,27 @@
 	
 	module.exports = function (Vue) {
 	
-	    var _ = Vue.util.extend({}, Vue.util);
+	    var _ = Vue.util.extend({}, Vue.util), config = Vue.config, console = window.console;
+	
+	    _.warn = function (msg) {
+	        if (console && Vue.util.warn && (!config.silent || config.debug)) {
+	            console.warn('[VueResource warn]: ' + msg);
+	        }
+	    };
+	
+	    _.error = function (msg) {
+	        if (console) {
+	            console.error(msg);
+	        }
+	    };
+	
+	    _.trim = function (str) {
+	        return str.replace(/^\s*|\s*$/g, '');
+	    };
+	
+	    _.toLower = function (str) {
+	        return str ? str.toLowerCase() : '';
+	    };
 	
 	    _.isString = function (value) {
 	        return typeof value === 'string';
@@ -12149,20 +12328,22 @@
 
 /***/ },
 /* 11 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Service for URL templating.
 	 */
 	
-	var ie = document.documentMode;
-	var el = document.createElement('a');
+	var UrlTemplate = __webpack_require__(12);
 	
 	module.exports = function (_) {
 	
+	    var ie = document.documentMode;
+	    var el = document.createElement('a');
+	
 	    function Url(url, params) {
 	
-	        var urlParams = {}, queryParams = {}, options = url, query;
+	        var urlParams = Object.keys(Url.options.params), queryParams = {}, options = url, query;
 	
 	        if (!_.isPlainObject(options)) {
 	            options = {url: url, params: params};
@@ -12172,10 +12353,14 @@
 	            Url.options, this.options, options
 	        );
 	
-	        url = options.url.replace(/(\/?):([a-z]\w*)/gi, function (match, slash, name) {
+	        url = UrlTemplate.expand(options.url, options.params, urlParams);
+	
+	        url = url.replace(/(\/?):([a-z]\w*)/gi, function (match, slash, name) {
+	
+	            _.warn('The `:' + name + '` parameter syntax has been deprecated. Use the `{' + name + '}` syntax instead.');
 	
 	            if (options.params[name]) {
-	                urlParams[name] = true;
+	                urlParams.push(name);
 	                return slash + encodeUriSegment(options.params[name]);
 	            }
 	
@@ -12187,7 +12372,7 @@
 	        }
 	
 	        _.each(options.params, function (value, key) {
-	            if (!urlParams[key]) {
+	            if (urlParams.indexOf(key) === -1) {
 	                queryParams[key] = value;
 	            }
 	        });
@@ -12312,142 +12497,241 @@
 
 /***/ },
 /* 12 */
+/***/ function(module, exports) {
+
+	/**
+	 * URL Template v2.0.6 (https://github.com/bramstein/url-template)
+	 */
+	
+	exports.expand = function (url, params, variables) {
+	
+	    var tmpl = this.parse(url), expanded = tmpl.expand(params);
+	
+	    if (variables) {
+	        variables.push.apply(variables, tmpl.vars);
+	    }
+	
+	    return expanded;
+	};
+	
+	exports.parse = function (template) {
+	
+	    var operators = ['+', '#', '.', '/', ';', '?', '&'], variables = [];
+	
+	    return {
+	        vars: variables,
+	        expand: function (context) {
+	            return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function (_, expression, literal) {
+	                if (expression) {
+	
+	                    var operator = null, values = [];
+	
+	                    if (operators.indexOf(expression.charAt(0)) !== -1) {
+	                        operator = expression.charAt(0);
+	                        expression = expression.substr(1);
+	                    }
+	
+	                    expression.split(/,/g).forEach(function (variable) {
+	                        var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
+	                        values.push.apply(values, exports.getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
+	                        variables.push(tmp[1]);
+	                    });
+	
+	                    if (operator && operator !== '+') {
+	
+	                        var separator = ',';
+	
+	                        if (operator === '?') {
+	                            separator = '&';
+	                        } else if (operator !== '#') {
+	                            separator = operator;
+	                        }
+	
+	                        return (values.length !== 0 ? operator : '') + values.join(separator);
+	                    } else {
+	                        return values.join(',');
+	                    }
+	
+	                } else {
+	                    return exports.encodeReserved(literal);
+	                }
+	            });
+	        }
+	    };
+	};
+	
+	exports.getValues = function (context, operator, key, modifier) {
+	
+	    var value = context[key], result = [];
+	
+	    if (this.isDefined(value) && value !== '') {
+	        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+	            value = value.toString();
+	
+	            if (modifier && modifier !== '*') {
+	                value = value.substring(0, parseInt(modifier, 10));
+	            }
+	
+	            result.push(this.encodeValue(operator, value, this.isKeyOperator(operator) ? key : null));
+	        } else {
+	            if (modifier === '*') {
+	                if (Array.isArray(value)) {
+	                    value.filter(this.isDefined).forEach(function (value) {
+	                        result.push(this.encodeValue(operator, value, this.isKeyOperator(operator) ? key : null));
+	                    }, this);
+	                } else {
+	                    Object.keys(value).forEach(function (k) {
+	                        if (this.isDefined(value[k])) {
+	                            result.push(this.encodeValue(operator, value[k], k));
+	                        }
+	                    }, this);
+	                }
+	            } else {
+	                var tmp = [];
+	
+	                if (Array.isArray(value)) {
+	                    value.filter(this.isDefined).forEach(function (value) {
+	                        tmp.push(this.encodeValue(operator, value));
+	                    }, this);
+	                } else {
+	                    Object.keys(value).forEach(function (k) {
+	                        if (this.isDefined(value[k])) {
+	                            tmp.push(encodeURIComponent(k));
+	                            tmp.push(this.encodeValue(operator, value[k].toString()));
+	                        }
+	                    }, this);
+	                }
+	
+	                if (this.isKeyOperator(operator)) {
+	                    result.push(encodeURIComponent(key) + '=' + tmp.join(','));
+	                } else if (tmp.length !== 0) {
+	                    result.push(tmp.join(','));
+	                }
+	            }
+	        }
+	    } else {
+	        if (operator === ';') {
+	            result.push(encodeURIComponent(key));
+	        } else if (value === '' && (operator === '&' || operator === '?')) {
+	            result.push(encodeURIComponent(key) + '=');
+	        } else if (value === '') {
+	            result.push('');
+	        }
+	    }
+	
+	    return result;
+	};
+	
+	exports.isDefined = function (value) {
+	    return value !== undefined && value !== null;
+	};
+	
+	exports.isKeyOperator = function (operator) {
+	    return operator === ';' || operator === '&' || operator === '?';
+	};
+	
+	exports.encodeValue = function (operator, value, key) {
+	
+	    value = (operator === '+' || operator === '#') ? this.encodeReserved(value) : encodeURIComponent(value);
+	
+	    if (key) {
+	        return encodeURIComponent(key) + '=' + value;
+	    } else {
+	        return value;
+	    }
+	};
+	
+	exports.encodeReserved = function (str) {
+	    return str.split(/(%[0-9A-Fa-f]{2})/g).map(function (part) {
+	        if (!/%[0-9A-Fa-f]/.test(part)) {
+	            part = encodeURI(part);
+	        }
+	        return part;
+	    }).join('');
+	};
+
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Service for sending network requests.
 	 */
 	
-	var xhr = __webpack_require__(13);
-	var jsonp = __webpack_require__(15);
-	var Promise = __webpack_require__(14);
-	
 	module.exports = function (_) {
 	
-	    var originUrl = _.url.parse(location.href);
-	    var jsonType = {'Content-Type': 'application/json;charset=utf-8'};
+	    var Promise = __webpack_require__(14)(_);
+	    var interceptor = __webpack_require__(16)(_);
+	    var defaultClient = __webpack_require__(17)(_);
+	    var jsonType = {'Content-Type': 'application/json'};
 	
 	    function Http(url, options) {
 	
-	        var promise;
+	        var client = defaultClient, request, promise;
 	
 	        if (_.isPlainObject(url)) {
 	            options = url;
 	            url = '';
 	        }
 	
-	        options = _.extend({url: url}, options);
-	        options = _.extend(true, {},
-	            Http.options, this.options, options
+	        request = _.extend({url: url}, options);
+	        request = _.extend(true, {},
+	            Http.options, this.options, request
 	        );
 	
-	        if (options.crossOrigin === null) {
-	            options.crossOrigin = crossOrigin(options.url);
+	        Http.interceptors.forEach(function (i) {
+	            client = interceptor(i, this.vm)(client);
+	        }, this);
+	
+	        promise = client(request).bind(this.vm).then(function (response) {
+	
+	            response.ok = response.status >= 200 && response.status < 300;
+	            return response.ok ? response : Promise.reject(response);
+	
+	        }, function (response) {
+	
+	            if (response instanceof Error) {
+	                _.error(response);
+	            }
+	
+	            return Promise.reject(response);
+	        });
+	
+	        if (request.success) {
+	            promise.success(request.success);
 	        }
 	
-	        options.method = options.method.toUpperCase();
-	        options.headers = _.extend({}, Http.headers.common,
-	            !options.crossOrigin ? Http.headers.custom : {},
-	            Http.headers[options.method.toLowerCase()],
-	            options.headers
-	        );
-	
-	        if (_.isPlainObject(options.data) && /^(GET|JSONP)$/i.test(options.method)) {
-	            _.extend(options.params, options.data);
-	            delete options.data;
-	        }
-	
-	        if (options.emulateHTTP && !options.crossOrigin && /^(PUT|PATCH|DELETE)$/i.test(options.method)) {
-	            options.headers['X-HTTP-Method-Override'] = options.method;
-	            options.method = 'POST';
-	        }
-	
-	        if (options.emulateJSON && _.isPlainObject(options.data)) {
-	            options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-	            options.data = _.url.params(options.data);
-	        }
-	
-	        if (_.isObject(options.data) && /FormData/i.test(options.data.toString())) {
-	            delete options.headers['Content-Type'];
-	        }
-	
-	        if (_.isPlainObject(options.data)) {
-	            options.data = JSON.stringify(options.data);
-	        }
-	
-	        promise = (options.method == 'JSONP' ? jsonp : xhr).call(this.vm, _, options);
-	        promise = extendPromise(promise.then(transformResponse, transformResponse), this.vm);
-	
-	        if (options.success) {
-	            promise = promise.success(options.success);
-	        }
-	
-	        if (options.error) {
-	            promise = promise.error(options.error);
+	        if (request.error) {
+	            promise.error(request.error);
 	        }
 	
 	        return promise;
-	    }
-	
-	    function extendPromise(promise, vm) {
-	
-	        promise.success = function (fn) {
-	
-	            return extendPromise(promise.then(function (response) {
-	                return fn.call(vm, response.data, response.status, response) || response;
-	            }), vm);
-	
-	        };
-	
-	        promise.error = function (fn) {
-	
-	            return extendPromise(promise.then(undefined, function (response) {
-	                return fn.call(vm, response.data, response.status, response) || response;
-	            }), vm);
-	
-	        };
-	
-	        promise.always = function (fn) {
-	
-	            var cb = function (response) {
-	                return fn.call(vm, response.data, response.status, response) || response;
-	            };
-	
-	            return extendPromise(promise.then(cb, cb), vm);
-	        };
-	
-	        return promise;
-	    }
-	
-	    function transformResponse(response) {
-	
-	        try {
-	            response.data = JSON.parse(response.responseText);
-	        } catch (e) {
-	            response.data = response.responseText;
-	        }
-	
-	        return response.ok ? response : Promise.reject(response);
-	    }
-	
-	    function crossOrigin(url) {
-	
-	        var requestUrl = _.url.parse(url);
-	
-	        return (requestUrl.protocol !== originUrl.protocol || requestUrl.host !== originUrl.host);
 	    }
 	
 	    Http.options = {
 	        method: 'get',
-	        params: {},
 	        data: '',
+	        params: {},
+	        headers: {},
 	        xhr: null,
 	        jsonp: 'callback',
 	        beforeSend: null,
 	        crossOrigin: null,
 	        emulateHTTP: false,
-	        emulateJSON: false
+	        emulateJSON: false,
+	        timeout: 0
 	    };
+	
+	    Http.interceptors = [
+	        __webpack_require__(19)(_),
+	        __webpack_require__(20)(_),
+	        __webpack_require__(21)(_),
+	        __webpack_require__(23)(_),
+	        __webpack_require__(24)(_),
+	        __webpack_require__(25)(_),
+	        __webpack_require__(26)(_)
+	    ];
 	
 	    Http.headers = {
 	        put: jsonType,
@@ -12468,6 +12752,11 @@
 	                data = undefined;
 	            }
 	
+	            if (_.isObject(success)) {
+	                options = success;
+	                success = undefined;
+	            }
+	
 	            return this(url, _.extend({method: method, data: data, success: success}, options));
 	        };
 	    });
@@ -12477,336 +12766,784 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * XMLHttp request.
+	 * Promise adapter.
 	 */
 	
-	var Promise = __webpack_require__(14);
-	var XDomain = window.XDomainRequest;
+	module.exports = function (_) {
 	
-	module.exports = function (_, options) {
+	    var Promise = window.Promise || __webpack_require__(15)(_);
 	
-	    var request = new XMLHttpRequest(), promise;
+	    var Adapter = function (executor) {
 	
-	    if (XDomain && options.crossOrigin) {
-	        request = new XDomainRequest(); options.headers = {};
-	    }
+	        if (executor instanceof Promise) {
+	            this.promise = executor;
+	        } else {
+	            this.promise = new Promise(executor);
+	        }
 	
-	    if (_.isPlainObject(options.xhr)) {
-	        _.extend(request, options.xhr);
-	    }
+	        this.context = undefined;
+	    };
 	
-	    if (_.isFunction(options.beforeSend)) {
-	        options.beforeSend.call(this, request, options);
-	    }
+	    Adapter.all = function (iterable) {
+	        return new Adapter(Promise.all(iterable));
+	    };
 	
-	    promise = new Promise(function (resolve, reject) {
+	    Adapter.resolve = function (value) {
+	        return new Adapter(Promise.resolve(value));
+	    };
 	
-	        request.open(options.method, _.url(options), true);
+	    Adapter.reject = function (reason) {
+	        return new Adapter(Promise.reject(reason));
+	    };
 	
-	        _.each(options.headers, function (value, header) {
-	            request.setRequestHeader(header, value);
-	        });
+	    Adapter.race = function (iterable) {
+	        return new Adapter(Promise.race(iterable));
+	    };
 	
-	        var handler = function (event) {
+	    var p = Adapter.prototype;
 	
-	            request.ok = event.type === 'load';
+	    p.bind = function (context) {
+	        this.context = context;
+	        return this;
+	    };
 	
-	            if (request.ok && request.status) {
-	                request.ok = request.status >= 200 && request.status < 300;
+	    p.then = function (fulfilled, rejected) {
+	
+	        if (fulfilled && fulfilled.bind && this.context) {
+	            fulfilled = fulfilled.bind(this.context);
+	        }
+	
+	        if (rejected && rejected.bind && this.context) {
+	            rejected = rejected.bind(this.context);
+	        }
+	
+	        this.promise = this.promise.then(fulfilled, rejected);
+	
+	        return this;
+	    };
+	
+	    p.catch = function (rejected) {
+	
+	        if (rejected && rejected.bind && this.context) {
+	            rejected = rejected.bind(this.context);
+	        }
+	
+	        this.promise = this.promise.catch(rejected);
+	
+	        return this;
+	    };
+	
+	    p.finally = function (callback) {
+	
+	        return this.then(function (value) {
+	                callback.call(this);
+	                return value;
+	            }, function (reason) {
+	                callback.call(this);
+	                return Promise.reject(reason);
 	            }
+	        );
+	    };
 	
-	            (request.ok ? resolve : reject)(request);
+	    p.success = function (callback) {
+	
+	        _.warn('The `success` method has been deprecated. Use the `then` method instead.');
+	
+	        return this.then(function (response) {
+	            return callback.call(this, response.data, response.status, response) || response;
+	        });
+	    };
+	
+	    p.error = function (callback) {
+	
+	        _.warn('The `error` method has been deprecated. Use the `catch` method instead.');
+	
+	        return this.catch(function (response) {
+	            return callback.call(this, response.data, response.status, response) || response;
+	        });
+	    };
+	
+	    p.always = function (callback) {
+	
+	        _.warn('The `always` method has been deprecated. Use the `finally` method instead.');
+	
+	        var cb = function (response) {
+	            return callback.call(this, response.data, response.status, response) || response;
 	        };
 	
-	        request.onload = handler;
-	        request.onabort = handler;
-	        request.onerror = handler;
-	
-	        request.send(options.data);
-	    });
-	
-	    return promise;
-	};
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	/**
-	 * Promises/A+ polyfill v1.1.0 (https://github.com/bramstein/promis)
-	 */
-	
-	var RESOLVED = 0;
-	var REJECTED = 1;
-	var PENDING  = 2;
-	
-	function Promise(executor) {
-	
-	    this.state = PENDING;
-	    this.value = undefined;
-	    this.deferred = [];
-	
-	    var promise = this;
-	
-	    try {
-	        executor(function (x) {
-	            promise.resolve(x);
-	        }, function (r) {
-	            promise.reject(r);
-	        });
-	    } catch (e) {
-	        promise.reject(e);
-	    }
-	}
-	
-	Promise.reject = function (r) {
-	    return new Promise(function (resolve, reject) {
-	        reject(r);
-	    });
-	};
-	
-	Promise.resolve = function (x) {
-	    return new Promise(function (resolve, reject) {
-	        resolve(x);
-	    });
-	};
-	
-	Promise.all = function all(iterable) {
-	    return new Promise(function (resolve, reject) {
-	        var count = 0,
-	            result = [];
-	
-	        if (iterable.length === 0) {
-	            resolve(result);
-	        }
-	
-	        function resolver(i) {
-	            return function (x) {
-	                result[i] = x;
-	                count += 1;
-	
-	                if (count === iterable.length) {
-	                    resolve(result);
-	                }
-	            };
-	        }
-	
-	        for (var i = 0; i < iterable.length; i += 1) {
-	            iterable[i].then(resolver(i), reject);
-	        }
-	    });
-	};
-	
-	Promise.race = function race(iterable) {
-	    return new Promise(function (resolve, reject) {
-	        for (var i = 0; i < iterable.length; i += 1) {
-	            iterable[i].then(resolve, reject);
-	        }
-	    });
-	};
-	
-	var p = Promise.prototype;
-	
-	p.resolve = function resolve(x) {
-	    var promise = this;
-	
-	    if (promise.state === PENDING) {
-	        if (x === promise) {
-	            throw new TypeError('Promise settled with itself.');
-	        }
-	
-	        var called = false;
-	
-	        try {
-	            var then = x && x['then'];
-	
-	            if (x !== null && typeof x === 'object' && typeof then === 'function') {
-	                then.call(x, function (x) {
-	                    if (!called) {
-	                        promise.resolve(x);
-	                    }
-	                    called = true;
-	
-	                }, function (r) {
-	                    if (!called) {
-	                        promise.reject(r);
-	                    }
-	                    called = true;
-	                });
-	                return;
-	            }
-	        } catch (e) {
-	            if (!called) {
-	                promise.reject(e);
-	            }
-	            return;
-	        }
-	        promise.state = RESOLVED;
-	        promise.value = x;
-	        promise.notify();
-	    }
-	};
-	
-	p.reject = function reject(reason) {
-	    var promise = this;
-	
-	    if (promise.state === PENDING) {
-	        if (reason === promise) {
-	            throw new TypeError('Promise settled with itself.');
-	        }
-	
-	        promise.state = REJECTED;
-	        promise.value = reason;
-	        promise.notify();
-	    }
-	};
-	
-	p.notify = function notify() {
-	    var promise = this;
-	
-	    async(function () {
-	        if (promise.state !== PENDING) {
-	            while (promise.deferred.length) {
-	                var deferred = promise.deferred.shift(),
-	                    onResolved = deferred[0],
-	                    onRejected = deferred[1],
-	                    resolve = deferred[2],
-	                    reject = deferred[3];
-	
-	                try {
-	                    if (promise.state === RESOLVED) {
-	                        if (typeof onResolved === 'function') {
-	                            resolve(onResolved.call(undefined, promise.value));
-	                        } else {
-	                            resolve(promise.value);
-	                        }
-	                    } else if (promise.state === REJECTED) {
-	                        if (typeof onRejected === 'function') {
-	                            resolve(onRejected.call(undefined, promise.value));
-	                        } else {
-	                            reject(promise.value);
-	                        }
-	                    }
-	                } catch (e) {
-	                    reject(e);
-	                }
-	            }
-	        }
-	    });
-	};
-	
-	p.catch = function (onRejected) {
-	    return this.then(undefined, onRejected);
-	};
-	
-	p.then = function then(onResolved, onRejected) {
-	    var promise = this;
-	
-	    return new Promise(function (resolve, reject) {
-	        promise.deferred.push([onResolved, onRejected, resolve, reject]);
-	        promise.notify();
-	    });
-	};
-	
-	var queue = [];
-	var async = function (callback) {
-	    queue.push(callback);
-	
-	    if (queue.length === 1) {
-	        async.async();
-	    }
-	};
-	
-	async.run = function () {
-	    while (queue.length) {
-	        queue[0]();
-	        queue.shift();
-	    }
-	};
-	
-	if (window.MutationObserver) {
-	    var el = document.createElement('div');
-	    var mo = new MutationObserver(async.run);
-	
-	    mo.observe(el, {
-	        attributes: true
-	    });
-	
-	    async.async = function () {
-	        el.setAttribute("x", 0);
+	        return this.then(cb, cb);
 	    };
-	} else {
-	    async.async = function () {
-	        setTimeout(async.run);
-	    };
-	}
 	
-	module.exports = window.Promise || Promise;
+	    return Adapter;
+	};
 
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
-	 * JSONP request.
+	 * Promises/A+ polyfill v1.1.4 (https://github.com/bramstein/promis)
 	 */
 	
-	var Promise = __webpack_require__(14);
+	module.exports = function (_) {
 	
-	module.exports = function (_, options) {
+	    var RESOLVED = 0;
+	    var REJECTED = 1;
+	    var PENDING  = 2;
 	
-	    var callback = '_jsonp' + Math.random().toString(36).substr(2), response = {}, script, body;
+	    function Promise(executor) {
 	
-	    options.params[options.jsonp] = callback;
+	        this.state = PENDING;
+	        this.value = undefined;
+	        this.deferred = [];
 	
-	    if (_.isFunction(options.beforeSend)) {
-	        options.beforeSend.call(this, {}, options);
+	        var promise = this;
+	
+	        try {
+	            executor(function (x) {
+	                promise.resolve(x);
+	            }, function (r) {
+	                promise.reject(r);
+	            });
+	        } catch (e) {
+	            promise.reject(e);
+	        }
 	    }
 	
-	    return new Promise(function (resolve, reject) {
+	    Promise.reject = function (r) {
+	        return new Promise(function (resolve, reject) {
+	            reject(r);
+	        });
+	    };
 	
-	        script = document.createElement('script');
-	        script.src = _.url(options);
-	        script.type = 'text/javascript';
-	        script.async = true;
+	    Promise.resolve = function (x) {
+	        return new Promise(function (resolve, reject) {
+	            resolve(x);
+	        });
+	    };
 	
-	        window[callback] = function (data) {
-	            body = data;
-	        };
+	    Promise.all = function all(iterable) {
+	        return new Promise(function (resolve, reject) {
+	            var count = 0, result = [];
 	
-	        var handler = function (event) {
-	
-	            delete window[callback];
-	            document.body.removeChild(script);
-	
-	            if (event.type === 'load' && !body) {
-	                event.type = 'error';
+	            if (iterable.length === 0) {
+	                resolve(result);
 	            }
 	
-	            response.ok = event.type !== 'error';
-	            response.status = response.ok ? 200 : 404;
-	            response.responseText = body ? body : event.type;
+	            function resolver(i) {
+	                return function (x) {
+	                    result[i] = x;
+	                    count += 1;
 	
-	            (response.ok ? resolve : reject)(response);
-	        };
+	                    if (count === iterable.length) {
+	                        resolve(result);
+	                    }
+	                };
+	            }
 	
-	        script.onload = handler;
-	        script.onerror = handler;
+	            for (var i = 0; i < iterable.length; i += 1) {
+	                Promise.resolve(iterable[i]).then(resolver(i), reject);
+	            }
+	        });
+	    };
 	
-	        document.body.appendChild(script);
-	    });
+	    Promise.race = function race(iterable) {
+	        return new Promise(function (resolve, reject) {
+	            for (var i = 0; i < iterable.length; i += 1) {
+	                Promise.resolve(iterable[i]).then(resolve, reject);
+	            }
+	        });
+	    };
 	
+	    var p = Promise.prototype;
+	
+	    p.resolve = function resolve(x) {
+	        var promise = this;
+	
+	        if (promise.state === PENDING) {
+	            if (x === promise) {
+	                throw new TypeError('Promise settled with itself.');
+	            }
+	
+	            var called = false;
+	
+	            try {
+	                var then = x && x['then'];
+	
+	                if (x !== null && typeof x === 'object' && typeof then === 'function') {
+	                    then.call(x, function (x) {
+	                        if (!called) {
+	                            promise.resolve(x);
+	                        }
+	                        called = true;
+	
+	                    }, function (r) {
+	                        if (!called) {
+	                            promise.reject(r);
+	                        }
+	                        called = true;
+	                    });
+	                    return;
+	                }
+	            } catch (e) {
+	                if (!called) {
+	                    promise.reject(e);
+	                }
+	                return;
+	            }
+	
+	            promise.state = RESOLVED;
+	            promise.value = x;
+	            promise.notify();
+	        }
+	    };
+	
+	    p.reject = function reject(reason) {
+	        var promise = this;
+	
+	        if (promise.state === PENDING) {
+	            if (reason === promise) {
+	                throw new TypeError('Promise settled with itself.');
+	            }
+	
+	            promise.state = REJECTED;
+	            promise.value = reason;
+	            promise.notify();
+	        }
+	    };
+	
+	    p.notify = function notify() {
+	        var promise = this;
+	
+	        _.nextTick(function () {
+	            if (promise.state !== PENDING) {
+	                while (promise.deferred.length) {
+	                    var deferred = promise.deferred.shift(),
+	                        onResolved = deferred[0],
+	                        onRejected = deferred[1],
+	                        resolve = deferred[2],
+	                        reject = deferred[3];
+	
+	                    try {
+	                        if (promise.state === RESOLVED) {
+	                            if (typeof onResolved === 'function') {
+	                                resolve(onResolved.call(undefined, promise.value));
+	                            } else {
+	                                resolve(promise.value);
+	                            }
+	                        } else if (promise.state === REJECTED) {
+	                            if (typeof onRejected === 'function') {
+	                                resolve(onRejected.call(undefined, promise.value));
+	                            } else {
+	                                reject(promise.value);
+	                            }
+	                        }
+	                    } catch (e) {
+	                        reject(e);
+	                    }
+	                }
+	            }
+	        });
+	    };
+	
+	    p.then = function then(onResolved, onRejected) {
+	        var promise = this;
+	
+	        return new Promise(function (resolve, reject) {
+	            promise.deferred.push([onResolved, onRejected, resolve, reject]);
+	            promise.notify();
+	        });
+	    };
+	
+	    p.catch = function (onRejected) {
+	        return this.then(undefined, onRejected);
+	    };
+	
+	    return Promise;
 	};
 
 
 /***/ },
 /* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Interceptor factory.
+	 */
+	
+	module.exports = function (_) {
+	
+	    var Promise = __webpack_require__(14)(_);
+	
+	    return function (handler, vm) {
+	        return function (client) {
+	
+	            if (_.isFunction(handler)) {
+	                handler = handler.call(vm, Promise);
+	            }
+	
+	            return function (request) {
+	
+	                if (_.isFunction(handler.request)) {
+	                    request = handler.request.call(vm, request);
+	                }
+	
+	                return when(request, function (request) {
+	                    return when(client(request), function (response) {
+	
+	                        if (_.isFunction(handler.response)) {
+	                            response = handler.response.call(vm, response);
+	                        }
+	
+	                        return response;
+	                    });
+	                });
+	            };
+	        };
+	    };
+	
+	    function when(value, fulfilled, rejected) {
+	
+	        var promise = Promise.resolve(value);
+	
+	        if (arguments.length < 2) {
+	            return promise;
+	        }
+	
+	        return promise.then(fulfilled, rejected);
+	    }
+	
+	};
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Default client.
+	 */
+	
+	module.exports = function (_) {
+	
+	    var xhrClient = __webpack_require__(18)(_);
+	
+	    return function (request) {
+	        return (request.client || xhrClient)(request);
+	    };
+	
+	};
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * XMLHttp client.
+	 */
+	
+	module.exports = function (_) {
+	
+	    var Promise = __webpack_require__(14)(_);
+	
+	    return function (request) {
+	        return new Promise(function (resolve) {
+	
+	            var xhr = new XMLHttpRequest(), response = {request: request}, handler;
+	
+	            request.cancel = function () {
+	                xhr.abort();
+	            };
+	
+	            xhr.open(request.method, _.url(request), true);
+	
+	            if (_.isPlainObject(request.xhr)) {
+	                _.extend(xhr, request.xhr);
+	            }
+	
+	            _.each(request.headers || {}, function (value, header) {
+	                xhr.setRequestHeader(header, value);
+	            });
+	
+	            handler = function (event) {
+	
+	                response.data = xhr.responseText;
+	                response.status = xhr.status;
+	                response.statusText = xhr.statusText;
+	                response.headers = getHeaders(xhr);
+	
+	                resolve(response);
+	            };
+	
+	            xhr.onload = handler;
+	            xhr.onabort = handler;
+	            xhr.onerror = handler;
+	
+	            xhr.send(request.data);
+	        });
+	    };
+	
+	    function getHeaders(xhr) {
+	
+	        var headers;
+	
+	        if (!headers) {
+	            headers = parseHeaders(xhr.getAllResponseHeaders());
+	        }
+	
+	        return function (name) {
+	
+	            if (name) {
+	                return headers[_.toLower(name)];
+	            }
+	
+	            return headers;
+	        };
+	    }
+	
+	    function parseHeaders(str) {
+	
+	        var headers = {}, value, name, i;
+	
+	        if (_.isString(str)) {
+	            _.each(str.split('\n'), function (row) {
+	
+	                i = row.indexOf(':');
+	                name = _.trim(_.toLower(row.slice(0, i)));
+	                value = _.trim(row.slice(i + 1));
+	
+	                if (headers[name]) {
+	
+	                    if (_.isArray(headers[name])) {
+	                        headers[name].push(value);
+	                    } else {
+	                        headers[name] = [headers[name], value];
+	                    }
+	
+	                } else {
+	
+	                    headers[name] = value;
+	                }
+	
+	            });
+	        }
+	
+	        return headers;
+	    }
+	
+	};
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	/**
+	 * Before Interceptor.
+	 */
+	
+	module.exports = function (_) {
+	
+	    return {
+	
+	        request: function (request) {
+	
+	            if (_.isFunction(request.beforeSend)) {
+	                request.beforeSend.call(this, request);
+	            }
+	
+	            return request;
+	        }
+	
+	    };
+	
+	};
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	/**
+	 * Timeout Interceptor.
+	 */
+	
+	module.exports = function (_) {
+	
+	    return function () {
+	
+	        var timeout;
+	
+	        return {
+	
+	            request: function (request) {
+	
+	                if (request.timeout) {
+	                    timeout = setTimeout(function () {
+	                        request.cancel();
+	                    }, request.timeout);
+	                }
+	
+	                return request;
+	            },
+	
+	            response: function (response) {
+	
+	                clearTimeout(timeout);
+	
+	                return response;
+	            }
+	
+	        };
+	    };
+	
+	};
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * JSONP Interceptor.
+	 */
+	
+	module.exports = function (_) {
+	
+	    var jsonpClient = __webpack_require__(22)(_);
+	
+	    return {
+	
+	        request: function (request) {
+	
+	            if (request.method == 'JSONP') {
+	                request.client = jsonpClient;
+	            }
+	
+	            return request;
+	        }
+	
+	    };
+	
+	};
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * JSONP client.
+	 */
+	
+	module.exports = function (_) {
+	
+	    var Promise = __webpack_require__(14)(_);
+	
+	    return function (request) {
+	        return new Promise(function (resolve) {
+	
+	            var callback = '_jsonp' + Math.random().toString(36).substr(2), response = {request: request, data: null}, handler, script;
+	
+	            request.params[request.jsonp] = callback;
+	            request.cancel = function () {
+	                handler({type: 'cancel'});
+	            };
+	
+	            script = document.createElement('script');
+	            script.src = _.url(request);
+	            script.type = 'text/javascript';
+	            script.async = true;
+	
+	            window[callback] = function (data) {
+	                response.data = data;
+	            };
+	
+	            handler = function (event) {
+	
+	                if (event.type === 'load' && response.data !== null) {
+	                    response.status = 200;
+	                } else if (event.type === 'error') {
+	                    response.status = 404;
+	                } else {
+	                    response.status = 0;
+	                }
+	
+	                resolve(response);
+	
+	                delete window[callback];
+	                document.body.removeChild(script);
+	            };
+	
+	            script.onload = handler;
+	            script.onerror = handler;
+	
+	            document.body.appendChild(script);
+	        });
+	    };
+	
+	};
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	/**
+	 * HTTP method override Interceptor.
+	 */
+	
+	module.exports = function (_) {
+	
+	    return {
+	
+	        request: function (request) {
+	
+	            if (request.emulateHTTP && /^(PUT|PATCH|DELETE)$/i.test(request.method)) {
+	                request.headers['X-HTTP-Method-Override'] = request.method;
+	                request.method = 'POST';
+	            }
+	
+	            return request;
+	        }
+	
+	    };
+	
+	};
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	/**
+	 * Mime Interceptor.
+	 */
+	
+	module.exports = function (_) {
+	
+	    return {
+	
+	        request: function (request) {
+	
+	            if (request.emulateJSON && _.isPlainObject(request.data)) {
+	                request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+	                request.data = _.url.params(request.data);
+	            }
+	
+	            if (_.isObject(request.data) && /FormData/i.test(request.data.toString())) {
+	                delete request.headers['Content-Type'];
+	            }
+	
+	            if (_.isPlainObject(request.data)) {
+	                request.data = JSON.stringify(request.data);
+	            }
+	
+	            return request;
+	        },
+	
+	        response: function (response) {
+	
+	            try {
+	                response.data = JSON.parse(response.data);
+	            } catch (e) {}
+	
+	            return response;
+	        }
+	
+	    };
+	
+	};
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	/**
+	 * Header Interceptor.
+	 */
+	
+	module.exports = function (_) {
+	
+	    return {
+	
+	        request: function (request) {
+	
+	            request.method = request.method.toUpperCase();
+	            request.headers = _.extend({}, _.http.headers.common,
+	                !request.crossOrigin ? _.http.headers.custom : {},
+	                _.http.headers[request.method.toLowerCase()],
+	                request.headers
+	            );
+	
+	            if (_.isPlainObject(request.data) && /^(GET|JSONP)$/i.test(request.method)) {
+	                _.extend(request.params, request.data);
+	                delete request.data;
+	            }
+	
+	            return request;
+	        }
+	
+	    };
+	
+	};
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * CORS Interceptor.
+	 */
+	
+	module.exports = function (_) {
+	
+	    var originUrl = _.url.parse(location.href);
+	    var xdrClient = __webpack_require__(22)(_);
+	    var xhrCors = 'withCredentials' in new XMLHttpRequest();
+	
+	    return {
+	
+	        request: function (request) {
+	
+	            if (request.crossOrigin === null) {
+	                request.crossOrigin = crossOrigin(request);
+	            }
+	
+	            if (request.crossOrigin) {
+	
+	                if (!xhrCors) {
+	                    request.client = xdrClient;
+	                }
+	
+	                request.emulateHTTP = false;
+	            }
+	
+	            return request;
+	        }
+	
+	    };
+	
+	    function crossOrigin(request) {
+	
+	        var requestUrl = _.url.parse(_.url(request));
+	
+	        return (requestUrl.protocol !== originUrl.protocol || requestUrl.host !== originUrl.host);
+	    }
+	
+	};
+
+
+/***/ },
+/* 27 */
 /***/ function(module, exports) {
 
 	/**
@@ -12923,81 +13660,7 @@
 
 
 /***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	/**
-	 * Created by teddyzhu on 15/12/18.
-	 */
-	
-	module.exports = function (Vue, options) {
-	    var duration = (options || {}).duration || 1000,
-	        transitions = {
-	        defineEmphasis: function (name, duration) {
-	            return {
-	                css: false,
-	                beforeEnter: function (el) {
-	                    $(el).show();
-	                },
-	
-	                enter: function (el, done) {
-	                    $(el).transition(name, duration, done);
-	
-	                    return function () {
-	                        $(el).transition('stop');
-	                    };
-	                },
-	
-	                leave: function (el, done) {
-	                    $(el).transition('reset').transition(name, duration, done).hide();
-	
-	                    return function () {
-	                        $(el).transition('stop');
-	                    };
-	                }
-	            };
-	        },
-	        defineAppearance: function (name, duration) {
-	
-	            return {
-	                css: false,
-	                enter: function (el, done) {
-	                    $(el).transition('reset').transition(name + ' in', duration, done);
-	
-	                    return function () {
-	                        $(el).transition('stop');
-	                    };
-	                },
-	
-	                leave: function (el, done) {
-	                    $(el).transition('reset').transition(name + ' out', duration, done);
-	
-	                    return function () {
-	                        $(el).transition('stop');
-	                    };
-	                }
-	            };
-	        }
-	    },
-	        emphasis = ['flash', 'shake', 'pulse', 'tada', 'bounce'],
-	        appearance = ['slide up', 'slide down', 'vertical flip', 'horizontal flip', 'fade', 'fade up', 'fade down', 'scale', 'drop', 'browse'];
-	
-	    emphasis.forEach(function (animation) {
-	        var definition = transitions.defineEmphasis(animation, duration);
-	
-	        Vue.transition(animation, definition);
-	    });
-	
-	    appearance.forEach(function (animation) {
-	        var definition = transitions.defineAppearance(animation, duration);
-	        var id = animation.split(' ').join('-');
-	
-	        Vue.transition(id, definition);
-	    });
-	};
-
-/***/ },
-/* 18 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13005,27 +13668,29 @@
 	 */
 	module.exports = {
 	    '/': {
-	        component: __webpack_require__(19)
-	    },
-	    "/all": {
-	        component: __webpack_require__(19)
-	    },
-	    "/a/*any": {
 	        component: __webpack_require__(29)
 	    },
+	    "/all": {
+	        component: __webpack_require__(29)
+	    },
+	    "/a/*any": {
+	        component: __webpack_require__(39)
+	    },
 	    '*': {
-	        component: __webpack_require__(19)
+	        component: __webpack_require__(29)
 	    }
 	};
 
 /***/ },
-/* 19 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(20)
-	
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(30)
+	__vue_template__ = __webpack_require__(38)
+	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(28)
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -13034,12 +13699,12 @@
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
-	    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+	    hotAPI.update(id, module.exports, __vue_template__)
 	  }
 	})()}
 
 /***/ },
-/* 20 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13102,7 +13767,7 @@
 	//         <div id="articlelist" class="ui attached fluid raised segment">
 	//             <div id="topicItems" class="ui divided items topiclist" data-page="{{page}}"
 	//                  data-sort="{{sort}}">
-	//                 <topic-list :topics="topicsList"></topic-list>
+	//                 <topic-list :topics="topicsList" :page="page"></topic-list>
 	//             </div>
 	//         </div>
 	//         <div id="articlebottons" class="ui bottom attached floating message">
@@ -13135,7 +13800,7 @@
 	//     </div>
 	// </template>
 	// <script type="text/javascript">
-	__webpack_require__(21);
+	__webpack_require__(31);
 	module.exports = {
 	    name: 'index',
 	    data: function data() {
@@ -13149,7 +13814,7 @@
 	        };
 	    },
 	    components: {
-	        "topic-list": __webpack_require__(25)
+	        "topic-list": __webpack_require__(35)
 	    },
 	    ready: function ready() {
 	        $.lc4e.index.bindEvent();
@@ -13166,22 +13831,24 @@
 	// </script>
 
 /***/ },
-/* 21 */
+/* 31 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(26)
-	
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(36)
+	__vue_template__ = __webpack_require__(37)
+	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(27)
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -13190,21 +13857,22 @@
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
-	    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+	    hotAPI.update(id, module.exports, __vue_template__)
 	  }
 	})()}
 
 /***/ },
-/* 26 */
+/* 36 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
 	// <template>
-	//     <div class="item topic" v-for="topic in topics" transition="fade">
+	//     <div class="item topic" v-for="topic in topics" track-by="$index" transition="fade"
+	//          stagger="85">
 	//         <div class="ui user picture">
 	//             <div class="ui fluid tiny image hidden-mb">
-	//                 <img v-bind:src="topic.imageUrl" data-title="{{topic.popUp.title}}"
+	//                 <img :src="topic.imageUrl" data-title="{{topic.popUp.title}}"
 	//                      data-content="{{topic.popUp.content}}"/>
 	//             </div>
 	//         </div>
@@ -13212,7 +13880,6 @@
 	//             <a class="header larger" href="{{topic.articleUrl}}">
 	//                 {{topic.articleTitle}}
 	//             </a>
-	
 	//             <div class="extra">
 	//                 <a class="ui blue label">
 	//                     {{topic.user}}
@@ -13261,32 +13928,36 @@
 	    props: {
 	        topics: {
 	            type: Array
+	        },
+	        page: {
+	            type: Number
 	        }
-	    },
-	    ready: function ready() {}
+	    }
 	};
 	// </script>
 
 /***/ },
-/* 27 */
+/* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"item topic\" v-for=\"topic in topics\" transition=\"fade\">\n        <div class=\"ui user picture\">\n            <div class=\"ui fluid tiny image hidden-mb\">\n                <img v-bind:src=\"topic.imageUrl\" data-title=\"{{topic.popUp.title}}\"\n                     data-content=\"{{topic.popUp.content}}\"/>\n            </div>\n        </div>\n        <div class=\"content\">\n            <a class=\"header larger\" href=\"{{topic.articleUrl}}\">\n                {{topic.articleTitle}}\n            </a>\n\n            <div class=\"extra\">\n                <a class=\"ui blue label\">\n                    {{topic.user}}\n                </a>\n                <a class=\"ui teal label\">\n                    {{topic.category}}\n                </a>\n\n                <div class=\"ui transparent label\">\n                    <i class=\"calendar icon\"></i>\n                    {{topic.publishTime}}\n                </div>\n                <div class=\"ui transparent label\">\n                    <i class=\"comments outline icon\"></i>\n                    {{topic.comments}}\n                </div>\n                <div class=\"ui transparent label\">\n                    <i class=\"comment icon\"></i>\n                    <a class=\"ui label\">\n                        {{topic.lastCommentUser}}\n                    </a>\n                </div>\n                <div class=\"topicQuickTools\">\n                    <a class=\"ui circular topicQuickTool label\"><i class=\"ui yellow star icon\"></i></a>\n                    <a class=\"ui circular topicQuickTool topicSetting bottom left dropdown pointing label\">\n                        <i class=\"ui red setting icon\"></i>\n\n                        <div class=\"menu\">\n                            <div class=\"item\">Move</div>\n                            <div class=\"item\">Delete</div>\n                            <div class=\"item\">Edit</div>\n                        </div>\n                    </a>\n                </div>\n            </div>\n        </div>\n        <div class=\"ui red top right attached label status\" v-if=\"topic.statusText && topic.statusText[0]\">\n            {{topic.statusText[0]}}\n        </div>\n    </div>";
+	module.exports = "<div class=\"item topic\" v-for=\"topic in topics\" track-by=\"$index\" transition=\"fade\"\n         stagger=\"85\">\n        <div class=\"ui user picture\">\n            <div class=\"ui fluid tiny image hidden-mb\">\n                <img :src=\"topic.imageUrl\" data-title=\"{{topic.popUp.title}}\"\n                     data-content=\"{{topic.popUp.content}}\"/>\n            </div>\n        </div>\n        <div class=\"content\">\n            <a class=\"header larger\" href=\"{{topic.articleUrl}}\">\n                {{topic.articleTitle}}\n            </a>\n            <div class=\"extra\">\n                <a class=\"ui blue label\">\n                    {{topic.user}}\n                </a>\n                <a class=\"ui teal label\">\n                    {{topic.category}}\n                </a>\n\n                <div class=\"ui transparent label\">\n                    <i class=\"calendar icon\"></i>\n                    {{topic.publishTime}}\n                </div>\n                <div class=\"ui transparent label\">\n                    <i class=\"comments outline icon\"></i>\n                    {{topic.comments}}\n                </div>\n                <div class=\"ui transparent label\">\n                    <i class=\"comment icon\"></i>\n                    <a class=\"ui label\">\n                        {{topic.lastCommentUser}}\n                    </a>\n                </div>\n                <div class=\"topicQuickTools\">\n                    <a class=\"ui circular topicQuickTool label\"><i class=\"ui yellow star icon\"></i></a>\n                    <a class=\"ui circular topicQuickTool topicSetting bottom left dropdown pointing label\">\n                        <i class=\"ui red setting icon\"></i>\n\n                        <div class=\"menu\">\n                            <div class=\"item\">Move</div>\n                            <div class=\"item\">Delete</div>\n                            <div class=\"item\">Edit</div>\n                        </div>\n                    </a>\n                </div>\n            </div>\n        </div>\n        <div class=\"ui red top right attached label status\" v-if=\"topic.statusText && topic.statusText[0]\">\n            {{topic.statusText[0]}}\n        </div>\n    </div>";
 
 /***/ },
-/* 28 */
+/* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"leftContent\" class=\"nine wide column\">\n        <div id=\"announcement\" class=\"ui white floating message\">\n            <div class=\"item\">\n                <div class=\"ui white label\">\n                    <i class=\"announcement icon\"></i>\n                </div>\n                <div id=\"announce\" class=\"ui text shape\">\n                    <div class=\"sides\">\n                        <div class=\"active ui header side\">Did you know? This side starts visible.</div>\n                        <div class=\"ui header side\">Help, its another side!</div>\n                        <div class=\"ui header side\">This is the last side</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"attachedHeader\" class=\"ui attached floating clearing message\" data-area=\"index\">\n            <div class=\"ui left floated breadcrumb basic segment\">\n                <a class=\"section\">\n                    {{siteName}}\n                </a>\n                <span class=\"divider\">/</span>\n                <a class=\"section\">Registration</a>\n                <span class=\"divider\">/</span>\n\n                <div class=\"active section\">Personal Information</div>\n            </div>\n            <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                <i class=\"filter icon\"></i>\n                <span class=\"text\">Sort</span>\n\n                <div class=\"menu\">\n                    <div class=\"header\">\n                        <i class=\"tags icon\"></i>\n                        Sort Method\n                    </div>\n                    <div class=\"scrolling menu\">\n                        <template v-if=\"isLogin\">\n                            <div class=\"item\" data-value=\"1\">\n                                <div class=\"ui red empty circular label\"></div>\n                                Order By System\n                            </div>\n                        </template>\n                        <div class=\"item\" data-value=\"2\">\n                            <div class=\"ui blue empty circular label\"></div>\n                            Order By Date\n                        </div>\n                        <div class=\"item\" data-value=\"3\">\n                            <div class=\"ui black empty circular label\"></div>\n                            Order By Last Reply\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"articlelist\" class=\"ui attached fluid raised segment\">\n            <div id=\"topicItems\" class=\"ui divided items topiclist\" data-page=\"{{page}}\"\n                 data-sort=\"{{sort}}\">\n                <topic-list :topics=\"topicsList\"></topic-list>\n            </div>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom attached floating message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>\n    <div id=\"rightContent\" class=\"three wide column animated fadeInRightTiny\">\n        <div id=\"todayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Today HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div id=\"yesterdayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Yesterday HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div class=\"ui vertical rectangle test ad\" data-text=\"Advertisement\"></div>\n    </div>";
+	module.exports = "<div id=\"leftContent\" class=\"nine wide column\">\n        <div id=\"announcement\" class=\"ui white floating message\">\n            <div class=\"item\">\n                <div class=\"ui white label\">\n                    <i class=\"announcement icon\"></i>\n                </div>\n                <div id=\"announce\" class=\"ui text shape\">\n                    <div class=\"sides\">\n                        <div class=\"active ui header side\">Did you know? This side starts visible.</div>\n                        <div class=\"ui header side\">Help, its another side!</div>\n                        <div class=\"ui header side\">This is the last side</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"attachedHeader\" class=\"ui attached floating clearing message\" data-area=\"index\">\n            <div class=\"ui left floated breadcrumb basic segment\">\n                <a class=\"section\">\n                    {{siteName}}\n                </a>\n                <span class=\"divider\">/</span>\n                <a class=\"section\">Registration</a>\n                <span class=\"divider\">/</span>\n\n                <div class=\"active section\">Personal Information</div>\n            </div>\n            <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                <i class=\"filter icon\"></i>\n                <span class=\"text\">Sort</span>\n\n                <div class=\"menu\">\n                    <div class=\"header\">\n                        <i class=\"tags icon\"></i>\n                        Sort Method\n                    </div>\n                    <div class=\"scrolling menu\">\n                        <template v-if=\"isLogin\">\n                            <div class=\"item\" data-value=\"1\">\n                                <div class=\"ui red empty circular label\"></div>\n                                Order By System\n                            </div>\n                        </template>\n                        <div class=\"item\" data-value=\"2\">\n                            <div class=\"ui blue empty circular label\"></div>\n                            Order By Date\n                        </div>\n                        <div class=\"item\" data-value=\"3\">\n                            <div class=\"ui black empty circular label\"></div>\n                            Order By Last Reply\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"articlelist\" class=\"ui attached fluid raised segment\">\n            <div id=\"topicItems\" class=\"ui divided items topiclist\" data-page=\"{{page}}\"\n                 data-sort=\"{{sort}}\">\n                <topic-list :topics=\"topicsList\" :page=\"page\"></topic-list>\n            </div>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom attached floating message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>\n    <div id=\"rightContent\" class=\"three wide column animated fadeInRightTiny\">\n        <div id=\"todayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Today HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div id=\"yesterdayHot\" class=\"ui raised segment\">\n            <h4 class=\"ui horizontal header divider\">\n                <i class=\"bar chart icon\"></i> Yesterday HotSpot\n            </h4>\n\n            <div class=\"ui divided items\"></div>\n        </div>\n        <div class=\"ui vertical rectangle test ad\" data-text=\"Advertisement\"></div>\n    </div>";
 
 /***/ },
-/* 29 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(30)
-	
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(40)
+	__vue_template__ = __webpack_require__(43)
+	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(33)
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -13295,12 +13966,12 @@
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
-	    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+	    hotAPI.update(id, module.exports, __vue_template__)
 	  }
 	})()}
 
 /***/ },
-/* 30 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13393,7 +14064,7 @@
 	//              class="ui divided items topiclist no padded attached raised segment"
 	//              data-page="{{page}}"
 	//              data-sort="{{topicSort}}">
-	//             <topic-list :topics="topics"></topic-list>
+	//             <topic-list :topics="topics" :page="page"></topic-list>
 	//         </div>
 	//         <div id="articlebottons" class="ui bottom clearing floating attached message">
 	//             <div id="prePage" class="ui left floated basic labeled icon button">
@@ -13409,7 +14080,7 @@
 	// </template>
 	
 	// <script>
-	__webpack_require__(31);
+	__webpack_require__(41);
 	module.exports = {
 	    name: "area",
 	    data: function data() {
@@ -13420,17 +14091,18 @@
 	            sort: this.$root.$data.sort,
 	            page: this.$root.$data.page,
 	            topics: [],
-	            curArea: ''
+	            curArea: '',
+	            showTopics: false
 	        };
 	    },
 	    route: {
-	        data: function data() {
-	            this.$http.post('/a/' + this.$route.params.any, function (result, status, request) {
-	                for (var index in result.data) {
-	                    this.$set(index, result.data[index]);
-	                }
-	            }).error(function (data, status, request) {
-	                // handle error
+	        data: function data(transition) {
+	            var that = this;
+	            that.topics = [];
+	            return this.$http.post('/a/' + this.$route.params.any + "-" + this.sort + "-" + this.page).then(function (response) {
+	                that.$nextTick(function () {
+	                    transition.next(response.data.data);
+	                });
 	            });
 	        }
 	    },
@@ -13438,33 +14110,34 @@
 	        $.lc4e.area.ready();
 	    },
 	    components: {
-	        "topic-list": __webpack_require__(25)
+	        "topic-list": __webpack_require__(35)
 	    }
 	};
-	
 	// </script>
 
 /***/ },
-/* 31 */
+/* 41 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 32 */,
-/* 33 */
+/* 42 */,
+/* 43 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui teal  basic row column segment\">\n        <div class=\"ui large inverted statistic\">\n            <div class=\"value\">\n                <i class=\"info circle icon\"></i> <br/>\n\n                <div id=\"areaName\" class=\"value\" v-html=\"curArea\"></div>\n            </div>\n            <div id=\"areaDescription\" class=\"label\">\n                Fill out the form below to sign-up for a new account\n            </div>\n        </div>\n    </div>\n    <div id=\"topicList\" class=\"twelve wide column\">\n        <div id=\"areaSummery\" class=\"ui attached floating message\">\n            <div class=\"ui row no padded clearing basic segment\">\n                <div class=\"ui left floated breadcrumb basic segment\">\n                    <a class=\"section\" v-html=\"siteName\"></a>\n                    <span class=\"divider\">/</span>\n\n                    <div class=\"active section\" v-html=\"curArea\"></div>\n                </div>\n                <div id=\"areaLabel\" class=\"ui labels\">\n                    <a class=\"ui tag mini label\">New</a>\n                    <a class=\"ui red mini tag label\">Upcoming</a>\n                    <a class=\"ui teal mini tag label\">Featured</a>\n                </div>\n                <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                    <i class=\"filter icon\"></i>\n                    <span class=\"text\">Sort</span>\n\n                    <div class=\"menu\">\n                        <div class=\"header\">\n                            <i class=\"tags icon\"></i>\n                            Sort Method\n                        </div>\n                        <div class=\"scrolling menu\">\n                            <template v-if=\"isLogin\">\n                                <div class=\"item\" data-value=\"1\">\n                                    <div class=\"ui red empty circular label\"></div>\n                                    Order By System\n                                </div>\n                            </template>\n                            <div class=\"item\" data-value=\"2\">\n                                <div class=\"ui blue empty circular label\"></div>\n                                Order By Date\n                            </div>\n                            <div class=\"item\" data-value=\"3\">\n                                <div class=\"ui black empty circular label\"></div>\n                                Order By Last Reply\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"ui header\">\n                <div class=\"ui three statistics\">\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Stars\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            31,200\n                        </div>\n                        <div class=\"label\">\n                            Topics\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Comments\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"topicItemsArea\"\n             class=\"ui divided items topiclist no padded attached raised segment\"\n             data-page=\"{{page}}\"\n             data-sort=\"{{topicSort}}\">\n            <topic-list :topics=\"topics\"></topic-list>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom clearing floating attached message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>";
+	module.exports = "<div class=\"ui teal  basic row column segment\">\n        <div class=\"ui large inverted statistic\">\n            <div class=\"value\">\n                <i class=\"info circle icon\"></i> <br/>\n\n                <div id=\"areaName\" class=\"value\" v-html=\"curArea\"></div>\n            </div>\n            <div id=\"areaDescription\" class=\"label\">\n                Fill out the form below to sign-up for a new account\n            </div>\n        </div>\n    </div>\n    <div id=\"topicList\" class=\"twelve wide column\">\n        <div id=\"areaSummery\" class=\"ui attached floating message\">\n            <div class=\"ui row no padded clearing basic segment\">\n                <div class=\"ui left floated breadcrumb basic segment\">\n                    <a class=\"section\" v-html=\"siteName\"></a>\n                    <span class=\"divider\">/</span>\n\n                    <div class=\"active section\" v-html=\"curArea\"></div>\n                </div>\n                <div id=\"areaLabel\" class=\"ui labels\">\n                    <a class=\"ui tag mini label\">New</a>\n                    <a class=\"ui red mini tag label\">Upcoming</a>\n                    <a class=\"ui teal mini tag label\">Featured</a>\n                </div>\n                <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                    <i class=\"filter icon\"></i>\n                    <span class=\"text\">Sort</span>\n\n                    <div class=\"menu\">\n                        <div class=\"header\">\n                            <i class=\"tags icon\"></i>\n                            Sort Method\n                        </div>\n                        <div class=\"scrolling menu\">\n                            <template v-if=\"isLogin\">\n                                <div class=\"item\" data-value=\"1\">\n                                    <div class=\"ui red empty circular label\"></div>\n                                    Order By System\n                                </div>\n                            </template>\n                            <div class=\"item\" data-value=\"2\">\n                                <div class=\"ui blue empty circular label\"></div>\n                                Order By Date\n                            </div>\n                            <div class=\"item\" data-value=\"3\">\n                                <div class=\"ui black empty circular label\"></div>\n                                Order By Last Reply\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"ui header\">\n                <div class=\"ui three statistics\">\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Stars\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            31,200\n                        </div>\n                        <div class=\"label\">\n                            Topics\n                        </div>\n                    </div>\n                    <div class=\"statistic\">\n                        <div class=\"value\">\n                            22\n                        </div>\n                        <div class=\"label\">\n                            Comments\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div id=\"topicItemsArea\"\n             class=\"ui divided items topiclist no padded attached raised segment\"\n             data-page=\"{{page}}\"\n             data-sort=\"{{topicSort}}\">\n            <topic-list :topics=\"topics\" :page=\"page\"></topic-list>\n        </div>\n        <div id=\"articlebottons\" class=\"ui bottom clearing floating attached message\">\n            <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n                <i class=\"angle double left icon\"></i>\n                Prev\n            </div>\n            <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n                <i class=\"angle double right icon\"></i>\n                Next\n            </div>\n        </div>\n    </div>";
 
 /***/ },
-/* 34 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(35)
-	
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(45)
+	__vue_template__ = __webpack_require__(55)
+	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(45)
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -13473,12 +14146,12 @@
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
-	    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+	    hotAPI.update(id, module.exports, __vue_template__)
 	  }
 	})()}
 
 /***/ },
-/* 35 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13636,8 +14309,8 @@
 	// </template>
 	
 	// <script>
-	__webpack_require__(36);
-	__webpack_require__(38);
+	__webpack_require__(46);
+	__webpack_require__(48);
 	module.exports = {
 	    name: 'app',
 	    data: function data() {
@@ -13647,28 +14320,28 @@
 	        $.lc4e.common.ready();
 	    },
 	    components: {
-	        "menu-tree": __webpack_require__(42)
+	        "menu-tree": __webpack_require__(52)
 	    }
 	};
 	// </script>
 
 /***/ },
-/* 36 */
+/* 46 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 37 */,
-/* 38 */
+/* 47 */,
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(39);
-	__webpack_require__(40);
-	__webpack_require__(41);
+	__webpack_require__(49);
+	__webpack_require__(50);
+	__webpack_require__(51);
 
 /***/ },
-/* 39 */
+/* 49 */
 /***/ function(module, exports) {
 
 	/*!
@@ -17049,7 +17722,7 @@
 	});
 
 /***/ },
-/* 40 */
+/* 50 */
 /***/ function(module, exports) {
 
 	/**
@@ -17121,7 +17794,7 @@
 	});
 
 /***/ },
-/* 41 */
+/* 51 */
 /***/ function(module, exports) {
 
 	/**
@@ -17164,13 +17837,15 @@
 	});
 
 /***/ },
-/* 42 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(43)
-	
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(53)
+	__vue_template__ = __webpack_require__(54)
+	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(44)
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
 	if (false) {(function () {  module.hot.accept()
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
@@ -17179,34 +17854,30 @@
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
-	    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+	    hotAPI.update(id, module.exports, __vue_template__)
 	  }
 	})()}
 
 /***/ },
-/* 43 */
+/* 53 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
-	// <template>
+	// <template xmlns:v-bind="http://www.w3.org/1999/xhtml">
 	//     <template v-for="menu in menus">
-	//         <template v-if="size(menu)">
-	//             <div class="ui dropdown link item">
-	//                 <i v-if="menu.ICON" v-bind:class="[menu.ICON,'icon']"></i>
-	//                 <span class="text">{{menu.NAME}}</span><i class="dropdown icon"></i>
+	//         <div class="ui dropdown link item" v-if="menu.CHILDS.length > 0">
+	//             <i v-if="menu.ICON" v-bind:class="[menu.ICON,'icon']"></i>
+	//             <span class="text">{{menu.NAME}}</span><i class="dropdown icon"></i>
 	
-	//                 <div class="menu">
-	//                     <menu-tree :menus="menu.CHILDS"></menu-tree>
-	//                 </div>
+	//             <div class="menu">
+	//                 <menu-tree :menus="menu.CHILDS"></menu-tree>
 	//             </div>
-	//         </template>
-	//         <template v-else>
-	//             <a class="item linked" title="{{menu.NAME}}" v-link="menu.ABBR">
-	//                 <i v-bind:class="[menu.ICON,'icon']" v-if="menu.ICON"></i>
-	//                 {{menu.NAME}}
-	//             </a>
-	//         </template>
+	//         </div>
+	//         <a class="item linked" title="{{menu.NAME}}" v-link="menu.ABBR" v-else>
+	//             <i v-bind:class="[menu.ICON,'icon']" v-if="menu.ICON"></i>
+	//             {{menu.NAME}}
+	//         </a>
 	//     </template>
 	// </template>
 	
@@ -17217,23 +17888,18 @@
 	        menus: {
 	            type: Array
 	        }
-	    },
-	    methods: {
-	        size: function size(obj) {
-	            return obj.CHILDS.length > 0;
-	        }
 	    }
 	};
 	// </script>
 
 /***/ },
-/* 44 */
+/* 54 */
 /***/ function(module, exports) {
 
-	module.exports = "<template v-for=\"menu in menus\">\n        <template v-if=\"size(menu)\">\n            <div class=\"ui dropdown link item\">\n                <i v-if=\"menu.ICON\" v-bind:class=\"[menu.ICON,'icon']\"></i>\n                <span class=\"text\">{{menu.NAME}}</span><i class=\"dropdown icon\"></i>\n\n                <div class=\"menu\">\n                    <menu-tree :menus=\"menu.CHILDS\"></menu-tree>\n                </div>\n            </div>\n        </template>\n        <template v-else>\n            <a class=\"item linked\" title=\"{{menu.NAME}}\" v-link=\"menu.ABBR\">\n                <i v-bind:class=\"[menu.ICON,'icon']\" v-if=\"menu.ICON\"></i>\n                {{menu.NAME}}\n            </a>\n        </template>\n    </template>";
+	module.exports = "<template v-for=\"menu in menus\">\n        <div class=\"ui dropdown link item\" v-if=\"menu.CHILDS.length > 0\">\n            <i v-if=\"menu.ICON\" v-bind:class=\"[menu.ICON,'icon']\"></i>\n            <span class=\"text\">{{menu.NAME}}</span><i class=\"dropdown icon\"></i>\n\n            <div class=\"menu\">\n                <menu-tree :menus=\"menu.CHILDS\"></menu-tree>\n            </div>\n        </div>\n        <a class=\"item linked\" title=\"{{menu.NAME}}\" v-link=\"menu.ABBR\" v-else>\n            <i v-bind:class=\"[menu.ICON,'icon']\" v-if=\"menu.ICON\"></i>\n            {{menu.NAME}}\n        </a>\n    </template>";
 
 /***/ },
-/* 45 */
+/* 55 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=\"menu\" class=\"ui menu\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" v-bind:src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\">\n                            <img class=\"ui headered linked image\" v-bind:src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" href=\"/SignUp\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" href=\"/SignIn\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}}{{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"https://www.digitalocean.com/?refcode=f7bf7094acd9\">DigitalOcean</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>";

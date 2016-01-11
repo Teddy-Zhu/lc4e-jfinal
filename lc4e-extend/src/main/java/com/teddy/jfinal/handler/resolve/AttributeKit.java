@@ -1,6 +1,5 @@
 package com.teddy.jfinal.handler.resolve;
 
-import com.jfinal.log.Logger;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.exceptions.Lc4eAutoSetterException;
 import com.teddy.jfinal.exceptions.Lc4eException;
@@ -10,14 +9,10 @@ import com.teddy.jfinal.tools.WebTool;
 
 import java.lang.reflect.Method;
 
-import static com.jfinal.log.Logger.getLogger;
-
 /**
  * Created by teddy on 2015/8/2.
  */
 public class AttributeKit {
-
-    private static final Logger log = getLogger(AttributeKit.class);
 
     public static void setUIDatas(SetUIDatas uiDatas, com.jfinal.core.Controller controller) throws Lc4eException, Lc4eAutoSetterException {
         if (uiDatas == null) {

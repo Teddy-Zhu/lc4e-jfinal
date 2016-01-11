@@ -45,7 +45,6 @@ public class Config implements JFinalConfig {
 
         me.setMainRenderFactory(new JetTemplateRenderFactory());
 
-
         /*
         me.setError401View("/common/401.html");
         me.setError403View("/common/403.html");

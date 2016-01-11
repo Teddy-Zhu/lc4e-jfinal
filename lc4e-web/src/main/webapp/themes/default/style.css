@@ -22,8 +22,6 @@
     cursor: pointer;
     position: relative;
     padding: 0;
-    -webkit-transition: background 0.5s ease;
-            transition: background 0.5s ease;
 }
 
 #topicItems > .item > .user.picture {
@@ -117,8 +115,7 @@
     content: '';
     -webkit-transition: all 0.2s;
     -webkit-backface-visibility: hidden;
-    -webkit-transition: all 0.2s;
-            transition: all 0.2s;
+    transition: all 0.2s;
     -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
     -webkit-transform: scaleX(0);
@@ -137,8 +134,7 @@
 
 #topicItems > .item .topicQuickTools {
     float: right;
-    -webkit-transition: opacity 0.5s ease;
-            transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease;
     opacity: 0;
 }
 
@@ -254,8 +250,7 @@
     content: '';
     -webkit-transition: all 0.2s;
     -webkit-backface-visibility: hidden;
-    -webkit-transition: all 0.2s;
-            transition: all 0.2s;
+    transition: all 0.2s;
     -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
     -webkit-transform: scaleX(0);
@@ -274,8 +269,7 @@
 
 #topicItemsArea > .item .topicQuickTools {
     float: right;
-    -webkit-transition: opacity 0.5s ease;
-            transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease;
     opacity: 0;
 }
 
@@ -315,8 +309,6 @@
     cursor: pointer;
     position: relative;
     padding: 0 !important;
-    -webkit-transition: background 0.5s ease;
-            transition: background 0.5s ease;
 }
 
 #topicItemsArea > .item > .user.picture {
@@ -371,7 +363,6 @@
  */
 
 .fullStars {
-    background: -webkit-radial-gradient(top center, 220% 105%, #A8C0F1 10%, #364F6F 40%, #5D2B7D 65%, #D0D065) fixed;
     background: radial-gradient(220% 105% at top center, #A8C0F1 10%, #364F6F 40%, #5D2B7D 65%, #D0D065) fixed;
 }
 
@@ -1220,12 +1211,10 @@
 }
 
 .allAnimation {
-    -webkit-transition: all 1s ease;
     transition: all 1s ease;
 }
 
 .lc4e-loading {
-    background: #6F6F6F;
     background: rgba(111, 111, 111, 0.3);
     border-radius: 0.29em;
     position: fixed;
@@ -2000,9 +1989,9 @@ html, body {
 }
 
 #menu .left.menu > .item {
-    -webkit-align-self: center;
     -ms-flex-item-align: center;
-    align-self: center;
+    -webkit-align-self: center;
+            align-self: center;
     box-shadow: none;
     border: none;
     padding: 1em 2em;
@@ -2011,7 +2000,6 @@ html, body {
 
 #menu, #menu > .column {
     margin: 0;
-    -webkit-transition: padding 0.5s ease, background-color 0.5s ease;
     transition: padding 0.5s ease, background-color 0.5s ease;
 }
 
@@ -2043,7 +2031,6 @@ html, body {
 
 #menu.fixed {
     z-index: 1001;
-    background-color: #FFFFFF;
     background-color: rgba(255, 255, 255, .95);
     border-bottom: 1px solid #DDDDDD;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.25);
@@ -2068,7 +2055,6 @@ html, body {
     transform: scaleY(0);
     transform-origin: bottom;
     -webkit-transform-origin: bottom;
-    -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
     border-radius: 0.25em;
     background: #BCBEC0;
@@ -2108,7 +2094,6 @@ html, body {
     margin: auto;
     width: 3em;
     border-radius: .25rem;
-    -webkit-transition: width 0.2s ease, height 0.2s ease;
     transition: width 0.2s ease, height 0.2s ease;
 }
 
@@ -2164,7 +2149,6 @@ html, body {
 
 /* header search*/
 #searchSite {
-    -webkit-transition: width 0.5s ease;
     transition: width 0.5s ease;
 }
 
@@ -2190,7 +2174,6 @@ html, body {
 .ui.footer.segment {
     border-radius: 0;
     padding: 4em 8% 2em 8%;
-    -webkit-transition: padding 0.5s ease;
     transition: padding 0.5s ease;
 }
 
@@ -2211,7 +2194,6 @@ html, body {
 /*main*/
 #mainContent {
     margin: 0;
-    -webkit-transition: height 0.3s ease, background 0.3s ease, border 0.4s ease, box-shadow 0.4s ease;
     transition: height 0.3s ease, background 0.3s ease, border 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -2342,7 +2324,6 @@ html, body {
         top: 0;
         left: 0;
         width: 100%;
-        background: #222426;
         background: rgba(34, 36, 38, 0.1);
         height: 1px;
     }
@@ -2403,7 +2384,6 @@ html, body {
     top: 100px;
     width: 230px;
     z-index: 1000;
-    -webkit-transition: all 0.2s ease-in-out 0s;
     transition: all 0.2s ease-in-out 0s;
 }
 
@@ -2422,7 +2402,6 @@ html, body {
     position: absolute;
     text-align: center;
     width: 50px;
-    -webkit-transition: left 0.1s ease;
     transition: left 0.1s ease;
     margin: 1em 0;
     border-top: 1px solid rgba(34, 36, 38, .15);
@@ -2568,4 +2547,25 @@ html, body {
 .shadow-5 {
     box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22) !important;
 }
+
+.fade-enter {
+    -webkit-animation: fadeIn 800ms ease;
+            animation: fadeIn 800ms ease;
+}
+
+.fade-leave {
+    -webkit-animation: fadeOut 800ms ease;
+            animation: fadeOut 800ms ease;
+}
+
+.fadeInDown-enter {
+    -webkit-animation: fadeInDown 800ms ease;
+            animation: fadeInDown 800ms ease;
+}
+
+.fadeInDown-leave {
+    -webkit-animation: fadeOutDown 800ms ease;
+            animation: fadeOutDown 800ms ease;
+}
+
 /*# sourceMappingURL=style.css.map*/

@@ -1,12 +1,10 @@
 package com.teddy.jfinal.handler;
 
 import com.jfinal.handler.Handler;
-import com.teddy.jfinal.handler.gzip.GZIPResponseWrapper;
 import com.teddy.jfinal.interfaces.IHandler;
 import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.ShiroPlugin;
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.ExecutionException;
@@ -41,7 +39,7 @@ public class GlobalHandler extends Handler {
             response.setHeader("Cache-Control", "max-age=" + MAX_AGE);
             response.addDateHeader("Expires", now + MAX_AGE * 1000);
             response.addDateHeader("Last-Modified", now);
-            nextHandler.handle(target, request, response, isHandled);
+            next.handle(target, request, response, isHandled);
         } else {
             Throwable t = null;
             final Subject subject = createSubject(request, response);
@@ -50,7 +48,7 @@ public class GlobalHandler extends Handler {
                 subject.execute(() -> {
                     resolveBefore(finalTarget, request, response, isHandled);
                     updateSessionLastAccessTime(request, response);
-                    nextHandler.handle(finalTarget, request, response, isHandled);
+                    next.handle(finalTarget, request, response, isHandled);
                     resolveAfter(finalTarget, request, response, isHandled);
                     return null;
                 });

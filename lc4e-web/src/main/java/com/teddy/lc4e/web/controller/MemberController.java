@@ -61,7 +61,7 @@ public class MemberController extends BaseController {
     public void signin() {
         User user = getModel(User.class, "user");
         Sys_Common_Variable captcha = ComVarService.service.getComVarByName(Key.CAPTCHA);
-        if (captcha != null && captcha.getToBoolean(Sys_Common_Variable.S_VALUE) && !Lc4eCaptchaRender.validate(getRequest(), getPara("captcha"))) {
+        if (captcha != null && captcha.getToBoolean(Sys_Common_Variable.S_VALUE) && !validateCaptcha(getPara("captcha"))) {
             renderJson(new Message(captcha.getStr(Sys_Common_Variable.S_ERROR)));
             return;
         }

@@ -21,7 +21,6 @@
     cursor: pointer;
     position: relative;
     padding: 0;
-    transition: background 0.5s ease;
 }
 
 #topicItems > .item > .user.picture {

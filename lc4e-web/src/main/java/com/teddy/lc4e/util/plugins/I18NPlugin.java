@@ -7,15 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.IPlugin;
 
 
 public class I18NPlugin implements IPlugin {
 
-    protected final Logger log = Logger.getLogger(getClass());
 
-    private static final Map<String, Map<String, String>> resourceBundleMap = new HashMap<String, Map<String, String>>();
+
+    private static final Map<String, Map<String, String>> resourceBundleMap = new HashMap<>();
 
 
     public static String i18n(String i18n) {
@@ -97,14 +96,14 @@ public class I18NPlugin implements IPlugin {
                 }
                 resourceBundleMap.put(language.toLowerCase(), i18nMap);
             } catch (Exception exception) {
-                log.info("get properties error...");
+                System.out.println("get properties error...");
             } finally {
                 try {
                     if (inputStream != null) {
                         inputStream.close();
                     }
                 } catch (IOException e) {
-                    log.info("close properties error...");
+                    System.out.println("close properties error...");
                 }
             }
         }

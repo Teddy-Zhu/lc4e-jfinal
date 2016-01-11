@@ -1,6 +1,6 @@
 package com.teddy.jfinal.plugin;
 
-import com.jfinal.log.Logger;
+import com.jfinal.kit.Prop;
 import com.teddy.jfinal.common.Dict;
 
 import java.lang.reflect.Field;
@@ -9,7 +9,6 @@ import java.util.*;
 
 public class PropPlugin {
 
-    private static final Logger LOGGER = Logger.getLogger(PropPlugin.class);
 
     private static Map<String, Object> paramMap = new HashMap<>();
 
@@ -21,6 +20,8 @@ public class PropPlugin {
     public PropPlugin(Properties properties) {
         this.properties = properties;
     }
+
+
 
     public static Object getObject(String key) {
         return paramMap.get(key);

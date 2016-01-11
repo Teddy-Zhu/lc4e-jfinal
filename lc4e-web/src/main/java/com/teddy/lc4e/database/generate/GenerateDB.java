@@ -1,9 +1,14 @@
 package com.teddy.lc4e.database.generate;
 
+import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.generator.Generator;
+import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.plugin.druid.DruidPlugin;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.tools.StringTool;
 import org.apache.log4j.Logger;
 
@@ -102,8 +107,22 @@ public class GenerateDB {
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-        new GenerateDB().generate();
-
+        PropPlugin plugin = new PropPlugin(new Prop(Const.CONFIG_FILE,com.jfinal.core.Const.DEFAULT_ENCODING).getProperties());
+        plugin.start();
+        C3p0Plugin c3p0Plugin = new C3p0Plugin(PropPlugin.getValue(Dict.DATABASE_URL), PropPlugin.getValue(Dict.DATABASE_USERNAME), PropPlugin.getValue(Dict.DATABASE_PASSWORD));
+        c3p0Plugin.start();
+        //new GenerateDB().generate();
+        // base model 所使用的包名
+        String baseModelPkg = "model.base";
+        // base model 文件保存路径
+        String baseModelDir = PathKit.getWebRootPath() + "/../src/com/main/java/com/teddy/lc4e/database/base";
+        // model 所使用的包名
+        String modelPkg = "model";
+        // model 文件保存路径
+        String modelDir = baseModelDir + "/..";
+        Generator gernerator = new Generator(c3p0Plugin.getDataSource(), baseModelPkg, baseModelDir,
+                modelPkg, modelDir);
+        gernerator.generate();
     }
 
 }

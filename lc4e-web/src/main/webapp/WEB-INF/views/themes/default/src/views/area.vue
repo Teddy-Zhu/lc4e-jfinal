@@ -86,7 +86,7 @@
              class="ui divided items topiclist no padded attached raised segment"
              data-page="{{page}}"
              data-sort="{{topicSort}}">
-            <topic-list :topics="topics"></topic-list>
+            <topic-list :topics="topics" :page="page"></topic-list>
         </div>
         <div id="articlebottons" class="ui bottom clearing floating attached message">
             <div id="prePage" class="ui left floated basic labeled icon button">
@@ -102,37 +102,37 @@
 </template>
 
 <script>
-require('../../../../../../themes/default/css/pages/area.css');
-module.exports = {
-    name: "area",
-    data: function () {
-        return {
-            params: {},
-            isLogin: this.$root.$data.isLogin,
-            siteName: this.$root.$data.siteName,
-            sort: this.$root.$data.sort,
-            page: this.$root.$data.page,
-            topics: [],
-            curArea: ''
-        };
-    },
-    route: {
+    require('../../../../../../themes/default/css/pages/area.css');
+    module.exports = {
+        name: "area",
         data: function () {
-            this.$http.post('/a/' + this.$route.params.any, function (result, status, request) {
-                for(var index in result.data){
-                    this.$set(index,result.data[index]);
-                }
-            }).error(function (data, status, request) {
-                // handle error
-            });
+            return {
+                params: {},
+                isLogin: this.$root.$data.isLogin,
+                siteName: this.$root.$data.siteName,
+                sort: this.$root.$data.sort,
+                page: this.$root.$data.page,
+                topics: [],
+                curArea: '',
+                showTopics: false
+            };
+        },
+        route: {
+            data: function (transition) {
+                var that = this;
+                that.topics = [];
+                return this.$http.post('/a/' + this.$route.params.any + "-" + this.sort + "-" + this.page).then(function (response) {
+                    that.$nextTick(function () {
+                        transition.next(response.data.data);
+                    });
+                })
+            }
+        },
+        ready: function () {
+            $.lc4e.area.ready();
+        },
+        components: {
+            "topic-list": require('../components/topicList.vue')
         }
-    },
-    ready: function () {
-        $.lc4e.area.ready();
-    },
-    components: {
-        "topic-list": require('../components/topicList.vue')
     }
-}
-
 </script>

@@ -17,11 +17,6 @@ public abstract class BaseController extends Controller {
         return WebTool.isAJAX(getRequest());
     }
 
-    protected void renderCaptcha() {
-        Lc4eCaptchaRender lc4eCaptchaRender = new Lc4eCaptchaRender();
-        render(lc4eCaptchaRender);
-    }
-
     protected boolean isPOST() {
         return WebTool.isPOST(getRequest());
     }

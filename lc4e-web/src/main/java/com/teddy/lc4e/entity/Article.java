@@ -26,11 +26,13 @@ public class Article {
 
     private List<String> statusText;
 
+    private Integer page;
+
     public Article() {
     }
 
 
-    public Article(String imageUrl, Popup popUp, String articleTitle, String category, String user, Integer comments, String publishTime, String lastCommentUser, String... statusText) {
+    public Article(String imageUrl, Popup popUp, String articleTitle, String category, String user, Integer comments, String publishTime, String lastCommentUser, Integer page, String... statusText) {
         this.imageUrl = imageUrl;
         this.popUp = popUp;
         this.articleTitle = articleTitle;
@@ -39,10 +41,11 @@ public class Article {
         this.comments = comments;
         this.publishTime = publishTime;
         this.lastCommentUser = lastCommentUser;
+        this.page = page;
         this.statusText = Arrays.asList(statusText);
     }
 
-    public Article(String imageUrl, Popup popUp, String articleTitle, String articleUrl, String category, String user, Integer comments, String publishTime, String lastCommentUser, String... statusText) {
+    public Article(String imageUrl, Popup popUp, String articleTitle, String articleUrl, String category, String user, Integer comments, String publishTime, String lastCommentUser, Integer page, String... statusText) {
         this.imageUrl = imageUrl;
         this.popUp = popUp;
         this.articleTitle = articleTitle;
@@ -52,7 +55,17 @@ public class Article {
         this.comments = comments;
         this.publishTime = publishTime;
         this.lastCommentUser = lastCommentUser;
+        this.page = page;
         this.statusText = Arrays.asList(statusText);
+    }
+
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
     }
 
     public List<String> getStatusText() {

@@ -14,7 +14,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var plugins = [
     //会将所有的样式文件打包成一个单独的style.css
     new ExtractTextPlugin("style.css", {
-        disable: false//,
+        disable: false
         //allChunks: true  //所有独立样式打包成一个css文件
     })
 ];
@@ -50,6 +50,9 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.vue']
     },
+    cssnext: {
+        browsers: "last 2 versions"
+    },
     plugins: plugins,
-    devtool: 'source-map'
+    devtool: '#source-map'
 };

@@ -1,8 +1,9 @@
 <template>
-    <div class="item topic" v-for="topic in topics" transition="fade">
+    <div class="item topic" v-for="topic in topics" track-by="$index" transition="fade"
+         stagger="85">
         <div class="ui user picture">
             <div class="ui fluid tiny image hidden-mb">
-                <img v-bind:src="topic.imageUrl" data-title="{{topic.popUp.title}}"
+                <img :src="topic.imageUrl" data-title="{{topic.popUp.title}}"
                      data-content="{{topic.popUp.content}}"/>
             </div>
         </div>
@@ -10,7 +11,6 @@
             <a class="header larger" href="{{topic.articleUrl}}">
                 {{topic.articleTitle}}
             </a>
-
             <div class="extra">
                 <a class="ui blue label">
                     {{topic.user}}
@@ -59,10 +59,10 @@
         props: {
             topics: {
                 type: Array
+            },
+            page: {
+                type: Number
             }
-        },
-        ready: function () {
-
         }
     }
 </script>

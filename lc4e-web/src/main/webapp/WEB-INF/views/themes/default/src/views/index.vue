@@ -56,7 +56,7 @@
         <div id="articlelist" class="ui attached fluid raised segment">
             <div id="topicItems" class="ui divided items topiclist" data-page="{{page}}"
                  data-sort="{{sort}}">
-                <topic-list :topics="topicsList"></topic-list>
+                <topic-list :topics="topicsList" :page="page"></topic-list>
             </div>
         </div>
         <div id="articlebottons" class="ui bottom attached floating message">
@@ -89,32 +89,32 @@
     </div>
 </template>
 <script type="text/javascript">
-require('../../../../../../themes/default/css/pages/index.css');
-module.exports = {
-    name: 'index',
-    data: function () {
-        return {
-            isLogin: this.$root.$data.isLogin,
-            siteName: this.$root.$data.siteName,
-            themePath: this.$root.$data.themePath,
-            sort: this.$root.$data.sort,
-            page: this.$root.$data.page,
-            topicsList: this.$root.$data.topics
-        }
-    },
-    components: {
-        "topic-list": require('../components/topicList.vue')
-    },
-    ready: function () {
-        $.lc4e.index.bindEvent();
-    },
-    created: function () {
-    },
-    methods: {
-        loadJquery: function () {
-            'use strict';
-            console.log(this.user);
+    require('../../../../../../themes/default/css/pages/index.css');
+    module.exports = {
+        name: 'index',
+        data: function () {
+            return {
+                isLogin: this.$root.$data.isLogin,
+                siteName: this.$root.$data.siteName,
+                themePath: this.$root.$data.themePath,
+                sort: this.$root.$data.sort,
+                page: this.$root.$data.page,
+                topicsList: this.$root.$data.topics
+            }
+        },
+        components: {
+            "topic-list": require('../components/topicList.vue')
+        },
+        ready: function () {
+            $.lc4e.index.bindEvent();
+        },
+        created: function () {
+        },
+        methods: {
+            loadJquery: function () {
+                'use strict';
+                console.log(this.user);
+            }
         }
     }
-}
 </script>
