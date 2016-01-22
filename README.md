@@ -7,7 +7,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 ###It's a Light Forum.
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
 >#### Use Java(`JDK8`),
->###Jetbrick Template(`HTML5`,`VueJs`,`CSS3`,`Ant-Design`)
+>###Jetbrick Template(`HTML5`,`VueJs`,`CSS3`)
 >### LESS 构建 CSS
 >### Webpack 构建前端组建
 
@@ -17,7 +17,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 > 前端使用 vuejs	
 > 前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI	
 > 抛弃Jquery (同上,Render效率较低)	
-> 本项目会暂缓更新,等待新的UI完成)
+> 本项目会暂缓更新,等待新的UI(选择/开发)完成)
 
 
 # [Demo](http://www.lc4e.com) #
@@ -114,8 +114,8 @@ public class customAn extend CustomAnnotationPlugin {
 
 
 ### Other enhancement
-- `BaseController`：增强Controller 增加isAJAX ，isPJAX等
-- `DBModel`:增加 enhancer方法，增强Model,自动set updateTime，createTime,自动事务，自动Cache
+- `BaseController`：增强Controller 增加isAJAX ，isPJAX , 验证码render等
+- `DBModel`: 增强Model,自动set updateTime，createTime,自动事务，自动Cache
 - `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
 - `IInterceptor`: interceptor增强，需使用InterceptorHandler载入，新增beforeIntercept，afterIntercept，beforeException，afterException
 - `IIPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
@@ -151,3 +151,4 @@ public class customAn extend CustomAnnotationPlugin {
 
 - 01/11/2015 23:34:42
 >update jfinal version to 2.1
+
