@@ -13,10 +13,11 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 ----------
 
 # 计划ING(2015-03-20)
-> <del>前端使用 vuejs	
+> 前端使用 vuejs	
 > <del>前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI	
 > <del>抛弃Jquery (同上,Render效率较低)	
 > <del>本项目会暂缓更新,等待新的UI(选择/开发)完成)
+
 > 时间关系,新UI放弃,暂时继续混用jquery ,vuejs,semantic ui
 
 
@@ -25,7 +26,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 
 > <del>View [http://lc4e.coding.io/InitDB](http://lc4e.coding.io/InitDB) to initial database 
 
-# Forum Related #
+# 论坛相关 #
 ----------
 
 > ###轻量级论坛系统  
