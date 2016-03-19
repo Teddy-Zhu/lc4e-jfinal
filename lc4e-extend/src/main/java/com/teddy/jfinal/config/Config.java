@@ -98,7 +98,7 @@ public class Config extends com.jfinal.config.JFinalConfig {
         Class<?> clz = CustomPlugin.getClazz();
         Method method;
         try {
-            method = ReflectTool.getMethodByClassAndName(clz, methodName);
+            method = ReflectTool.getDeclaredMethodByClassAndName(clz, methodName);
             method.setAccessible(true);
             if (me == null) {
                 method.invoke(clz.newInstance());

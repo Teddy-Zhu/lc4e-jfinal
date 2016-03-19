@@ -9,7 +9,7 @@ import com.teddy.jfinal.exceptions.Lc4eAutoSetterException;
 import com.teddy.jfinal.handler.resolve.AttributeKitI;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
-import com.teddy.lc4e.database.model.Sys_Common_Variable;
+import com.teddy.lc4e.database.model.SysCommonVariable;
 import com.teddy.lc4e.web.service.ComVarService;
 
 import java.util.HashMap;
@@ -29,12 +29,12 @@ public class AttributeKit implements AttributeKitI {
         if (StringTool.equalEmpty(comVar.value())) {
             throw new Lc4eAutoSetterException("ComVar Field must be not empty!");
         }
-        Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.value());
+        SysCommonVariable variable = ComVarService.service.getComVarByName(comVar.value());
         if (variable == null) {
             throw new Lc4eAutoSetterException("No ComVar Record Found in Database or Cache");
         } else {
             controller.setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
-                    .type(), variable.getStr(Sys_Common_Variable.S_VALUE)));
+                    .type(), variable.getValue()));
         }
     }
 
@@ -56,17 +56,17 @@ public class AttributeKit implements AttributeKitI {
         }
         Map<String, SetComVar> comVarMap = setComVarsBefore(comVars);
         Set<String> keys = comVarMap.keySet();
-        List<Sys_Common_Variable> variables = ComVarService.service.getComVarsByNames(keys);
+        List<SysCommonVariable> variables = ComVarService.service.getComVarsByNames(keys);
         if (variables.size() != keys.size()) {
             throw new Lc4eAutoSetterException("mismatch vaiables");
         }
         if (variables.size() == 0) {
             throw new Lc4eAutoSetterException("No ComVar Record Found in Database or Cache");
         }
-        for (Sys_Common_Variable variable : variables) {
-            SetComVar comVar = comVarMap.get(variable.getStr(Sys_Common_Variable.S_NAME));
+        for (SysCommonVariable variable : variables) {
+            SetComVar comVar = comVarMap.get(variable.getName());
             controller.setAttr(Const.DEFAULT_NONE.equals(comVar.attrName()) ? comVar.value() : comVar.attrName(), ReflectTool.wrapperObject(comVar
-                    .type(), variable.getStr(Sys_Common_Variable.S_VALUE)));
+                    .type(), variable.getValue()));
         }
     }
 

@@ -15,10 +15,10 @@ public class PassDisposer {
 
     public static void encryptPassword(User user) {
 
-        user.set(User.S_PASSSALT, randomNumberGenerator.nextBytes().toHex());
+        user.setPasssalt(randomNumberGenerator.nextBytes().toHex());
 
-        String newPassword = new SimpleHash(algorithmName, user.getStr(User.S_PASSWORD), ByteSource.Util.bytes(user.getStr(User.S_NAME) + user.getStr(User.S_PASSSALT)), hashIterations).toHex();
+        String newPassword = new SimpleHash(algorithmName, user.getPassword(), ByteSource.Util.bytes(user.getName() + user.getPasssalt()), hashIterations).toHex();
 
-        user.set(User.S_PASSWORD, newPassword);
+        user.setPassword(newPassword);
     }
 }

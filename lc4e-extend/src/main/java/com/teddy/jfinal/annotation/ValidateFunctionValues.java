@@ -6,23 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by teddy on 2015/5/21.
+ * Created by teddyzhu on 16/1/29.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface SetUIData {
+public @interface ValidateFunctionValues {
 
-    Class methodClass();
-
-    /**
-     * the method parameter must be Invocation
-     *
-     * @return
-     */
-    String methodName();
-
-    String attrName();
-
-    boolean isDeclared() default true;
-
+    ValidateFunctionValue[] value() default {};
 }

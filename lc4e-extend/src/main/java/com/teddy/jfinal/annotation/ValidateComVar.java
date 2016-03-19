@@ -19,4 +19,6 @@ public @interface ValidateComVar {
     String value() default Const.DEFAULT_NONE;
 
     Class type() default Boolean.class;
+
+    boolean validateEqual() default true;
 }

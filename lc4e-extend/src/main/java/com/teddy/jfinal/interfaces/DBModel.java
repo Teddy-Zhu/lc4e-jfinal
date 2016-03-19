@@ -6,11 +6,8 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.teddy.jfinal.common.Const;
-import com.teddy.jfinal.tools.CustomTool;
-import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.SQLTool;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -40,7 +37,8 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public List<M> find(SQLTool sql) {
-        return sql.getParas().length > 0 ? find(sql.toString(), sql.getParas()) : find(sql.toString());
+        Object[] objs = sql.getParams();
+        return objs.length > 0 ? find(sql.toString(), objs) : find(sql.toString());
     }
 
     public List<M> findAll() {
@@ -48,7 +46,8 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public M findFirst(SQLTool sql) {
-        return sql.getParas().length > 0 ? findFirst(sql.toString(), sql.getParas()) : findFirst(sql.toString());
+        Object[] objs = sql.getParams();
+        return objs.length > 0 ? findFirst(sql.toString(), objs) : findFirst(sql.toString());
     }
 
     public boolean exist(String param, String columnName) {
@@ -56,7 +55,7 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
     }
 
     public Page<M> paginate(SQLTool sql, int page, int size) {
-        return paginate(page, size, sql.getSqlSelect(), sql.getSqlExceptSelect(), sql.getParas());
+        return paginate(page, size, sql.getSelectSQL(), sql.getExceptSQL(), sql.getParams());
     }
 
     public List<M> findInByColumn(String[] objs, String column) {

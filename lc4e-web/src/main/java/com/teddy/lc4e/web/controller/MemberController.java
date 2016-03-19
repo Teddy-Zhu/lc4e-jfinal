@@ -9,9 +9,9 @@ import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.plugin.jetbrick.Lc4eCaptchaRender;
 import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.config.Key;
-import com.teddy.lc4e.database.model.Sys_Common_Variable;
+import com.teddy.lc4e.database.model.SysCommonVariable;
 import com.teddy.lc4e.database.model.User;
-import com.teddy.lc4e.database.model.User_Basicinfo;
+import com.teddy.lc4e.database.model.UserBasicinfo;
 import com.teddy.lc4e.entity.Message;
 import com.teddy.lc4e.web.service.ComVarService;
 import com.teddy.lc4e.web.service.UserService;
@@ -42,9 +42,9 @@ public class MemberController extends BaseController {
     @ValidateComVar(name = Key.REGISTER, value = "true")
     public void signup() throws Lc4eApplicationException {
         User user = getModel(User.class, "user");
-        User_Basicinfo basicInfo = getModel(User_Basicinfo.class, "extend");
+        UserBasicinfo basicInfo = getModel(UserBasicinfo.class, "extend");
         UserService.service.createUser(user, basicInfo);
-        if (StrKit.notBlank(user.getStr(User.S_ID))) {
+        if (user.getId() != null) {
             renderJson(new Message(true, "register successfully"));
         } else {
             renderJson(new Message("register failed"));
@@ -60,14 +60,14 @@ public class MemberController extends BaseController {
     @RequestMethod(Method.POST)
     public void signin() {
         User user = getModel(User.class, "user");
-        Sys_Common_Variable captcha = ComVarService.service.getComVarByName(Key.CAPTCHA);
-        if (captcha != null && captcha.getToBoolean(Sys_Common_Variable.S_VALUE) && !validateCaptcha(getPara("captcha"))) {
-            renderJson(new Message(captcha.getStr(Sys_Common_Variable.S_ERROR)));
+        SysCommonVariable captcha = ComVarService.service.getComVarByName(Key.CAPTCHA);
+        if (captcha != null && captcha.getToBoolean(SysCommonVariable.VALUE) && !validateCaptcha(getPara("captcha"))) {
+            renderJson(new Message(captcha.getError()));
             return;
         }
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            UsernamePasswordToken token = new UsernamePasswordToken(user.getStr(User.S_NAME), user.getStr(User.S_PASSWORD));
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
             token.setRememberMe(getParaToBoolean("rememberMe"));
             subject.login(token);
             if (subject.isAuthenticated()) {

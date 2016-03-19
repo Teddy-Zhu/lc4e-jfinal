@@ -1,6 +1,5 @@
 <template>
-    <div class="item topic" v-for="topic in topics" track-by="$index" transition="fade"
-         stagger="85">
+    <div class="item topic" v-for="topic in topics" track-by="$index">
         <div class="ui user picture">
             <div class="ui fluid tiny image hidden-mb">
                 <img :src="topic.imageUrl" data-title="{{topic.popUp.title}}"
@@ -63,6 +62,9 @@
             page: {
                 type: Number
             }
+        },
+        ready: function () {
+
         }
     }
 </script>

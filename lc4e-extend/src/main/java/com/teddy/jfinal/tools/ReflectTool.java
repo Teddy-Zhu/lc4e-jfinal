@@ -418,7 +418,7 @@ public class ReflectTool {
     /**
      * according method and class to get method
      */
-    public static Method getMethodByClassAndName(Class c, String methodName) throws Lc4eException {
+    public static Method getDeclaredMethodByClassAndName(Class c, String methodName) throws Lc4eException {
         Method[] methods = c.getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().equals(methodName)) {
@@ -428,7 +428,7 @@ public class ReflectTool {
         throw new Lc4eException("Can not find Method [" + methodName + "] in Class");
     }
 
-    public static Method getMethodByClassAndNameBase(Class c, String methodName) throws Lc4eException {
+    public static Method getMethodByClassAndName(Class c, String methodName) throws Lc4eException {
         Method[] methods = c.getMethods();
         for (Method method : methods) {
             if (method.getName().equals(methodName)) {

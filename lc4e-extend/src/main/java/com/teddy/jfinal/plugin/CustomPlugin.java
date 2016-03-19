@@ -175,7 +175,6 @@ public class CustomPlugin implements IPlugin {
         CustomPlugin.clazz = clazz;
     }
 
-
     public void init(Routes me) throws InstantiationException {
         routes.forEach(route -> {
             if (StringTool.equalEmpty(route.getViewPath()))

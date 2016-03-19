@@ -36,9 +36,10 @@ public class CustomInterceptor implements MethodInterceptor {
         //resolve Inject
         Class clz = target.getClass();
 
-        AnnotationPluginResolver resolver = new AnnotationPluginResolver(isHandled, target, method, objects, methodProxy, isClass ? CustomPlugin.getClassAnnotationMap().get(target.getClass()) : CustomPlugin.getMethodAnnotationMap().get(method));
+        AnnotationPluginResolver resolver = new AnnotationPluginResolver(isHandled, target, method, objects, methodProxy, isClass ? CustomPlugin.getClassAnnotationMap().get(clz) : CustomPlugin.getMethodAnnotationMap().get(method));
 
         GlobalInterceptorKit.Inject(target, clz);
+
 
         returnValue = resolver.invoke();
 

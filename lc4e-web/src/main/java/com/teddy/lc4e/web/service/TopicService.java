@@ -27,40 +27,39 @@ public class TopicService {
      */
     public Page<? extends DBModel> getTopicPw(String userId, int page, int size, double userTagPCT, double topicStatusPCT, double commentCountPCT, double curCommentCountPCT) {
         SQLTool sql = new SQLTool();
-        sql.select(Vw_Topic_Pw.F_ID
-                , Vw_Topic_Pw.F_AREAABBR
-                , Vw_Topic_Pw.F_AREANAME
-                , Vw_Topic_Pw.F_TITLE
-                , Vw_Topic_Pw.F_AUTHOR
-                , Vw_Topic_Pw.F_AUTHORID
-                , Vw_Topic_Pw.F_COUNT
-                , Vw_Topic_Pw.F_LASTCOMMENTID
-                , Vw_Topic_Pw.F_LASTCOMMENTORDER
-                , Vw_Topic_Pw.F_LASTUSER
-                , Vw_Topic_Pw.F_LASTUSERNICK
-                , Vw_Topic_Pw.F_AUTHORAVATAR)
-                .from(Vw_Topic_Pw.TABLE_NAME)
-                .leftJoin(Sys_Comment.TABLE_NAME)
-                .on(Sys_Comment.F_TOPICID + " = " + Vw_Topic_Pw.F_ID)
+        sql.select(VwTopicPw.id
+                , VwTopicPw.areaabbr
+                , VwTopicPw.areaname
+                , VwTopicPw.title
+                , VwTopicPw.author
+                , VwTopicPw.authorid
+                , VwTopicPw.count
+                , VwTopicPw.lastcommentid
+                , VwTopicPw.lastcommentorder
+                , VwTopicPw.lastuser
+                , VwTopicPw.lastusernick
+                , VwTopicPw.authoravatar)
+                .from(VwTopicPw.TABLE_NAME)
+                .leftJoin(SysComment.TABLE_NAME,SysComment.topicid + " = " + VwTopicPw.id)
                 .where(" AND ",
                         SQLTool.OR("curTagUser = ?", "ISNULL(curTagUser)")
-                        , SQLTool.NOTIN(Vw_Topic_Pw.F_ID, SQLTool.SELECT(User_Topic_Blocked.F_TOPICID) + SQLTool.FROM(User_Topic_Blocked.TABLE_NAME) + SQLTool.WHERE(User_Topic_Blocked.F_USERID + " = ?"))
-                        , SQLTool.NOTIN(Vw_Topic_Pw.F_AUTHORID, SQLTool.SELECT(User_Blocked.F_BLOCKEDUSERID) + SQLTool.FROM(User_Blocked.TABLE_NAME) + SQLTool.WHERE(User_Blocked.F_USERID + " = ?"))
-                        , Sys_Comment.F_USERID + " =  ?")
-                .groupBy(Vw_Topic_Pw.F_ID, Vw_Topic_Pw.F_AREAABBR
-                        , Vw_Topic_Pw.F_AREANAME
-                        , Vw_Topic_Pw.F_TITLE
-                        , Vw_Topic_Pw.F_AUTHOR
-                        , Vw_Topic_Pw.F_AUTHORID
-                        , Vw_Topic_Pw.F_COUNT
-                        , Vw_Topic_Pw.F_LASTCOMMENTID
-                        , Vw_Topic_Pw.F_LASTCOMMENTORDER
-                        , Vw_Topic_Pw.F_LASTUSER
-                        , Vw_Topic_Pw.F_LASTUSERNICK
-                        , Vw_Topic_Pw.F_AUTHORAVATAR)
-                .orderByDesc(Vw_Topic_Pw.F_UTPW + " * ? + " + Vw_Topic_Pw.F_TSPW + " * ? + " + Vw_Topic_Pw.F_COUNT + " * ? + " + SQLTool.COUNT(Sys_Comment.F_ID) + " * ?");
-        sql.addParams(userId, userId, userId, userId, userTagPCT, topicStatusPCT, commentCountPCT, curCommentCountPCT);
-        return Vw_Topic_Pw.dao.paginate(sql, page, size);
+                        , SQLTool.NOTIN(VwTopicPw.id, SQLTool.SELECT(UserTopicBlocked.topicid) + SQLTool.FROM(UserTopicBlocked.TABLE_NAME) + SQLTool.WHERE(UserTopicBlocked.userid + " = ?"))
+                        , SQLTool.NOTIN(VwTopicPw.authorid, SQLTool.SELECT(UserBlocked.blockeduserid) + SQLTool.FROM(UserBlocked.TABLE_NAME) + SQLTool.WHERE(UserBlocked.userid + " = ?"))
+                        , SysComment.userid + " =  ?")
+                .groupBy(VwTopicPw.id, VwTopicPw.areaabbr
+                        , VwTopicPw.areaname
+                        , VwTopicPw.title
+                        , VwTopicPw.author
+                        , VwTopicPw.authorid
+                        , VwTopicPw.count
+                        , VwTopicPw.lastcommentid
+                        , VwTopicPw.lastcommentorder
+                        , VwTopicPw.lastuser
+                        , VwTopicPw.lastusernick
+                        , VwTopicPw.authoravatar)
+                .orderByDesc(VwTopicPw.utpw + " * ? + " + VwTopicPw.tspw + " * ? + " + VwTopicPw.count + " * ? + " + SQLTool.COUNT(SysComment.id) + " * ?");
+        sql.appendParam(userId, userId, userId, userId, userTagPCT, topicStatusPCT, commentCountPCT, curCommentCountPCT);
+        return VwTopicPw.dao.paginate(sql, page, size);
     }
 
     /**
@@ -78,44 +77,44 @@ public class TopicService {
         User user = CurUserService.service.getCurrentUser();
         isLogin = user != null;
         if (isLogin) {
-            userId = user.getIntToString(User.S_ID);
+            userId = user.getId().toString();
         }
         SQLTool sql = new SQLTool();
-        sql.select(Vw_Topic.F_ID, Vw_Topic.F_AREAABBR, Vw_Topic.F_AREANAME, Vw_Topic.F_TITLE
-                , Vw_Topic.F_AUTHOR, Vw_Topic.F_AUTHORID, Vw_Topic.F_COUNT, Vw_Topic.F_LASTCOMMENTID
-                , Vw_Topic.F_LASTCOMMENTORDER, Vw_Topic.F_LASTUSER, Vw_Topic.F_LASTUSERNICK
-                , Vw_Topic.F_AUTHORAVATAR
-        ).from(Vw_Topic.TABLE_NAME);
+        sql.select(VwTopic.id, VwTopic.areaabbr, VwTopic.areaname, VwTopic.title
+                , VwTopic.author, VwTopic.authorid, VwTopic.count, VwTopic.lastcommentid
+                , VwTopic.lastcommentorder, VwTopic.lastuser, VwTopic.lastusernick
+                , VwTopic.authoravatar
+        ).from(VwTopic.TABLE_NAME);
         if (isLogin) {
-            sql.where(" AND ", SQLTool.NOTIN(Vw_Topic.F_ID,
-                    SQLTool.SELECT(User_Topic_Blocked.F_TOPICID)
-                            + SQLTool.FROM(User_Topic_Blocked.TABLE_NAME)
-                            + SQLTool.WHERE(User_Topic_Blocked.F_USERID + " = ? ")),
-                    SQLTool.NOTIN(Vw_Topic.F_AUTHORID,
-                            SQLTool.SELECT(User_Blocked.F_BLOCKEDUSERID)
-                                    + SQLTool.FROM(User_Blocked.TABLE_NAME)
-                                    + SQLTool.WHERE(User_Blocked.F_USERID + " = ? ")));
-            sql.addParams(userId, userId);
+            sql.where(" AND ", SQLTool.NOTIN(VwTopic.id,
+                    SQLTool.SELECT(UserTopicBlocked.topicid)
+                            + SQLTool.FROM(UserTopicBlocked.TABLE_NAME)
+                            + SQLTool.WHERE(UserTopicBlocked.userid + " = ? ")),
+                    SQLTool.NOTIN(VwTopic.authorid,
+                            SQLTool.SELECT(UserBlocked.blockeduserid)
+                                    + SQLTool.FROM(UserBlocked.TABLE_NAME)
+                                    + SQLTool.WHERE(UserBlocked.userid + " = ? ")));
+            sql.appendParam(userId, userId);
         }
         switch (order) {
             case 1: {
                 if (isLogin) {
                     return getTopicPw(userId, page, size, userTagPCT, topicStatusPCT, commentCountPCT, curCommentCountPCT);
                 } else {
-                    sql.orderByDesc(Vw_Topic.F_PUBTIME);
+                    sql.orderByDesc(VwTopic.pubtime);
                 }
                 break;
             }
             case 3: {
-                sql.orderByDesc(Vw_Topic.F_LASTCOMMENTTIME);
+                sql.orderByDesc(VwTopic.lastcommenttime);
                 break;
             }
             default: {
-                sql.orderByDesc(Vw_Topic.F_PUBTIME);
+                sql.orderByDesc(VwTopic.pubtime);
                 break;
             }
         }
-        return Vw_Topic.dao.paginate(sql, page, size);
+        return VwTopic.dao.paginate(sql, page, size);
     }
 
 }

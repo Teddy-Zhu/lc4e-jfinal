@@ -6,23 +6,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by teddy on 2015/5/21.
+ * Created by teddyzhu on 16/1/29.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface SetUIData {
+public @interface ValidateFunctionValue {
 
-    Class methodClass();
+    ValidateComVar value();
 
-    /**
-     * the method parameter must be Invocation
-     *
-     * @return
-     */
+    Class targetClass();
+
     String methodName();
-
-    String attrName();
 
     boolean isDeclared() default true;
 
+    String errorInfo() default "validate value is not equal the given one";
 }

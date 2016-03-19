@@ -2,7 +2,7 @@ package com.teddy.lc4e.util.shiro;
 
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.lc4e.database.model.User;
-import com.teddy.lc4e.database.model.Vw_User_Role_Permission;
+import com.teddy.lc4e.database.model.VwUserRolePermission;
 import com.teddy.lc4e.web.service.CurUserService;
 import com.teddy.lc4e.web.service.UserService;
 import org.apache.shiro.authc.*;
@@ -24,11 +24,11 @@ public class UserRealm extends AuthorizingRealm {
         String username = (String) principals.getPrimaryPrincipal();
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        List<Vw_User_Role_Permission> user = UserService.service.findUserRolesAndPermission(username);
+        List<VwUserRolePermission> user = UserService.service.findUserRolesAndPermission(username);
         Set<String> roles = new HashSet<>(), permissions = new HashSet<>();
         user.forEach(u -> {
-            roles.add(u.getStr(Vw_User_Role_Permission.S_ROLEABBR));
-            permissions.add(u.getStr(Vw_User_Role_Permission.S_PERMISSIONABBR));
+            roles.add(u.getRoleAbbr());
+            permissions.add(u.getPermissionAbbr());
         });
 
         authorizationInfo.setRoles(roles);
@@ -47,13 +47,13 @@ public class UserRealm extends AuthorizingRealm {
             throw new UnknownAccountException();
         }
 
-        if (Boolean.TRUE.equals(user.getBoolean(Vw_User_Role_Permission.S_LOCKED))) {
+        if (Boolean.TRUE.equals(user.getLocked())) {
             throw new LockedAccountException();
         }
 
         CacheKit.put("users", CurUserService.service.getSessionId(), user);
 
-        return new SimpleAuthenticationInfo(user.getStr(Vw_User_Role_Permission.S_NAME), user.getStr(Vw_User_Role_Permission.S_PASSWORD), ByteSource.Util.bytes(user.getStr(Vw_User_Role_Permission.S_NAME) + user.getStr(Vw_User_Role_Permission.S_PASSSALT)), getName());
+        return new SimpleAuthenticationInfo(user.getName(), user.getPassword(), ByteSource.Util.bytes(user.getName()+ user.getPasssalt()), getName());
     }
 
     @Override

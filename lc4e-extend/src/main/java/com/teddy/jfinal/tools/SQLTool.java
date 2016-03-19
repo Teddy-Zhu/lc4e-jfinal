@@ -1,9 +1,9 @@
 package com.teddy.jfinal.tools;
 
-import com.jfinal.kit.StrKit;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,137 +11,156 @@ import java.util.List;
  */
 public class SQLTool {
 
+    private static String EmptySplit = " ";
     private String tableName;
 
-    private StringBuilder sql;
+    private boolean cached = false;
 
-    private List<Object> paras;
+    private String sql = "";
+
+    private StringBuilder selectSQL = new StringBuilder();
+
+    private StringBuilder exceptSelectSQL = new StringBuilder();
+
+    private List<String> selectList = new ArrayList<>();
+
+    private List<String> joinList = new ArrayList<>();
+
+    private List<String> whereList = new ArrayList<>();
+
+    private List<String> orderList = new ArrayList<>();
+
+    private List<String> groupList = new ArrayList<>();
+
+    private List<Object> params = new ArrayList<>();
+
+    private String limit = "";
 
     public SQLTool() {
-        this.sql = new StringBuilder();
-        this.paras = new ArrayList<>();
+
+    }
+
+    public SQLTool(String tableName) {
+        this.tableName = tableName;
     }
 
     public SQLTool(String sql, List<Object> paras) {
-        this.sql = new StringBuilder().append(sql);
-        this.paras = paras;
+        this.sql = sql;
+        this.params = paras;
     }
 
-    public String getSqlSelect() {
-        return this.sql.substring(0, this.sql.indexOf("from"));
+
+    public String getSelectSQL() {
+        return " select " + StringUtils.join(selectList, ",");
     }
 
-    public String getSqlExceptSelect() {
-        return this.sql.substring(this.sql.indexOf("from"), this.sql.length());
+    public String getExceptSQL() {
+
+        return " from " + tableName + getWhereSQL() + getGroupSQL() + getOrderSQL() + getLimit();
     }
 
-    public String getSql() {
-        return sql.indexOf("where") == -1 && StrKit.notBlank(this.tableName) ? from().toString() : sql.toString();
+    public String getSQL() {
+        return getSelectSQL() + getExceptSQL();
     }
 
-    public void setSql(String sql) {
-        this.sql = new StringBuilder().append(sql);
+    public String getWhereSQL() {
+        return getListSQL(whereList, " where ( ", " ) ", " AND ", EmptySplit);
     }
 
-    public Object[] getParas() {
-        return paras.toArray();
+    public String getGroupSQL() {
+        return getListSQL(groupList, " group by ", "", ",", EmptySplit);
     }
 
-    public void setParas(List<Object> paras) {
-        this.paras = paras;
+    public String getOrderSQL() {
+        return getListSQL(orderList, " order by ", "", ",", EmptySplit);
     }
 
-    public SQLTool append(String sql) {
-        this.sql.append(sql);
-        return this;
+    public String getLimit() {
+        return limit;
     }
 
-    public SQLTool addParam(Object object) {
-        this.paras.add(object);
-        return this;
+    private String getListSQL(List<String> list, String prefix, String suffix, String split, String empty) {
+        return list.size() > 0 ? prefix + StringUtils.join(list, split) + suffix : empty;
     }
 
-    public SQLTool addParams(Object... objects) {
-        for (Object object : objects) {
-            this.paras.add(object);
-        }
+    public Object[] getParams() {
+        return params.toArray();
+    }
+
+    public void setParams(List<Object> params) {
+        this.params = params;
+    }
+
+    public SQLTool appendParam(Object... objects) {
+        Collections.addAll(this.params, objects);
         return this;
     }
 
     public SQLTool select(String... columns) {
-        this.sql.append("select ").append(StringUtils.join(columns, ","));
+        Collections.addAll(this.selectList, columns);
         return this;
     }
 
-    public SQLTool from() {
-        this.sql.append(" from ").append(this.tableName);
-        return this;
-    }
 
     public SQLTool from(String tableName) {
-        this.sql.append(" from ").append(tableName);
+        this.tableName = tableName;
         return this;
     }
 
-    public SQLTool where(String conditions) {
-        this.sql.append(" where ( ").append(conditions).append(" ) ");
+    public SQLTool where(String... conditions) {
+        Collections.addAll(this.whereList, conditions);
         return this;
     }
 
-    public SQLTool where(String logic, String... conditions) {
-        this.sql.append(" where ").append(StringUtils.join(conditions, logic));
+    private String join(String direct, String tableName) {
+        return EmptySplit + direct + " join " + tableName;
+    }
+
+    public SQLTool leftJoin(String tableName, String condition) {
+        this.joinList.add(join("left", tableName) + " on " + condition);
         return this;
     }
 
-    public SQLTool join(String direct, String tableName) {
-        this.sql.append(" ").append(direct).append(" join ").append(tableName);
+    public SQLTool rightJoin(String tableName, String condition) {
+        this.joinList.add(join("right", tableName) + " on " + condition);
         return this;
     }
 
-    public SQLTool leftJoin(String tableName) {
-        return join("left", tableName);
-    }
-
-    public SQLTool rightJoin(String tableName) {
-        return join("right", tableName);
-    }
-
-    public SQLTool on(String condition) {
-        this.sql.append(" on ( ").append(condition).append(" ) ");
+    public SQLTool join(String direct, String tableName, String condition) {
+        this.joinList.add(join(direct, tableName) + " on " + condition);
         return this;
     }
 
     public SQLTool groupBy(String... columns) {
-        this.sql.append(" group by ").append(StringUtils.join(columns, ","));
+        Collections.addAll(this.groupList, columns);
         return this;
     }
 
     public SQLTool orderByDesc(String... columns) {
-        return orderBy("DESC", columns);
-    }
-
-    public SQLTool orderByAsc(String... columns) {
-        return orderBy("ASC", columns);
-    }
-
-    public SQLTool orderBy(String order, String... columns) {
-        if(this.sql.toString().contains("order by")){
-            this.sql.append(" , ");
-        }else{
-            this.sql.append(" order by ");
-        }
-        this.sql.append(StringUtils.join(columns, " " + order + " ,")).append(" ").append(order).append(" ");
+        Collections.addAll(this.orderList, orderBy(" DESC ", columns));
         return this;
     }
 
+    public SQLTool orderByAsc(String... columns) {
+        Collections.addAll(this.orderList, orderBy(" ASC ", columns));
+        return this;
+    }
+
+    private String[] orderBy(String order, String... columns) {
+        for (int i = 0; i < columns.length; i++) {
+            columns[i] = EmptySplit + columns[i] + EmptySplit + order;
+        }
+        return columns;
+    }
+
     public SQLTool limit(int size, int page) {
-        this.sql.append(" limit ").append((page - 1) * size).append(",").append(size);
+        this.limit = " limit " + (page - 1) * size + "," + size;
         return this;
     }
 
     @Override
     public String toString() {
-        return this.sql.toString();
+        return getSQL();
     }
 
     public static String NOTIN(String column, String condition) {

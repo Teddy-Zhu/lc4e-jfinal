@@ -9,7 +9,7 @@ import com.teddy.jfinal.exceptions.Lc4eValidateException;
 import com.teddy.jfinal.handler.resolve.ValidateKitI;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
-import com.teddy.lc4e.database.model.Sys_Common_Variable;
+import com.teddy.lc4e.database.model.SysCommonVariable;
 import com.teddy.lc4e.web.service.ComVarService;
 
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class ValidateKit implements ValidateKitI {
         }
         Map<String, ValidateComVar> comVarMap = validateComVarsBefore(comVars);
         Set<String> keys = comVarMap.keySet();
-        List<Sys_Common_Variable> variables = ComVarService.service.getComVarsByNames(keys);
+        List<SysCommonVariable> variables = ComVarService.service.getComVarsByNames(keys);
         if (variables.size() != keys.size()) {
             throw new Lc4eValidateException("May lost some ComVars");
         }
@@ -37,14 +37,24 @@ public class ValidateKit implements ValidateKitI {
             throw new Lc4eValidateException("No ComVar Record Found in Database or Cache");
         }
 
-        for (Sys_Common_Variable variable : variables) {
-            ValidateComVar comVar = comVarMap.get(variable.getStr(Sys_Common_Variable.S_NAME));
-            Class type = ReflectTool.wrapper(comVar.type());
-            if (!ReflectTool.wrapperObject(type, variable.getStr(Sys_Common_Variable.S_VALUE)).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
-                throw new Lc4eValidateException(variable.get(Sys_Common_Variable.S_ERROR));
-            }
+        for (SysCommonVariable variable : variables) {
+            ValidateComVar comVar = comVarMap.get(variable.getName());
+            validate(comVar, variable);
         }
 
+    }
+
+    private void validate(ValidateComVar comVar, SysCommonVariable variable) throws Lc4eValidateException {
+        Class type = ReflectTool.wrapper(comVar.type());
+        if (comVar.validateEqual()) {
+            if (!ReflectTool.wrapperObject(type, variable.getValue()).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
+                throw new Lc4eValidateException(variable.getError());
+            }
+        } else {
+            if (ReflectTool.wrapperObject(type, variable.getValue()).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
+                throw new Lc4eValidateException(variable.getError());
+            }
+        }
     }
 
     @Override
@@ -55,14 +65,11 @@ public class ValidateKit implements ValidateKitI {
         if (StringTool.equalEmpty(comVar.name()) || StringTool.equalEmpty(comVar.value())) {
             throw new Lc4eValidateException("Parameter field in invalid!");
         }
-        Sys_Common_Variable variable = ComVarService.service.getComVarByName(comVar.name());
+        SysCommonVariable variable = ComVarService.service.getComVarByName(comVar.name());
         if (variable == null) {
             throw new Lc4eValidateException("No ComVar Record Found in Database or Cache");
         } else {
-            Class type = ReflectTool.wrapper(comVar.type());
-            if (!ReflectTool.wrapperObject(type, variable.getStr(Sys_Common_Variable.S_VALUE)).equals(ReflectTool.wrapperObject(type, comVar.value()))) {
-                throw new Lc4eValidateException(variable.get(Sys_Common_Variable.S_ERROR));
-            }
+            validate(comVar, variable);
         }
     }
 

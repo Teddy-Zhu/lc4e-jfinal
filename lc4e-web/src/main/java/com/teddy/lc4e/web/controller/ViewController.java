@@ -134,7 +134,6 @@ public class ViewController extends BaseController {
         return list;
     }
 
-
     public void vue() {
         setAttr("page", getPara(1)).setAttr("topicsString", JsonKit.toJson(getArticle(getParaToInt(1), getParaToInt(0), getPara("a"))));
         render("index.html");
