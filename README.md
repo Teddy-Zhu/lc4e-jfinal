@@ -8,16 +8,16 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 >#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
 >#### Use Java(`JDK8`),
 >###Jetbrick Template(`HTML5`,`VueJs`,`CSS3`)
->### LESS 构建 CSS
->### Webpack 构建前端组建
+>### Webpack
 
 ----------
 
-# 计划ING(2015-12-19 started)
-> 前端使用 vuejs	
-> 前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI	
-> 抛弃Jquery (同上,Render效率较低)	
-> 本项目会暂缓更新,等待新的UI(选择/开发)完成)
+# 计划ING(2015-03-20)
+> <del>前端使用 vuejs	
+> <del>前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI	
+> <del>抛弃Jquery (同上,Render效率较低)	
+> <del>本项目会暂缓更新,等待新的UI(选择/开发)完成)
+> 时间关系,新UI放弃,暂时继续混用jquery ,vuejs,semantic ui
 
 
 # [Demo](http://www.lc4e.com) #
@@ -42,14 +42,14 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 >  1.浏览习惯推荐主题  
 >5. 待补充。。。 
 
-# Jfianl Framework Enhancement Related #
+# Jfianl 框架增强相关 #
 ----------
 
 >Jfianl Extend 基于Jfinal轻量级框架   
 >实现了类似Spring的注解，Serveice，Controller 自动注入  
 >注解参数验证等功能
 
-#Annotation enhancement 
+# 注解
 
 - `ConfigHandler [T]`:注解Jfianl Config，可以导入多个Config
 - `PluginHander [T]`:注解插件类 ，自动加载插件无需在Config中手动配置
@@ -63,7 +63,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 - `Model [T]`：结合ActiveRecord，自动Mapping数据库， 结合Tools 可以自动生成Dao 与 Mapping数据
 - `Inject [F]`: 自动注入，须在Serivce 或者 Controller中。
 
-##Custom Annotation Plugins
+## 自定义注解插件
 > 自定义注解插件,除了系统初始化级别的注解外,`Controller ` 以及`Service ` 内的注解均可以通过此插件进行拓展.	
 > 用法(Usage): 具体参考系统一有注解	
 > example
@@ -105,7 +105,7 @@ public class customAn extend CustomAnnotationPlugin {
 - `SetPJAX`:设置PJAX attribute
 - `SetAJAX`:设置AJAX attribute
 
-### Shiro Related
+### Shiro相关注解
 - `RequireGuest[T/M]`:
 - `RequiresAuthentication[T/M]`:
 - `RequiresPermissions[T/M]`:
@@ -113,7 +113,7 @@ public class customAn extend CustomAnnotationPlugin {
 - `RequiresUser[T/M]`:
 
 
-### Other enhancement
+### 其他注解
 - `BaseController`：增强Controller 增加isAJAX ，isPJAX , 验证码render等
 - `DBModel`: 增强Model,自动set updateTime，createTime,自动事务，自动Cache
 - `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
@@ -121,7 +121,7 @@ public class customAn extend CustomAnnotationPlugin {
 - `IIPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
 
 
-## Exception(待整理)
+## 新增异常(待整理)
 
 - Lc4eAutoSetterException:自动设置response attribute 异常  
 - Lc4eApplicationException: 业务层异常  
@@ -132,7 +132,7 @@ public class customAn extend CustomAnnotationPlugin {
 
 ----------
 
-#Important Update#
+#重大更新#
 ----------
 
 - 6/13/2015 4:22:59
