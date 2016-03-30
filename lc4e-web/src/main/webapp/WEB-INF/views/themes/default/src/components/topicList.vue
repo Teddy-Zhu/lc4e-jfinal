@@ -61,10 +61,22 @@
             },
             page: {
                 type: Number
+            },
+            parentdomid: {
+                type: String,
+                default: ''
             }
         },
-        ready: function () {
-
+        watch: {
+            topics: function (val, oldVal) {
+                var that = this;
+                that.$nextTick(function () {
+                    $('.item.topic', '#' + that.parentdomid).transition({
+                        animation: 'fade up in',
+                        interval: 50
+                    });
+                })
+            }
         }
     }
 </script>

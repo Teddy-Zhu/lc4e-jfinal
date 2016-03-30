@@ -8,7 +8,7 @@ module.exports = {
     "/all": {
         component: require('./views/index.vue')
     },
-    "/a/*any": {
+    "/a/*curArea": {
         component: require('./views/area.vue')
     },
     '*': {

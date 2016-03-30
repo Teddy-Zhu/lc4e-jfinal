@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.1.3 - Step
+ * # Semantic UI 2.1.7 - Step
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -441,7 +441,7 @@
 
 
 /* Tablet Or Below */
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 991px) {
   .ui[class*="tablet stackable"].steps {
     display: -webkit-inline-box;
     display: -webkit-inline-flex;

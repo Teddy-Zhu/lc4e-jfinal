@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.1.3 - Icon
+ * # Semantic UI 2.1.7 - Icon
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -2376,6 +2376,9 @@ i.icon.conversation:before {
 }
 i.icon.umbrella:before {
   content: "\f0e9";
+}
+i.icon.clipboard:before {
+  content: "\f0ea";
 }
 i.icon.lightbulb:before {
   content: "\f0eb";

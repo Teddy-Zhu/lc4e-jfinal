@@ -85,8 +85,8 @@
         <div id="topicItemsArea"
              class="ui divided items topiclist no padded attached raised segment"
              data-page="{{page}}"
-             data-sort="{{topicSort}}">`
-            <topic-list :topics="topics" :page="page"></topic-list>
+             data-sort="{{topicSort}}">
+            <topic-list :topics="topics" :page="page" parentdomid="topicItemsArea"></topic-list>
         </div>
         <div id="articlebottons" class="ui bottom clearing floating attached message">
             <div id="prePage" class="ui left floated basic labeled icon button">
@@ -121,14 +121,8 @@
             data: function (transition) {
                 var that = this;
                 that.topics = [];
-                this.$http.post('/a/' + this.$route.params.any + "-" + this.sort + "-" + this.page).then(function (response) {
+                this.$http.post('/a/' + this.$route.params.curArea + "-" + this.sort + "-" + this.page).then(function (response) {
                     transition.next(response.data.data);
-                    that.$nextTick(function () {
-                        $('.item.topic', '#topicItemsArea').transition({
-                            animation: 'fade up in',
-                            interval: 50
-                        });
-                    })
                 })
             }
         },

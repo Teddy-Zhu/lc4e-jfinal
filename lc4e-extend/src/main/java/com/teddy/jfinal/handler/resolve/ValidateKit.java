@@ -170,7 +170,7 @@ class ValidateKit {
         Class type = param.type();
         type = ReflectTool.wrapper(type);
         boolean setDefaultFlag = false, isUrlPara = param.index() != -1;
-        object = isUrlPara ? controller.getPara(param.value()) : controller.getPara(param.index());
+        object = isUrlPara ? controller.getPara(param.index()) : controller.getPara(param.value());
         setDefaultFlag = object == null && param.required();
         object = object != null ? object : Const.DEFAULT_NONE.equals(param.defaultValue()) ? object : param.defaultValue();
         validate(param, controller, type, object, setDefaultFlag, isUrlPara);

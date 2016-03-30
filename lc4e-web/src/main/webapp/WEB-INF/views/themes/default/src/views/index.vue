@@ -56,7 +56,7 @@
         <div id="articlelist" class="ui attached fluid raised segment">
             <div id="topicItems" class="ui divided items topiclist" data-page="{{page}}"
                  data-sort="{{sort}}">
-                <topic-list :topics="topicsList" :page="page"></topic-list>
+                <topic-list :topics="topicsList" :page="page" parentdomid="topicItems"></topic-list>
             </div>
         </div>
         <div id="articlebottons" class="ui bottom attached floating message">
@@ -99,11 +99,16 @@
                 themePath: this.$root.$data.themePath,
                 sort: this.$root.$data.sort,
                 page: this.$root.$data.page,
-                topicsList: this.$root.$data.topics
+                topicsList: []
             }
         },
         components: {
             "topic-list": require('../components/topicList.vue')
+        },
+        route: {
+            data: function (transition) {
+                this.topicsList = this.$root.$data.topics
+            }
         },
         ready: function () {
             $.lc4e.index.bindEvent();

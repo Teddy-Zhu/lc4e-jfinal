@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.1.3 - Search
+ * # Semantic UI 2.1.7 - Search
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -254,7 +254,40 @@
 
 
 /*--------------
-    Categories
+    Selection
+---------------*/
+
+.ui.search.selection .prompt {
+  border-radius: 0.28571429rem;
+}
+
+/* Remove input */
+.ui.search.selection > .icon.input > .remove.icon {
+  pointer-events: none;
+  position: absolute;
+  left: auto;
+  opacity: 0;
+  color: '';
+  top: 0em;
+  right: 0em;
+  -webkit-transition: color 0.1s ease, opacity 0.1s ease;
+          transition: color 0.1s ease, opacity 0.1s ease;
+}
+.ui.search.selection > .icon.input > .active.remove.icon {
+  cursor: pointer;
+  opacity: 0.8;
+  pointer-events: auto;
+}
+.ui.search.selection > .icon.input:not([class*="left icon"]) > .icon ~ .remove.icon {
+  right: 1.85714em;
+}
+.ui.search.selection > .icon.input > .remove.icon:hover {
+  opacity: 1;
+  color: #db2828;
+}
+
+/*--------------
+    Category
 ---------------*/
 
 .ui.category.search .results {
