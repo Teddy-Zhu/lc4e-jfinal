@@ -92,8 +92,9 @@
 	
 	router.map(__webpack_require__(28));
 	
-	Vue.config.debug = true;
-	router.start(__webpack_require__(44), '#lc4eApp');
+	Vue.config.debug = false;
+	Vue.config.silent = true;
+	router.start(__webpack_require__(44), '#app');
 
 /***/ },
 /* 1 */
@@ -14193,7 +14194,7 @@
 	    "/all": {
 	        component: __webpack_require__(29)
 	    },
-	    "/a/*curArea": {
+	    "/a/*area": {
 	        component: __webpack_require__(39)
 	    },
 	    '*': {
@@ -14277,7 +14278,62 @@
 
 /***/ },
 /* 32 */,
-/* 33 */,
+/* 33 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
 /* 34 */,
 /* 35 */
 /***/ function(module, exports, __webpack_require__) {
@@ -14332,7 +14388,8 @@
 	            that.$nextTick(function () {
 	                $('.item.topic', '#' + that.parentdomid).transition({
 	                    animation: 'fade up in',
-	                    interval: 50
+	                    duration: 350,
+	                    interval: 100
 	                });
 	            });
 	        }
@@ -14343,13 +14400,13 @@
 /* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"item topic\" v-for=\"topic in topics\" track-by=\"$index\">\n    <div class=\"ui user picture\">\n        <div class=\"ui fluid tiny image hidden-mb\">\n            <img :src=\"topic.imageUrl\" data-title=\"{{topic.popUp.title}}\"\n                 data-content=\"{{topic.popUp.content}}\"/>\n        </div>\n    </div>\n    <div class=\"content\">\n        <a class=\"header larger\" href=\"{{topic.articleUrl}}\">\n            {{topic.articleTitle}}\n        </a>\n        <div class=\"extra\">\n            <a class=\"ui blue label\">\n                {{topic.user}}\n            </a>\n            <a class=\"ui teal label\">\n                {{topic.category}}\n            </a>\n\n            <div class=\"ui transparent label\">\n                <i class=\"calendar icon\"></i>\n                {{topic.publishTime}}\n            </div>\n            <div class=\"ui transparent label\">\n                <i class=\"comments outline icon\"></i>\n                {{topic.comments}}\n            </div>\n            <div class=\"ui transparent label\">\n                <i class=\"comment icon\"></i>\n                <a class=\"ui label\">\n                    {{topic.lastCommentUser}}\n                </a>\n            </div>\n            <div class=\"topicQuickTools\">\n                <a class=\"ui circular topicQuickTool label\"><i class=\"ui yellow star icon\"></i></a>\n                <a class=\"ui circular topicQuickTool topicSetting bottom left dropdown pointing label\">\n                    <i class=\"ui red setting icon\"></i>\n\n                    <div class=\"menu\">\n                        <div class=\"item\">Move</div>\n                        <div class=\"item\">Delete</div>\n                        <div class=\"item\">Edit</div>\n                    </div>\n                </a>\n            </div>\n        </div>\n    </div>\n    <div class=\"ui red top right attached label status\" v-if=\"topic.statusText && topic.statusText[0]\">\n        {{topic.statusText[0]}}\n    </div>\n</div>\n";
+	module.exports = "\n<div class=\"item topic\" v-for=\"topic in topics\" track-by=\"$index\" v-cloak style=\"display: none\">\n    <div class=\"ui user picture\">\n        <div class=\"ui fluid tiny image hidden-mb\">\n            <img :src=\"topic.imageUrl\" data-title=\"{{topic.popUp.title}}\"\n                 data-content=\"{{topic.popUp.content}}\"/>\n        </div>\n    </div>\n    <div class=\"content\">\n        <a class=\"header larger\" href=\"{{topic.articleUrl}}\">\n            {{topic.articleTitle}}\n        </a>\n        <div class=\"extra\">\n            <a class=\"ui blue label\">\n                {{topic.user}}\n            </a>\n            <a class=\"ui teal label\">\n                {{topic.category}}\n            </a>\n\n            <div class=\"ui transparent label\">\n                <i class=\"calendar icon\"></i>\n                {{topic.publishTime}}\n            </div>\n            <div class=\"ui transparent label\">\n                <i class=\"comments outline icon\"></i>\n                {{topic.comments}}\n            </div>\n            <div class=\"ui transparent label\">\n                <i class=\"comment icon\"></i>\n                <a class=\"ui label\">\n                    {{topic.lastCommentUser}}\n                </a>\n            </div>\n            <div class=\"topicQuickTools\">\n                <a class=\"ui circular topicQuickTool label\"><i class=\"ui yellow star icon\"></i></a>\n                <a class=\"ui circular topicQuickTool topicSetting bottom left dropdown pointing label\">\n                    <i class=\"ui red setting icon\"></i>\n\n                    <div class=\"menu\">\n                        <div class=\"item\">Move</div>\n                        <div class=\"item\">Delete</div>\n                        <div class=\"item\">Edit</div>\n                    </div>\n                </a>\n            </div>\n        </div>\n    </div>\n    <div class=\"ui red top right attached label status\" v-if=\"topic.statusText && topic.statusText[0]\">\n        {{topic.statusText[0]}}\n    </div>\n</div>\n";
 
 /***/ },
 /* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div id=\"leftContent\" class=\"nine wide column\">\n    <div id=\"announcement\" class=\"ui white floating message\">\n        <div class=\"item\">\n            <div class=\"ui white label\">\n                <i class=\"announcement icon\"></i>\n            </div>\n            <div id=\"announce\" class=\"ui text shape\">\n                <div class=\"sides\">\n                    <div class=\"active ui header side\">Did you know? This side starts visible.</div>\n                    <div class=\"ui header side\">Help, its another side!</div>\n                    <div class=\"ui header side\">This is the last side</div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"attachedHeader\" class=\"ui attached floating clearing message\" data-area=\"index\">\n        <div class=\"ui left floated breadcrumb basic segment\">\n            <a class=\"section\">\n                {{siteName}}\n            </a>\n            <span class=\"divider\">/</span>\n            <a class=\"section\">Registration</a>\n            <span class=\"divider\">/</span>\n\n            <div class=\"active section\">Personal Information</div>\n        </div>\n        <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n            <i class=\"filter icon\"></i>\n            <span class=\"text\">Sort</span>\n\n            <div class=\"menu\">\n                <div class=\"header\">\n                    <i class=\"tags icon\"></i>\n                    Sort Method\n                </div>\n                <div class=\"scrolling menu\">\n                    <template v-if=\"isLogin\">\n                        <div class=\"item\" data-value=\"1\">\n                            <div class=\"ui red empty circular label\"></div>\n                            Order By System\n                        </div>\n                    </template>\n                    <div class=\"item\" data-value=\"2\">\n                        <div class=\"ui blue empty circular label\"></div>\n                        Order By Date\n                    </div>\n                    <div class=\"item\" data-value=\"3\">\n                        <div class=\"ui black empty circular label\"></div>\n                        Order By Last Reply\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"articlelist\" class=\"ui attached fluid raised segment\">\n        <div id=\"topicItems\" class=\"ui divided items topiclist\" data-page=\"{{page}}\"\n             data-sort=\"{{sort}}\">\n            <topic-list :topics=\"topicsList\" :page=\"page\" parentdomid=\"topicItems\"></topic-list>\n        </div>\n    </div>\n    <div id=\"articlebottons\" class=\"ui bottom attached floating message\">\n        <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n            <i class=\"angle double left icon\"></i>\n            Prev\n        </div>\n        <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n            <i class=\"angle double right icon\"></i>\n            Next\n        </div>\n    </div>\n</div>\n<div id=\"rightContent\" class=\"three wide column animated fadeInRightTiny\">\n    <div id=\"todayHot\" class=\"ui raised segment\">\n        <h4 class=\"ui horizontal header divider\">\n            <i class=\"bar chart icon\"></i> Today HotSpot\n        </h4>\n\n        <div class=\"ui divided items\"></div>\n    </div>\n    <div id=\"yesterdayHot\" class=\"ui raised segment\">\n        <h4 class=\"ui horizontal header divider\">\n            <i class=\"bar chart icon\"></i> Yesterday HotSpot\n        </h4>\n\n        <div class=\"ui divided items\"></div>\n    </div>\n    <div class=\"ui vertical rectangle test ad\" data-text=\"Advertisement\"></div>\n</div>\n";
+	module.exports = "\n<div id=\"leftContent\" class=\"nine wide column\">\n    <div id=\"announcement\" class=\"ui white floating message\">\n        <div class=\"item\">\n            <div class=\"ui white label\">\n                <i class=\"announcement icon\"></i>\n            </div>\n            <div id=\"announce\" class=\"ui text shape\">\n                <div class=\"sides\">\n                    <div class=\"active ui header side\">Did you know? This side starts visible.</div>\n                    <div class=\"ui header side\">Help, its another side!</div>\n                    <div class=\"ui header side\">This is the last side</div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"attachedHeader\" class=\"ui attached floating clearing message\" data-area=\"index\">\n        <div class=\"ui left floated breadcrumb basic segment\">\n            <a class=\"section\">\n                {{siteName}}\n            </a>\n            <span class=\"divider\">/</span>\n            <a class=\"section\">Registration</a>\n            <span class=\"divider\">/</span>\n\n            <div class=\"active section\">Personal Information</div>\n        </div>\n        <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n            <i class=\"filter icon\"></i>\n            <span class=\"text\">Sort</span>\n\n            <div class=\"menu\">\n                <div class=\"scrolling menu\">\n                    <template v-if=\"isLogin\">\n                        <div class=\"item\" data-value=\"1\">\n                            <div class=\"ui red empty circular label\"></div>\n                            Order By System\n                        </div>\n                    </template>\n                    <div class=\"item\" data-value=\"2\">\n                        <div class=\"ui blue empty circular label\"></div>\n                        Order By Date\n                    </div>\n                    <div class=\"item\" data-value=\"3\">\n                        <div class=\"ui black empty circular label\"></div>\n                        Order By Last Reply\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"articlelist\" class=\"ui attached fluid raised segment\">\n        <div id=\"topicItems\" class=\"ui divided items topiclist\" data-page=\"{{page}}\"\n             data-sort=\"{{sort}}\">\n            <topic-list :topics=\"topicsList\" :page=\"page\" parentdomid=\"topicItems\"></topic-list>\n        </div>\n    </div>\n    <div id=\"articlebottons\" class=\"ui bottom attached floating message\">\n        <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n            <i class=\"angle double left icon\"></i>\n            Prev\n        </div>\n        <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n            <i class=\"angle double right icon\"></i>\n            Next\n        </div>\n    </div>\n</div>\n<div id=\"rightContent\" class=\"three wide column animated fadeInRightTiny\">\n    <div id=\"todayHot\" class=\"ui raised segment\">\n        <h4 class=\"ui horizontal header divider\">\n            <i class=\"bar chart icon\"></i> Today HotSpot\n        </h4>\n\n        <div class=\"ui divided items\"></div>\n    </div>\n    <div id=\"yesterdayHot\" class=\"ui raised segment\">\n        <h4 class=\"ui horizontal header divider\">\n            <i class=\"bar chart icon\"></i> Yesterday HotSpot\n        </h4>\n\n        <div class=\"ui divided items\"></div>\n    </div>\n    <div class=\"ui vertical rectangle test ad\" data-text=\"Advertisement\"></div>\n</div>\n";
 
 /***/ },
 /* 39 */
@@ -14404,7 +14461,7 @@
 	        data: function data(transition) {
 	            var that = this;
 	            that.topics = [];
-	            this.$http.post('/a/' + this.$route.params.curArea + "-" + this.sort + "-" + this.page).then(function (response) {
+	            this.$http.post('/a/' + this.$route.params.area + "-" + this.sort + "-" + this.page).then(function (response) {
 	                transition.next(response.data.data);
 	            });
 	        }
@@ -14428,19 +14485,20 @@
 /* 43 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"ui teal  basic row column segment\">\n    <div class=\"ui large inverted statistic\">\n        <div class=\"value\">\n            <i class=\"info circle icon\"></i> <br/>\n\n            <div id=\"areaName\" class=\"value\" v-html=\"curArea\"></div>\n        </div>\n        <div id=\"areaDescription\" class=\"label\">\n            Fill out the form below to sign-up for a new account\n        </div>\n    </div>\n</div>\n<div id=\"topicList\" class=\"twelve wide column\">\n    <div id=\"areaSummery\" class=\"ui attached floating message\">\n        <div class=\"ui row no padded clearing basic segment\">\n            <div class=\"ui left floated breadcrumb basic segment\">\n                <a class=\"section\" v-html=\"siteName\"></a>\n                <span class=\"divider\">/</span>\n\n                <div class=\"active section\" v-html=\"curArea\"></div>\n            </div>\n            <div id=\"areaLabel\" class=\"ui labels\">\n                <a class=\"ui tag mini label\">New</a>\n                <a class=\"ui red mini tag label\">Upcoming</a>\n                <a class=\"ui teal mini tag label\">Featured</a>\n            </div>\n            <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                <i class=\"filter icon\"></i>\n                <span class=\"text\">Sort</span>\n\n                <div class=\"menu\">\n                    <div class=\"header\">\n                        <i class=\"tags icon\"></i>\n                        Sort Method\n                    </div>\n                    <div class=\"scrolling menu\">\n                        <template v-if=\"isLogin\">\n                            <div class=\"item\" data-value=\"1\">\n                                <div class=\"ui red empty circular label\"></div>\n                                Order By System\n                            </div>\n                        </template>\n                        <div class=\"item\" data-value=\"2\">\n                            <div class=\"ui blue empty circular label\"></div>\n                            Order By Date\n                        </div>\n                        <div class=\"item\" data-value=\"3\">\n                            <div class=\"ui black empty circular label\"></div>\n                            Order By Last Reply\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"ui header\">\n            <div class=\"ui three statistics\">\n                <div class=\"statistic\">\n                    <div class=\"value\">\n                        22\n                    </div>\n                    <div class=\"label\">\n                        Stars\n                    </div>\n                </div>\n                <div class=\"statistic\">\n                    <div class=\"value\">\n                        31,200\n                    </div>\n                    <div class=\"label\">\n                        Topics\n                    </div>\n                </div>\n                <div class=\"statistic\">\n                    <div class=\"value\">\n                        22\n                    </div>\n                    <div class=\"label\">\n                        Comments\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"topicItemsArea\"\n         class=\"ui divided items topiclist no padded attached raised segment\"\n         data-page=\"{{page}}\"\n         data-sort=\"{{topicSort}}\">\n        <topic-list :topics=\"topics\" :page=\"page\" parentdomid=\"topicItemsArea\"></topic-list>\n    </div>\n    <div id=\"articlebottons\" class=\"ui bottom clearing floating attached message\">\n        <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n            <i class=\"angle double left icon\"></i>\n            Prev\n        </div>\n        <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n            <i class=\"angle double right icon\"></i>\n            Next\n        </div>\n    </div>\n</div>\n";
+	module.exports = "\n<div class=\"ui teal  basic row column segment\">\n    <div class=\"ui large inverted statistic\">\n        <div class=\"value\">\n            <i class=\"info circle icon\"></i> <br/>\n\n            <div id=\"areaName\" class=\"value\" v-html=\"curArea\"></div>\n        </div>\n        <div id=\"areaDescription\" class=\"label\">\n            Fill out the form below to sign-up for a new account\n        </div>\n    </div>\n</div>\n<div id=\"topicList\" class=\"twelve wide column\">\n    <div id=\"areaSummery\" class=\"ui attached floating message\">\n        <div class=\"ui row no padded clearing basic segment\">\n            <div class=\"ui left floated breadcrumb basic segment\">\n                <a class=\"section\" v-html=\"siteName\"></a>\n                <span class=\"divider\">/</span>\n\n                <div class=\"active section\" v-html=\"curArea\"></div>\n            </div>\n            <div id=\"areaLabel\" class=\"ui labels\">\n                <a class=\"ui tag mini label\">New</a>\n                <a class=\"ui red mini tag label\">Upcoming</a>\n                <a class=\"ui teal mini tag label\">Featured</a>\n            </div>\n            <div id=\"sortTopic\" class=\"ui dropdown labeled icon basic button\">\n                <i class=\"filter icon\"></i>\n                <span class=\"text\">Sort</span>\n\n                <div class=\"menu\">\n                    <div class=\"scrolling menu\">\n                        <template v-if=\"isLogin\">\n                            <div class=\"item\" data-value=\"1\">\n                                <div class=\"ui red empty circular label\"></div>\n                                Order By System\n                            </div>\n                        </template>\n                        <div class=\"item\" data-value=\"2\">\n                            <div class=\"ui blue empty circular label\"></div>\n                            Order By Date\n                        </div>\n                        <div class=\"item\" data-value=\"3\">\n                            <div class=\"ui black empty circular label\"></div>\n                            Order By Last Reply\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"ui header\">\n            <div class=\"ui three statistics\">\n                <div class=\"statistic\">\n                    <div class=\"value\">\n                        22\n                    </div>\n                    <div class=\"label\">\n                        Stars\n                    </div>\n                </div>\n                <div class=\"statistic\">\n                    <div class=\"value\">\n                        31,200\n                    </div>\n                    <div class=\"label\">\n                        Topics\n                    </div>\n                </div>\n                <div class=\"statistic\">\n                    <div class=\"value\">\n                        22\n                    </div>\n                    <div class=\"label\">\n                        Comments\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"topicItemsArea\"\n         class=\"ui divided items topiclist no padded attached raised segment\"\n         data-page=\"{{page}}\"\n         data-sort=\"{{topicSort}}\">\n        <topic-list :topics=\"topics\" :page=\"page\" parentdomid=\"topicItemsArea\"></topic-list>\n    </div>\n    <div id=\"articlebottons\" class=\"ui bottom clearing floating attached message\">\n        <div id=\"prePage\" class=\"ui left floated basic labeled icon button\">\n            <i class=\"angle double left icon\"></i>\n            Prev\n        </div>\n        <div id=\"nextPage\" class=\"ui right floated basic right labeled icon button\">\n            <i class=\"angle double right icon\"></i>\n            Next\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
 /* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(45)
+	__webpack_require__(45)
+	__vue_script__ = __webpack_require__(48)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/app.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(55)
+	__vue_template__ = __webpack_require__(58)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14462,10 +14520,272 @@
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(46);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(47)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./app.vue", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./app.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(33)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n[v-cloak] {\n    display: none;\n}\n", "", {"version":3,"sources":["/./src/app.vue?0f68816a"],"names":[],"mappings":";AACA;IACA,cAAA;CACA","file":"app.vue","sourcesContent":["<style>\n    [v-cloak] {\n        display: none;\n    }\n</style>\n<template>\n    <div id=\"menu\" class=\"ui menu\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" v-bind:src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\">\n                            <img class=\"ui headered linked image\" v-bind:src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" href=\"/SignUp\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" href=\"/SignIn\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}}{{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"https://www.digitalocean.com/?refcode=f7bf7094acd9\">DigitalOcean</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</template>\n\n<script>\nrequire('../../../../../themes/default/css/lc4e/jquery-extend.css');\nrequire('./lc4e.js');\nmodule.exports = {\n    name: 'app',\n    data: function () {\n        return preLoadData;\n    },\n    ready: function () {\n        $.lc4e.common.ready();\n    },\n    components: {\n        \"menu-tree\": require('./components/menu.vue')\n    }\n}\n</script>"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+	
+		if (media) {
+			styleElement.setAttribute("media", media);
+		}
+	
+		if (sourceMap) {
+			// https://developer.chrome.com/devtools/docs/javascript-debugging
+			// this makes source maps inside style tags work properly in Chrome
+			css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */';
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
-	__webpack_require__(46);
-	__webpack_require__(48);
+	__webpack_require__(49);
+	__webpack_require__(51);
 	module.exports = {
 	    name: 'app',
 	    data: function data() {
@@ -14475,27 +14795,27 @@
 	        $.lc4e.common.ready();
 	    },
 	    components: {
-	        "menu-tree": __webpack_require__(52)
+	        "menu-tree": __webpack_require__(55)
 	    }
 	};
 
 /***/ },
-/* 46 */
+/* 49 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 47 */,
-/* 48 */
+/* 50 */,
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(49);
-	__webpack_require__(50);
-	__webpack_require__(51);
+	__webpack_require__(52);
+	__webpack_require__(53);
+	__webpack_require__(54);
 
 /***/ },
-/* 49 */
+/* 52 */
 /***/ function(module, exports) {
 
 	/*!
@@ -17876,7 +18196,7 @@
 	});
 
 /***/ },
-/* 50 */
+/* 53 */
 /***/ function(module, exports) {
 
 	/**
@@ -17948,7 +18268,7 @@
 	});
 
 /***/ },
-/* 51 */
+/* 54 */
 /***/ function(module, exports) {
 
 	/**
@@ -17991,16 +18311,16 @@
 	});
 
 /***/ },
-/* 52 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(53)
+	__vue_script__ = __webpack_require__(56)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/components/menu.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(54)
+	__vue_template__ = __webpack_require__(57)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -18019,7 +18339,7 @@
 	})()}
 
 /***/ },
-/* 53 */
+/* 56 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -18034,13 +18354,13 @@
 	};
 
 /***/ },
-/* 54 */
+/* 57 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<template v-for=\"menu in menus\">\n    <div class=\"ui dropdown link item\" v-if=\"menu.CHILDS.length > 0\">\n        <i v-if=\"menu.ICON\" v-bind:class=\"[menu.ICON,'icon']\"></i>\n        <span class=\"text\">{{menu.NAME}}</span><i class=\"dropdown icon\"></i>\n\n        <div class=\"menu\">\n            <menu-tree :menus=\"menu.CHILDS\"></menu-tree>\n        </div>\n    </div>\n    <a class=\"item linked\" title=\"{{menu.NAME}}\" v-link=\"menu.ABBR\" v-else>\n        <i v-bind:class=\"[menu.ICON,'icon']\" v-if=\"menu.ICON\"></i>\n        {{menu.NAME}}\n    </a>\n</template>\n";
 
 /***/ },
-/* 55 */
+/* 58 */
 /***/ function(module, exports) {
 
 	module.exports = "\n    <div id=\"menu\" class=\"ui menu\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" v-bind:src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\">\n                            <img class=\"ui headered linked image\" v-bind:src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" href=\"/SignUp\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" href=\"/SignIn\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}}{{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"https://www.digitalocean.com/?refcode=f7bf7094acd9\">DigitalOcean</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n";

@@ -20,29 +20,23 @@ import com.teddy.jfinal.entity.Route;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.handler.GlobalInterceptor;
-import com.teddy.jfinal.handler.resolve.*;
-import com.teddy.jfinal.interfaces.*;
-import com.teddy.jfinal.tools.ClassSearcherTool;
+import com.teddy.jfinal.handler.resolve.AttributeKitI;
+import com.teddy.jfinal.handler.resolve.ValidateKitI;
+import com.teddy.jfinal.interfaces.BaseController;
+import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
+import com.teddy.jfinal.interfaces.IHandler;
+import com.teddy.jfinal.plugin.Custom.AnnotationsPack;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
-import org.apache.commons.collections.iterators.ObjectArrayIterator;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.shiro.authz.annotation.*;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * Created by teddy on 2015/7/18.
@@ -51,13 +45,12 @@ public class CustomPlugin implements IPlugin {
 
     private static final Logger LOGGER = Logger.getLogger(CustomPlugin.class);
 
-    private static Map<Class<? extends Annotation>, Set<Class>> classesMap;
+    private static AnnotationsPack annotationsPack;
 
     private static Map<Class<? extends Throwable>, Method> exceptionsMap;
 
     private static List<IHandler> pluginIhanders;
 
-    private static List<IInterceptor> pluginIinterceptors;
 
     private static List<com.teddy.jfinal.interfaces.IPlugin> pluginIplugins;
 
@@ -81,8 +74,6 @@ public class CustomPlugin implements IPlugin {
 
     private static Map<Class<? extends Annotation>, CustomAnnotationPlugin> customs;
 
-    private static Class[] customAns;
-
     private static Map<Method, Annotation[]> methodAnnotationMap;
 
     private static Map<Class, Annotation[]> classAnnotationMap;
@@ -101,24 +92,19 @@ public class CustomPlugin implements IPlugin {
         handlers = new ArrayList<>();
         actionKeys = new HashSet<>();
         pluginIhanders = new ArrayList<>();
-        pluginIinterceptors = new ArrayList<>();
         pluginIplugins = new ArrayList<>();
         injectObjs = new HashMap<>();
         customs = new HashMap<>();
         classAnnotationMap = new HashMap<>();
         methodAnnotationMap = new HashMap<>();
         List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
+        annotationsPack = new AnnotationsPack(jars);
 
-        if (jars.size() > 0) {
-            classesMap = new ClassSearcherTool().includeAllJarsInLib(ClassSearcherTool.isValiJar()).injars(jars).getAllAnnotation();
-        } else {
-            classesMap = new ClassSearcherTool().getAllAnnotation();
-        }
-        if (!classesMap.containsKey(ConfigHandler.class)) {
+        if (!annotationsPack.containsAnnotation(ConfigHandler.class)) {
             LOGGER.error("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
             throw new Lc4eException("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
         }
-        Set<Class> clzes = classesMap.get(ConfigHandler.class);
+        Set<Class> clzes = annotationsPack.getAnnotationClass(ConfigHandler.class);
 
         if (clzes.size() != 1) {
             LOGGER.error("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
@@ -160,11 +146,6 @@ public class CustomPlugin implements IPlugin {
     public boolean stop() {
         pluginIplugins.forEach(com.teddy.jfinal.interfaces.IPlugin::stop);
         return true;
-    }
-
-
-    public static Map<Class<? extends Annotation>, Set<Class>> getClassesMap() {
-        return classesMap;
     }
 
     public static Class<?> getClazz() {
@@ -217,17 +198,13 @@ public class CustomPlugin implements IPlugin {
 
 
     private void initInject() throws NoSuchFieldException, IllegalAccessException, InstantiationException {
-        if (!classesMap.containsKey(Service.class) && !classesMap.containsKey(Controller.class)) {
-            return;
-        }
         //Inject with @Inject Service
         Set<Class> Classes = new HashSet<>();
-        if (classesMap.containsKey(Service.class)) {
-            Classes.addAll(classesMap.get(Service.class));
-        }
-        if (classesMap.containsKey(Controller.class)) {
-            Classes.addAll(classesMap.get(Controller.class));
-        }
+
+        Classes.addAll(annotationsPack.getAnnotationClass(Service.class));
+
+        Classes.addAll(annotationsPack.getAnnotationClass(Controller.class));
+
         Classes.forEach(service -> {
             List<Field> fieldList = new ArrayList<>();
             Field[] fields = service.getFields();
@@ -262,73 +239,59 @@ public class CustomPlugin implements IPlugin {
     }
 
     private void initCustomAnnotation() {
-        if (classesMap.containsKey(CustomAnnotation.class)) {
-            Set<Class> Classes = classesMap.get(CustomAnnotation.class);
-            Classes.forEach(aClass -> {
-                if (CustomAnnotationPlugin.class.isAssignableFrom(aClass)) {
-                    try {
-                        CustomAnnotationPlugin plugin = (CustomAnnotationPlugin) aClass.newInstance();
-                        customs.put(plugin.getAnnotation(), plugin);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+        annotationsPack.getAnnotationClass(CustomAnnotation.class).forEach(aClass -> {
+            if (CustomAnnotationPlugin.class.isAssignableFrom(aClass)) {
+                try {
+                    CustomAnnotationPlugin plugin = (CustomAnnotationPlugin) aClass.newInstance();
+                    customs.put(plugin.getAnnotation(), plugin);
+                } catch (InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-            });
-            customAns = customs.keySet().toArray(new Class[customs.keySet().size()]);
-        } else {
-            customAns = new Class[0];
-        }
+            }
+        });
     }
 
     private void initService() {
-        if (classesMap.containsKey(Service.class)) {
-            Set<Class> Classes = classesMap.get(Service.class);
+        annotationsPack.getAnnotationClass(Service.class).forEach(service -> {
+            Annotation[] serviceAns = buildAnnotation(service);
+            classAnnotationMap.put(service, serviceAns);
 
-            Classes.forEach(service -> {
-                Annotation[] serviceAns = buildAnnotation(service);
-                classAnnotationMap.put(service, serviceAns);
-
-                Method[] methods = service.getMethods();
-                for (Method method : methods) {
-                    Annotation[] methodAns = buildAnnotation(method);
-                    methodAnnotationMap.put(method, methodAns);
-                }
-            });
-        }
+            Method[] methods = service.getMethods();
+            for (Method method : methods) {
+                Annotation[] methodAns = buildAnnotation(method);
+                methodAnnotationMap.put(method, methodAns);
+            }
+        });
 
     }
 
     private void initRoutes() {
-        if (classesMap.containsKey(Controller.class)) {
-            Set<Class> Classes = classesMap.get(Controller.class);
-            Set<String> excludedMethodName = ReflectTool.buildExcludedMethodName(com.jfinal.core.Controller.class, BaseController.class);
-
-            Classes.forEach(controller -> {
-                Controller controllerBind = (Controller) controller.getAnnotation(Controller.class);
-                if (controllerBind != null && BaseController.class.isAssignableFrom(controller)) {
-                    Annotation[] controllerAns = buildAnnotation(controller);
-                    classAnnotationMap.put(controller, controllerAns);
-                    String controllerKey = controllerBind.value();
-                    String controllerView = controllerBind.views();
-                    if (controllerKey.equals("")) {
-                        LOGGER.error(controller.getName() + " Path must not be empty");
-                        return;
-                    }
-                    routes.add(new Route(controllerKey, controller, controllerView));
-                    Method[] methods = controller.getMethods();
-                    for (Method method : methods) {
-                        if (!excludedMethodName.contains(method.getName())
-                                && method.getParameterTypes().length == 0) {
-                            String actionKey = createActionKey(controller, method, controllerKey);
-                            Annotation[] methodAns = buildAnnotation(method);
-                            actionKeys.add(actionKey);
-                            methodAnnotationMap.put(method, methodAns);
-                        }
-                    }
-                    LOGGER.debug("Controller Registered : controller = " + controller + ", Mapping URL = " + controllerKey);
+        Set<String> excludedMethodName = ReflectTool.buildExcludedMethodName(com.jfinal.core.Controller.class, BaseController.class);
+        annotationsPack.getAnnotationClass(Controller.class).forEach(controller -> {
+            Controller controllerBind = (Controller) controller.getAnnotation(Controller.class);
+            if (controllerBind != null && BaseController.class.isAssignableFrom(controller)) {
+                Annotation[] controllerAns = buildAnnotation(controller);
+                classAnnotationMap.put(controller, controllerAns);
+                String controllerKey = controllerBind.value();
+                String controllerView = controllerBind.views();
+                if (controllerKey.equals("")) {
+                    LOGGER.error(controller.getName() + " path must not be empty");
+                    return;
                 }
-            });
-        }
+                routes.add(new Route(controllerKey, controller, controllerView));
+                Method[] methods = controller.getMethods();
+                for (Method method : methods) {
+                    if (!excludedMethodName.contains(method.getName())
+                            && method.getParameterTypes().length == 0) {
+                        String actionKey = createActionKey(controller, method, controllerKey);
+                        Annotation[] methodAns = buildAnnotation(method);
+                        actionKeys.add(actionKey);
+                        methodAnnotationMap.put(method, methodAns);
+                    }
+                }
+                LOGGER.debug("Controller Registered : controller = " + controller + ", Mapping URL = " + controllerKey);
+            }
+        });
     }
 
 
@@ -383,9 +346,9 @@ public class CustomPlugin implements IPlugin {
 
     private void initPlugins() throws InstantiationException {
 
-        if (classesMap.containsKey(Model.class)) {
+        if (annotationsPack.containsAnnotation(Model.class)) {
 
-            Set<Class> Classes = classesMap.get(Model.class);
+            Set<Class> Classes = annotationsPack.getAnnotationClass(Model.class);
 
             //Init Model annotation
 
@@ -436,23 +399,20 @@ public class CustomPlugin implements IPlugin {
         }
 
 
-        if (classesMap.containsKey(PluginHandler.class)) {
-            //Init Other Plugin By @PluginHandler
-            Set<Class> Classes = classesMap.get(PluginHandler.class);
-            for (Class plugin : Classes) {
-                try {
-                    if (com.teddy.jfinal.interfaces.IPlugin.class.isAssignableFrom(plugin)) {
-                        //resolve Class implements custom IPlugin
-                        pluginIplugins.add((com.teddy.jfinal.interfaces.IPlugin) plugin.newInstance());
-                    } else {
-                        //init jfinal plugins
-                        plugins.add((IPlugin) plugin.newInstance());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        annotationsPack.getAnnotationClass(PluginHandler.class).forEach(plugin -> {
+            try {
+                if (com.teddy.jfinal.interfaces.IPlugin.class.isAssignableFrom(plugin)) {
+                    //resolve Class implements custom IPlugin
+                    pluginIplugins.add((com.teddy.jfinal.interfaces.IPlugin) plugin.newInstance());
+                } else {
+                    //init jfinal plugins
+                    plugins.add((IPlugin) plugin.newInstance());
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
+        });
+
         //Init CORE plugin
         plugins.add(new CustomPlugin());
 
@@ -460,66 +420,50 @@ public class CustomPlugin implements IPlugin {
 
     private void initExceptions() {
         //Init Exception annotation
-        if (classesMap.containsKey(ExceptionHandlers.class)) {
-            Set<Class> Classes = classesMap.get(ExceptionHandlers.class);
-            for (Class exceptionClass : Classes) {
-
-                Method[] methods = exceptionClass.getDeclaredMethods();
-                for (Method method : methods) {
-                    // resolve @ExceptionHandler add method into ExceptionMap
-                    if (method.isAnnotationPresent(ExceptionHandler.class)) {
-                        for (Class<? extends Throwable> exception : method.getAnnotation(ExceptionHandler.class).value()) {
-                            exceptionsMap.put(exception, method);
-                        }
+        annotationsPack.getAnnotationClass(ExceptionHandlers.class).forEach(exceptionClass -> {
+            Method[] methods = exceptionClass.getDeclaredMethods();
+            for (Method method : methods) {
+                // resolve @ExceptionHandler add method into ExceptionMap
+                if (method.isAnnotationPresent(ExceptionHandler.class)) {
+                    for (Class<? extends Throwable> exception : method.getAnnotation(ExceptionHandler.class).value()) {
+                        exceptionsMap.put(exception, method);
                     }
-
                 }
+
             }
-        }
+        });
     }
 
     private void initInterceptors() {
-        if (classesMap.containsKey(InterceptorHandler.class)) {
-            Set<Class> Classes = classesMap.get(InterceptorHandler.class);
+        annotationsPack.getAnnotationClass(InterceptorHandler.class).forEach(interceptor -> {
             try {
-                for (Class interceptor : Classes) {
-                    if (IInterceptor.class.isAssignableFrom(interceptor)) {
-                        //custom IInterceptor
-                        pluginIinterceptors.add((IInterceptor) interceptor.newInstance());
-                    } else {
-                        //Jfinal Interceptor
-                        interceptors.add((Interceptor) interceptor.newInstance());
-                    }
+                if (Interceptor.class.isAssignableFrom(interceptor)) {
+                    //Jfinal Interceptor
+                    interceptors.add((Interceptor) interceptor.newInstance());
                 }
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-        }
+        });
 
         //Init Core Interceptor
         interceptors.add(new GlobalInterceptor());
     }
 
     private void initHanders() {
-        if (classesMap.containsKey(GlobalHandler.class)) {
-            Set<Class> Classes = classesMap.get(GlobalHandler.class);
+        annotationsPack.getAnnotationClass(GlobalHandler.class).forEach(handler -> {
             try {
-                for (Class handler : Classes) {
-                    if (IHandler.class.isAssignableFrom(handler)) {
-                        //custom handler with @GlobalHandler
-                        pluginIhanders.add((IHandler) handler.newInstance());
-                    } else {
-                        //Jfinal handler
-                        handlers.add((Handler) handler.newInstance());
-                    }
+                if (IHandler.class.isAssignableFrom(handler)) {
+                    //custom handler with @GlobalHandler
+                    pluginIhanders.add((IHandler) handler.newInstance());
+                } else {
+                    //Jfinal handler
+                    handlers.add((Handler) handler.newInstance());
                 }
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-        }
-        if (PropPlugin.getBool(Dict.USE_HTTP_CACHE)) {
-            //handlers.add(new HttpCacheHandler());
-        }
+        });
 
         //Init Core Handler
         handlers.add(new com.teddy.jfinal.handler.GlobalHandler());
@@ -551,13 +495,12 @@ public class CustomPlugin implements IPlugin {
         return injectObjs;
     }
 
+    public static AnnotationsPack getAnnotationsPack() {
+        return annotationsPack;
+    }
 
     public static Map<Class<? extends Annotation>, CustomAnnotationPlugin> getCustoms() {
         return customs;
-    }
-
-    public static Class<? extends Annotation>[] getCustomAns() {
-        return customAns;
     }
 
     public static AttributeKitI getAttributeKit() {

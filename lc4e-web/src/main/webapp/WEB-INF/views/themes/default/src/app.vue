@@ -1,3 +1,8 @@
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
 <template>
     <div id="menu" class="ui menu">
         <div class="column">

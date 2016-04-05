@@ -52,7 +52,7 @@ public class QuartzPlugin implements IPlugin {
             }
         });
 
-        CustomPlugin.getClassesMap().get(Job.class).forEach(aClass -> {
+        CustomPlugin.getAnnotationsPack().getAnnotationClass(Job.class).forEach(aClass -> {
             com.teddy.jfinal.annotation.Job an = (com.teddy.jfinal.annotation.Job) aClass.getAnnotation(com.teddy.jfinal.annotation.Job.class);
             try {
                 Lc4eJob job = new Lc4eJob((Job) aClass.newInstance(), an.name(), an.corn(), aClass.getName());

@@ -1,5 +1,5 @@
 <template>
-    <div class="item topic" v-for="topic in topics" track-by="$index">
+    <div class="item topic" v-for="topic in topics" track-by="$index" v-cloak style="display: none">
         <div class="ui user picture">
             <div class="ui fluid tiny image hidden-mb">
                 <img :src="topic.imageUrl" data-title="{{topic.popUp.title}}"
@@ -73,7 +73,8 @@
                 that.$nextTick(function () {
                     $('.item.topic', '#' + that.parentdomid).transition({
                         animation: 'fade up in',
-                        interval: 50
+                        duration  : 350,
+                        interval: 100
                     });
                 })
             }

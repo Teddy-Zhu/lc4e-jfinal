@@ -30,10 +30,6 @@
                     <span class="text">Sort</span>
 
                     <div class="menu">
-                        <div class="header">
-                            <i class="tags icon"></i>
-                            Sort Method
-                        </div>
                         <div class="scrolling menu">
                             <template v-if="isLogin">
                                 <div class="item" data-value="1">
@@ -121,7 +117,7 @@
             data: function (transition) {
                 var that = this;
                 that.topics = [];
-                this.$http.post('/a/' + this.$route.params.curArea + "-" + this.sort + "-" + this.page).then(function (response) {
+                this.$http.post('/a/' + this.$route.params.area + "-" + this.sort + "-" + this.page).then(function (response) {
                     transition.next(response.data.data);
                 })
             }

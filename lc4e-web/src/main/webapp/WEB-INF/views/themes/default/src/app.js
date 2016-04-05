@@ -46,5 +46,6 @@ var router = new Vueplugins.VueRouter({
 
 router.map(require('./routes'));
 
-Vue.config.debug = true;
-router.start(require("./app.vue"), '#lc4eApp');
+Vue.config.debug = false;
+Vue.config.silent = true;
+router.start(require("./app.vue"), '#app');

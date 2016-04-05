@@ -42,10 +42,8 @@ module.exports = {
         ]
     },
     vue: {
-        loaders: {
-            css: ExtractTextPlugin.extract("style-loader",
-                "css-loader?sourceMap!cssnext-loader")
-        }
+        css: ExtractTextPlugin.extract("style-loader",
+            "css-loader?sourceMap!cssnext-loader")
     },
     resolve: {
         extensions: ['', '.js', '.vue']

@@ -30,10 +30,6 @@
                 <span class="text">Sort</span>
 
                 <div class="menu">
-                    <div class="header">
-                        <i class="tags icon"></i>
-                        Sort Method
-                    </div>
                     <div class="scrolling menu">
                         <template v-if="isLogin">
                             <div class="item" data-value="1">

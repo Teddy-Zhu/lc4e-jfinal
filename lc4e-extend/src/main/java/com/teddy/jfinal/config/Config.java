@@ -118,7 +118,6 @@ public class Config extends com.jfinal.config.JFinalConfig {
     @Override
     public void beforeJFinalStop() {
         resolve(Const.BEFORE_JFINAL_STOP, null);
-        CustomPlugin.getClassesMap().clear();
         CustomPlugin.setClazz(null);
         CustomPlugin.getExceptionsMap().clear();
     }

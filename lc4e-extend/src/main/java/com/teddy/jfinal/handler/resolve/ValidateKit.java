@@ -159,7 +159,7 @@ class ValidateKit {
         }
     }
 
-    public static void resolveParameter(ValidateParam param, Controller controller) throws Lc4eValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
+    static void resolveParameter(ValidateParam param, Controller controller) throws Lc4eValidateException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, ParseException {
         if (param == null) {
             return;
         }
