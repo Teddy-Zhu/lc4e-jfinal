@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="content">
-            <a class="header larger" href="{{topic.articleUrl}}">
+            <a class="header larger" v-link="topic.articleUrl">
                 {{topic.articleTitle}}
             </a>
             <div class="extra">

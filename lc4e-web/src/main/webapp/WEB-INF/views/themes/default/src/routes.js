@@ -11,6 +11,9 @@ module.exports = {
     "/a/*area": {
         component: require('./views/area.vue')
     },
+    "/t/*thread": {
+        component: require('./views/thread.vue')
+    },
     '*': {
         component: require('./views/index.vue')
     }

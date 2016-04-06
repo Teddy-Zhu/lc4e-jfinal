@@ -37,16 +37,19 @@ module.exports = {
                 test: /\.vue$/,
                 loader: 'vue'
             },
-            {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!cssnext-loader")},
-            {test: /\.js$/, loader: 'babel', exclude: /node_modules/, query: {compact: false}}
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!cssnext-loader")
+            },
+            {test: /\.js$/, loader: 'babel', exclude: /node_modules/, query: {compact: false}},
+            {test: /\.(png|jpg|gif)$/, loader: require.resolve("url-loader")},
+            {test: /\.woff$/, loader: "url?limit=10000&minetype=application/font-woff"},
+            {test: /\.(ttf|eot|svg)$/, loader: "file"}
         ]
     },
     vue: {
         css: ExtractTextPlugin.extract("style-loader",
             "css-loader?sourceMap!cssnext-loader")
-    },
-    resolve: {
-        extensions: ['', '.js', '.vue']
     },
     cssnext: {
         browsers: "last 2 versions"

@@ -47,7 +47,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 ----------
 
 >Jfianl Extend 基于Jfinal轻量级框架   
->实现了类似Spring的注解，Serveice，Controller 自动注入  
+>实现了类似Spring的Ioc, 更加简单的aop功能
 >注解参数验证等功能
 
 # 注解
@@ -72,7 +72,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 ```Java
 @CustomAnnotation
 public class customAn extend CustomAnnotationPlugin {
-            // 插件生效顺序[future]暂未实现
+            // 插件触发生效顺序[future]暂未实现
            public int getOrder() {
                 return 0;
             }

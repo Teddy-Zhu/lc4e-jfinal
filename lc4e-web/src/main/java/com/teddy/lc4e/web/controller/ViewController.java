@@ -33,22 +33,12 @@ public class ViewController extends BaseController {
     @ValidateParams(value = {
             @ValidateParam(index = 1, type = int.class, defaultValue = "1"),
             @ValidateParam(value = "art", type = boolean.class, defaultValue = "false"),
-            @ValidateParam(value = "a", type = String.class, defaultValue = "index"),
             @ValidateParam(index = 0, type = Integer.class, defaultValue = "2")
     })
     public void index() {
         setAttr("page", getPara(1));
         render("index.html");
     }
-
-    @ValidateParams({
-            @ValidateParam(value = "p", type = int.class, defaultValue = "1"),
-            @ValidateParam(value = "a", type = String.class, defaultValue = "all"),
-            @ValidateParam(value = "o", type = Integer.class, defaultValue = "1")
-    })
-    public void Articles() {
-    }
-
 
     @ValidateParams({
             @ValidateParam(index = 2, type = int.class, defaultValue = "1"), //page
@@ -66,7 +56,7 @@ public class ViewController extends BaseController {
 
 
     public void t() {
-        render("pages/topic.html");
+        render("index.html");
     }
 
 
@@ -102,10 +92,6 @@ public class ViewController extends BaseController {
         render("pages/signup.html");
     }
 
-    public void test() {
-        render("pages/test.html");
-    }
-
     //test
     public void Error() {
         setAttr("message", new Message("test error"));
@@ -127,14 +113,9 @@ public class ViewController extends BaseController {
         Date now = new Date();
         List<Article> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            list.add(new Article("/themes/" + Key.kvs.get("Theme") + "/images/wireframe/image.png", new Popup("Matt", "Matt has been a member since July 2014"), "The friction between your thoughts and your code" + page, "/t/hello-word" + new Random().nextInt(1000), cate[new Random().nextInt(cate.length - 1)], users[new Random().nextInt(users.length - 1)], new Random().nextInt(100),
+            list.add(new Article("/themes/" + Key.kvs.get("Theme") + "/images/wireframe/image.png", new Popup("Matt", "Matt has been a member since July 2014"), "The friction between your thoughts and your code" + page, "/t/hello" + new Random().nextInt(1000), cate[new Random().nextInt(cate.length - 1)], users[new Random().nextInt(users.length - 1)], new Random().nextInt(100),
                     RelativeDate.format(RelativeDate.randomDate("2015-05-11 13:00:00", now), now), users[new Random().nextInt(users.length - 1)], page, high[new Random().nextInt(high.length - 1)]));
         }
         return list;
-    }
-
-    public void vue() {
-        setAttr("page", getPara(1)).setAttr("topicsString", JsonKit.toJson(getArticle(getParaToInt(1), getParaToInt(0), getPara("a"))));
-        render("index.html");
     }
 }
