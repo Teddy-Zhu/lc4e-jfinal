@@ -12,7 +12,7 @@
             </div>
             <div class="allmenus">
                 <div class="left menu">
-                    <img class="logo ui image item hidden-mb" v-bind:src="themePath + '/images/logo.png'"/>
+                    <img class="logo ui image item hidden-mb" :src="themePath + '/images/logo.png'"/>
                     <menu-tree :menus="menus"></menu-tree>
                 </div>
                 <div class="right menu">
@@ -24,7 +24,7 @@
                     </div>
                     <template v-if="isLogin">
                         <div id="userItem" class="item">
-                            <img class="ui headered linked image" v-bind:src="themePath+'/images/wireframe/image.png'"/>
+                            <img class="ui headered linked image" :src="themePath+'/images/wireframe/image.png'"/>
 
                             <div id="userCardPop" class="ui flowing popup">
                                 <div id="userCard" class="ui card">

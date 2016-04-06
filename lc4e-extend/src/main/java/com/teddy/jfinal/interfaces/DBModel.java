@@ -7,6 +7,7 @@ import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.tools.SQLTool;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,7 +64,7 @@ public abstract class DBModel<M extends DBModel> extends Model<M> {
             return new ArrayList<>();
         }
         String objStr = "";
-        for (int i = 0, len = objs.length; i < len; i++) {
+        for (String obj : objs) {
             objStr += "?,";
         }
         return find("select " + getTbName() + ".* from " + getTbName() + " where " + column + " in(" + objStr.substring(0, objStr.length() - 1) + ")", objs);

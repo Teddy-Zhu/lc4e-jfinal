@@ -25,7 +25,7 @@ public class TransactionAnnotationResolver extends CustomAnnotationPlugin {
         return Transaction.class;
     }
 
-    public static Config getConfigWithTxConfig(Method method) {
+    private static Config getConfigWithTxConfig(Method method) {
         TxConfig txConfig = method.getAnnotation(TxConfig.class);
         if (txConfig == null)
             txConfig = method.getDeclaringClass().getAnnotation(TxConfig.class);
@@ -39,7 +39,7 @@ public class TransactionAnnotationResolver extends CustomAnnotationPlugin {
         return null;
     }
 
-    protected int getTransactionLevel(Config config) {
+    private int getTransactionLevel(Config config) {
         return config.getTransactionLevel();
     }
 

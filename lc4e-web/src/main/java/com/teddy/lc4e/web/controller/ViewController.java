@@ -38,7 +38,6 @@ public class ViewController extends BaseController {
     })
     public void index() {
         setAttr("page", getPara(1));
-        setAttr("topicsString", JsonKit.toJson(getArticle(getParaToInt(1), getParaToInt(0), getPara("a"))));
         render("index.html");
     }
 
@@ -61,7 +60,7 @@ public class ViewController extends BaseController {
             renderJson(new Message(true, new Data("curArea", getPara(0)), new Data("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)))));
         } else {
             setAttr("curArea", getPara(0)).setAttr("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)));
-            render("pages/area.html");
+            render("index.html");
         }
     }
 

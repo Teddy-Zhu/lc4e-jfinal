@@ -42,10 +42,8 @@ public class CacheAnnotationResolver extends CustomAnnotationPlugin {
         useCache = cache != null && PropPlugin.getBool(Dict.USE_CACHE, true) && cache.index() < objects.length;
 
         cacheKey = cache.index() == -1 ? cache.key() : objects[cache.index()];
-        if (cacheKey.getClass().isArray()) {
+        if (cacheKey.getClass().isArray() || cacheKey instanceof Collection) {
             cacheKey = StringUtils.join((String[]) cacheKey, ",");
-        } else if (cacheKey instanceof Collection) {
-            cacheKey = StringTool.join((Collection<String>) cacheKey, ",");
         } else {
             cacheKey = cacheKey.toString();
         }

@@ -30,7 +30,7 @@ public class ReflectTool {
         classMap.put(void.class, Void.class);
 
         functionMap = new HashMap<>();
-        functionMap.put(String.class, String::valueOf);
+        functionMap.put(String.class, String::toString);
         functionMap.put(Boolean.class, (x) -> {
             Boolean returnVal = null;
             try {

@@ -19,11 +19,11 @@ public class CustomInterceptor implements MethodInterceptor {
     private boolean isClass = false;
 
 
-    public CustomInterceptor(Object target) {
+    private CustomInterceptor(Object target) {
         this.target = target;
     }
 
-    public CustomInterceptor(Object target, boolean isClass) {
+    private CustomInterceptor(Object target, boolean isClass) {
         this.target = target;
         this.isClass = isClass;
     }
