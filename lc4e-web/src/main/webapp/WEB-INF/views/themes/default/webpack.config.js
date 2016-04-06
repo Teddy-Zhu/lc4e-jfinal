@@ -42,7 +42,7 @@ module.exports = {
                 loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!cssnext-loader")
             },
             {test: /\.js$/, loader: 'babel', exclude: /node_modules/, query: {compact: false}},
-            {test: /\.(png|jpg|gif)$/, loader: require.resolve("url-loader")},
+            {test: /\.(png|jpg|gif)$/, loader: require.resolve("url-loader") + '?limit=10&name=./images/pack/[name].[ext]'},
             {test: /\.woff$/, loader: "url?limit=10000&minetype=application/font-woff"},
             {test: /\.(ttf|eot|svg)$/, loader: "file"}
         ]
