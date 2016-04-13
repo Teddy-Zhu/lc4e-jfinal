@@ -1695,7 +1695,7 @@ html, body {
     float: left;
 }
 
-#menu .right.menu {
+#menu .float.right.menu {
     float: right;
 }
 
@@ -1774,12 +1774,12 @@ html, body {
 }
 
 #searchSite {
-    width: 10em;
+    width: 12.97em;
     background-color: transparent;
 }
 
 #searchSite.expended {
-    width: 15em;
+    width: 25em;
 }
 
 /* header expend button*/

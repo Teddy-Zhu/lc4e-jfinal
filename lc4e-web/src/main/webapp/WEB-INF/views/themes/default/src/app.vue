@@ -1,10 +1,11 @@
-<style>
+<!--suppress ALL -->
+<style xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
     [v-cloak] {
         display: none;
     }
 </style>
 <template>
-    <div id="menu" class="ui menu">
+    <div id="menu" class="ui menu" v-bind:class="{ 'expended': menuExpened }">
         <div class="column">
             <div class="hidden-pc">
                 <a class="item linked"> <i class="content icon"></i> Menus
@@ -15,15 +16,16 @@
                     <img class="logo ui image item hidden-mb" :src="themePath + '/images/logo.png'"/>
                     <menu-tree :menus="menus"></menu-tree>
                 </div>
-                <div class="right menu">
+                <div class="right menu" v-bind:class="{ 'float': rightMenuFloat }">
                     <div class="item">
                         <div class="ui icon input">
-                            <input id="searchSite" type="text" placeholder="Search..."/> <i
+                            <input id="searchSite" type="text" placeholder="Search..."
+                                   v-on:focus="expend" v-on:blur="collapse"/> <i
                                 class="search link icon"></i>
                         </div>
                     </div>
                     <template v-if="isLogin">
-                        <div id="userItem" class="item">
+                        <div id="userItem" class="item" v-show="enable">
                             <img class="ui headered linked image" :src="themePath+'/images/wireframe/image.png'"/>
 
                             <div id="userCardPop" class="ui flowing popup">
@@ -74,20 +76,20 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div class="ui item animated fade button" href="/SignUp">
+                        <div class="ui item animated fade button" href="/SignUp" v-show="enable">
                             <div class="visible content">Sign Up</div>
                             <div class="hidden content">
                                 <i class="add user icon"></i>
                             </div>
                         </div>
-                        <div class="ui item animated button" href="/SignIn">
+                        <div class="ui item animated button" href="/SignIn" v-show="enable">
                             <div class="visible content">Sign In</div>
                             <div class="hidden content">
                                 <i class="user icon"></i>
                             </div>
                         </div>
                     </template>
-                    <div id="expendHeader" class="ui item hidden-mb">
+                    <div id="expendHeader" class="ui item hidden-mb" v-show="enable" v-on:click="menuExpend">
                         <div class="ui linked label">
                             <i class="maximize icon"></i>
                         </div>
@@ -106,7 +108,7 @@
             <div class="ui stackable inverted divided relaxed grid">
                 <div class="eight wide column">
                     <h3 class="ui inverted header">
-                        {{siteName}}{{version}}
+                        {{siteName}} {{version}}
                     </h3>
 
                     <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>
@@ -147,7 +149,8 @@
                     <h5 class="ui teal inverted header">LC4E Network</h5>
 
                     <div class="ui inverted link list">
-                        <a class="item" href="https://www.digitalocean.com/?refcode=f7bf7094acd9">DigitalOcean</a>
+                        <a class="item"
+                           href="https://www.linode.com/?r=9a43d7ae15699c5363209820309d8d6c68509f78">Linode</a>
                     </div>
                 </div>
             </div>
@@ -160,6 +163,20 @@
     require('./lc4e.js');
     module.exports = {
         name: 'app',
+        props: {
+            menuExpened: {
+                type: Boolean,
+                default: false
+            },
+            rightMenuFloat: {
+                type: Boolean,
+                default: false
+            },
+            expended: {
+                type: Boolean,
+                default: false
+            }
+        },
         data: function () {
             return preLoadData;
         },
@@ -168,6 +185,31 @@
         },
         components: {
             "menu-tree": require('./components/menu.vue')
+        },
+        methods: {
+            expend: function (e) {
+                this.expended = true;
+            },
+            collapse: function (e) {
+                this.expended = false;
+            },
+            menuExpend: function (e) {
+                var that = this;
+                that.menuExpened = !that.menuExpened;
+                if (that.menuExpened) {
+                    that.rightMenuFloat = true;
+                } else {
+                    $('#menu').one('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function () {
+                        that.rightMenuFloat = false;
+                    });
+                }
+            }
+        },
+        computed: {
+            enable: function () {
+                return this.menuExpened || !this.expended;
+            }
         }
+
     }
 </script>

@@ -3683,10 +3683,6 @@ $.extend($.lc4e, {
 
             $('#searchSite').Lc4eFocusBlur('expended');
 
-            $('#expendHeader').on('click', function () {
-                $menu.toggleClass('expended');
-            });
-
             $menu.find('.column div:first a').on('click', function () {
                 $menu.find('>.column>.allmenus').transition({
                     animation: "fly down",
