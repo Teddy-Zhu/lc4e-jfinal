@@ -18,22 +18,9 @@ public class QuartzSessionValidationJob implements Job {
      */
     public static final String SESSION_MANAGER_KEY = "sessionManager";
 
-    /*--------------------------------------------
-    |    I N S T A N C E   V A R I A B L E S    |
-    ============================================*/
+
     private static final Logger log = LoggerFactory.getLogger(QuartzSessionValidationJob.class);
 
-    /*--------------------------------------------
-    |         C O N S T R U C T O R S           |
-    ============================================*/
-
-    /*--------------------------------------------
-    |  A C C E S S O R S / M O D I F I E R S    |
-    ============================================*/
-
-    /*--------------------------------------------
-    |               M E T H O D S               |
-    ============================================*/
 
     /**
      * Called when the job is executed by quartz. This method delegates to the <tt>validateSessions()</tt> method on the

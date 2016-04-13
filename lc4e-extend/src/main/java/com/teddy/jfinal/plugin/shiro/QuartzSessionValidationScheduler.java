@@ -63,7 +63,7 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
         try {
             SimpleTrigger trigger = TriggerBuilder.newTrigger().startNow().withIdentity(JOB_NAME, Scheduler.DEFAULT_GROUP)
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(sessionValidationInterval))
-                    .build();//<span style="color:#ff0000;">Quartz 2中的实现</span>
+                    .build();
 
             JobDetail detail = JobBuilder.newJob(QuartzSessionValidationJob.class)
                     .withIdentity(JOB_NAME, Scheduler.DEFAULT_GROUP).build();
@@ -108,7 +108,7 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
             return;
         }
         try {
-            scheduler.unscheduleJob("SessionValidationJob", "DEFAULT");
+            scheduler.unscheduleJob(new TriggerKey("SessionValidationJob", "DEFAULT"));
             if (log.isDebugEnabled())
                 log.debug("Quartz session validation job stopped successfully.");
         } catch (SchedulerException e) {
