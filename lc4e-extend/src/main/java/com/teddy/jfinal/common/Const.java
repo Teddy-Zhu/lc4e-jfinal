@@ -64,4 +64,6 @@ public class Const {
 
     public static final String LC4EAJAX = "LC4EAJAX";
     public static final String LC4EPJAX = "LC4EPJAX";
+
+    public static final String DEFAULT = "DEFAULT";
 }

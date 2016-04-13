@@ -11,13 +11,16 @@ public class Lc4eJob {
     private String name;
     private String corn;
 
+    private String group;
+
     private String className;
 
-    public Lc4eJob(Job job, String name, String corn, String className) {
+    public Lc4eJob(Job job, String name, String corn, String className, String group) {
         this.job = job;
         this.name = name;
         this.corn = corn;
         this.className = className;
+        this.group = group;
     }
 
     public String getClassName() {
@@ -50,5 +53,13 @@ public class Lc4eJob {
 
     public void setCorn(String corn) {
         this.corn = corn;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

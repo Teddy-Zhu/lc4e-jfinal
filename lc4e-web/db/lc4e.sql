@@ -11,7 +11,7 @@
  Target Server Version : 50709
  File Encoding         : utf-8
 
- Date: 03/20/2016 01:39:59 AM
+ Date: 04/13/2016 17:25:01 PM
 */
 
 SET NAMES utf8;
@@ -200,6 +200,7 @@ CREATE TABLE `sys_job` (
   `order` int(11) NOT NULL,
   `cron` varchar(255) COLLATE utf8_bin NOT NULL,
   `className` varchar(255) COLLATE utf8_bin NOT NULL,
+  `group` varchar(50) COLLATE utf8_bin NOT NULL,
   `enable` tinyint(4) NOT NULL DEFAULT '0',
   `createTime` datetime NOT NULL,
   `updateTime` datetime NOT NULL,

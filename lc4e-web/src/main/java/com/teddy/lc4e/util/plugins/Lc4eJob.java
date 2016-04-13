@@ -4,6 +4,8 @@ import com.teddy.jfinal.interfaces.DBModel;
 import com.teddy.jfinal.plugin.quartz.IJob;
 import com.teddy.lc4e.database.model.SysJob;
 import com.teddy.lc4e.web.service.JobService;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import java.util.List;
 
@@ -29,5 +31,15 @@ public class Lc4eJob implements IJob {
     @Override
     public String getCron() {
         return SysJob.CRON;
+    }
+
+    @Override
+    public String getGroup() {
+        return SysJob.GROUP;
+    }
+
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        System.out.println("Not Implement");
     }
 }

@@ -69,6 +69,18 @@ public abstract class BaseSysJob<M extends BaseSysJob<M>> extends DBModel<M> imp
 
 	public static final String CLASSNAME = "CLASSNAME";
 
+	public void setGroup(java.lang.String group) {
+		set("group", group);
+	}
+
+	public java.lang.String getGroup() {
+		return get("group");
+	}
+
+	public static final String group = "sys_job.group";
+
+	public static final String GROUP = "GROUP";
+
 	public void setEnable(java.lang.Integer enable) {
 		set("enable", enable);
 	}
