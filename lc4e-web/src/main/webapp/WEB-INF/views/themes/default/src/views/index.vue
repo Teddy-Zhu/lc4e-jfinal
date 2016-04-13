@@ -52,15 +52,15 @@
         <div id="articlelist" class="ui attached fluid raised segment">
             <div id="topicItems" class="ui divided items topiclist" data-page="{{page}}"
                  data-sort="{{sort}}">
-                <topic-list :topics="topics" :page="page" parentdomid="topicItems"></topic-list>
+                <topic-list :topics="topics" :page="page"></topic-list>
             </div>
         </div>
         <div id="articlebottons" class="ui bottom attached floating message">
-            <div id="prePage" class="ui left floated basic labeled icon button">
+            <div id="prePage" v-waves class="ui left floated basic labeled icon button">
                 <i class="angle double left icon"></i>
                 Prev
             </div>
-            <div id="nextPage" class="ui right floated basic right labeled icon button">
+            <div id="nextPage" v-waves class="ui right floated basic right labeled icon button">
                 <i class="angle double right icon"></i>
                 Next
             </div>
@@ -71,7 +71,6 @@
             <h4 class="ui horizontal header divider">
                 <i class="bar chart icon"></i> Today HotSpot
             </h4>
-
             <div class="ui divided items"></div>
         </div>
         <div id="yesterdayHot" class="ui raised segment">
@@ -104,15 +103,14 @@
         route: {
             data: function (transition) {
                 //this.topicsList = this.$root.$data.topics;
-                this.$http.post('/a/all' +"-" + this.sort + "-" + this.page).then(function (response) {
+                var that = this;
+                this.$http.post('/a/all' + "-" + that.sort + "-" + that.page).then(function (response) {
                     transition.next(response.data.data);
+                    that.$nextTick(function () {
+                        $.lc4e.index.bindEvent();
+                    });
                 })
             }
-        },
-        ready: function () {
-            $.lc4e.index.bindEvent();
-        },
-        created: function () {
         },
         methods: {
             loadJquery: function () {

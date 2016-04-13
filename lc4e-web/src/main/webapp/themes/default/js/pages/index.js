@@ -43,14 +43,6 @@ $.extend($.lc4e, {
                 })
             });
 
-            $topicItems.on('click', function (e) {
-                var $target = $(e.target);
-                if ($target.hasClass('content')) {
-                    window.location.href = $target.find('a.header').attr('href');
-                } else if ($target.hasClass('extra')) {
-                    window.location.href = $target.prev().attr('href');
-                }
-            });
             setTimeout(function () {
                 $.lc4e.index.shape($announce);
             }, 10000);

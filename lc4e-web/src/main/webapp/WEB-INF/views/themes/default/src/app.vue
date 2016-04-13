@@ -156,18 +156,18 @@
 </template>
 
 <script>
-require('../../../../../themes/default/css/lc4e/jquery-extend.css');
-require('./lc4e.js');
-module.exports = {
-    name: 'app',
-    data: function () {
-        return preLoadData;
-    },
-    ready: function () {
-        $.lc4e.common.ready();
-    },
-    components: {
-        "menu-tree": require('./components/menu.vue')
+    require('../../../../../themes/default/css/lc4e/jquery-extend.css');
+    require('./lc4e.js');
+    module.exports = {
+        name: 'app',
+        data: function () {
+            return preLoadData;
+        },
+        ready: function () {
+            $.lc4e.common.ready();
+        },
+        components: {
+            "menu-tree": require('./components/menu.vue')
+        }
     }
-}
 </script>

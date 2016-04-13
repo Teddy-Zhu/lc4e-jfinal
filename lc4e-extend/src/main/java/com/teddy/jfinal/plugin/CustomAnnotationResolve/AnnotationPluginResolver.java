@@ -17,7 +17,7 @@ public class AnnotationPluginResolver {
 
     public int index = 0;
 
-    public boolean useInjectTarget = true;
+    private boolean useInjectTarget = true;
     private Object target;
     private Method method;
     private Object[] args;

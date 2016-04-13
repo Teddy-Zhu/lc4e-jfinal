@@ -438,75 +438,6 @@ public class ReflectTool {
         throw new Lc4eException("Can not find Method [" + methodName + "] in Class");
     }
 
-    public static <T> T getAnnotationByMethod(Method method, Class<T> annoClass) {
-        Annotation all[] = method.getAnnotations();
-        for (Annotation annotation : all) {
-            if (annotation.annotationType() == annoClass) {
-                return (T) annotation;
-            }
-        }
-        return null;
-    }
-
-    public static Field getFieldByClass(Class clz, String name) {
-        Field[] fields = clz.getFields();
-        for (Field field : fields) {
-            if (field.getName().equals(name)) {
-                return field;
-            }
-        }
-        return null;
-    }
-
-    public static List<String> getKeyWordConst(String... args) {
-        Field[] fields = Const.class.getDeclaredFields();
-        List<String> list = new ArrayList<>();
-        try {
-            for (Field field : fields) {
-                String name = field.getName();
-                for (String arg : args) {
-                    if (name.startsWith(arg)) {
-                        list.add(field.get(null).toString());
-                        break;
-                    }
-                }
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public static Object getFieldByObjectAndFileName(Controller controller, Class type, String fileName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-
-        String tmp[] = fileName.split("\\.");
-        Object arg = controller.getModel(type, tmp[0]);
-        if (arg == null) {
-            return null;
-        }
-
-        if (Model.class.isAnnotationPresent(type)) {
-            for (int i = 1; i < tmp.length; i++) {
-                Method method = arg.getClass().getMethod("get", String.class);
-                arg = method.invoke(arg, tmp[i]);
-            }
-        } else {
-            for (int i = 1; i < tmp.length; i++) {
-                Method method = arg.getClass().getMethod(getGetterNameByFieldName(tmp[i]));
-                arg = method.invoke(arg);
-            }
-        }
-
-        return arg;
-    }
-
-    /**
-     * get field get function
-     */
-    public static String getGetterNameByFieldName(String fieldName) {
-        return "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-    }
-
 
     public static void setParameter(String key, String value, Controller controller) throws NoSuchFieldException, IllegalAccessException {
 
@@ -518,32 +449,6 @@ public class ReflectTool {
         });
 
     }
-
-
-    public static void setParameter(String[] key, String[] value, Controller controller) throws NoSuchFieldException, IllegalAccessException {
-
-        if (key.length != value.length) {
-            return;
-        }
-        Map<String, ArrayList<String>> map = RequestTool.getParameterMap(controller.getRequest());
-
-        for (int i = 0, len = key.length; i < len; i++) {
-            ArrayList<String> values = new ArrayList<>();
-            values.add(value[i]);
-            map.put(key[i], values);
-        }
-    }
-
-    public static Map<Class<? extends Annotation>, Annotation> getAnnotationsMap(Method method) {
-        Map<Class<? extends Annotation>, Annotation> ret = new HashMap<>();
-        Annotation[] ans = method.getAnnotations();
-        for (Annotation an : ans) {
-            ret.put(an.annotationType(), an);
-        }
-        return ret;
-    }
-
-
     /**
      * exclude method in Controller
      *

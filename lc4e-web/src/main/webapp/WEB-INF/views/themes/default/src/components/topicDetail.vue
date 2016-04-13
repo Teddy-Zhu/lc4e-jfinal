@@ -1,5 +1,5 @@
 <template>
-    <template v-for="n in number">
+    <div class="row" v-for="(index, comment) in comments" style="display: none;">
         <div class="two wide user info column">
             <div class="ui stackable centered card">
                 <a class="ui blurring dimmable image">
@@ -21,17 +21,15 @@
         <div class="fourteen wide user content column">
             <div class="ui comment title attached message">
                 <div class="ui basic comment clearing title segment row">
-                    UserName Posted: 2015-12-12
-                    <a class="ui right float label">#{{n}}
+                    {{comment.UserName}} Posted: 2015-12-12
+                    <a class="ui right float label">#{{index}}
                     </a>
                 </div>
             </div>
 
             <div class="ui attached raised segments">
                 <article class="ui fluid segment topic content">
-                    <a href="http://www.apple.com">Safari 5 released</a><br/>
-                    7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,
-                    Apple announced the release of Safari 5 for Windows and Mac......
+                    {{comment.body}}
                 </article>
             </div>
 
@@ -44,15 +42,42 @@
                 </div>
             </div>
         </div>
-    </template>
+    </div>
 </template>
 <script>
     module.exports = {
         name: 'topic-detail',
         props: {
-            number: {
+            comments: {
+                type: Array,
+                required: true,
+                default: []
+            },
+            animate: {
+                type: String,
+                default: 'fade left'
+            },
+            duration: {
                 type: Number,
-                default: 10
+                default: 300
+            },
+            interval: {
+                type: Number,
+                default: 60
+            }
+        },
+        watch: {
+            comments: function (val, oldVal) {
+                if (val.length !== 0) {
+                    var that = this;
+                    that.$nextTick(function () {
+                        $('>.row', that.$el.parentNode).transition({
+                            animation: that.animate + ' in',
+                            duration: that.duration,
+                            interval: that.interval
+                        });
+                    })
+                }
             }
         }
     }

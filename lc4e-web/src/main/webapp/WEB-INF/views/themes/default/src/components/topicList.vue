@@ -1,38 +1,38 @@
-<template>
+<template xmlns:v-on="http://www.w3.org/1999/xhtml">
     <div class="item topic" v-for="topic in topics" track-by="$index" v-cloak style="display: none">
-        <div class="ui user picture">
+        <div class="ui user picture hidden-mb">
             <div class="ui fluid tiny image hidden-mb">
                 <img :src="topic.imageUrl" data-title="{{topic.popUp.title}}"
                      data-content="{{topic.popUp.content}}"/>
             </div>
         </div>
-        <div class="content">
+        <div class="content" v-link="topic.articleUrl">
             <a class="header larger" v-link="topic.articleUrl">
                 {{topic.articleTitle}}
             </a>
             <div class="extra">
-                <a class="ui blue label">
+                <a class="ui blue label" v-on:click.stop>
                     {{topic.user}}
                 </a>
-                <a class="ui teal label">
+                <a class="ui teal label" v-on:click.stop>
                     {{topic.category}}
                 </a>
 
-                <div class="ui transparent label">
+                <div class="ui transparent label" v-on:click.stop>
                     <i class="calendar icon"></i>
                     {{topic.publishTime}}
                 </div>
-                <div class="ui transparent label">
+                <div class="ui transparent label" v-on:click.stop>
                     <i class="comments outline icon"></i>
                     {{topic.comments}}
                 </div>
-                <div class="ui transparent label">
+                <div class="ui transparent label" v-on:click.stop>
                     <i class="comment icon"></i>
                     <a class="ui label">
                         {{topic.lastCommentUser}}
                     </a>
                 </div>
-                <div class="topicQuickTools">
+                <div class="topicQuickTools" v-on:click.stop>
                     <a class="ui circular topicQuickTool label"><i class="ui yellow star icon"></i></a>
                     <a class="ui circular topicQuickTool topicSetting bottom left dropdown pointing label">
                         <i class="ui red setting icon"></i>
@@ -57,26 +57,40 @@
         name: 'topic-list',
         props: {
             topics: {
-                type: Array
+                type: Array,
+                default: []
             },
             page: {
-                type: Number
+                type: Number,
+                required: true
             },
-            parentdomid: {
+            animate: {
                 type: String,
-                default: ''
+                default: 'fade up'
+            },
+            duration: {
+                type: Number,
+                default: 350
+            },
+            interval: {
+                type: Number,
+                default: 100
             }
         },
         watch: {
             topics: function (val, oldVal) {
-                var that = this;
-                that.$nextTick(function () {
-                    $('.item.topic', '#' + that.parentdomid).transition({
-                        animation: 'fade up in',
-                        duration  : 350,
-                        interval: 100
-                    });
-                })
+                if (val.length !== 0) {
+                    var that = this;
+                    that.$nextTick(function () {
+                        $('>.item', that.$el.parentNode).transition({
+                            animation: that.animate + ' in',
+                            duration: that.duration,
+                            interval: that.interval
+                        });
+                        $('.topicSetting', that.$el.parentNode).dropdown();
+                        $('>.item .ui.fluid.image img', that.$el.parentNode).popup();
+                    })
+                }
             }
         }
     }

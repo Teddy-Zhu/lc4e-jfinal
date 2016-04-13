@@ -36,11 +36,6 @@
     padding-bottom: .45rem;
 }
 
-.bottom.message > .ui.button {
-    padding: .45rem .2rem;
-    margin-left: .2em;
-}
-
 .bottom.message > .ui.button > i.icon {
     margin: 0;
 }

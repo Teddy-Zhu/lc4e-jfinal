@@ -1696,7 +1696,7 @@ html, body {
 }
 
 #menu .right.menu {
-
+    float: right;
 }
 
 #menu > .column .left.menu > img {

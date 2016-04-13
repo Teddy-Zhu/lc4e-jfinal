@@ -105,7 +105,7 @@
             </div>
         </div>
         <div id="commentArea" class="ui grid">
-            <topic-detail :number="number"></topic-detail>
+            <topic-detail :comments="comments"></topic-detail>
         </div>
         <div id="replyArea" class="ui grid" v-if="isLogin">
             <div class="one wide column word">
@@ -126,14 +126,63 @@
         data: function () {
             return {
                 isLogin: this.$root.$data.isLogin,
-                number: 10,
                 sort: this.$root.$data.sort,
-                page: this.$root.$data.page
+                page: this.$root.$data.page,
+                comments: []
             }
         },
         route: {
             data: function (transition) {
-                console.log(this.number);
+                var comments = [{
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }, {
+                    UserName: 'aaa',
+                    body: '<a href="http://www.apple.com">Safari 5 released</a><br/>' +
+                    '7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,' +
+                    'Apple announced the release of Safari 5 for Windows and Mac......'
+                }];
+                this.comments = comments;
+                this.$nextTick(function () {
+                    $.lc4e.topic.bindEvent();
+                });
 //                this.$http.post('/t/' + this.$route.params.thread + "-" + this.sort + "-" + this.page).then(function (response) {
 //                    console.log(response.data.data);
 //                    transition.next(response.data.data);
@@ -142,9 +191,6 @@
         },
         components: {
             "topic-detail": require('../components/topicDetail.vue')
-        },
-        ready: function () {
-            $.lc4e.topic.bindEvent();
         }
     }
 </script>

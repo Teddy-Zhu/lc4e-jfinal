@@ -54,6 +54,9 @@ module.exports = {
     cssnext: {
         browsers: "last 2 versions"
     },
+    resolve: {
+        extensions: ['', '.js', '.vue']
+    },
     plugins: plugins,
     devtool: '#source-map'
 };

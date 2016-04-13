@@ -101,8 +101,10 @@ public class customAn extend CustomAnnotationPlugin {
 - `ValidateComVars[M]`:批量ValidateComVar
 - `ValidateParam[M]`:参数验证,支持String Integer,Long,Double,Float,Date,File,ActiveRecord等验证，同时设置默认值
 - `ValidateParams[M]`:批量参数验证,当参数过多时推荐使用
+- `ValidateFunctionValue[M]`: 参数验证升级版,可以指定获取某方法的返回值,意味着可以动态获取值去验证
+- `ValidateFunctionValues[M]`: 批量的验证
 - `ValidateToken[T/M]`:验证TOKEN
-- `Cache[M]`:在Service的方法中注解，可以自动缓存
+- `Cache[M]`:在Service的方法中注解，可以自动缓存结果
 - `SetPJAX`:设置PJAX attribute
 - `SetAJAX`:设置AJAX attribute
 
@@ -118,7 +120,6 @@ public class customAn extend CustomAnnotationPlugin {
 - `BaseController`：增强Controller 增加isAJAX ，isPJAX , 验证码render等
 - `DBModel`: 增强Model,自动set updateTime，createTime,自动事务，自动Cache
 - `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
-- `IInterceptor`: interceptor增强，需使用InterceptorHandler载入，新增beforeIntercept，afterIntercept，beforeException，afterException
 - `IIPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
 
 

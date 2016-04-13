@@ -82,14 +82,14 @@
              class="ui divided items topiclist no padded attached raised segment"
              data-page="{{page}}"
              data-sort="{{topicSort}}">
-            <topic-list :topics="topics" :page="page" parentdomid="topicItemsArea"></topic-list>
+            <topic-list :topics="topics" :page="page"></topic-list>
         </div>
         <div id="articlebottons" class="ui bottom clearing floating attached message">
-            <div id="prePage" class="ui left floated basic labeled icon button">
+            <div id="prePage" v-waves class="ui left floated basic labeled icon button">
                 <i class="angle double left icon"></i>
                 Prev
             </div>
-            <div id="nextPage" class="ui right floated basic right labeled icon button">
+            <div id="nextPage" v-waves class="ui right floated basic right labeled icon button">
                 <i class="angle double right icon"></i>
                 Next
             </div>
@@ -116,14 +116,13 @@
         route: {
             data: function (transition) {
                 var that = this;
-                that.topics = [];
-                this.$http.post('/a/' + this.$route.params.area + "-" + this.sort + "-" + this.page).then(function (response) {
+                this.$http.post('/a/' + this.$route.params.area + "-" + that.sort + "-" + that.page).then(function (response) {
                     transition.next(response.data.data);
+                    that.$nextTick(function () {
+                        $.lc4e.index.bindEvent();
+                    });
                 })
             }
-        },
-        ready: function () {
-            $.lc4e.area.ready();
         },
         components: {
             "topic-list": require('../components/topicList.vue')
