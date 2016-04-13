@@ -18,5 +18,4 @@ targetgenerated-sourcesannotations
 *.log.*
 
 out/*
-Model
 node_modules
