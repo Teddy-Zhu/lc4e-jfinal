@@ -17,6 +17,10 @@ module.exports = {
         name: 'thread',
         component: require('./views/thread.vue')
     },
+    "/SignIn": {
+        name: 'signin',
+        component: require('./views/signin.vue')
+    },
     '*': {
         component: require('./views/index.vue')
     }

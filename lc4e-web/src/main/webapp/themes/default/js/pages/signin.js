@@ -1,8 +1,8 @@
 /**
  * Created by teddy on 2015/8/30.
  */
-$(function () {
-    $.lc4e.signin = {
+$.extend($.lc4e, {
+    signin: {
         ready: function () {
             $.lc4e.signin.run();
             $.lc4e.signin.bindEvent();
@@ -41,6 +41,5 @@ $(function () {
 
             $('.ui.icon.header > .icon').Lc4eHover('scaleSpin');
         }
-    };
-    $.lc4e.signin.ready();
-});
+    }
+})

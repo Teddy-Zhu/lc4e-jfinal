@@ -95,7 +95,7 @@
                             <i class="hide icon"></i>
                             block
                         </div>
-                        <div class="ui primary button">
+                        <div class="ui basic button">
                             <i class="reply icon"></i>
                             reply
                         </div>

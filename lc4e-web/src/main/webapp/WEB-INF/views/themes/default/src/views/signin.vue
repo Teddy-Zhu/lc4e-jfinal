@@ -1,0 +1,98 @@
+<template>
+    <div class="ui basic padding clearing segment flipInY animated">
+        <h2 class="ui center aligned icon header">
+            <i class="circular massive home icon"></i>
+            Sign in {{siteName}},Welcome Back!
+        </h2>
+        <div id="signInForm" class="ui form attached segment" observe-on="blur" data-url="/member/signin"
+             data-loading="true">
+            <div class="inline fields">
+                <div class="four wide field">
+                    <label class="fieldName">UserName</label>
+                </div>
+                <div class="ten wide field">
+                    <div class="ui icon input">
+                        <input id="user.name" class="fieldValue" name="user.name" type="text"
+                               placeholder="your login name" data-rules="[{type:'empty'},{type:'minLength[4]'}]"/>
+                        <i class="user icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="four wide field">
+                    <label class="fieldName">Password</label>
+                </div>
+                <div class="ten wide field">
+                    <div class="ui icon input">
+                        <input id="user.password" name="user.password" class="fieldValue" type="password"
+                               placeholder="your password" data-rules="[{type:'empty'},{type:'minLength[6]'}]"/>
+                        <i class="eye icon link"></i></div>
+                </div>
+            </div>
+            <div class="inline fields" v-if="Captcha">
+                <div class="four wide field">
+                    <label class="fieldName">Verification Code</label>
+                </div>
+                <div class="six wide field">
+                    <div class="ui input">
+                        <input id="captcha" name="captcha" class="fieldValue" type="text"
+                               data-rules="[{type:'empty'},{type:'exactLength[4]'}]"/>
+                    </div>
+                </div>
+                <div class="four wide field">
+                    <img id="captchaimg" src="/captcha?rand={{new Date().getTime()}}">
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="four wide field">
+                    <label class="fieldName">Remember</label>
+                </div>
+                <div class="ten wide field">
+                    <div class="ui toggle checkbox">
+                        <input id="rememberMe" name="rememberMe" type="checkbox" class="fieldValue"
+                               data-rules="[{type:'empty'}]">
+                        <label>One Month</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inline fields operatepanel">
+                <div class="sixteen wide field ui centered grid">
+                    <div class="ui buttons">
+                        <button class="ui lc4eSubmit primary button">SignIn</button>
+                        <div class="or"></div>
+                        <button class="ui button lc4eReset">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui bottom attached warning message">
+            <i class="warning icon"></i>
+            <a>Lost password? </a> <a>Lost username?</a><a>Lost everyThing</a>
+        </div>
+    </div>
+</template>
+<style>
+
+</style>
+<script>
+    module.exports = {
+        name: 'SignIn',
+        data: function () {
+            return {
+                Captcha: false,
+                siteName: this.$root.$data.siteName
+            };
+        },
+        route: {
+            data: function (transition) {
+                this.$http.post('/SignIn').then(function (response) {
+                    transition.next(response.data.data);
+                })
+            }
+        },
+        ready: function () {
+            $.lc4e.signin.bindEvent();
+        }
+    }
+</script>

@@ -66,7 +66,7 @@
 	
 	Vue.config.debug = false;
 	Vue.config.silent = true;
-	router.start(__webpack_require__(60), '#app');
+	router.start(__webpack_require__(66), '#app');
 
 /***/ },
 /* 1 */
@@ -14908,6 +14908,10 @@
 	        name: 'thread',
 	        component: __webpack_require__(47)
 	    },
+	    "/SignIn": {
+	        name: 'signin',
+	        component: __webpack_require__(60)
+	    },
 	    '*': {
 	        component: __webpack_require__(34)
 	    }
@@ -15341,7 +15345,7 @@
 /* 59 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div id=\"topicMaster\" class=\"ui orange basic row one column segment\">\n    <div class=\"ui aligned center column\">\n        <div class=\"ui inverted statistic\">\n            <div class=\"topic title value\">\n                Topic Title\n            </div>\n        </div>\n    </div>\n    <div class=\"ui aligned center column\">\n        <div class=\"ui large inverted statistic\">\n            <div class=\"ui middle aligned selection list topic time\">\n                <div class=\"item\">\n                    <i class=\"send icon\"></i>\n\n                    <div class=\"content\">\n                        <div class=\"header\">Posted: 2015-12-12</div>\n                    </div>\n                </div>\n                <div class=\"item\">\n                    <i class=\"edit icon\"></i>\n\n                    <div class=\"content\">\n                        <div class=\"header\">Last Modified: 2015-12-12</div>\n                    </div>\n                </div>\n                <div class=\"item\">\n                    <i class=\"comment icon\"></i>\n\n                    <div class=\"content\">\n                        <div class=\"header\">Last Commented:2015-12-12</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div id=\"topic\" class=\"eleven wide column\">\n    <div id=\"mainArea\" class=\"ui grid\">\n        <div class=\"three wide user info column overlay\">\n\n            <div class=\"ui fluid card\">\n                <a class=\"ui blurring dimmable image\">\n                    <div class=\"ui dimmer\">\n                        <div class=\"content\">\n                            <div class=\"center\">\n                                <div class=\"ui user operate vertical buttons\">\n                                    <div class=\"ui inverted yellow button\">Star</div>\n                                    <div class=\"ui inverted green button\">Friend</div>\n                                    <div class=\"ui inverted red button\">Block</div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <img src=\"/themes/default/images/avatar/steve.jpg\">\n                </a>\n\n                <div class=\"content\">\n                    <a class=\"header\">Daniel Louise</a>\n                </div>\n            </div>\n\n        </div>\n\n        <div class=\"thirteen wide user content column\">\n\n            <div class=\"ui attached raised segments\">\n                <article class=\"ui fluid segment topic content\">\n                    <a href=\"http://www.apple.com\">Safari 5 released</a><br/>\n                    7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,\n                    Apple announced the release of Safari 5 for Windows and Mac......\n                </article>\n            </div>\n\n            <div class=\"ui bottom attached clearing message\">\n                <div class=\"ui left float labels\">\n                    <a class=\"ui tag label\">New</a>\n                    <a class=\"ui red tag label\">Upcoming</a>\n                    <a class=\"ui teal tag label\">Featured</a>\n                </div>\n                <div id=\"topicOperateButton\" class=\"ui right float icon top pointing dropdown button\">\n                    <i class=\"caret down icon\"></i>\n\n                    <div class=\"menu\">\n                        <div class=\"item\">move</div>\n                        <div class=\"item\">hide</div>\n                    </div>\n                </div>\n                <div class=\"ui right float buttons\">\n                    <div class=\"ui button\">\n                        <i class=\"folder icon\"></i>\n                        collect\n                    </div>\n                    <div class=\"ui red button\">\n                        <i class=\"hide icon\"></i>\n                        block\n                    </div>\n                    <div class=\"ui primary button\">\n                        <i class=\"reply icon\"></i>\n                        reply\n                    </div>\n                </div>\n\n            </div>\n        </div>\n    </div>\n    <div id=\"commentArea\" class=\"ui grid\">\n        <topic-detail :comments=\"comments\"></topic-detail>\n    </div>\n    <div id=\"replyArea\" class=\"ui grid\" v-if=\"isLogin\">\n        <div class=\"one wide column word\">\n            <label>Reply</label>\n        </div>\n        <div class=\"fifteen wide column ui form\">\n            <div id=\"userCommentTextArea\"></div>\n        </div>\n    </div>\n</div>\n";
+	module.exports = "\n<div id=\"topicMaster\" class=\"ui orange basic row one column segment\">\n    <div class=\"ui aligned center column\">\n        <div class=\"ui inverted statistic\">\n            <div class=\"topic title value\">\n                Topic Title\n            </div>\n        </div>\n    </div>\n    <div class=\"ui aligned center column\">\n        <div class=\"ui large inverted statistic\">\n            <div class=\"ui middle aligned selection list topic time\">\n                <div class=\"item\">\n                    <i class=\"send icon\"></i>\n\n                    <div class=\"content\">\n                        <div class=\"header\">Posted: 2015-12-12</div>\n                    </div>\n                </div>\n                <div class=\"item\">\n                    <i class=\"edit icon\"></i>\n\n                    <div class=\"content\">\n                        <div class=\"header\">Last Modified: 2015-12-12</div>\n                    </div>\n                </div>\n                <div class=\"item\">\n                    <i class=\"comment icon\"></i>\n\n                    <div class=\"content\">\n                        <div class=\"header\">Last Commented:2015-12-12</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div id=\"topic\" class=\"eleven wide column\">\n    <div id=\"mainArea\" class=\"ui grid\">\n        <div class=\"three wide user info column overlay\">\n\n            <div class=\"ui fluid card\">\n                <a class=\"ui blurring dimmable image\">\n                    <div class=\"ui dimmer\">\n                        <div class=\"content\">\n                            <div class=\"center\">\n                                <div class=\"ui user operate vertical buttons\">\n                                    <div class=\"ui inverted yellow button\">Star</div>\n                                    <div class=\"ui inverted green button\">Friend</div>\n                                    <div class=\"ui inverted red button\">Block</div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                    <img src=\"/themes/default/images/avatar/steve.jpg\">\n                </a>\n\n                <div class=\"content\">\n                    <a class=\"header\">Daniel Louise</a>\n                </div>\n            </div>\n\n        </div>\n\n        <div class=\"thirteen wide user content column\">\n\n            <div class=\"ui attached raised segments\">\n                <article class=\"ui fluid segment topic content\">\n                    <a href=\"http://www.apple.com\">Safari 5 released</a><br/>\n                    7 Jun 2010. Just after the announcement of the new iPhone 4 at WWDC,\n                    Apple announced the release of Safari 5 for Windows and Mac......\n                </article>\n            </div>\n\n            <div class=\"ui bottom attached clearing message\">\n                <div class=\"ui left float labels\">\n                    <a class=\"ui tag label\">New</a>\n                    <a class=\"ui red tag label\">Upcoming</a>\n                    <a class=\"ui teal tag label\">Featured</a>\n                </div>\n                <div id=\"topicOperateButton\" class=\"ui right float icon top pointing dropdown button\">\n                    <i class=\"caret down icon\"></i>\n\n                    <div class=\"menu\">\n                        <div class=\"item\">move</div>\n                        <div class=\"item\">hide</div>\n                    </div>\n                </div>\n                <div class=\"ui right float buttons\">\n                    <div class=\"ui button\">\n                        <i class=\"folder icon\"></i>\n                        collect\n                    </div>\n                    <div class=\"ui red button\">\n                        <i class=\"hide icon\"></i>\n                        block\n                    </div>\n                    <div class=\"ui basic button\">\n                        <i class=\"reply icon\"></i>\n                        reply\n                    </div>\n                </div>\n\n            </div>\n        </div>\n    </div>\n    <div id=\"commentArea\" class=\"ui grid\">\n        <topic-detail :comments=\"comments\"></topic-detail>\n    </div>\n    <div id=\"replyArea\" class=\"ui grid\" v-if=\"isLogin\">\n        <div class=\"one wide column word\">\n            <label>Reply</label>\n        </div>\n        <div class=\"fifteen wide column ui form\">\n            <div id=\"userCommentTextArea\"></div>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
 /* 60 */
@@ -15353,8 +15357,8 @@
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/app.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(76)
+	  console.warn("[vue-loader] src/views/signin.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(65)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -15364,7 +15368,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/Users/teddyzhu/Documents/JavaWork/code/lc4e/lc4e-web/src/main/webapp/WEB-INF/views/themes/default/src/app.vue"
+	  var id = "/Users/teddyzhu/Documents/JavaWork/code/lc4e/lc4e-web/src/main/webapp/WEB-INF/views/themes/default/src/views/signin.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15388,8 +15392,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./app.vue", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./app.vue");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signin.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signin.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -15407,7 +15411,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n[v-cloak] {\n    display: none;\n}\n", "", {"version":3,"sources":["/./src/app.vue?bb7b9216"],"names":[],"mappings":";AAEA;IACA,cAAA;CACA","file":"app.vue","sourcesContent":["<!--suppress ALL -->\n<style xmlns:v-on=\"http://www.w3.org/1999/xhtml\" xmlns:v-on=\"http://www.w3.org/1999/xhtml\">\n    [v-cloak] {\n        display: none;\n    }\n</style>\n<template>\n    <div id=\"menu\" class=\"ui menu\" v-bind:class=\"{ 'expended': menuExpened }\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" :src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\" v-bind:class=\"{ 'float': rightMenuFloat }\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"\n                                   v-on:focus=\"expend\" v-on:blur=\"collapse\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\" v-show=\"enable\">\n                            <img class=\"ui headered linked image\" :src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" href=\"/SignUp\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" href=\"/SignIn\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\" v-show=\"enable\" v-on:click=\"menuExpend\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}} {{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\"\n                           href=\"https://www.linode.com/?r=9a43d7ae15699c5363209820309d8d6c68509f78\">Linode</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</template>\n\n<script>\n    require('../../../../../themes/default/css/lc4e/jquery-extend.css');\n    require('./lc4e.js');\n    module.exports = {\n        name: 'app',\n        props: {\n            menuExpened: {\n                type: Boolean,\n                default: false\n            },\n            rightMenuFloat: {\n                type: Boolean,\n                default: false\n            },\n            expended: {\n                type: Boolean,\n                default: false\n            }\n        },\n        data: function () {\n            return preLoadData;\n        },\n        ready: function () {\n            $.lc4e.common.ready();\n        },\n        components: {\n            \"menu-tree\": require('./components/menu.vue')\n        },\n        methods: {\n            expend: function (e) {\n                this.expended = true;\n            },\n            collapse: function (e) {\n                this.expended = false;\n            },\n            menuExpend: function (e) {\n                var that = this;\n                that.menuExpened = !that.menuExpened;\n                if (that.menuExpened) {\n                    that.rightMenuFloat = true;\n                } else {\n                    $('#menu').one('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function () {\n                        that.rightMenuFloat = false;\n                    });\n                }\n            }\n        },\n        computed: {\n            enable: function () {\n                return this.menuExpened || !this.expended;\n            }\n        }\n\n    }\n</script>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"signin.vue","sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -15636,12 +15640,113 @@
 
 /***/ },
 /* 64 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = {
+	    name: 'SignIn',
+	    data: function data() {
+	        return {
+	            Captcha: false,
+	            siteName: this.$root.$data.siteName
+	        };
+	    },
+	    route: {
+	        data: function data(transition) {
+	            this.$http.post('/SignIn', {}).then(function (response) {
+	                transition.next(response.data.data);
+	            });
+	        }
+	    },
+	    ready: function ready() {
+	        $.lc4e.signin.bindEvent();
+	    }
+	};
+
+/***/ },
+/* 65 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"ui basic padding clearing segment flipInY animated\">\n    <h2 class=\"ui center aligned icon header\">\n        <i class=\"circular massive home icon\"></i>\n        Sign in {{siteName}},Welcome Back!\n    </h2>\n    <div id=\"signInForm\" class=\"ui form attached segment\" observe-on=\"blur\" data-url=\"/member/signin\"\n         data-loading=\"true\">\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">UserName</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.name\" class=\"fieldValue\" name=\"user.name\" type=\"text\"\n                           placeholder=\"your login name\" data-rules=\"[{type:'empty'},{type:'minLength[4]'}]\"/>\n                    <i class=\"user icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Password</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.password\" name=\"user.password\" class=\"fieldValue\" type=\"password\"\n                           placeholder=\"your password\" data-rules=\"[{type:'empty'},{type:'minLength[6]'}]\"/>\n                    <i class=\"eye icon link\"></i></div>\n            </div>\n        </div>\n        <div class=\"inline fields\" v-if=\"Captcha\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Verification Code</label>\n            </div>\n            <div class=\"six wide field\">\n                <div class=\"ui input\">\n                    <input id=\"captcha\" name=\"captcha\" class=\"fieldValue\" type=\"text\"\n                           data-rules=\"[{type:'empty'},{type:'exactLength[4]'}]\"/>\n                </div>\n            </div>\n            <div class=\"four wide field\">\n                <img id=\"captchaimg\" src=\"/captcha?rand={{new Date().getTime()}}\">\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Remember</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui toggle checkbox\">\n                    <input id=\"rememberMe\" name=\"rememberMe\" type=\"checkbox\" class=\"fieldValue\"\n                           data-rules=\"[{type:'empty'}]\">\n                    <label>One Month</label>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"inline fields operatepanel\">\n            <div class=\"sixteen wide field ui centered grid\">\n                <div class=\"ui buttons\">\n                    <button class=\"ui lc4eSubmit primary button\">SignIn</button>\n                    <div class=\"or\"></div>\n                    <button class=\"ui button lc4eReset\">Reset</button>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"ui bottom attached warning message\">\n        <i class=\"warning icon\"></i>\n        <a>Lost password? </a> <a>Lost username?</a><a>Lost everyThing</a>\n    </div>\n</div>\n";
+
+/***/ },
+/* 66 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(67)
+	__vue_script__ = __webpack_require__(69)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src/app.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(82)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/teddyzhu/Documents/JavaWork/code/lc4e/lc4e-web/src/main/webapp/WEB-INF/views/themes/default/src/app.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 67 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(68);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(63)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./app.vue", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./app.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(31)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n[v-cloak] {\n    display: none;\n}\n", "", {"version":3,"sources":["/./src/app.vue?029fabee"],"names":[],"mappings":";AAEA;IACA,cAAA;CACA","file":"app.vue","sourcesContent":["<!--suppress ALL -->\n<style xmlns:v-on=\"http://www.w3.org/1999/xhtml\" xmlns:v-on=\"http://www.w3.org/1999/xhtml\">\n    [v-cloak] {\n        display: none;\n    }\n</style>\n<template>\n    <div id=\"menu\" class=\"ui menu\" v-bind:class=\"{ 'expended': menuExpened }\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" :src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\" v-bind:class=\"{ 'float': rightMenuFloat }\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"\n                                   v-on:focus=\"expend\" v-on:blur=\"collapse\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\" v-show=\"enable\">\n                            <img class=\"ui headered linked image\" :src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" v-link=\"'/SignUp'\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" v-link=\"'/SignIn'\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\" v-show=\"enable\" v-on:click=\"menuExpend\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}} {{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\"\n                           href=\"https://www.linode.com/?r=9a43d7ae15699c5363209820309d8d6c68509f78\">Linode</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</template>\n\n<script>\n    require('../../../../../themes/default/css/lc4e/jquery-extend.css');\n    require('./lc4e.js');\n    module.exports = {\n        name: 'app',\n        props: {\n            menuExpened: {\n                type: Boolean,\n                default: false\n            },\n            rightMenuFloat: {\n                type: Boolean,\n                default: false\n            },\n            expended: {\n                type: Boolean,\n                default: false\n            }\n        },\n        data: function () {\n            return preLoadData;\n        },\n        ready: function () {\n            $.lc4e.common.ready();\n        },\n        components: {\n            \"menu-tree\": require('./components/menu.vue')\n        },\n        methods: {\n            expend: function (e) {\n                this.expended = true;\n            },\n            collapse: function (e) {\n                this.expended = false;\n            },\n            menuExpend: function (e) {\n                var that = this;\n                that.menuExpened = !that.menuExpened;\n                if (that.menuExpened) {\n                    that.rightMenuFloat = true;\n                } else {\n                    $('#menu').one('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function () {\n                        that.rightMenuFloat = false;\n                    });\n                }\n            }\n        },\n        computed: {\n            enable: function () {\n                return this.menuExpened || !this.expended;\n            }\n        }\n\n    }\n</script>"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(65);
-	__webpack_require__(67);
+	__webpack_require__(70);
+	__webpack_require__(72);
 	module.exports = {
 	    name: 'app',
 	    props: {
@@ -15665,7 +15770,7 @@
 	        $.lc4e.common.ready();
 	    },
 	    components: {
-	        "menu-tree": __webpack_require__(73)
+	        "menu-tree": __webpack_require__(79)
 	    },
 	    methods: {
 	        expend: function expend(e) {
@@ -15695,24 +15800,25 @@
 	};
 
 /***/ },
-/* 65 */
+/* 70 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 66 */,
-/* 67 */
+/* 71 */,
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(68);
-	__webpack_require__(69);
-	__webpack_require__(70);
-	__webpack_require__(71);
-	__webpack_require__(72);
+	__webpack_require__(73);
+	__webpack_require__(74);
+	__webpack_require__(75);
+	__webpack_require__(76);
+	__webpack_require__(77);
+	__webpack_require__(78);
 
 /***/ },
-/* 68 */
+/* 73 */
 /***/ function(module, exports) {
 
 	/*!
@@ -19089,7 +19195,7 @@
 	});
 
 /***/ },
-/* 69 */
+/* 74 */
 /***/ function(module, exports) {
 
 	/**
@@ -19153,7 +19259,55 @@
 	});
 
 /***/ },
-/* 70 */
+/* 75 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by teddy on 2015/8/30.
+	 */
+	$(function () {
+	    $.lc4e.signin = {
+	        ready: function () {
+	            $.lc4e.signin.run();
+	            $.lc4e.signin.bindEvent();
+	        },
+	        run: function () {},
+	        bindEvent: function () {
+	            var $captchaimg = $('#captchaimg');
+	            $captchaimg.on('click', function () {
+	                if (!$captchaimg.transition('is animating')) {
+	                    $captchaimg.transition({
+	                        animation: 'vertical flip out',
+	                        onComplete: function () {
+	                            $captchaimg.attr('src', '/captcha?rand=' + new Date().getTime()).transition({
+	                                animation: 'vertical flip in',
+	                                displayType: false
+	                            });
+	                        },
+	                        duration: '500ms',
+	                        displayType: false
+	                    });
+	                }
+	            });
+	            $('#signInForm').Lc4eForm();
+	
+	            $('#user\\.password,#user\\.repassword').next('.eye.icon').on({
+	                mousedown: function () {
+	                    $(this).prev('input').attr('type', 'text');
+	                },
+	                mouseup: function () {
+	                    $(this).prev('input').attr('type', 'password');
+	                }
+	            });
+	
+	            $('.ui.icon.header > .icon').Lc4eHover('scaleSpin');
+	        }
+	    };
+	    $.lc4e.signin.ready();
+	});
+
+/***/ },
+/* 76 */
 /***/ function(module, exports) {
 
 	/**
@@ -19189,7 +19343,7 @@
 	});
 
 /***/ },
-/* 71 */
+/* 77 */
 /***/ function(module, exports) {
 
 	/**
@@ -19231,7 +19385,7 @@
 	});
 
 /***/ },
-/* 72 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -23889,16 +24043,16 @@
 	});
 
 /***/ },
-/* 73 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(74)
+	__vue_script__ = __webpack_require__(80)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/components/menu.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(75)
+	__vue_template__ = __webpack_require__(81)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -23917,7 +24071,7 @@
 	})()}
 
 /***/ },
-/* 74 */
+/* 80 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23932,16 +24086,16 @@
 	};
 
 /***/ },
-/* 75 */
+/* 81 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<template v-for=\"menu in menus\">\n    <div class=\"ui dropdown link item\" v-if=\"menu.CHILDS.length > 0\">\n        <i v-if=\"menu.ICON\" v-bind:class=\"[menu.ICON,'icon']\"></i>\n        <span class=\"text\">{{menu.NAME}}</span><i class=\"dropdown icon\"></i>\n\n        <div class=\"menu\">\n            <menu-tree :menus=\"menu.CHILDS\"></menu-tree>\n        </div>\n    </div>\n    <a class=\"item linked\" title=\"{{menu.NAME}}\" v-link=\"menu.ABBR\" v-else>\n        <i v-bind:class=\"[menu.ICON,'icon']\" v-if=\"menu.ICON\"></i>\n        {{menu.NAME}}\n    </a>\n</template>\n";
 
 /***/ },
-/* 76 */
+/* 82 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div id=\"menu\" class=\"ui menu\" v-bind:class=\"{ 'expended': menuExpened }\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" :src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\" v-bind:class=\"{ 'float': rightMenuFloat }\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"\n                                   v-on:focus=\"expend\" v-on:blur=\"collapse\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\" v-show=\"enable\">\n                            <img class=\"ui headered linked image\" :src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" href=\"/SignUp\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" href=\"/SignIn\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\" v-show=\"enable\" v-on:click=\"menuExpend\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}} {{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\"\n                           href=\"https://www.linode.com/?r=9a43d7ae15699c5363209820309d8d6c68509f78\">Linode</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n";
+	module.exports = "\n    <div id=\"menu\" class=\"ui menu\" v-bind:class=\"{ 'expended': menuExpened }\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" :src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\" v-bind:class=\"{ 'float': rightMenuFloat }\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"\n                                   v-on:focus=\"expend\" v-on:blur=\"collapse\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\" v-show=\"enable\">\n                            <img class=\"ui headered linked image\" :src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" v-link=\"'/SignUp'\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" v-link=\"'/SignIn'\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\" v-show=\"enable\" v-on:click=\"menuExpend\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}} {{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\"\n                           href=\"https://www.linode.com/?r=9a43d7ae15699c5363209820309d8d6c68509f78\">Linode</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n";
 
 /***/ }
 /******/ ]);

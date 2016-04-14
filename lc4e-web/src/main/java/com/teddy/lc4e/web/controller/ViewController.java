@@ -7,6 +7,7 @@ import com.teddy.jfinal.entity.Method;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.tools.RelativeDate;
 import com.teddy.lc4e.config.Key;
+import com.teddy.lc4e.database.model.SysCommonVariable;
 import com.teddy.lc4e.entity.Article;
 import com.teddy.lc4e.entity.Data;
 import com.teddy.lc4e.entity.Message;
@@ -78,9 +79,12 @@ public class ViewController extends BaseController {
     }
 
     @RequiresGuest
-    @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
     public void SignIn() {
-        render("pages/signin.html");
+        if (isPOST()) {
+            renderJson(new Message(true, new Data(Key.CAPTCHA, ComVarService.service.getComVarByName(Key.CAPTCHA).getToBoolean(SysCommonVariable.VALUE))));
+        } else {
+            render("index.html");
+        }
     }
 
     @RequiresGuest

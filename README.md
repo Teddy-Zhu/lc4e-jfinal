@@ -1,4 +1,4 @@
-[Light Forum](http://www.lc4e.com)
+[Light Forum](http://www.eicoding.com)
 ==========
 
 ----------
@@ -21,10 +21,8 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 > 时间关系,新UI放弃,暂时继续混用jquery ,vuejs,semantic ui
 
 
-# [Demo](http://www.lc4e.com) #
+# [Demo](http://www.eicoding.com) #
 ----------
-
-> <del>View [http://lc4e.coding.io/InitDB](http://lc4e.coding.io/InitDB) to initial database 
 
 # 论坛相关 #
 ----------

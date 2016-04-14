@@ -76,13 +76,13 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div class="ui item animated fade button" href="/SignUp" v-show="enable">
+                        <div class="ui item animated fade button" v-link="'/SignUp'" v-show="enable">
                             <div class="visible content">Sign Up</div>
                             <div class="hidden content">
                                 <i class="add user icon"></i>
                             </div>
                         </div>
-                        <div class="ui item animated button" href="/SignIn" v-show="enable">
+                        <div class="ui item animated button" v-link="'/SignIn'" v-show="enable">
                             <div class="visible content">Sign In</div>
                             <div class="hidden content">
                                 <i class="user icon"></i>

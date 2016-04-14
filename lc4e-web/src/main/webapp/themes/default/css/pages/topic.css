@@ -117,3 +117,8 @@
 #topicMaster {
     padding-bottom: 0;
 }
+
+#topicOperateButton {
+    padding: .48571429em;
+    margin-left: 0.1em;
+}
