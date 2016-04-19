@@ -1,15 +1,13 @@
 package com.teddy.lc4e.web.controller;
 
-import com.jfinal.kit.JsonKit;
 import com.jfinal.kit.StrKit;
 import com.teddy.jfinal.annotation.*;
-import com.teddy.jfinal.entity.Method;
+import com.teddy.jfinal.entity.ReturnData;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.tools.RelativeDate;
 import com.teddy.lc4e.config.Key;
 import com.teddy.lc4e.database.model.SysCommonVariable;
 import com.teddy.lc4e.entity.Article;
-import com.teddy.lc4e.entity.Data;
 import com.teddy.lc4e.entity.Message;
 import com.teddy.lc4e.entity.Popup;
 import com.teddy.lc4e.web.service.ComVarService;
@@ -48,7 +46,7 @@ public class ViewController extends BaseController {
     })
     public void a() {
         if (isPOST()) {
-            renderJson(new Message(true, new Data("curArea", getPara(0)), new Data("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)))));
+            renderJson(new Message(true, new ReturnData("curArea", getPara(0)), new ReturnData("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)))));
         } else {
             setAttr("curArea", getPara(0)).setAttr("topics", getArticle(getParaToInt(2), getParaToInt(1), getPara(0)));
             render("index.html");
@@ -80,20 +78,24 @@ public class ViewController extends BaseController {
 
     @RequiresGuest
     public void SignIn() {
+        ReturnData data = new ReturnData(Key.CAPTCHA, ComVarService.service.getComVarByName(Key.CAPTCHA).getToBoolean(SysCommonVariable.VALUE));
         if (isPOST()) {
-            renderJson(new Message(true, new Data(Key.CAPTCHA, ComVarService.service.getComVarByName(Key.CAPTCHA).getToBoolean(SysCommonVariable.VALUE))));
+            renderJson(new Message(true, data));
         } else {
             render("index.html");
         }
     }
 
     @RequiresGuest
-    @SetComVars(value = {
-            @SetComVar(value = Key.SIMPLE_REGISTER, type = Boolean.class),
-            @SetComVar(value = Key.CAPTCHA, type = Boolean.class)
-    })
     public void SignUp() {
-        render("pages/signup.html");
+        ReturnData[] datas ={
+              new ReturnData(Key.CAPTCHA, ComVarService.service.getComVarByName(Key.CAPTCHA).getToBoolean(SysCommonVariable.VALUE)),
+              new ReturnData(Key.SIMPLE_REGISTER, ComVarService.service.getComVarByName(Key.SIMPLE_REGISTER).getToBoolean(SysCommonVariable.VALUE))};
+        if (isPOST()) {
+            renderJson(new Message(true, datas));
+        } else {
+            render("index.html");
+        }
     }
 
     //test

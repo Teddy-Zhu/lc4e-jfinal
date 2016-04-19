@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-on="http://www.w3.org/1999/xhtml">
     <div id="leftContent" class="nine wide column">
         <div id="announcement" class="ui white floating message">
             <div class="item">
@@ -56,11 +56,13 @@
             </div>
         </div>
         <div id="articlebottons" class="ui bottom attached floating message">
-            <div id="prePage" v-waves class="ui left floated basic labeled icon button">
+            <div id="prePage" v-waves
+                 class="ui left floated basic labeled icon button" v-show="page>0"
+                 v-on:click="prevPage">
                 <i class="angle double left icon"></i>
-                Prev
+                Prevs
             </div>
-            <div id="nextPage" v-waves class="ui right floated basic right labeled icon button">
+            <div id="nextPage" v-waves class="ui right floated basic right labeled icon button" v-on:click="nextPage">
                 <i class="angle double right icon"></i>
                 Next
             </div>
@@ -102,20 +104,55 @@
         },
         route: {
             data: function (transition) {
-                //this.topicsList = this.$root.$data.topics;
                 var that = this;
-                this.$http.post('/a/all' + "-" + that.sort + "-" + that.page).then(function (response) {
+                that.topics = [];
+                that.$http.post('/a/all' + "-" + that.sort + "-" + that.page).then(function (response) {
                     transition.next(response.data.data);
-                    that.$nextTick(function () {
-                        $.lc4e.index.bindEvent();
-                    });
                 })
             }
         },
+        ready: function () {
+            var that = this, announce = $('#announce'), sortTopic = $('#sortTopic');
+            announce.shape();
+
+            function shapTime() {
+                announce.shape('flip down');
+                setTimeout(shapTime, 10000);
+            };
+            shapTime();
+
+            sortTopic.dropdown().dropdown('set selected', that.sort ? that.sort : sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
+
+            $('#topicItems').find('.topicSetting').dropdown();
+        },
+        watch: {
+            page: function (val, oldVal) {
+                if (val != oldVal && val > 0) {
+                    var that = this;
+                    $.Lc4eLoading({
+                        title: "loading articles"
+                    });
+                    that.topics = [];
+                    that.$http.post('/a/all' + "-" + that.sort + "-" + that.page).then(function (response) {
+                        that.topics = response.data.data["topics"];
+                    });
+                    $('body').animate({scrollTop: 0}, 500);
+                    that.$nextTick(function () {
+                        $.Lc4eLoading('hide');
+                    });
+                }
+            }
+        },
         methods: {
-            loadJquery: function () {
-                'use strict';
-                console.log(this.user);
+            asas: function () {
+
+            },
+            nextPage: function () {
+                console.log(this.page);
+                this.page = this.page + 1;
+            },
+            prevPage: function () {
+                this.page = this.page - 1;
             }
         }
     }

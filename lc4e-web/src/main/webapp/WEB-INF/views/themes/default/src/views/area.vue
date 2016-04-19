@@ -1,10 +1,10 @@
-<template>
+<template xmlns:v-on="http://www.w3.org/1999/xhtml">
     <div class="ui teal  basic row column segment">
         <div class="ui large inverted statistic">
             <div class="value">
                 <i class="info circle icon"></i> <br/>
 
-                <div id="areaName" class="value" v-html="curArea"></div>
+                <div id="areaName" class="value" v-html="curArea" v-on:mouseover.stop="spin"></div>
             </div>
             <div id="areaDescription" class="label">
                 Fill out the form below to sign-up for a new account
@@ -85,11 +85,12 @@
             <topic-list :topics="topics" :page="page"></topic-list>
         </div>
         <div id="articlebottons" class="ui bottom clearing floating attached message">
-            <div id="prePage" v-waves class="ui left floated basic labeled icon button">
+            <div id="prePage" v-waves class="ui left floated basic labeled icon button" v-show="page>0"
+                 v-on:click="prevPage">
                 <i class="angle double left icon"></i>
                 Prev
             </div>
-            <div id="nextPage" v-waves class="ui right floated basic right labeled icon button">
+            <div id="nextPage" v-waves class="ui right floated basic right labeled icon button" v-on:click="nextPage">
                 <i class="angle double right icon"></i>
                 Next
             </div>
@@ -116,16 +117,51 @@
         route: {
             data: function (transition) {
                 var that = this;
-                this.$http.post('/a/' + this.$route.params.area + "-" + that.sort + "-" + that.page).then(function (response) {
+                that.topics = [];
+                that.$http.post('/a/' + that.$route.params.area + "-" + that.sort + "-" + that.page).then(function (response) {
                     transition.next(response.data.data);
-                    that.$nextTick(function () {
-                        $.lc4e.index.bindEvent();
-                    });
                 })
+            }
+        },
+        ready: function () {
+            var that = this;
+            var $topicItems = $('#topicItems'), $sortTopic = $('#sortTopic');
+            $topicItems.find('.topicSetting').dropdown();
+            $sortTopic.dropdown().dropdown('set selected', that.sort ? that.sort : $sortTopic.find('.scrolling.menu>.item:first').attr('data-value'))
+        },
+        watch: {
+            page: function (val, oldVal) {
+                if (val != oldVal && val > 0) {
+                    var that = this;
+                    $.Lc4eLoading({
+                        title: "loading articles"
+                    });
+                    that.$router.go("/a/" + that.$route.params.area + "-" + that.sort + "-" + that.page);
+                    $('body').animate({scrollTop: 0}, 500);
+                    that.$nextTick(function () {
+                        $.Lc4eLoading('hide');
+                    });
+                }
             }
         },
         components: {
             "topic-list": require('../components/topicList.vue')
+        },
+        methods: {
+            spin: function (e) {
+                var $areaName = $(e.target);
+                if (!$areaName.hasClass("animated")) {
+                    $areaName.addClass('animated flip').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                        $areaName.removeClass('animated flip');
+                    })
+                }
+            },
+            nextPage: function () {
+                this.page = this.page + 1;
+            },
+            prevPage: function () {
+                this.page = this.page - 1;
+            }
         }
     }
 </script>

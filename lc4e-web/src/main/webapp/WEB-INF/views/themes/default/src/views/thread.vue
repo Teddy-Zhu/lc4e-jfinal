@@ -120,7 +120,6 @@
 
 <script>
     require('../../../../../../themes/default/css/pages/topic.css');
-    require('../../../../../../themes/default/js/plugins/editor.md/css/editormd.min.css');
     module.exports = {
         name: 'thread',
         data: function () {
@@ -191,6 +190,9 @@
         },
         components: {
             "topic-detail": require('../components/topicDetail.vue')
+        },
+        ready: function () {
+
         }
     }
 </script>

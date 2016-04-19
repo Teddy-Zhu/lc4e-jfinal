@@ -1,5 +1,7 @@
 package com.teddy.lc4e.entity;
 
+import com.teddy.jfinal.entity.ReturnData;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,21 +22,21 @@ public class Message implements Serializable {
         this.data = data;
     }
 
-    public Message(boolean result, String message, Data... data) {
+    public Message(boolean result, String message, ReturnData... data) {
         this.result = result;
         this.message = message;
         this.data = ConvertToMap(data);
     }
 
-    public Message(boolean result, Data... data) {
+    public Message(boolean result, ReturnData... data) {
         this.result = result;
         this.message = "";
         this.data = ConvertToMap(data);
     }
 
-    private Map<String, Object> ConvertToMap(Data... data) {
+    private Map<String, Object> ConvertToMap(ReturnData... data) {
         Map<String, Object> maps = new HashMap<String, Object>();
-        for (Data d : data) {
+        for (ReturnData d : data) {
             maps.put(d.getName(), d.getData());
         }
         return maps;

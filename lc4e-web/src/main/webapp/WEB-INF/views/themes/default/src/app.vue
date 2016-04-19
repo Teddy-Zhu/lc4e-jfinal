@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <style xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
     [v-cloak] {
         display: none;
@@ -160,7 +159,7 @@
 
 <script>
     require('../../../../../themes/default/css/lc4e/jquery-extend.css');
-    require('./lc4e.js');
+    require('../../../../../themes/default/js/lc4e/jquery-extend.js');
     module.exports = {
         name: 'app',
         props: {

@@ -1,17 +1,17 @@
-package com.teddy.lc4e.entity;
+package com.teddy.jfinal.entity;
 
 /**
  * Created by teddy on 2015/6/18.
  */
-public class Data {
+public class ReturnData {
 
     private String name;
     private Object Data;
 
-    public Data() {
+    public ReturnData() {
     }
 
-    public Data(String name, Object data) {
+    public ReturnData(String name, Object data) {
         this.name = name;
         Data = data;
     }

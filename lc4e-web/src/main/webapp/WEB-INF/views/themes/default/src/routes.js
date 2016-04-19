@@ -21,6 +21,10 @@ module.exports = {
         name: 'signin',
         component: require('./views/signin.vue')
     },
+    "/SignUp": {
+        name: 'signup',
+        component: require('./views/signup.vue')
+    },
     '*': {
         component: require('./views/index.vue')
     }

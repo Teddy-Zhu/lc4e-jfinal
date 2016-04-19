@@ -5,7 +5,6 @@
  * http://www.lc4e.com/ | Released under MIT license
  * 
  * Include jquery (http://jquery.com/) semantic-ui (http://semantic-ui.com/)
- * animatescroll(http://plugins.compzets.com/animatescroll/)
  * datetimepicker (http://xdsoft.net/jqplugins/datetimepicker/)
  * jQuery Cookie Plugin (https://github.com/carhartl/jquery-cookie)
  */
@@ -71,13 +70,6 @@ $.extend($.lc4e, {
         p: function (s) {
             return s < 10 ? '0' + s : s;
         }
-    },
-    Lc4ePJAX: {
-        support: function () {
-            return window.history && window.history.pushState && window.history.replaceState && !navigator.userAgent.match(/(iPod|iPhone|iPad|WebApps\/.+CFNetwork)/) && window.localStorage
-        },
-        active: false,
-        successFunc: {}
     },
     HighlightedDate: function (date, desc, style) {
         return {
@@ -378,9 +370,6 @@ function shouldAdjustOldDeltas(orgEvent, absDelta) {
     return special.settings.adjustOldDeltas && orgEvent.type === 'mousewheel' && absDelta % 120 === 0;
 }
 
-/* animate scroll */
-/* defines various easing effects*/
-$.easing['jswing'] = $.easing['swing'];
 $.extend($.easing, {
     def: 'easeOutQuad',
     swing: function (x, t, b, c, d) {
@@ -555,37 +544,6 @@ $.extend($.easing, {
         return $.easing.easeOutBounce(x, t * 2 - d, 0, c, d) * .5 + c * .5 + b;
     }
 });
-
-$.fn.animatescroll = function (options) {
-
-    var opts = $.extend({}, $.fn.animatescroll.defaults, options);
-    if (typeof opts.onScrollStart == 'function') {
-        opts.onScrollStart.call(this);
-    }
-
-    if (opts.element == "html,body") {
-        var offset = this.offset().top;
-        $(opts.element).stop().animate({
-            scrollTop: offset - opts.padding
-        }, opts.scrollSpeed, opts.easing);
-    } else {
-        $(opts.element).stop().animate({
-            scrollTop: this.offset().top - this.parent().offset().top + this.parent().scrollTop() - opts.padding
-        }, opts.scrollSpeed, opts.easing);
-    }
-
-    setTimeout(function () {
-        if (typeof opts.onScrollEnd == 'function') {
-            opts.onScrollEnd.call(this);
-        }
-    }, opts.scrollSpeed);
-};
-$.fn.animatescroll.defaults = {
-    easing: "swing",
-    scrollSpeed: 800,
-    padding: 0,
-    element: "html,body"
-};
 
 /*rewrite for semantic ui 2.0+ in 2015/08/16*/
 /*author:zhuxi*/
@@ -1037,8 +995,7 @@ $.fn.Lc4eStars = function (parameters) {
                 }
             },
             destroy: function () {
-                $context.removeClass('fullStars').
-                removeData(namespace);
+                $context.removeClass('fullStars').removeData(namespace);
                 $lc4eStar && $lc4eStar.remove();
             }
         };
@@ -2646,8 +2603,7 @@ $.fn.Lc4eDateTimePicker = function (opt) {
                             event.stopPropagation();
                         }
                     )
-                    .
-                    on('toggle.' + namespace, function (event) {
+                    .on('toggle.' + namespace, function (event) {
                         if ($datetimepicker.is(':visible')) {
                             $datetimepicker.trigger('close.' + namespace);
                         } else {
@@ -3618,8 +3574,7 @@ $.extend({
             data.showLoad && $.Lc4eLoading('hide');
         };
         return $.ajax(data);
-    }
-    ,
+    },
     Lc4eResolveMessage: function (returnVal, success, error) {
         if (returnVal) {
             $.Lc4eModal({
@@ -3764,7 +3719,7 @@ $.extend($.lc4e, {
 
             $('#gtop').on('click', function () {
                 $.requestAnimationFrame(function () {
-                    $('html').animatescroll({scrollSpeed: 2000, easing: 'easeOutBounce'})
+                    $('body').animate({scrollTop: 0}, 2000, 'easeOutBounce');
                 });
             });
 
