@@ -118,7 +118,7 @@
             data: function (transition) {
                 var that = this;
                 that.topics = [];
-                that.$http.post('/a/' + that.$route.params.area + "-" + that.sort + "-" + that.page).then(function (response) {
+                that.$http.post('/a/' + that.area + "-" + that.sort + "-" + that.page).then(function (response) {
                     transition.next(response.data.data);
                 })
             }
@@ -136,7 +136,7 @@
                     $.Lc4eLoading({
                         title: "loading articles"
                     });
-                    that.$router.go("/a/" + that.$route.params.area + "-" + that.sort + "-" + that.page);
+                    that.$router.go("/a/" + that.area + "-" + that.sort + "-" + that.page);
                     $('body').animate({scrollTop: 0}, 500);
                     that.$nextTick(function () {
                         $.Lc4eLoading('hide');
@@ -161,6 +161,11 @@
             },
             prevPage: function () {
                 this.page = this.page - 1;
+            }
+        },
+        computed :{
+            area :function () {
+                return  this.$route.params.area.split('-')[0];
             }
         }
     }

@@ -136,8 +136,9 @@
                     that.$http.post('/a/all' + "-" + that.sort + "-" + that.page).then(function (response) {
                         that.topics = response.data.data["topics"];
                     });
-                    $('body').animate({scrollTop: 0}, 500);
+
                     that.$nextTick(function () {
+
                         $.Lc4eLoading('hide');
                     });
                 }

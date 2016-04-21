@@ -180,7 +180,15 @@
                 }];
                 this.comments = comments;
                 this.$nextTick(function () {
-                    $.lc4e.topic.bindEvent();
+                    var $topicArea = $('#topic');
+                    $topicArea.find('.ui.card .image').dimmer({
+                        on: 'hover'
+                    });
+                    $('#mainArea').find('.overlay').visibility({
+                        type: 'fixed',
+                        offset: 80
+                    });
+                    $('#topicOperateButton').dropdown();
                 });
 //                this.$http.post('/t/' + this.$route.params.thread + "-" + this.sort + "-" + this.page).then(function (response) {
 //                    console.log(response.data.data);
