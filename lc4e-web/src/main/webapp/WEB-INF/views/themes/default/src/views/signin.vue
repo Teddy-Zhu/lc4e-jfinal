@@ -1,4 +1,4 @@
-<template xmlns:v-on="http://www.w3.org/1999/xhtml">
+<template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-form="http://www.w3.org/1999/xhtml">
     <div class="ui basic padding clearing segment flipInY animated">
         <h2 class="ui center aligned icon header">
             <i class="circular massive home icon animated allAnimation" :class="{  'scaleSpin': iconSpin }"
@@ -74,18 +74,26 @@
         </div>
     </div>
 </template>
-<style>
-
-</style>
 <script>
     module.exports = {
         name: 'SignIn',
+        props: {
+            iconSpin: {
+                type: Boolean,
+                default: false
+            },
+            passwordInputType: {
+                type: String,
+                default: 'password'
+            },
+            Captcha: {
+                type: Boolean,
+                default: false
+            }
+        },
         data: function () {
             return {
-                Captcha: false,
-                siteName: this.$root.$data.siteName,
-                passwordInputType: 'password',
-                iconSpin: false
+                siteName: this.$root.$data.siteName
             };
         },
         route: {
@@ -93,6 +101,13 @@
                 this.$http.post('/SignIn').then(function (response) {
                     transition.next(response.data.data);
                 })
+            }
+        },
+        watch: {
+            Captcha: function (val, oldVal) {
+                if (val) {
+                    $('#signInForm').Lc4eForm();
+                }
             }
         },
         computed: {
@@ -134,7 +149,7 @@
 
         ready: function () {
 
-            $('#signInForm').Lc4eForm();
+
         }
     }
 </script>

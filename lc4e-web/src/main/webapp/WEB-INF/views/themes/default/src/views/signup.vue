@@ -146,6 +146,7 @@
                     </div>
                 </div>
             </div>
+            <div class="ui error message"></div>
         </div>
         <div class="ui bottom attached positive message">
             <i class="warning icon"></i>
@@ -160,16 +161,48 @@
 <script>
     module.exports = {
         name: 'SignUp',
+        props: {
+            iconSpin: {
+                type: Boolean,
+                default: false
+            },
+            extendDesPanel: {
+                type: Boolean,
+                default: false
+            },
+            Captcha: {
+                type: Boolean,
+                default: false
+            },
+            SimpleRegister: {
+                type: Boolean,
+                default: true
+            },
+            passwordInputType: {
+                type: String,
+                default: 'password'
+            }
+        },
         data: function () {
             return {
                 isLogin: this.$root.$data.isLogin,
-                Captcha: false,
-                SimpleRegister: true,
-                siteName: this.$root.$data.siteName,
-                passwordInputType: 'password',
-                iconSpin: false,
-                extendDesPanel: false
+                siteName: this.$root.$data.siteName
             };
+        },
+        watch: {
+            SimpleRegister: function (val, oldVal) {
+                if (val) {
+                    $('#signUpForm').Lc4eForm({
+                        success: function () {
+                            window.location.href = "/";
+                        },
+                        error: function () {
+                        },
+                        complete: function () {
+                        }
+                    });
+                }
+            }
         },
         computed: {
             timeLine: function () {
@@ -219,15 +252,6 @@
             }
         },
         ready: function () {
-            $('#signUpForm').Lc4eForm({
-                success: function () {
-                    window.location.href = "/";
-                },
-                error: function () {
-                },
-                complete: function () {
-                }
-            });
 
             $('#extend\\.birth').Lc4eDateTimePicker({
                 dayOfWeekStart: 1,

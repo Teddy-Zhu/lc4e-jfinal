@@ -53,6 +53,7 @@
 	    VueRouter: __webpack_require__(3),
 	    VueResource: __webpack_require__(4),
 	    VueWaves: __webpack_require__(28)
+	    // VueValidate: require('./semantic/form.js')
 	};
 	for (var index in Vueplugins) {
 	    Vue.use(Vueplugins[index]);
@@ -66,7 +67,7 @@
 	
 	Vue.config.debug = false;
 	Vue.config.silent = true;
-	router.start(__webpack_require__(66), '#app');
+	router.start(__webpack_require__(64), '#app');
 
 /***/ },
 /* 1 */
@@ -14972,7 +14973,7 @@
 	    },
 	    "/SignUp": {
 	        name: 'signup',
-	        component: __webpack_require__(61)
+	        component: __webpack_require__(58)
 	    },
 	    '*': {
 	        component: __webpack_require__(34)
@@ -15489,13 +15490,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(56)
-	__vue_script__ = __webpack_require__(59)
+	__vue_script__ = __webpack_require__(56)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/views/signin.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(60)
+	__vue_template__ = __webpack_require__(57)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -15515,22 +15515,137 @@
 
 /***/ },
 /* 56 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = {
+	    name: 'SignIn',
+	    props: {
+	        iconSpin: {
+	            type: Boolean,
+	            default: false
+	        },
+	        passwordInputType: {
+	            type: String,
+	            default: 'password'
+	        },
+	        Captcha: {
+	            type: Boolean,
+	            default: false
+	        }
+	    },
+	    data: function data() {
+	        return {
+	            siteName: this.$root.$data.siteName
+	        };
+	    },
+	    route: {
+	        data: function data(transition) {
+	            this.$http.post('/SignIn').then(function (response) {
+	                transition.next(response.data.data);
+	            });
+	        }
+	    },
+	    watch: {
+	        Captcha: function Captcha(val, oldVal) {
+	            if (val) {
+	                $('#signInForm').Lc4eForm();
+	            }
+	        }
+	    },
+	    computed: {
+	        timeLine: function timeLine() {
+	            return new Date().getTime();
+	        }
+	    },
+	    methods: {
+	        changeImg: function changeImg(e) {
+	            var $captchaimg = $(e.target);
+	            if (!$captchaimg.transition('is animating')) {
+	                $captchaimg.transition({
+	                    animation: 'vertical flip out',
+	                    onComplete: function onComplete() {
+	                        $captchaimg.attr('src', '/captcha?rand=' + new Date().getTime()).transition({
+	                            animation: 'vertical flip in',
+	                            displayType: false
+	                        });
+	                    },
+	                    duration: '500ms',
+	                    displayType: false
+	                });
+	            }
+	        },
+	        changeVisible: function changeVisible(e) {
+	            this.passwordInputType = 'text';
+	        },
+	        changeInvisible: function changeInvisible(e) {
+	            this.passwordInputType = 'password';
+	        },
+	        addScalaSpin: function addScalaSpin(e) {
+	            this.iconSpin = true;
+	        },
+	        removeScalaSpin: function removeScalaSpin(e) {
+	            this.iconSpin = false;
+	        }
+	    },
+	
+	    ready: function ready() {}
+	};
+
+/***/ },
+/* 57 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"ui basic padding clearing segment flipInY animated\">\n    <h2 class=\"ui center aligned icon header\">\n        <i class=\"circular massive home icon animated allAnimation\" :class=\"{  'scaleSpin': iconSpin }\"\n           v-on:mouseenter=\"addScalaSpin\" v-on:mouseout=\"removeScalaSpin\"></i>\n        Sign in {{siteName}},Welcome Back!\n    </h2>\n    <div id=\"signInForm\" class=\"ui form attached segment\" observe-on=\"blur\" data-url=\"/member/signin\"\n         data-loading=\"true\">\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">UserName</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.name\" class=\"fieldValue\" name=\"user.name\" type=\"text\"\n                           placeholder=\"your login name\" data-rules=\"[{type:'empty'},{type:'minLength[4]'}]\"/>\n                    <i class=\"user icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Password</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.password\" name=\"user.password\" class=\"fieldValue\" :type=\"passwordInputType\"\n                           placeholder=\"your password\" data-rules=\"[{type:'empty'},{type:'minLength[6]'}]\"/>\n                    <i class=\"eye icon link\" v-on:mousedown=\"changeVisible\" v-on:mouseup=\"changeInvisible\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\" v-if=\"Captcha\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Verification Code</label>\n            </div>\n            <div class=\"six wide field\">\n                <div class=\"ui input\">\n                    <input id=\"captcha\" name=\"captcha\" class=\"fieldValue\" type=\"text\"\n                           data-rules=\"[{type:'empty'},{type:'exactLength[4]'}]\"/>\n                </div>\n            </div>\n            <div class=\"four wide field\">\n                <img id=\"captchaimg\" :src=\"'/captcha?rand=timeLine' + timeLine\" v-on:click=\"changeImg\">\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Remember</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui toggle checkbox\">\n                    <input id=\"rememberMe\" name=\"rememberMe\" type=\"checkbox\" class=\"fieldValue\"\n                           data-rules=\"[{type:'empty'}]\">\n                    <label>One Month</label>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"inline fields operatepanel\">\n            <div class=\"sixteen wide field ui centered grid\">\n                <div class=\"ui buttons\">\n                    <button class=\"ui lc4eSubmit primary button\">SignIn</button>\n                    <div class=\"or\"></div>\n                    <button class=\"ui button lc4eReset\">Reset</button>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"ui bottom attached warning message\">\n        <i class=\"warning icon\"></i>\n        <a>Lost password? </a> <a>Lost username?</a><a>Lost everyThing</a>\n    </div>\n</div>\n";
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(59)
+	__vue_script__ = __webpack_require__(62)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src/views/signup.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(63)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/teddyzhu/Documents/JavaWork/code/lc4e/lc4e-web/src/main/webapp/WEB-INF/views/themes/default/src/views/signup.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(57);
+	var content = __webpack_require__(60);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(58)(content, {});
+	var update = __webpack_require__(61)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signin.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signin.vue");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signup.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signup.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -15540,7 +15655,7 @@
 	}
 
 /***/ },
-/* 57 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(31)();
@@ -15548,13 +15663,13 @@
 	
 	
 	// module
-	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"signin.vue","sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"signup.vue","sourceRoot":"webpack://"}]);
 	
 	// exports
 
 
 /***/ },
-/* 58 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -15776,163 +15891,53 @@
 
 
 /***/ },
-/* 59 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	module.exports = {
-	    name: 'SignIn',
-	    data: function data() {
-	        return {
-	            Captcha: false,
-	            siteName: this.$root.$data.siteName,
-	            passwordInputType: 'password',
-	            iconSpin: false
-	        };
-	    },
-	    route: {
-	        data: function data(transition) {
-	            this.$http.post('/SignIn').then(function (response) {
-	                transition.next(response.data.data);
-	            });
-	        }
-	    },
-	    computed: {
-	        timeLine: function timeLine() {
-	            return new Date().getTime();
-	        }
-	    },
-	    methods: {
-	        changeImg: function changeImg(e) {
-	            var $captchaimg = $(e.target);
-	            if (!$captchaimg.transition('is animating')) {
-	                $captchaimg.transition({
-	                    animation: 'vertical flip out',
-	                    onComplete: function onComplete() {
-	                        $captchaimg.attr('src', '/captcha?rand=' + new Date().getTime()).transition({
-	                            animation: 'vertical flip in',
-	                            displayType: false
-	                        });
-	                    },
-	                    duration: '500ms',
-	                    displayType: false
-	                });
-	            }
-	        },
-	        changeVisible: function changeVisible(e) {
-	            this.passwordInputType = 'text';
-	        },
-	        changeInvisible: function changeInvisible(e) {
-	            this.passwordInputType = 'password';
-	        },
-	        addScalaSpin: function addScalaSpin(e) {
-	            this.iconSpin = true;
-	        },
-	        removeScalaSpin: function removeScalaSpin(e) {
-	            this.iconSpin = false;
-	        }
-	    },
-	
-	    ready: function ready() {
-	
-	        $('#signInForm').Lc4eForm();
-	    }
-	};
-
-/***/ },
-/* 60 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"ui basic padding clearing segment flipInY animated\">\n    <h2 class=\"ui center aligned icon header\">\n        <i class=\"circular massive home icon animated allAnimation\" :class=\"{  'scaleSpin': iconSpin }\"\n           v-on:mouseenter=\"addScalaSpin\" v-on:mouseout=\"removeScalaSpin\"></i>\n        Sign in {{siteName}},Welcome Back!\n    </h2>\n    <div id=\"signInForm\" class=\"ui form attached segment\" observe-on=\"blur\" data-url=\"/member/signin\"\n         data-loading=\"true\">\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">UserName</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.name\" class=\"fieldValue\" name=\"user.name\" type=\"text\"\n                           placeholder=\"your login name\" data-rules=\"[{type:'empty'},{type:'minLength[4]'}]\"/>\n                    <i class=\"user icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Password</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.password\" name=\"user.password\" class=\"fieldValue\" :type=\"passwordInputType\"\n                           placeholder=\"your password\" data-rules=\"[{type:'empty'},{type:'minLength[6]'}]\"/>\n                    <i class=\"eye icon link\" v-on:mousedown=\"changeVisible\" v-on:mouseup=\"changeInvisible\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\" v-if=\"Captcha\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Verification Code</label>\n            </div>\n            <div class=\"six wide field\">\n                <div class=\"ui input\">\n                    <input id=\"captcha\" name=\"captcha\" class=\"fieldValue\" type=\"text\"\n                           data-rules=\"[{type:'empty'},{type:'exactLength[4]'}]\"/>\n                </div>\n            </div>\n            <div class=\"four wide field\">\n                <img id=\"captchaimg\" :src=\"'/captcha?rand=timeLine' + timeLine\" v-on:click=\"changeImg\">\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Remember</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui toggle checkbox\">\n                    <input id=\"rememberMe\" name=\"rememberMe\" type=\"checkbox\" class=\"fieldValue\"\n                           data-rules=\"[{type:'empty'}]\">\n                    <label>One Month</label>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"inline fields operatepanel\">\n            <div class=\"sixteen wide field ui centered grid\">\n                <div class=\"ui buttons\">\n                    <button class=\"ui lc4eSubmit primary button\">SignIn</button>\n                    <div class=\"or\"></div>\n                    <button class=\"ui button lc4eReset\">Reset</button>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"ui bottom attached warning message\">\n        <i class=\"warning icon\"></i>\n        <a>Lost password? </a> <a>Lost username?</a><a>Lost everyThing</a>\n    </div>\n</div>\n";
-
-/***/ },
-/* 61 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(62)
-	__vue_script__ = __webpack_require__(64)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/views/signup.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(65)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), true)
-	  if (!hotAPI.compatible) return
-	  var id = "/Users/teddyzhu/Documents/JavaWork/code/lc4e/lc4e-web/src/main/webapp/WEB-INF/views/themes/default/src/views/signup.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
 /* 62 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(63);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(58)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signup.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./signup.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 63 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(31)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"signup.vue","sourceRoot":"webpack://"}]);
-	
-	// exports
-
-
-/***/ },
-/* 64 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
 	module.exports = {
 	    name: 'SignUp',
+	    props: {
+	        iconSpin: {
+	            type: Boolean,
+	            default: false
+	        },
+	        extendDesPanel: {
+	            type: Boolean,
+	            default: false
+	        },
+	        Captcha: {
+	            type: Boolean,
+	            default: false
+	        },
+	        SimpleRegister: {
+	            type: Boolean,
+	            default: true
+	        },
+	        passwordInputType: {
+	            type: String,
+	            default: 'password'
+	        }
+	    },
 	    data: function data() {
 	        return {
 	            isLogin: this.$root.$data.isLogin,
-	            Captcha: false,
-	            SimpleRegister: true,
-	            siteName: this.$root.$data.siteName,
-	            passwordInputType: 'password',
-	            iconSpin: false,
-	            extendDesPanel: false
+	            siteName: this.$root.$data.siteName
 	        };
+	    },
+	    watch: {
+	        SimpleRegister: function SimpleRegister(val, oldVal) {
+	            if (val) {
+	                $('#signUpForm').Lc4eForm({
+	                    success: function success() {
+	                        window.location.href = "/";
+	                    },
+	                    error: function error() {},
+	                    complete: function complete() {}
+	                });
+	            }
+	        }
 	    },
 	    computed: {
 	        timeLine: function timeLine() {
@@ -15981,13 +15986,6 @@
 	        }
 	    },
 	    ready: function ready() {
-	        $('#signUpForm').Lc4eForm({
-	            success: function success() {
-	                window.location.href = "/";
-	            },
-	            error: function error() {},
-	            complete: function complete() {}
-	        });
 	
 	        $('#extend\\.birth').Lc4eDateTimePicker({
 	            dayOfWeekStart: 1,
@@ -15999,23 +15997,23 @@
 	};
 
 /***/ },
-/* 65 */
+/* 63 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"ui basic padding clearing segment flipInY animated\">\n    <h2 class=\"ui center aligned icon header\">\n        <i class=\"circular users icon  animated allAnimation\" :class=\"{  'scaleSpin': iconSpin }\"\n           v-on:mouseenter=\"addScalaSpin\" v-on:mouseout=\"removeScalaSpin\"></i>\n        Join in {{siteName}}\n    </h2>\n    <div id=\"signUpForm\" class=\"ui form attached segment\" observe-on=\"blur\" data-url=\"/member/signup\"\n         data-loading=\"\">\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">UserName</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.name\" class=\"fieldValue\" name=\"user.name\" type=\"text\"\n                           placeholder=\"login name\"\n                           data-rules=\"[{type:'minLength[4]'},{type:'maxLength[12]'},{type:'remote[/su/user]'}]\"/>\n                    <i class=\"user icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Password</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.password\" name=\"user.password\" class=\"fieldValue\" :type=\"passwordInputType\"\n                           placeholder=\"password\" data-rules=\"[{type:'minLength[6]'},{type:'maxLength[20]'}]\"/>\n                    <i class=\"eye icon link\" v-on:mousedown=\"changeVisible\" v-on:mouseup=\"changeInvisible\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Repeat Pass</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.repassword\"\n                           name=\"user.repassword\"\n                           class=\"fieldValue\"\n                           :type=\"passwordInputType\"\n                           placeholder=\"repeat password\"\n                           data-ignore=\"true\"\n                           data-rules=\"[{type:'match[user.password]'}]\"/>\n                    <i class=\"eye icon link\" v-on:mousedown=\"changeVisible\" v-on:mouseup=\"changeInvisible\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Nick</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.nick\" name=\"user.nick\" class=\"fieldValue\" type=\"text\"\n                           placeholder=\"your nick\" data-rules=\"[{type:'minLength[4]'},{type:'maxLength[12]'}]\"/>\n                    <i class=\"detective icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Email</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.mail\" name=\"user.mail\" class=\"fieldValue\" type=\"text\"\n                           placeholder=\"your email\"\n                           data-rules=\"[{type:'regExp[/\\\\b(^[\\'_A-Za-z0-9-]+(\\\\.[\\'_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\\\.[A-Za-z0-9-]+)*((\\\\.[A-Za-z0-9]{2,})|(\\\\.[A-Za-z0-9]{2,}\\\\.[A-Za-z0-9]{2,}))$)\\\\b/]'}]\"/>\n                    <i class=\"at icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\" v-if=\"Captcha\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Verification Code</label>\n            </div>\n            <div class=\"six wide field\">\n                <div class=\"ui input\">\n                    <input id=\"captcha\" name=\"captcha\" class=\"fieldValue\" type=\"text\"\n                           data-rules=\"[{type:'exactLength[4]'}]\"/>\n                </div>\n            </div>\n            <div class=\"four wide field\">\n                <img id=\"captchaimg\" :src=\"'/captcha?rand=timeLine' + timeLine\" v-on:click=\"changeImg\">\n            </div>\n        </div>\n        <h4 class=\"ui horizontal divider header\" v-if=\"!SimpleRegister\">\n            <div id=\"extendDes\" class=\"linked\" v-on:click=\"extendDescription\"><i class=\"icon\"\n                                                                                 :class=\"{ 'add': !extendDesPanel ,'minus': extendDesPanel}\"></i>\n                Description(optional)\n            </div>\n        </h4>\n        <div id=\"extendPanel\" style=\"display: none;\" v-if=\"!SimpleRegister\">\n            <div class=\"inline fields\">\n                <div class=\"four wide field\">\n                    <label class=\"fieldName\">Phone</label>\n                </div>\n                <div class=\"ten wide field\">\n                    <div class=\"ui icon input\">\n                        <input id=\"extend.phoneNumber\" name=\"extend.phoneNumber\" class=\"fieldValue\" type=\"text\"\n                               placeholder=\"phone\"\n                               data-rules=\"[{type:'regExp[/(^1[3|4|5|8|7]\\\\d{9}$)/]'}]\" data-optional=\"true\"/>\n                        <i class=\"phone icon\"></i>\n                    </div>\n                </div>\n            </div>\n            <div class=\"inline fields\">\n                <div class=\"four wide field\">\n                    <label class=\"fieldName\">BirthDay</label>\n                </div>\n                <div class=\"ten wide field\">\n                    <div class=\"ui icon input\">\n                        <input id=\"extend.birth\" name=\"user.birth\" class=\"fieldValue\" type=\"text\"\n                               placeholder=\"birth day,it should be true\" data-optional=\"true\"\n                               data-rules=\"[{type:'regExp[/(^(\\\\d{4})-(0\\\\d{1}|1[0-2])-(0\\\\d{1}|[12]\\\\d{1}|3[01])$)/]'}]\"/>\n                        <i class=\"birthday icon\"></i>\n                    </div>\n                </div>\n            </div>\n            <div class=\"inline fields\">\n                <div class=\"four wide field\">\n                    <label class=\"fieldName\">Sign</label>\n                </div>\n                <div class=\"ten wide field\">\n                    <textarea id=\"extend.sign\" name=\"user.sign\" class=\"fieldValue\" type=\"text\"\n                              placeholder=\"personal sign\" data-rules=\"[]\" data-optional=\"true\"></textarea>\n                </div>\n            </div>\n        </div>\n        <div id=\"signUpAttached\" class=\"inline fields operatepanel\">\n            <div class=\"sixteen wide field ui centered grid\">\n                <div class=\"ui buttons\">\n                    <button class=\"ui labeled icon lc4eSubmit primary button\">\n                        <i class=\"add user icon\"></i>\n                        SignIn\n                    </button>\n                    <div class=\"or\"></div>\n                    <button class=\"ui right labeled icon button lc4eReset\">\n                        <i class=\"refresh icon\"></i>\n                        Reset\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"ui bottom attached positive message\">\n        <i class=\"warning icon\"></i>\n        Remember your account information , it's important\n    </div>\n</div>\n\n";
+	module.exports = "\n<div class=\"ui basic padding clearing segment flipInY animated\">\n    <h2 class=\"ui center aligned icon header\">\n        <i class=\"circular users icon  animated allAnimation\" :class=\"{  'scaleSpin': iconSpin }\"\n           v-on:mouseenter=\"addScalaSpin\" v-on:mouseout=\"removeScalaSpin\"></i>\n        Join in {{siteName}}\n    </h2>\n    <div id=\"signUpForm\" class=\"ui form attached segment\" observe-on=\"blur\" data-url=\"/member/signup\"\n         data-loading=\"\">\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">UserName</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.name\" class=\"fieldValue\" name=\"user.name\" type=\"text\"\n                           placeholder=\"login name\"\n                           data-rules=\"[{type:'minLength[4]'},{type:'maxLength[12]'},{type:'remote[/su/user]'}]\"/>\n                    <i class=\"user icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Password</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.password\" name=\"user.password\" class=\"fieldValue\" :type=\"passwordInputType\"\n                           placeholder=\"password\" data-rules=\"[{type:'minLength[6]'},{type:'maxLength[20]'}]\"/>\n                    <i class=\"eye icon link\" v-on:mousedown=\"changeVisible\" v-on:mouseup=\"changeInvisible\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Repeat Pass</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.repassword\"\n                           name=\"user.repassword\"\n                           class=\"fieldValue\"\n                           :type=\"passwordInputType\"\n                           placeholder=\"repeat password\"\n                           data-ignore=\"true\"\n                           data-rules=\"[{type:'match[user.password]'}]\"/>\n                    <i class=\"eye icon link\" v-on:mousedown=\"changeVisible\" v-on:mouseup=\"changeInvisible\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Nick</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.nick\" name=\"user.nick\" class=\"fieldValue\" type=\"text\"\n                           placeholder=\"your nick\" data-rules=\"[{type:'minLength[4]'},{type:'maxLength[12]'}]\"/>\n                    <i class=\"detective icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Email</label>\n            </div>\n            <div class=\"ten wide field\">\n                <div class=\"ui icon input\">\n                    <input id=\"user.mail\" name=\"user.mail\" class=\"fieldValue\" type=\"text\"\n                           placeholder=\"your email\"\n                           data-rules=\"[{type:'regExp[/\\\\b(^[\\'_A-Za-z0-9-]+(\\\\.[\\'_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\\\.[A-Za-z0-9-]+)*((\\\\.[A-Za-z0-9]{2,})|(\\\\.[A-Za-z0-9]{2,}\\\\.[A-Za-z0-9]{2,}))$)\\\\b/]'}]\"/>\n                    <i class=\"at icon\"></i>\n                </div>\n            </div>\n        </div>\n        <div class=\"inline fields\" v-if=\"Captcha\">\n            <div class=\"four wide field\">\n                <label class=\"fieldName\">Verification Code</label>\n            </div>\n            <div class=\"six wide field\">\n                <div class=\"ui input\">\n                    <input id=\"captcha\" name=\"captcha\" class=\"fieldValue\" type=\"text\"\n                           data-rules=\"[{type:'exactLength[4]'}]\"/>\n                </div>\n            </div>\n            <div class=\"four wide field\">\n                <img id=\"captchaimg\" :src=\"'/captcha?rand=timeLine' + timeLine\" v-on:click=\"changeImg\">\n            </div>\n        </div>\n        <h4 class=\"ui horizontal divider header\" v-if=\"!SimpleRegister\">\n            <div id=\"extendDes\" class=\"linked\" v-on:click=\"extendDescription\"><i class=\"icon\"\n                                                                                 :class=\"{ 'add': !extendDesPanel ,'minus': extendDesPanel}\"></i>\n                Description(optional)\n            </div>\n        </h4>\n        <div id=\"extendPanel\" style=\"display: none;\" v-if=\"!SimpleRegister\">\n            <div class=\"inline fields\">\n                <div class=\"four wide field\">\n                    <label class=\"fieldName\">Phone</label>\n                </div>\n                <div class=\"ten wide field\">\n                    <div class=\"ui icon input\">\n                        <input id=\"extend.phoneNumber\" name=\"extend.phoneNumber\" class=\"fieldValue\" type=\"text\"\n                               placeholder=\"phone\"\n                               data-rules=\"[{type:'regExp[/(^1[3|4|5|8|7]\\\\d{9}$)/]'}]\" data-optional=\"true\"/>\n                        <i class=\"phone icon\"></i>\n                    </div>\n                </div>\n            </div>\n            <div class=\"inline fields\">\n                <div class=\"four wide field\">\n                    <label class=\"fieldName\">BirthDay</label>\n                </div>\n                <div class=\"ten wide field\">\n                    <div class=\"ui icon input\">\n                        <input id=\"extend.birth\" name=\"user.birth\" class=\"fieldValue\" type=\"text\"\n                               placeholder=\"birth day,it should be true\" data-optional=\"true\"\n                               data-rules=\"[{type:'regExp[/(^(\\\\d{4})-(0\\\\d{1}|1[0-2])-(0\\\\d{1}|[12]\\\\d{1}|3[01])$)/]'}]\"/>\n                        <i class=\"birthday icon\"></i>\n                    </div>\n                </div>\n            </div>\n            <div class=\"inline fields\">\n                <div class=\"four wide field\">\n                    <label class=\"fieldName\">Sign</label>\n                </div>\n                <div class=\"ten wide field\">\n                    <textarea id=\"extend.sign\" name=\"user.sign\" class=\"fieldValue\" type=\"text\"\n                              placeholder=\"personal sign\" data-rules=\"[]\" data-optional=\"true\"></textarea>\n                </div>\n            </div>\n        </div>\n        <div id=\"signUpAttached\" class=\"inline fields operatepanel\">\n            <div class=\"sixteen wide field ui centered grid\">\n                <div class=\"ui buttons\">\n                    <button class=\"ui labeled icon lc4eSubmit primary button\">\n                        <i class=\"add user icon\"></i>\n                        SignIn\n                    </button>\n                    <div class=\"or\"></div>\n                    <button class=\"ui right labeled icon button lc4eReset\">\n                        <i class=\"refresh icon\"></i>\n                        Reset\n                    </button>\n                </div>\n            </div>\n        </div>\n        <div class=\"ui error message\"></div>\n    </div>\n    <div class=\"ui bottom attached positive message\">\n        <i class=\"warning icon\"></i>\n        Remember your account information , it's important\n    </div>\n</div>\n\n";
 
 /***/ },
-/* 66 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(67)
-	__vue_script__ = __webpack_require__(69)
+	__webpack_require__(65)
+	__vue_script__ = __webpack_require__(67)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/app.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(76)
+	__vue_template__ = __webpack_require__(74)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -16034,16 +16032,16 @@
 	})()}
 
 /***/ },
-/* 67 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(68);
+	var content = __webpack_require__(66);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(58)(content, {});
+	var update = __webpack_require__(61)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -16060,7 +16058,7 @@
 	}
 
 /***/ },
-/* 68 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(31)();
@@ -16074,13 +16072,13 @@
 
 
 /***/ },
-/* 69 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
+	__webpack_require__(68);
 	__webpack_require__(70);
-	__webpack_require__(72);
 	module.exports = {
 	    name: 'app',
 	    props: {
@@ -16104,7 +16102,7 @@
 	        $.lc4e.common.ready();
 	    },
 	    components: {
-	        "menu-tree": __webpack_require__(73)
+	        "menu-tree": __webpack_require__(71)
 	    },
 	    methods: {
 	        expend: function expend(e) {
@@ -16134,14 +16132,14 @@
 	};
 
 /***/ },
-/* 70 */
+/* 68 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 71 */,
-/* 72 */
+/* 69 */,
+/* 70 */
 /***/ function(module, exports) {
 
 	/*!
@@ -17251,7 +17249,7 @@
 	                        }
 	                    });
 	                } else {
-	
+	                    $form.removeClass('isSubmiting');
 	                    var errorfields = $form.data('errorFields'),
 	                        errorInfos = $form.data('errorInfos'),
 	                        content = "";
@@ -19475,16 +19473,16 @@
 	});
 
 /***/ },
-/* 73 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(74)
+	__vue_script__ = __webpack_require__(72)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/components/menu.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(75)
+	__vue_template__ = __webpack_require__(73)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -19503,7 +19501,7 @@
 	})()}
 
 /***/ },
-/* 74 */
+/* 72 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19518,13 +19516,13 @@
 	};
 
 /***/ },
-/* 75 */
+/* 73 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<template v-for=\"menu in menus\">\n    <div class=\"ui dropdown link item\" v-if=\"menu.CHILDS.length > 0\">\n        <i v-if=\"menu.ICON\" v-bind:class=\"[menu.ICON,'icon']\"></i>\n        <span class=\"text\">{{menu.NAME}}</span><i class=\"dropdown icon\"></i>\n\n        <div class=\"menu\">\n            <menu-tree :menus=\"menu.CHILDS\"></menu-tree>\n        </div>\n    </div>\n    <a class=\"item linked\" title=\"{{menu.NAME}}\" v-link=\"menu.ABBR\" v-else>\n        <i v-bind:class=\"[menu.ICON,'icon']\" v-if=\"menu.ICON\"></i>\n        {{menu.NAME}}\n    </a>\n</template>\n";
 
 /***/ },
-/* 76 */
+/* 74 */
 /***/ function(module, exports) {
 
 	module.exports = "\n    <div id=\"menu\" class=\"ui menu\" v-bind:class=\"{ 'expended': menuExpened }\">\n        <div class=\"column\">\n            <div class=\"hidden-pc\">\n                <a class=\"item linked\"> <i class=\"content icon\"></i> Menus\n                </a>\n            </div>\n            <div class=\"allmenus\">\n                <div class=\"left menu\">\n                    <img class=\"logo ui image item hidden-mb\" :src=\"themePath + '/images/logo.png'\"/>\n                    <menu-tree :menus=\"menus\"></menu-tree>\n                </div>\n                <div class=\"right menu\" v-bind:class=\"{ 'float': rightMenuFloat }\">\n                    <div class=\"item\">\n                        <div class=\"ui icon input\">\n                            <input id=\"searchSite\" type=\"text\" placeholder=\"Search...\"\n                                   v-on:focus=\"expend\" v-on:blur=\"collapse\"/> <i\n                                class=\"search link icon\"></i>\n                        </div>\n                    </div>\n                    <template v-if=\"isLogin\">\n                        <div id=\"userItem\" class=\"item\" v-show=\"enable\">\n                            <img class=\"ui headered linked image\" :src=\"themePath+'/images/wireframe/image.png'\"/>\n\n                            <div id=\"userCardPop\" class=\"ui flowing popup\">\n                                <div id=\"userCard\" class=\"ui card\">\n                                    <div class=\"content\">\n                                        <div class=\"centered aligned header\">\n                                            Teddy\n                                        </div>\n                                        <div class=\"ui clearing divider\"></div>\n                                        <div class=\"description\">\n                                            <div class=\"ui divided items\">\n                                                <div class=\"item\">\n                                                    <i class=\"comments outline icon\"></i> Comments <a\n                                                        class=\"ui right floated label\"> 11 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"diamond icon\"></i> Diamonds <a\n                                                        class=\"ui right floated label\">\n                                                    111 </a>\n                                                </div>\n                                                <div class=\"item\">\n                                                    <i class=\"mail outline icon\"></i> Messages <a\n                                                        class=\"ui right floated label\">\n                                                    2111 </a>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"extra content\">\n\t\t\t\t\t\t\t\t<span class=\"left floated\"> <i class=\"users icon\"></i> Follows <a\n                                        class=\"ui transparent circular label\"> 10 </a>\n\t\t\t\t\t\t\t\t</span> <span class=\"right floated\"> <i class=\"star icon\"></i> Favorites <a\n                                            class=\"ui transparent circular label\"> 5 </a>\n\t\t\t\t\t\t\t\t</span>\n                                    </div>\n                                    <div class=\"ui two  bottom attached buttons\">\n                                        <div class=\"ui primary button\">\n                                            <i class=\"setting icon\"></i> Settings\n                                        </div>\n                                        <div class=\"or\"></div>\n                                        <div class=\"ui button\" onclick=\"$.lc4e.signOut()\">\n                                            <i class=\"sign out icon\"></i>\n                                            Sign Out\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </template>\n                    <template v-else>\n                        <div class=\"ui item animated fade button\" v-link=\"'/SignUp'\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign Up</div>\n                            <div class=\"hidden content\">\n                                <i class=\"add user icon\"></i>\n                            </div>\n                        </div>\n                        <div class=\"ui item animated button\" v-link=\"'/SignIn'\" v-show=\"enable\">\n                            <div class=\"visible content\">Sign In</div>\n                            <div class=\"hidden content\">\n                                <i class=\"user icon\"></i>\n                            </div>\n                        </div>\n                    </template>\n                    <div id=\"expendHeader\" class=\"ui item hidden-mb\" v-show=\"enable\" v-on:click=\"menuExpend\">\n                        <div class=\"ui linked label\">\n                            <i class=\"maximize icon\"></i>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div id=\"content\">\n        <div id=\"mainContent\" class=\"ui grid centered\">\n            <router-view></router-view>\n        </div>\n    </div>\n    <div id=\"footer\" class=\"ui inverted black footer vertical segment\">\n        <div class=\"container\">\n            <div class=\"ui stackable inverted divided relaxed grid\">\n                <div class=\"eight wide column\">\n                    <h3 class=\"ui inverted header\">\n                        {{siteName}} {{version}}\n                    </h3>\n\n                    <p>Designed By ZhuXi. Run with Tomcat8. Deploy:Jenkins.</p>\n\n                    <p>Framework:Jfinal 2.O. UI:Semantic UI. Rendered:Jetbrick 2.x</p>\n\n                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"\n                          style=\"display: inline;\">\n                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"hosted_button_id\"\n                                                                                  value=\"7ZAF2Q8DBZAQL\">\n                        <button type=\"submit\" class=\"ui teal button\">Donate Semantic</button>\n                    </form>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui red button\">\n                            <i class=\"heart icon\"></i> Stars\n                        </div>\n                        <a class=\"ui basic red left pointing label\">\n                            1,048\n                        </a>\n                    </div>\n                    <div class=\"ui labeled button\" tabindex=\"0\">\n                        <div class=\"ui basic blue button\">\n                            <i class=\"fork icon\"></i> Forks\n                        </div>\n                        <a class=\"ui basic left pointing blue label\">\n                            1,048\n                        </a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">Contributers</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\" href=\"http://www.lc4e.com/\" target=\"_blank\">ZhuXi</a>\n                    </div>\n                </div>\n                <div class=\"four wide column\">\n                    <h5 class=\"ui teal inverted header\">LC4E Network</h5>\n\n                    <div class=\"ui inverted link list\">\n                        <a class=\"item\"\n                           href=\"https://www.linode.com/?r=9a43d7ae15699c5363209820309d8d6c68509f78\">Linode</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n";

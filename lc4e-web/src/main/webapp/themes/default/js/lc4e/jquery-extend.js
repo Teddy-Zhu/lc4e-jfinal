@@ -1176,7 +1176,7 @@ $.fn.Lc4eForm = function (parameters) {
                     )
                 }
                 else {
-
+                    $form.removeClass('isSubmiting');
                     var errorfields = $form.data('errorFields'), errorInfos = $form.data('errorInfos'), content = "";
                     for (var i in errorfields) {
                         content += '<div class="nobr">' + errorfields[i] + ' is invalid</div>\n';

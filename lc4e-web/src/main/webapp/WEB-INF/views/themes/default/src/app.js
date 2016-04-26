@@ -7,10 +7,12 @@ var Vue = require('vue'),
         VueRouter: require('vue-router'),
         VueResource: require('vue-resource'),
         VueWaves: require('vue-waves')
+       // VueValidate: require('./semantic/form.js')
     };
 for (var index in Vueplugins) {
     Vue.use(Vueplugins[index]);
 }
+
 
 var router = new Vueplugins.VueRouter({
     history: true
