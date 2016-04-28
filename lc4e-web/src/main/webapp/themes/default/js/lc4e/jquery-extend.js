@@ -1085,7 +1085,9 @@ $.fn.Lc4eForm = function (parameters) {
                                 this.css('max-width', 'none');
                             }
                         }).popup('show');
-
+                        setTimeout(function () {
+                            $field.popup('hide')
+                        }, 2000)
                     }
                 }, validate = {};
 
