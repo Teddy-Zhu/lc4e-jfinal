@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class ValidateParamsAnnotationResolver extends CustomAnnotationPlugin {
+public class ValidateParamsAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return ValidateParams.class;

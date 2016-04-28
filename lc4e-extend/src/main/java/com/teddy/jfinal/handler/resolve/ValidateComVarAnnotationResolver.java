@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class ValidateComVarAnnotationResolver extends CustomAnnotationPlugin {
+public class ValidateComVarAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return ValidateComVar.class;

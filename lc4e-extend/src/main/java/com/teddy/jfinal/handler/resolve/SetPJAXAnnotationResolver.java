@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class SetPJAXAnnotationResolver extends CustomAnnotationPlugin {
+public class SetPJAXAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return SetPJAX.class;

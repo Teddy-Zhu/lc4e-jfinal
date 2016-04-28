@@ -120,9 +120,7 @@
                 setTimeout(shapTime, 10000);
             };
             shapTime();
-
             sortTopic.dropdown().dropdown('set selected', that.sort ? that.sort : sortTopic.find('.scrolling.menu>.item:first').attr('data-value'));
-
             $('#topicItems').find('.topicSetting').dropdown();
         },
         watch: {

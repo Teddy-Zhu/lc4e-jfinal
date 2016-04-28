@@ -137,9 +137,9 @@
                         title: "loading articles"
                     });
                     that.$router.go("/a/" + that.area + "-" + that.sort + "-" + that.page);
-                    $('body').animate({scrollTop: 0}, 500);
                     that.$nextTick(function () {
                         $.Lc4eLoading('hide');
+                        $('body').animate({scrollTop: 0}, 500,'easeOutQuad');
                     });
                 }
             }

@@ -1,14 +1,16 @@
 package com.teddy.jfinal.plugin.CustomAnnotationResolve;
 
 import com.jfinal.aop.Invocation;
+import com.teddy.jfinal.annotation.CustomAnnotation;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
 import com.teddy.jfinal.plugin.CustomPlugin;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.commons.collections.map.HashedMap;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by teddyzhu on 15/12/12.
@@ -24,12 +26,9 @@ public class AnnotationPluginResolver {
     private MethodProxy methodProxy;
     private boolean[] isHandled;
 
-    private Annotation[] ans;
-    private static Map<Class<? extends Annotation>, CustomAnnotationPlugin> pluginMap;
+    private Map<CustomAnnotationPlugin, Annotation> pluginMap;
 
-    static {
-        pluginMap = CustomPlugin.getCustoms();
-    }
+    private List<CustomAnnotationPlugin> keySet;
 
     public AnnotationPluginResolver(boolean[] isHandled, Object target, Method method, Object[] args, MethodProxy methodProxy, Annotation[] annotations) {
         this.target = target;
@@ -39,20 +38,42 @@ public class AnnotationPluginResolver {
         this.isHandled = isHandled;
         if (annotations == null)
             annotations = new Annotation[0];
-        this.ans = annotations;
+
+        pluginMap = new HashedMap();
+
+        for (Annotation an:
+             annotations) {
+            if(CustomPlugin.getCustoms().containsKey(an.annotationType())){
+                pluginMap.put(CustomPlugin.getCustoms().get(an.annotationType()), an);
+            }
+        }
+        Set<CustomAnnotationPlugin> keys = pluginMap.keySet();
+
+        keySet = new ArrayList<>(keys);
+
+        Collections.sort(keySet, (o1, o2) -> {
+            int x = o1.getOrder();
+            int y = o2.getOrder();
+            return (x < y) ? -1 : ((x == y) ? 0 : 1);
+        });
+
+
     }
+
 
     public Object invoke() throws Throwable {
         Object returnValue = null;
-        if (index < ans.length) {
-            Annotation annotation = ans[index++];
-            if (pluginMap.containsKey(annotation.annotationType())) {
-                returnValue = pluginMap.get(annotation.annotationType()).intercept(annotation, this, args, target, method, isHandled);
-            }
+        if (index < keySet.size()) {
+            CustomAnnotationPlugin plugin = keySet.get(index++);
+
+            Annotation annotation = pluginMap.get(plugin);
+
+            returnValue = plugin.intercept(annotation, this, args, target, method, isHandled);
+
             if (isHandled[0]) {
                 return returnValue;
             }
-        } else if (index++ == ans.length) {
+        } else if (index++ == keySet.size()) {
             try {
                 if (useInjectTarget)
                     returnValue = methodProxy.invoke(target, args);
@@ -68,6 +89,8 @@ public class AnnotationPluginResolver {
             }
             return returnValue;
         }
+
         return returnValue;
+
     }
 }

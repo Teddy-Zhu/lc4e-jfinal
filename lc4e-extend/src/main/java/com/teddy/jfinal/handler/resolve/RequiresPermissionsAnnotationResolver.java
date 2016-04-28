@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class RequiresPermissionsAnnotationResolver extends CustomAnnotationPlugin {
+public class RequiresPermissionsAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return RequiresPermissions.class;

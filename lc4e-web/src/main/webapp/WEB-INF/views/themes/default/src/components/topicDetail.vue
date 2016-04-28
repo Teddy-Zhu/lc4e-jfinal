@@ -35,7 +35,7 @@
 
             <div class="ui bottom attached grey clearing message">
                 <div class="ui right float buttons">
-                    <div class="ui primary button">
+                    <div class="ui basic primary button">
                         <i class="reply icon"></i>
                         reply
                     </div>

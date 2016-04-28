@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 /**
  * Created by teddyzhu on 16/1/29.
  */
-public class ValidateFunctionValueAnnotationResolver extends CustomAnnotationPlugin {
+public class ValidateFunctionValueAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return ValidateFunctionValue.class;

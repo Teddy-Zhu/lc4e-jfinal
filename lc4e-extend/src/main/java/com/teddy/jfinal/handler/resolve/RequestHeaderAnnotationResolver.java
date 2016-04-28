@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class RequestHeaderAnnotationResolver extends CustomAnnotationPlugin {
+public class RequestHeaderAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return RequestHeader.class;

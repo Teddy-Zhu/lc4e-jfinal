@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class SetUIDatasAnnotationResolver extends CustomAnnotationPlugin {
+public class SetUIDatasAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return SetUIDatas.class;

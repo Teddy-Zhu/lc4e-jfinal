@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class RequiresRolesAnnotationResolver extends CustomAnnotationPlugin {
+public class RequiresRolesAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return RequiresRoles.class;

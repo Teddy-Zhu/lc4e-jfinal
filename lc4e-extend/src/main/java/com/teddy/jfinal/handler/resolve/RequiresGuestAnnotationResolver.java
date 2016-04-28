@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class RequiresGuestAnnotationResolver extends CustomAnnotationPlugin {
+public class RequiresGuestAnnotationResolver implements CustomAnnotationPlugin {
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return RequiresGuest.class;

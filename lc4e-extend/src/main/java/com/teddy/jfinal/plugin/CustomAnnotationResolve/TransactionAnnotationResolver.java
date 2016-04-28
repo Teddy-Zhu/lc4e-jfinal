@@ -19,7 +19,13 @@ import java.sql.SQLException;
  * Created by teddyzhu on 15/12/12.
  */
 @CustomAnnotation
-public class TransactionAnnotationResolver extends CustomAnnotationPlugin {
+public class TransactionAnnotationResolver implements CustomAnnotationPlugin {
+
+    @Override
+    public int getOrder() {
+        return 11;
+    }
+
     @Override
     public Class<? extends Annotation> getAnnotation() {
         return Transaction.class;

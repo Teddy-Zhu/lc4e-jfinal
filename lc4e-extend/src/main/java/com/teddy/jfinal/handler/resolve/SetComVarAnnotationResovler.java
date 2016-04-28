@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Created by teddyzhu on 15/12/14.
  */
 @CustomAnnotation
-public class SetComVarAnnotationResovler extends CustomAnnotationPlugin {
+public class SetComVarAnnotationResovler implements CustomAnnotationPlugin {
 
 
     @Override

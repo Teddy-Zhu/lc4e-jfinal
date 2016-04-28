@@ -1066,17 +1066,26 @@ $.fn.Lc4eForm = function (parameters) {
             $field = $form.find('.fieldValue');
         module = {
             initialize: function () {
-                $form.data('errorFields', {}).data('validate', true).data('errorInfos', {}).data('ignore', []);
+                $form.data('validate', true).data('ignore', []);
                 var data = {
                     onValid: function () {
                         var $this = $(this), $field = $this.closest('.field');
                         $field.removeClass('error').addClass('success');
-                        delete $form.data('errorFields')[$this.attr('name')];
                     },
-                    onInvalid: function () {
+                    onInvalid: function (errors) {
                         var $this = $(this), $field = $this.closest('.field');
                         $field.removeClass('success');
-                        $form.data('errorFields')[$this.attr('name')] = $this.attr('prompt') ? $this.attr('prompt') : $field.prev().find('label.fieldName').html();
+                        $field.popup({
+                            position: 'right center',
+                            target: $field,
+                            revalidate: false,
+                            on: 'manual',
+                            html: '<div class="nobr">' + errors.join('</div>\n<div class="nobr">') + '</div>',
+                            onShow: function () {
+                                this.css('max-width', 'none');
+                            }
+                        }).popup('show');
+
                     }
                 }, validate = {};
 
@@ -1099,19 +1108,7 @@ $.fn.Lc4eForm = function (parameters) {
                 data["on"] = $form.attr('observe-on') ? $form.attr('observe-on') : "blur";
                 data["fields"] = validate;
                 data["keyboardShortcuts"] = false;
-                $form.form(data).attr('data-content', "please fill the form").popup({
-                    inline: true,
-                    position: 'right center',
-                    hideOnScroll: false,
-                    exclusive: true,
-                    closable: false,
-                    setFluidWidth: true,
-                    on: 'manual',
-                    preserve: true,
-                    onShow: function (modal) {
-                        $(this).find('.content').html($(modal).attr('data-content'));
-                    }
-                });
+                $form.form(data);
                 module.bindEvent();
             },
             bindEvent: function () {
@@ -1141,7 +1138,7 @@ $.fn.Lc4eForm = function (parameters) {
                 });
             },
             reset: function () {
-                $form.data('errorInfos', {}).data('validate', true).data('errorFields', {}).popup('hide');
+                $form.data('validate', true).popup('hide');
                 $field.each(function () {
                     var $this = $(this);
                     $this.closest('.field').removeClass('success');
@@ -1177,20 +1174,7 @@ $.fn.Lc4eForm = function (parameters) {
                 }
                 else {
                     $form.removeClass('isSubmiting');
-                    var errorfields = $form.data('errorFields'), errorInfos = $form.data('errorInfos'), content = "";
-                    for (var i in errorfields) {
-                        content += '<div class="nobr">' + errorfields[i] + ' is invalid</div>\n';
-                    }
-                    for (var i in errorInfos) {
-                        content += '<div class="nobr">' + errorInfos[i] + '</div>\n';
-                        $('#' + i.replace(/\./g, '\\.')).closest('.field').removeClass('success').addClass('error');
-                    }
-                    if ($.trim(content)) {
-                        $form.attr('data-content', content);
-                        $form.popup('animate hide', function () {
-                            $form.popup('show');
-                        });
-                    }
+
                     options.complete.call($form);
                 }
             },

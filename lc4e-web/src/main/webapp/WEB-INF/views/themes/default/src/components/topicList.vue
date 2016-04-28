@@ -70,11 +70,11 @@
             },
             duration: {
                 type: Number,
-                default: 350
+                default: 200
             },
             interval: {
                 type: Number,
-                default: 100
+                default: 60
             }
         },
         watch: {

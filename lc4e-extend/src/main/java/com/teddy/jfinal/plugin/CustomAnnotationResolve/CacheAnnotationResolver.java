@@ -21,11 +21,11 @@ import java.util.Collection;
  * Created by teddyzhu on 15/12/12.
  */
 @CustomAnnotation
-public class CacheAnnotationResolver extends CustomAnnotationPlugin {
+public class CacheAnnotationResolver implements CustomAnnotationPlugin {
 
     @Override
     public int getOrder() {
-        return 999;
+        return 10;
     }
 
     @Override
