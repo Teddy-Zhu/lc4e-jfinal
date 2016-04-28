@@ -69,8 +69,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 
 ```Java
 @CustomAnnotation
-public class customAn extend CustomAnnotationPlugin {
-            // 插件触发生效顺序[future]暂未实现
+public class customAn implements CustomAnnotationPlugin {
            public int getOrder() {
                 return 0;
             }
