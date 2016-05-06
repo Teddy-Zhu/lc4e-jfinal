@@ -6,7 +6,6 @@
  * 
  * Include jquery (http://jquery.com/) semantic-ui (http://semantic-ui.com/)
  * datetimepicker (http://xdsoft.net/jqplugins/datetimepicker/)
- * jQuery Cookie Plugin (https://github.com/carhartl/jquery-cookie)
  */
 
 $.lc4e = $.lc4e || {};
@@ -370,181 +369,211 @@ function shouldAdjustOldDeltas(orgEvent, absDelta) {
     return special.settings.adjustOldDeltas && orgEvent.type === 'mousewheel' && absDelta % 120 === 0;
 }
 
+$.easing.jswing = $.easing.swing;
 $.extend($.easing, {
-    def: 'easeOutQuad',
-    swing: function (x, t, b, c, d) {
-        return $.easing[$.easing.def](x, t, b, c, d);
+    def: "easeOutQuad",
+    swing: function(e, f, a, h, g) {
+        return $.easing[$.easing.def](e, f, a, h, g)
     },
-    easeInQuad: function (x, t, b, c, d) {
-        return c * (t /= d) * t + b;
+    easeInQuad: function(e, f, a, h, g) {
+        return h * (f /= g) * f + a
     },
-    easeOutQuad: function (x, t, b, c, d) {
-        return -c * (t /= d) * (t - 2) + b;
+    easeOutQuad: function(e, f, a, h, g) {
+        return -h * (f /= g) * (f - 2) + a
     },
-    easeInOutQuad: function (x, t, b, c, d) {
-        if ((t /= d / 2) < 1)
-            return c / 2 * t * t + b;
-        return -c / 2 * ((--t) * (t - 2) - 1) + b;
+    easeInOutQuad: function(e, f, a, h, g) {
+        if ((f /= g / 2) < 1) {
+            return h / 2 * f * f + a
+        }
+        return -h / 2 * ((--f) * (f - 2) - 1) + a
     },
-    easeInCubic: function (x, t, b, c, d) {
-        return c * (t /= d) * t * t + b;
+    easeInCubic: function(e, f, a, h, g) {
+        return h * (f /= g) * f * f + a
     },
-    easeOutCubic: function (x, t, b, c, d) {
-        return c * ((t = t / d - 1) * t * t + 1) + b;
+    easeOutCubic: function(e, f, a, h, g) {
+        return h * ((f = f / g - 1) * f * f + 1) + a
     },
-    easeInOutCubic: function (x, t, b, c, d) {
-        if ((t /= d / 2) < 1)
-            return c / 2 * t * t * t + b;
-        return c / 2 * ((t -= 2) * t * t + 2) + b;
+    easeInOutCubic: function(e, f, a, h, g) {
+        if ((f /= g / 2) < 1) {
+            return h / 2 * f * f * f + a
+        }
+        return h / 2 * ((f -= 2) * f * f + 2) + a
     },
-    easeInQuart: function (x, t, b, c, d) {
-        return c * (t /= d) * t * t * t + b;
+    easeInQuart: function(e, f, a, h, g) {
+        return h * (f /= g) * f * f * f + a
     },
-    easeOutQuart: function (x, t, b, c, d) {
-        return -c * ((t = t / d - 1) * t * t * t - 1) + b;
+    easeOutQuart: function(e, f, a, h, g) {
+        return -h * ((f = f / g - 1) * f * f * f - 1) + a
     },
-    easeInOutQuart: function (x, t, b, c, d) {
-        if ((t /= d / 2) < 1)
-            return c / 2 * t * t * t * t + b;
-        return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+    easeInOutQuart: function(e, f, a, h, g) {
+        if ((f /= g / 2) < 1) {
+            return h / 2 * f * f * f * f + a
+        }
+        return -h / 2 * ((f -= 2) * f * f * f - 2) + a
     },
-    easeInQuint: function (x, t, b, c, d) {
-        return c * (t /= d) * t * t * t * t + b;
+    easeInQuint: function(e, f, a, h, g) {
+        return h * (f /= g) * f * f * f * f + a
     },
-    easeOutQuint: function (x, t, b, c, d) {
-        return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+    easeOutQuint: function(e, f, a, h, g) {
+        return h * ((f = f / g - 1) * f * f * f * f + 1) + a
     },
-    easeInOutQuint: function (x, t, b, c, d) {
-        if ((t /= d / 2) < 1)
-            return c / 2 * t * t * t * t * t + b;
-        return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+    easeInOutQuint: function(e, f, a, h, g) {
+        if ((f /= g / 2) < 1) {
+            return h / 2 * f * f * f * f * f + a
+        }
+        return h / 2 * ((f -= 2) * f * f * f * f + 2) + a
     },
-    easeInSine: function (x, t, b, c, d) {
-        return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+    easeInSine: function(e, f, a, h, g) {
+        return -h * Math.cos(f / g * (Math.PI / 2)) + h + a
     },
-    easeOutSine: function (x, t, b, c, d) {
-        return c * Math.sin(t / d * (Math.PI / 2)) + b;
+    easeOutSine: function(e, f, a, h, g) {
+        return h * Math.sin(f / g * (Math.PI / 2)) + a
     },
-    easeInOutSine: function (x, t, b, c, d) {
-        return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+    easeInOutSine: function(e, f, a, h, g) {
+        return -h / 2 * (Math.cos(Math.PI * f / g) - 1) + a
     },
-    easeInExpo: function (x, t, b, c, d) {
-        return (t == 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+    easeInExpo: function(e, f, a, h, g) {
+        return (f == 0) ? a : h * Math.pow(2, 10 * (f / g - 1)) + a
     },
-    easeOutExpo: function (x, t, b, c, d) {
-        return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+    easeOutExpo: function(e, f, a, h, g) {
+        return (f == g) ? a + h : h * (-Math.pow(2, -10 * f / g) + 1) + a
     },
-    easeInOutExpo: function (x, t, b, c, d) {
-        if (t == 0)
-            return b;
-        if (t == d)
-            return b + c;
-        if ((t /= d / 2) < 1)
-            return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-        return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
+    easeInOutExpo: function(e, f, a, h, g) {
+        if (f == 0) {
+            return a
+        }
+        if (f == g) {
+            return a + h
+        }
+        if ((f /= g / 2) < 1) {
+            return h / 2 * Math.pow(2, 10 * (f - 1)) + a
+        }
+        return h / 2 * (-Math.pow(2, -10 * --f) + 2) + a
     },
-    easeInCirc: function (x, t, b, c, d) {
-        return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
+    easeInCirc: function(e, f, a, h, g) {
+        return -h * (Math.sqrt(1 - (f /= g) * f) - 1) + a
     },
-    easeOutCirc: function (x, t, b, c, d) {
-        return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
+    easeOutCirc: function(e, f, a, h, g) {
+        return h * Math.sqrt(1 - (f = f / g - 1) * f) + a
     },
-    easeInOutCirc: function (x, t, b, c, d) {
-        if ((t /= d / 2) < 1)
-            return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
-        return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
+    easeInOutCirc: function(e, f, a, h, g) {
+        if ((f /= g / 2) < 1) {
+            return -h / 2 * (Math.sqrt(1 - f * f) - 1) + a
+        }
+        return h / 2 * (Math.sqrt(1 - (f -= 2) * f) + 1) + a
     },
-    easeInElastic: function (x, t, b, c, d) {
-        var s = 1.70158;
-        var p = 0;
-        var a = c;
-        if (t == 0)
-            return b;
-        if ((t /= d) == 1)
-            return b + c;
-        if (!p)
-            p = d * .3;
-        if (a < Math.abs(c)) {
-            a = c;
-            var s = p / 4;
-        } else
-            var s = p / (2 * Math.PI) * Math.asin(c / a);
-        return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-    },
-    easeOutElastic: function (x, t, b, c, d) {
-        var s = 1.70158;
-        var p = 0;
-        var a = c;
-        if (t == 0)
-            return b;
-        if ((t /= d) == 1)
-            return b + c;
-        if (!p)
-            p = d * .3;
-        if (a < Math.abs(c)) {
-            a = c;
-            var s = p / 4;
-        } else
-            var s = p / (2 * Math.PI) * Math.asin(c / a);
-        return a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b;
-    },
-    easeInOutElastic: function (x, t, b, c, d) {
-        var s = 1.70158;
-        var p = 0;
-        var a = c;
-        if (t == 0)
-            return b;
-        if ((t /= d / 2) == 2)
-            return b + c;
-        if (!p)
-            p = d * (.3 * 1.5);
-        if (a < Math.abs(c)) {
-            a = c;
-            var s = p / 4;
-        } else
-            var s = p / (2 * Math.PI) * Math.asin(c / a);
-        if (t < 1)
-            return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
-    },
-    easeInBack: function (x, t, b, c, d, s) {
-        if (s == undefined)
-            s = 1.70158;
-        return c * (t /= d) * t * ((s + 1) * t - s) + b;
-    },
-    easeOutBack: function (x, t, b, c, d, s) {
-        if (s == undefined)
-            s = 1.70158;
-        return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
-    },
-    easeInOutBack: function (x, t, b, c, d, s) {
-        if (s == undefined)
-            s = 1.70158;
-        if ((t /= d / 2) < 1)
-            return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
-        return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
-    },
-    easeInBounce: function (x, t, b, c, d) {
-        return c - $.easing.easeOutBounce(x, d - t, 0, c, d) + b;
-    },
-    easeOutBounce: function (x, t, b, c, d) {
-        if ((t /= d) < (1 / 2.75)) {
-            return c * (7.5625 * t * t) + b;
-        } else if (t < (2 / 2.75)) {
-            return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
-        } else if (t < (2.5 / 2.75)) {
-            return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+    easeInElastic: function(f, h, e, l, k) {
+        var i = 1.70158;
+        var j = 0;
+        var g = l;
+        if (h == 0) {
+            return e
+        }
+        if ((h /= k) == 1) {
+            return e + l
+        }
+        if (!j) {
+            j = k * 0.3
+        }
+        if (g < Math.abs(l)) {
+            g = l;
+            var i = j / 4
         } else {
-            return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+            var i = j / (2 * Math.PI) * Math.asin(l / g)
+        }
+        return -(g * Math.pow(2, 10 * (h -= 1)) * Math.sin((h * k - i) * (2 * Math.PI) / j)) + e
+    },
+    easeOutElastic: function(f, h, e, l, k) {
+        var i = 1.70158;
+        var j = 0;
+        var g = l;
+        if (h == 0) {
+            return e
+        }
+        if ((h /= k) == 1) {
+            return e + l
+        }
+        if (!j) {
+            j = k * 0.3
+        }
+        if (g < Math.abs(l)) {
+            g = l;
+            var i = j / 4
+        } else {
+            var i = j / (2 * Math.PI) * Math.asin(l / g)
+        }
+        return g * Math.pow(2, -10 * h) * Math.sin((h * k - i) * (2 * Math.PI) / j) + l + e
+    },
+    easeInOutElastic: function(f, h, e, l, k) {
+        var i = 1.70158;
+        var j = 0;
+        var g = l;
+        if (h == 0) {
+            return e
+        }
+        if ((h /= k / 2) == 2) {
+            return e + l
+        }
+        if (!j) {
+            j = k * (0.3 * 1.5)
+        }
+        if (g < Math.abs(l)) {
+            g = l;
+            var i = j / 4
+        } else {
+            var i = j / (2 * Math.PI) * Math.asin(l / g)
+        }
+        if (h < 1) {
+            return -0.5 * (g * Math.pow(2, 10 * (h -= 1)) * Math.sin((h * k - i) * (2 * Math.PI) / j)) + e
+        }
+        return g * Math.pow(2, -10 * (h -= 1)) * Math.sin((h * k - i) * (2 * Math.PI) / j) * 0.5 + l + e
+    },
+    easeInBack: function(e, f, a, i, h, g) {
+        if (g == undefined) {
+            g = 1.70158
+        }
+        return i * (f /= h) * f * ((g + 1) * f - g) + a
+    },
+    easeOutBack: function(e, f, a, i, h, g) {
+        if (g == undefined) {
+            g = 1.70158
+        }
+        return i * ((f = f / h - 1) * f * ((g + 1) * f + g) + 1) + a
+    },
+    easeInOutBack: function(e, f, a, i, h, g) {
+        if (g == undefined) {
+            g = 1.70158
+        }
+        if ((f /= h / 2) < 1) {
+            return i / 2 * (f * f * (((g *= (1.525)) + 1) * f - g)) + a
+        }
+        return i / 2 * ((f -= 2) * f * (((g *= (1.525)) + 1) * f + g) + 2) + a
+    },
+    easeInBounce: function(e, f, a, h, g) {
+        return h - jQuery.easing.easeOutBounce(e, g - f, 0, h, g) + a
+    },
+    easeOutBounce: function(e, f, a, h, g) {
+        if ((f /= g) < (1 / 2.75)) {
+            return h * (7.5625 * f * f) + a
+        } else {
+            if (f < (2 / 2.75)) {
+                return h * (7.5625 * (f -= (1.5 / 2.75)) * f + 0.75) + a
+            } else {
+                if (f < (2.5 / 2.75)) {
+                    return h * (7.5625 * (f -= (2.25 / 2.75)) * f + 0.9375) + a
+                } else {
+                    return h * (7.5625 * (f -= (2.625 / 2.75)) * f + 0.984375) + a
+                }
+            }
         }
     },
-    easeInOutBounce: function (x, t, b, c, d) {
-        if (t < d / 2)
-            return $.easing.easeInBounce(x, t * 2, 0, c, d) * .5 + b;
-        return $.easing.easeOutBounce(x, t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+    easeInOutBounce: function(e, f, a, h, g) {
+        if (f < g / 2) {
+            return $.easing.easeInBounce(e, f * 2, 0, h, g) * 0.5 + a
+        }
+        return $.easing.easeOutBounce(e, f * 2 - g, 0, h, g) * 0.5 + h * 0.5 + a
     }
 });
-
 /*rewrite for semantic ui 2.0+ in 2015/08/16*/
 /*author:zhuxi*/
 $.fn.Lc4eDimmer = function (parameters) {

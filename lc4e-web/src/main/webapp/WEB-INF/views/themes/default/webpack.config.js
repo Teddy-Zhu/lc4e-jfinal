@@ -21,7 +21,7 @@ var plugins = [
 
 
 //压缩
-//plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}));
+plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}));
 
 
 module.exports = {
@@ -29,6 +29,7 @@ module.exports = {
     output: {
         path: '../../../../themes/default',
         publicPath: '${Theme}/',
+        chunkFilename: "app.min.js",
         filename: 'app.js'
     },
     module: {
@@ -39,17 +40,20 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!cssnext-loader")
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!postcss-loader")
             },
             {test: /\.js$/, loader: 'babel', exclude: /node_modules/, query: {compact: false}},
-            {test: /\.(png|jpg|gif)$/, loader: require.resolve("url-loader") + '?limit=10&name=./images/pack/[name].[ext]'},
+            {
+                test: /\.(png|jpg|gif)$/,
+                loader: require.resolve("url-loader") + '?limit=10&name=./images/pack/[name].[ext]'
+            },
             {test: /\.woff$/, loader: "url?limit=10000&minetype=application/font-woff"},
             {test: /\.(ttf|eot|svg)$/, loader: "file"}
         ]
     },
     vue: {
         css: ExtractTextPlugin.extract("style-loader",
-            "css-loader?sourceMap!cssnext-loader")
+            "css-loader?sourceMap!postcss-loader")
     },
     cssnext: {
         browsers: "last 2 versions"

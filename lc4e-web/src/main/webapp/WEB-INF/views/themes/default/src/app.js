@@ -13,7 +13,6 @@ for (var index in Vueplugins) {
     Vue.use(Vueplugins[index]);
 }
 
-
 var router = new Vueplugins.VueRouter({
     history: true
 });
@@ -23,3 +22,4 @@ router.map(require('./routes.js'));
 Vue.config.debug = false;
 Vue.config.silent = true;
 router.start(require("./app.vue"), '#app');
+require('smoothscroll-for-websites');
