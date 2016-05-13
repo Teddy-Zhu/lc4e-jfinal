@@ -8,8 +8,8 @@
     <title>${SiteName}</title>
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <link rel="alternate icon" type="image/png" href="${Theme}/images/logo.png">
-    <link rel="stylesheet" type="text/css" href="${Theme}/js/plugins/semantic-ui/semantic.min.css">
-    <link href="${Theme}/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${Theme}/js/plugins/semantic-ui/semantic.min.css?v=${version}">
+    <link href="${Theme}/style.css?v=${version}" rel="stylesheet">
 </head>
 <body>
 <div id="app"></div>
@@ -17,15 +17,15 @@
     var preLoadData = {
         menus: JSON.parse('${menusString}'),
         isLogin: Boolean('${user()}' == 'true'),
-        siteName: '${SiteName}',
-        version: '${version}',
-        themePath: '${Theme}',
+        siteName: String('${SiteName}'),
+        version: String('${version}'),
+        themePath: String('${Theme}'),
         sort: Number('${topicSort?!2}'),
         page: Number('${page?!1}')
     };
 </script>
-<script type="text/javascript" src="${Theme}/js/plugins/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="${Theme}/js/plugins/semantic-ui/semantic.min.js"></script>
-<script src="${Theme}/app.js"></script>
+<script type="text/javascript" src="${Theme}/js/plugins/jquery/jquery.min.js?v=${version}"></script>
+<script type="text/javascript" src="${Theme}/js/plugins/semantic-ui/semantic.min.js?v=${version}"></script>
+<script src="${Theme}/app.js?v=${version}"></script>
 </body>
 </html>

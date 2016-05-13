@@ -112,6 +112,7 @@
             }
         },
         ready: function () {
+            console.log(this);
             var that = this, announce = $('#announce'), sortTopic = $('#sortTopic');
             announce.shape();
 

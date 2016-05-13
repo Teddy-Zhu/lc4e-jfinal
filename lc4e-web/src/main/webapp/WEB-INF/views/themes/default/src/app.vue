@@ -141,7 +141,7 @@
                     <h5 class="ui teal inverted header">Contributers</h5>
 
                     <div class="ui inverted link list">
-                        <a class="item" href="http://www.lc4e.com/" target="_blank">ZhuXi</a>
+                        <a class="item" href="http://www.eicoding.com/" target="_blank">ZhuXi</a>
                     </div>
                 </div>
                 <div class="four wide column">

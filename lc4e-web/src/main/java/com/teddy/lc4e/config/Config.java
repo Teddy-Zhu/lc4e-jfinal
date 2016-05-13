@@ -100,6 +100,7 @@ public class Config implements JFinalConfig {
         globalContext.set(String.class, "version", PropPlugin.getValue(Dict.version));
         globalContext.set(String.class, "Theme", "/themes/" + ComVarService.service.getComVarValueByName("DefaultTheme"));
 
+
         Key.kvs.put("Theme", ComVarService.service.getComVarValueByName("DefaultTheme"));
 
         Field field, field1;

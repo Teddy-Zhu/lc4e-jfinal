@@ -64,7 +64,7 @@ public class GlobalInterceptorKit {
     }
 
 
-    public static void Inject(Object obj, Class clz) {
+    public static void Autowired(Object obj, Class clz) {
 
         Map<Field, Object> injectObjs = CustomPlugin.getInjectObjs().get(clz);
 
@@ -77,7 +77,7 @@ public class GlobalInterceptorKit {
                     key.set(obj, CustomInterceptor.Proxy(fieldValue));
                 }
             } catch (IllegalAccessException e) {
-                LOGGER.error("Inject error in Class [" + clz.getName() + "]");
+                LOGGER.error("Autowired error in Class [" + clz.getName() + "]");
                 e.printStackTrace();
             }
         });

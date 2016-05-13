@@ -3,6 +3,7 @@
  */
 
 module.exports = function (Vue, options) {
+    'use strict';
     var duration = (options || {}).duration || 1000,
         transitions = {
             defineEmphasis: function (name, duration) {
@@ -57,8 +58,7 @@ module.exports = function (Vue, options) {
     });
 
     appearance.forEach(function (animation) {
-        var definition = transitions.defineAppearance(animation, duration);
-        var id = animation.split(' ').join('-');
+        var definition = transitions.defineAppearance(animation, duration), id = animation.split(' ').join('-');
 
         Vue.transition(id, definition);
     });

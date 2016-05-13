@@ -1,6 +1,5 @@
 package com.teddy.jfinal.handler;
 
-import com.jfinal.aop.Invocation;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
 import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
 import com.teddy.jfinal.plugin.CustomPlugin;
@@ -33,13 +32,13 @@ public class CustomInterceptor implements MethodInterceptor {
         boolean[] isHandled = new boolean[]{false};
 
         Object returnValue;
-        //resolve Inject
+        //resolve Autowired
         Class clz = target.getClass();
 
         AnnotationPluginResolver resolver = new AnnotationPluginResolver(isHandled, target, method, objects, methodProxy,
                 isClass ? CustomPlugin.getClassAnnotationMap().get(clz) : CustomPlugin.getMethodAnnotationMap().get(method));
 
-        GlobalInterceptorKit.Inject(target, clz);
+        GlobalInterceptorKit.Autowired(target, clz);
 
 
         returnValue = resolver.invoke();

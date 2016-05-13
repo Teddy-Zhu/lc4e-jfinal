@@ -198,7 +198,7 @@ public class CustomPlugin implements IPlugin {
 
 
     private void initInject() throws NoSuchFieldException, IllegalAccessException, InstantiationException {
-        //Inject with @Inject Service
+        //Autowired with @Autowired Service
         Set<Class> Classes = new HashSet<>();
 
         Classes.addAll(annotationsPack.getAnnotationClass(Service.class));

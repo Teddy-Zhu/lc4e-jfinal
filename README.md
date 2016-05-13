@@ -4,11 +4,12 @@
 ----------
 converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/lc4e-spring)
 
-###It's a Light Forum.
->#### Based On `Maven` `Jfinal` `MYSQL` `Shiro`
->#### Use Java(`JDK8`),
->###Jetbrick Template(`HTML5`,`VueJs`,`CSS3`)
->### Webpack
+### It's a Light Forum.
+
+>#### Back
+>### Based On `JDK8` `Maven` `Jfinal` `MYSQL` `Shiro` `Jetbrick Template`
+>#### Font
+>### `Webpack` `HTML5`,`VueJs`,`CSS3`
 
 ----------
 
@@ -23,23 +24,6 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 
 # [Demo](http://www.eicoding.com) #
 ----------
-
-# 论坛相关 #
-----------
-
-> ###轻量级论坛系统  
->1.  主题  
->  1.Markdown支持  
->  2.@楼层功能  
->  3.等...
->2. 用户  
->  1.用户控制权限系统  
->  2.独立自由的用户like,block系统  
->3. 插件拓展系统  
->  1.自由定制系统  
->4. 用户喜好推荐系统  
->  1.浏览习惯推荐主题  
->5. 待补充。。。 
 
 # Jfianl 框架增强相关 #
 ----------
@@ -70,10 +54,11 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 ```Java
 @CustomAnnotation
 public class customAn implements CustomAnnotationPlugin {
+           // 插件运行顺序
            public int getOrder() {
-                return 0;
+                return 1000;
             }
-            // 需要自定义的注解class
+            // 需要自定义的注解的class
             public abstract Class<? extends Annotation> getAnnotation();
             //处理此注解的事件
             //参数说明 
@@ -131,6 +116,25 @@ public class customAn implements CustomAnnotationPlugin {
 
 ----------
 
+# 论坛相关 #
+----------
+
+> ###轻量级论坛系统  
+>1.  主题  
+>  1.Markdown支持  
+>  2.@楼层功能  
+>  3.等...
+>2. 用户  
+>  1.用户控制权限系统  
+>  2.独立自由的用户like,block系统  
+>3. 插件拓展系统  
+>  1.自由定制系统  
+>4. 用户喜好推荐系统  
+>  1.浏览习惯推荐主题  
+>5. 待补充。。。 
+
+
+
 #重大更新#
 ----------
 
@@ -148,6 +152,6 @@ public class customAn implements CustomAnnotationPlugin {
 - 12/21/2015 19:13:16
 >stop woking on the project and wait for sui finished
 
-- 01/11/2015 23:34:42
+- 01/11/2016 23:34:42
 >update jfinal version to 2.1
 
