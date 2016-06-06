@@ -2,6 +2,7 @@ package com.teddy.jfinal.tools;
 
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.plugin.PropPlugin;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -144,23 +145,23 @@ public class StringTool {
 
     public static String encode(String data) throws Exception {
 
-        byte[] b = Base64.encodeBase64URLSafe(data.getBytes(PropPlugin.getValue(Dict.ENCODING)));
+        byte[] b = Base64.encodeBase64URLSafe(data.getBytes(Config.getCustomConfig().getProp().getValue(Dict.ENCODING)));
 
-        return new String(b, PropPlugin.getValue(Dict.ENCODING));
+        return new String(b, Config.getCustomConfig().getProp().getValue(Dict.ENCODING));
     }
 
 
     public static String decode(String data) throws Exception {
 
-        byte[] b = Base64.decodeBase64(data.getBytes(PropPlugin.getValue(Dict.ENCODING)));
+        byte[] b = Base64.decodeBase64(data.getBytes(Config.getCustomConfig().getProp().getValue(Dict.ENCODING)));
 
-        return new String(b, PropPlugin.getValue(Dict.ENCODING));
+        return new String(b, Config.getCustomConfig().getProp().getValue(Dict.ENCODING));
     }
 
     public static String urlEncode(String source) {
         String result = source;
         try {
-            result = java.net.URLEncoder.encode(source, PropPlugin.getValue(Dict.ENCODING));
+            result = java.net.URLEncoder.encode(source, Config.getCustomConfig().getProp().getValue(Dict.ENCODING));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

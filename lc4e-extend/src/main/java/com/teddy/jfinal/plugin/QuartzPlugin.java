@@ -3,12 +3,15 @@ package com.teddy.jfinal.plugin;
 
 import com.jfinal.log.Log;
 import com.jfinal.plugin.IPlugin;
+import com.teddy.jfinal.annotation.*;
+import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.interfaces.DBModel;
 import com.teddy.jfinal.plugin.quartz.IJob;
 import com.teddy.jfinal.plugin.quartz.Lc4eJob;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
 import org.quartz.*;
+import org.quartz.Job;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.Date;
@@ -55,7 +58,7 @@ public class QuartzPlugin implements IPlugin {
             }
         });
 
-        CustomPlugin.getAnnotationsPack().getAnnotationClass(Job.class).forEach(aClass -> {
+        Config.getCustomConfig().getAnnotationClass(com.teddy.jfinal.annotation.Job.class).forEach(aClass -> {
             com.teddy.jfinal.annotation.Job an = (com.teddy.jfinal.annotation.Job) aClass.getAnnotation(com.teddy.jfinal.annotation.Job.class);
             try {
                 Lc4eJob job = new Lc4eJob((Job) aClass.newInstance(), an.name(), an.corn(), aClass.getName(), an.group());

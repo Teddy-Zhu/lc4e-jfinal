@@ -4,6 +4,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.plugin.shiro.QuartzSessionValidationScheduler;
 import com.teddy.jfinal.plugin.shiro.RetryLimitHashedCredentialsMatcher;
 import com.teddy.jfinal.plugin.shiro.ShiroLoader;
@@ -34,25 +35,26 @@ public class ShiroPlugin implements IPlugin {
 
     @Override
     public boolean start() {
+        PropPlugin prop = Config.getCustomConfig().getProp();
         RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = new RetryLimitHashedCredentialsMatcher();
-        retryLimitHashedCredentialsMatcher.setHashAlgorithmName(PropPlugin.getValue(Dict.SHIRO_CREDENTIALS_MATCHER_HASHALGORITHMNAME, "md5"));
-        retryLimitHashedCredentialsMatcher.setHashIterations(PropPlugin.getInt(Dict.SHIRO_CREDENTIALS_MATCHER_HASHITERATIONS, 2));
-        retryLimitHashedCredentialsMatcher.setStoredCredentialsHexEncoded(PropPlugin.getBool(Dict.SHIRO_CREDENTIALS_MATCHER_STOREDCREDENTIALSHEXENCODED, true));
+        retryLimitHashedCredentialsMatcher.setHashAlgorithmName(prop.getValue(Dict.SHIRO_CREDENTIALS_MATCHER_HASHALGORITHMNAME, "md5"));
+        retryLimitHashedCredentialsMatcher.setHashIterations(prop.getInt(Dict.SHIRO_CREDENTIALS_MATCHER_HASHITERATIONS, 2));
+        retryLimitHashedCredentialsMatcher.setStoredCredentialsHexEncoded(prop.getBool(Dict.SHIRO_CREDENTIALS_MATCHER_STOREDCREDENTIALSHEXENCODED, true));
         EhCacheManager ehCacheManager = new EhCacheManager();
         ehCacheManager.setCacheManager(CacheKit.getCacheManager());
 
         JavaUuidSessionIdGenerator sessionIdGenerator = new JavaUuidSessionIdGenerator();
 
-        SimpleCookie sessionIdCookie = new SimpleCookie(PropPlugin.getValue(Dict.SHIRO_SESSION_COOKIENAME, "lc4e"));
-        sessionIdCookie.setMaxAge(PropPlugin.getInt(Dict.SHIRO_SESSION_IDCOOKIE_MAXAGE, -1));
-        sessionIdCookie.setHttpOnly(PropPlugin.getBool(Dict.SHIRO_SESSION_IDCOOKIE_HTTPONLY, true));
+        SimpleCookie sessionIdCookie = new SimpleCookie(prop.getValue(Dict.SHIRO_SESSION_COOKIENAME, "lc4e"));
+        sessionIdCookie.setMaxAge(prop.getInt(Dict.SHIRO_SESSION_IDCOOKIE_MAXAGE, -1));
+        sessionIdCookie.setHttpOnly(prop.getBool(Dict.SHIRO_SESSION_IDCOOKIE_HTTPONLY, true));
 
-        SimpleCookie rememberMeCookie = new SimpleCookie(PropPlugin.getValue(Dict.SHIRO_SESSION_REMEMBER_COOKIENAME, "rlc4e"));
-        rememberMeCookie.setHttpOnly(PropPlugin.getBool(Dict.SHIRO_SESSION_REMEMBER_ME_HTTPONLY, true));
-        rememberMeCookie.setMaxAge(PropPlugin.getInt(Dict.SHIRO_SESSION_REMEMBER_ME_MAXAGE, 2592000));
+        SimpleCookie rememberMeCookie = new SimpleCookie(prop.getValue(Dict.SHIRO_SESSION_REMEMBER_COOKIENAME, "rlc4e"));
+        rememberMeCookie.setHttpOnly(prop.getBool(Dict.SHIRO_SESSION_REMEMBER_ME_HTTPONLY, true));
+        rememberMeCookie.setMaxAge(prop.getInt(Dict.SHIRO_SESSION_REMEMBER_ME_MAXAGE, 2592000));
 
         CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
-        rememberMeManager.setCipherKey(Base64.decode(PropPlugin.getValue(Dict.SECURITY_KEY, "4AvVhmFLUs0KTA3Kprsdag==")));
+        rememberMeManager.setCipherKey(Base64.decode(prop.getValue(Dict.SECURITY_KEY, "4AvVhmFLUs0KTA3Kprsdag==")));
         rememberMeManager.setCookie(rememberMeCookie);
 
         EnterpriseCacheSessionDAO sessionDAO = new EnterpriseCacheSessionDAO();
@@ -61,18 +63,18 @@ public class ShiroPlugin implements IPlugin {
         sessionDAO.setCacheManager(ehCacheManager);
 
         QuartzSessionValidationScheduler sessionValidationScheduler = new QuartzSessionValidationScheduler();
-        sessionValidationScheduler.setSessionValidationInterval(PropPlugin.getLong(Dict.SHIRO_SESSION_VALIDATIONINTERVAL, 1800000L));
+        sessionValidationScheduler.setSessionValidationInterval(prop.getLong(Dict.SHIRO_SESSION_VALIDATIONINTERVAL, 1800000L));
 
         realm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher);
         realm.setCachingEnabled(false);
         realm.setCacheManager(ehCacheManager);
 
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setGlobalSessionTimeout(PropPlugin.getLong(Dict.SHIRO_SESSION_GLOBALSESSIONTIMEOUT, 1800000L));
+        sessionManager.setGlobalSessionTimeout(prop.getLong(Dict.SHIRO_SESSION_GLOBALSESSIONTIMEOUT, 1800000L));
         sessionManager.setSessionDAO(sessionDAO);
-        sessionManager.setSessionValidationInterval(PropPlugin.getLong(Dict.SHIRO_SESSION_VALIDATIONINTERVAL, 360000L));
+        sessionManager.setSessionValidationInterval(prop.getLong(Dict.SHIRO_SESSION_VALIDATIONINTERVAL, 360000L));
         sessionManager.setSessionValidationScheduler(sessionValidationScheduler);
-        sessionManager.setSessionIdCookieEnabled(PropPlugin.getBool(Dict.SHIRO_SESSION_IDCOOKIEENABLED, true));
+        sessionManager.setSessionIdCookieEnabled(prop.getBool(Dict.SHIRO_SESSION_IDCOOKIEENABLED, true));
         sessionManager.setSessionIdCookie(sessionIdCookie);
 
 

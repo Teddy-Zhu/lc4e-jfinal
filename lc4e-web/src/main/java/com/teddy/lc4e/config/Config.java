@@ -4,8 +4,6 @@ import com.jfinal.config.*;
 import com.jfinal.kit.JsonKit;
 import com.teddy.jfinal.annotation.ConfigHandler;
 import com.teddy.jfinal.common.Dict;
-import com.teddy.jfinal.config.JFinalConfig;
-import com.teddy.jfinal.handler.GlobalHandler;
 import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.plugin.ShiroPlugin;
@@ -33,15 +31,20 @@ import java.util.List;
  * Created by teddy on 2015/7/18.
  */
 @ConfigHandler
-public class Config implements JFinalConfig {
+public class Config extends JFinalConfig {
 
     private static final Logger LOGGER = Logger.getLogger(Config.class);
 
     public void configConstant(Constants me) {
+        PropPlugin prop = com.teddy.jfinal.config.Config.getCustomConfig().getProp();
+        //enable comvar and validate comvar function
+        com.teddy.jfinal.config.Config.getCustomConfig().setAttributeKit(new AttributeKit());
+        com.teddy.jfinal.config.Config.getCustomConfig().setValidateKit(new ValidateKit());
+        ShiroPlugin.setRealm(new UserRealm());
 
-        me.setEncoding(PropPlugin.getValue(Dict.ENCODING, "utf-8"));
+        me.setEncoding(prop.getValue(Dict.ENCODING, "utf-8"));
 
-        me.setDevMode(PropPlugin.getBool(Dict.DEV_MODE, false));
+        me.setDevMode(prop.getBool(Dict.DEV_MODE, false));
 
         me.setMainRenderFactory(new JetTemplateRenderFactory());
 
@@ -72,13 +75,6 @@ public class Config implements JFinalConfig {
 
     }
 
-    @Override
-    public void beforeConstant(Constants var1) {
-        //enable comvar and validate comvar function
-        CustomPlugin.setAttributeKit(new AttributeKit());
-        CustomPlugin.setValidateKit(new ValidateKit());
-        ShiroPlugin.setRealm(new UserRealm());
-    }
 
     public void beforeJFinalStop() {
     }
@@ -97,7 +93,7 @@ public class Config implements JFinalConfig {
         globalContext.set(String.class, "SiteName", ComVarService.service.getComVarValueByName("SiteName"));
         globalContext.set(List.class, "menulist", MenuService.service.getMenuTree());
         globalContext.set(String.class, "menusString", JsonKit.toJson(MenuService.service.getMenuTree()));
-        globalContext.set(String.class, "version", PropPlugin.getValue(Dict.version));
+        globalContext.set(String.class, "version", com.teddy.jfinal.config.Config.getCustomConfig().getProp().getValue(Dict.version));
         globalContext.set(String.class, "Theme", "/themes/" + ComVarService.service.getComVarValueByName("DefaultTheme"));
 
 

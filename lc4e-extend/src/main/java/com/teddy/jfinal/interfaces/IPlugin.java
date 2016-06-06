@@ -1,6 +1,7 @@
 package com.teddy.jfinal.interfaces;
 
 import com.jfinal.config.*;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 
 /**
@@ -18,8 +19,18 @@ public interface IPlugin {
 
     void init(Handlers me);
 
-    boolean start();
+    boolean start(CustomPlugin configPlugin);
 
-    boolean stop();
+    boolean stop(CustomPlugin configPlugin);
+
+    default boolean start() {
+        return true;
+    }
+
+    default boolean stop() {
+        return true;
+    }
+
+
 }
 

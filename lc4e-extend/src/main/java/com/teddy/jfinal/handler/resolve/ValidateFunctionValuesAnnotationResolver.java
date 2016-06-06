@@ -9,6 +9,7 @@ import com.teddy.jfinal.exceptions.Lc4eValidateException;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
 import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
 import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.plugin.core.InjectPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 
 import java.lang.annotation.Annotation;
@@ -35,7 +36,7 @@ public class ValidateFunctionValuesAnnotationResolver implements CustomAnnotatio
                 throw new Lc4eApplicationException("The method [" + an.methodName() + "] can not found in Class [" + an.targetClass().getName() + "]");
             }
             try {
-                Object obj = CustomPlugin.getInjectObjs().containsKey(an.targetClass()) ? CustomPlugin.getInjectObjs().get(an.targetClass()) : an.targetClass().newInstance();
+                Object obj = InjectPlugin.containsKey(an.targetClass()) ? InjectPlugin.get(an.targetClass()) : an.targetClass().newInstance();
                 returnValue = targetMethod.getParameterCount() > 0 ? targetMethod.invoke(obj, target) : targetMethod.invoke(obj);
             } catch (Exception e) {
                 e.printStackTrace();

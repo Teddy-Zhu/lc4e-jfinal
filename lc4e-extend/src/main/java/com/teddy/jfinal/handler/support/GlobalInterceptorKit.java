@@ -5,6 +5,8 @@ import com.jfinal.core.Controller;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.plugin.core.ExceptionPlugin;
+import com.teddy.jfinal.plugin.core.InjectPlugin;
 import com.teddy.jfinal.tools.WebTool;
 import org.apache.log4j.Logger;
 
@@ -47,7 +49,7 @@ public class GlobalInterceptorKit {
     }
 
     public static void ExceptionHandle(Invocation ai, Throwable e) throws Exception {
-        Method method = CustomPlugin.getExceptionsMap().get(e.getClass());
+        Method method = ExceptionPlugin.get(e.getClass());
         if (method == null) {
             resolve(ai, e);
         } else {
@@ -66,7 +68,7 @@ public class GlobalInterceptorKit {
 
     public static void Autowired(Object obj, Class clz) {
 
-        Map<Field, Object> injectObjs = CustomPlugin.getInjectObjs().get(clz);
+        Map<Field, Object> injectObjs = InjectPlugin.get(clz);
 
         injectObjs.forEach((key, value) -> {
             try {

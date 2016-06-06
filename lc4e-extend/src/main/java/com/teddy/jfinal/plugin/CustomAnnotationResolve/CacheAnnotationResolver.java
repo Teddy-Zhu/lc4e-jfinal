@@ -6,6 +6,7 @@ import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.CustomAnnotation;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
 import com.teddy.jfinal.plugin.PropPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
@@ -39,7 +40,7 @@ public class CacheAnnotationResolver implements CustomAnnotationPlugin {
         boolean useCache;
         Object cacheKey = null;
         Cache cache = (Cache) annotation;
-        useCache = cache != null && PropPlugin.getBool(Dict.USE_CACHE, true) && cache.index() < objects.length;
+        useCache = cache != null && Config.getCustomConfig().getProp().getBool(Dict.USE_CACHE, true) && cache.index() < objects.length;
 
         cacheKey = cache.index() == -1 ? cache.key() : objects[cache.index()];
         if (cacheKey.getClass().isArray() || cacheKey instanceof Collection) {

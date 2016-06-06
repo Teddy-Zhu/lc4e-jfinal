@@ -19,83 +19,49 @@ public class Config extends com.jfinal.config.JFinalConfig {
 
     private static final Logger logger = getLogger(Config.class);
 
-    private CustomPlugin custom = new CustomPlugin();
+    private static CustomPlugin customConfig = new CustomPlugin();
 
     public void configConstant(Constants me) {
         //Init Property File And Scan Annotation Classes
         try {
-            custom.init(loadPropertyFile(Const.CONFIG_FILE));
-
-            resolve(Const.CONFIG_BEFORE_CONSTANT, me);
-
-            custom.enable();
-
-            custom.init(me);
-
-
+            customConfig.init(loadPropertyFile(Const.CONFIG_FILE));
 
         } catch (Lc4eException | InstantiationException | IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
             logger.error("init failed");
         }
-
-        //Init original plugins
+        customConfig.init(me);
+        //Init original Config
         resolve(Const.CONFIG_CONSTANT, me);
+
+
     }
 
     public void configRoute(Routes me) {
-        try {
-            //Init custom routes with @Controller
-            custom.init(me);
-            //Init routes in Config Classes
-            resolve(Const.CONFIG_ROUTE, me);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            logger.error("init Route error");
-        }
+        customConfig.init(me);
+        resolve(Const.CONFIG_ROUTE, me);
+
     }
 
 
     public void configPlugin(Plugins me) {
-
-        try {
-            //Init custom plugins with @PluginHandler implements com.teddy.jfinal.IPlugin
-            custom.init(me);
-            //Init plugins in Config Classes
-            resolve(Const.CONFIG_PLUGIN, me);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            logger.error("init plugin error");
-        }
-
-
+        customConfig.init(me);
+        me.add(customConfig);
+        resolve(Const.CONFIG_PLUGIN, me);
     }
 
     public void configInterceptor(Interceptors me) {
-
-        try {
-            custom.init(me);
-            resolve(Const.CONFIG_INTERCEPTOR, me);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-
-
+        customConfig.init(me);
+        resolve(Const.CONFIG_INTERCEPTOR, me);
     }
 
     public void configHandler(Handlers me) {
-        try {
-            custom.init(me);
-            resolve(Const.CONFIG_HANDLER, me);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-
-
+        customConfig.init(me);
+        resolve(Const.CONFIG_HANDLER, me);
     }
 
     private void resolve(String methodName, Object me) {
-        Class<?> clz = CustomPlugin.getClazz();
+        Class<?> clz = customConfig.getClazz();
         Method method;
         try {
             method = ReflectTool.getDeclaredMethodByClassAndName(clz, methodName);
@@ -118,8 +84,10 @@ public class Config extends com.jfinal.config.JFinalConfig {
     @Override
     public void beforeJFinalStop() {
         resolve(Const.BEFORE_JFINAL_STOP, null);
-        CustomPlugin.setClazz(null);
-        CustomPlugin.getExceptionsMap().clear();
     }
 
+
+    public static CustomPlugin getCustomConfig() {
+        return customConfig;
+    }
 }

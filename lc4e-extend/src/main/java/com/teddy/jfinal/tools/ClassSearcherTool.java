@@ -2,6 +2,7 @@ package com.teddy.jfinal.tools;
 
 import com.jfinal.kit.PathKit;
 import com.teddy.jfinal.common.Dict;
+import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.plugin.PropPlugin;
 
 import java.io.File;
@@ -71,15 +72,8 @@ public class ClassSearcherTool {
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean isValiPkg() {
-        List<String> pkgs = (List<String>) PropPlugin.getObject(Dict.SCAN_PACKAGE);
-        return pkgs.size() > 0;
-    }
-
-
-    @SuppressWarnings("unchecked")
     public static boolean valiPkg(String classFile) {
-        List<String> pkgs = (List<String>) PropPlugin.getObject(Dict.SCAN_PACKAGE);
+        List<String> pkgs = (List<String>) Config.getCustomConfig().getProp().getObject(Dict.SCAN_PACKAGE);
         for (String pkg : pkgs) {
             if (classFile.startsWith(pkg)) {
                 return true;
@@ -91,21 +85,10 @@ public class ClassSearcherTool {
 
     @SuppressWarnings("unchecked")
     public static boolean isValiJar() {
-        List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
+        List<String> jars = (List<String>) Config.getCustomConfig().getProp().getObject(Dict.SCAN_JAR);
         return jars.size() > 0;
     }
 
-
-    @SuppressWarnings("unchecked")
-    public static boolean valiJar(String jarName) {
-        List<String> jars = (List<String>) PropPlugin.getObject(Dict.SCAN_JAR);
-        for (String jar : jars) {
-            if (jarName.equals(jar)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static ClassSearcherTool of(Class<? extends Annotation>... target) {

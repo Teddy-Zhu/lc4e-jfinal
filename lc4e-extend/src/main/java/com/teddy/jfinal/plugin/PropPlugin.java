@@ -10,7 +10,7 @@ import java.util.*;
 public class PropPlugin {
 
 
-    private static Map<String, Object> paramMap = new HashMap<>();
+    private Map<String, Object> paramMap = new HashMap<>();
 
     private Properties properties;
 
@@ -23,54 +23,54 @@ public class PropPlugin {
 
 
 
-    public static Object getObject(String key) {
+    public Object getObject(String key) {
         return paramMap.get(key);
     }
 
 
-    public static String getValue(String key) {
+    public String getValue(String key) {
         return paramMap.containsKey(key) ? (String) paramMap.get(key) : null;
     }
 
-    public static String getValue(String key, String defaultValue) {
+    public String getValue(String key, String defaultValue) {
         return paramMap.containsKey(key) ? (String) paramMap.get(key) : defaultValue;
     }
 
 
-    public static Integer getInt(String key) {
+    public Integer getInt(String key) {
         String value = getValue(key);
         return value == null ? (Integer) null : Integer.valueOf(value);
     }
 
-    public static Integer getInt(String key, Integer defaultValue) {
+    public Integer getInt(String key, Integer defaultValue) {
         String value = getValue(key);
         return value == null ? defaultValue : Integer.valueOf(value);
     }
 
 
-    public static Long getLong(String key) {
+    public Long getLong(String key) {
         String value = getValue(key);
         return value == null ? (Long) null : Long.valueOf(value);
     }
 
-    public static Long getLong(String key, Long defaultValue) {
+    public Long getLong(String key, Long defaultValue) {
         String value = getValue(key);
         return value == null ? defaultValue : Long.valueOf(value);
     }
 
-    public static Boolean getBool(String key) {
+    public Boolean getBool(String key) {
         String value = getValue(key);
         return value == null ? (Boolean) null : Boolean.valueOf(value);
     }
 
-    public static Boolean getBool(String key, Boolean defaultValue) {
+    public Boolean getBool(String key, Boolean defaultValue) {
         String value = getValue(key);
         return value == null ? defaultValue : Boolean.valueOf(value);
     }
 
     public boolean start() {
 
-        Field[] fields = new Dict().getClass().getDeclaredFields();
+        Field[] fields = Dict.class.getDeclaredFields();
 
         for (Field field : fields) {
             try {

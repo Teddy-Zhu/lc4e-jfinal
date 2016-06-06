@@ -26,7 +26,7 @@ public class SetComVarsAnnotationResolver implements CustomAnnotationPlugin {
 
         returnValue = resolver.invoke();
 
-        CustomPlugin.getAttributeKit().setComVars((SetComVars) annotation, (Controller) target);
+        com.teddy.jfinal.config.Config.getCustomConfig().getAttributeKit().setComVars((SetComVars) annotation, (Controller) target);
         return returnValue;
     }
 }
