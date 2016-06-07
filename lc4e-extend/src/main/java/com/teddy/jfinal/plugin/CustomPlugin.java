@@ -79,9 +79,7 @@ public class CustomPlugin implements IPlugin {
     }
 
     private void initScanClass() {
-        String jarString = prop.getValue(Dict.SCAN_JAR);
-        List<String> jars = Arrays.asList(jarString.split(";"));
-        jars.forEach(jar -> jar = jar.trim());
+        List<String> jars = (List<String>) prop.getObject(Dict.SCAN_JAR);
 
         if (jars.size() > 0) {
             classesMap = new ClassSearcherTool().includeAllJarsInLib(ClassSearcherTool.isValiJar()).injars(jars).getAllAnnotation();
@@ -164,12 +162,12 @@ public class CustomPlugin implements IPlugin {
     @Override
     public boolean start() {
         plugins.forEach(com.teddy.jfinal.interfaces.IPlugin::start);
-        return false;
+        return true;
     }
     @Override
     public boolean stop() {
         plugins.forEach(com.teddy.jfinal.interfaces.IPlugin::stop);
         plugins.forEach(iPlugin -> iPlugin.stop(this));
-        return false;
+        return true;
     }
 }
