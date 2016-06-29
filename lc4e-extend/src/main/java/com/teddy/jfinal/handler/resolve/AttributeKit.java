@@ -3,7 +3,6 @@ package com.teddy.jfinal.handler.resolve;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.exceptions.Lc4eAutoSetterException;
 import com.teddy.jfinal.exceptions.Lc4eException;
-import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.core.InjectPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.WebTool;

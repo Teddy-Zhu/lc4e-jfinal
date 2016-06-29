@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin;
+package com.teddy.jfinal.plugin.core;
 
 import com.jfinal.config.*;
 import com.jfinal.plugin.IPlugin;
@@ -7,7 +7,6 @@ import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.resolve.AttributeKitI;
 import com.teddy.jfinal.handler.resolve.ValidateKitI;
-import com.teddy.jfinal.plugin.core.*;
 import com.teddy.jfinal.tools.ClassSearcherTool;
 import org.apache.log4j.Logger;
 
@@ -58,6 +57,18 @@ public class CustomPlugin implements IPlugin {
         plugins.add(new InterceptorPlugin());
         plugins.add(new ExceptionPlugin());
         plugins.add(new CustomAnPlugin());
+        plugins.add(new CacheControlPlugin());
+
+        //Init Shiro
+        if (prop.getBool(Dict.USE_SHIRO, true)) {
+            plugins.add(new ShiroPlugin());
+        }
+
+        //Init Shiro
+        if (prop.getBool(Dict.USE_CACHE_CONTROL, true)) {
+            plugins.add(new CacheControlPlugin());
+        }
+
 
         plugins.forEach(plugin -> plugin.start(this));
 

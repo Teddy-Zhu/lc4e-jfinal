@@ -3,7 +3,7 @@ package com.teddy.jfinal.config;
 import com.jfinal.config.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.exceptions.Lc4eException;
-import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.plugin.core.CustomPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 import org.apache.log4j.Logger;
 

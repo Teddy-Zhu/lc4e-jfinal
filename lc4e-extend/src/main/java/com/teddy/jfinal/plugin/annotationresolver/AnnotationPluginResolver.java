@@ -1,9 +1,6 @@
-package com.teddy.jfinal.plugin.CustomAnnotationResolve;
+package com.teddy.jfinal.plugin.annotationresolver;
 
-import com.jfinal.aop.Invocation;
-import com.teddy.jfinal.annotation.CustomAnnotation;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.core.CustomAnPlugin;
 import net.sf.cglib.proxy.MethodProxy;
 import org.apache.commons.collections.map.HashedMap;

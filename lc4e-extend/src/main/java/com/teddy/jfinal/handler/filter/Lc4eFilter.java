@@ -3,12 +3,10 @@ package com.teddy.jfinal.handler.filter;
 import com.jfinal.config.Constants;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.core.JFinal;
-import com.jfinal.core.JFinalFilter;
 import com.jfinal.core.JFinalPublic;
 import com.jfinal.handler.Handler;
 import com.jfinal.log.Log;
 import com.teddy.jfinal.handler.gzip.GZIPResponseWrapper;
-import com.teddy.jfinal.plugin.CustomPlugin;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

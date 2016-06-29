@@ -42,7 +42,7 @@ public class CustomAnPlugin implements IPlugin {
     }
 
     @Override
-    public boolean start(com.teddy.jfinal.plugin.CustomPlugin configPlugin) {
+    public boolean start(CustomPlugin configPlugin) {
         configPlugin.getAnnotationClass(CustomAnnotation.class).forEach(aClass -> {
             if (CustomAnnotationPlugin.class.isAssignableFrom(aClass)) {
                 try {
@@ -58,7 +58,7 @@ public class CustomAnPlugin implements IPlugin {
     }
 
     @Override
-    public boolean stop(com.teddy.jfinal.plugin.CustomPlugin configPlugin) {
+    public boolean stop(CustomPlugin configPlugin) {
         return false;
     }
 

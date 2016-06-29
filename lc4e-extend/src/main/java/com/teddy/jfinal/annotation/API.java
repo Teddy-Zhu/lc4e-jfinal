@@ -5,21 +5,15 @@ import com.teddy.jfinal.common.Const;
 import java.lang.annotation.*;
 
 /**
- * Created by teddy on 2015/7/18.
+ * Created by teddyzhu on 16/6/29.
  */
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface Controller {
+public @interface API {
+    String version() ;
 
-    /**
-     * url paths
-     *
-     * @return
-     */
     String value() default Const.DEFAULT_NONE;
-
-    String views() default Const.DEFAULT_NONE;
 
 }

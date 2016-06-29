@@ -4,7 +4,6 @@ import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.CustomInterceptor;
-import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.plugin.core.ExceptionPlugin;
 import com.teddy.jfinal.plugin.core.InjectPlugin;
 import com.teddy.jfinal.tools.WebTool;

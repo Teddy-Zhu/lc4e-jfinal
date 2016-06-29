@@ -2,25 +2,14 @@ package com.teddy.lc4e.database.generate;
 
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Prop;
-import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.generator.Generator;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
-import com.jfinal.plugin.druid.DruidPlugin;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
-import com.teddy.jfinal.config.Config;
-import com.teddy.jfinal.plugin.PropPlugin;
-import com.teddy.jfinal.tools.StringTool;
-import org.apache.log4j.Logger;
+import com.teddy.jfinal.plugin.core.PropPlugin;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * generate db table mappers for mysql

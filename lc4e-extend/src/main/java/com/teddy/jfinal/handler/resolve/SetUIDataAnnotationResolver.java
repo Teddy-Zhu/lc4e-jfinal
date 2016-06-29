@@ -2,10 +2,9 @@ package com.teddy.jfinal.handler.resolve;
 
 import com.jfinal.core.Controller;
 import com.teddy.jfinal.annotation.CustomAnnotation;
-import com.teddy.jfinal.annotation.SetPJAX;
 import com.teddy.jfinal.annotation.SetUIData;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

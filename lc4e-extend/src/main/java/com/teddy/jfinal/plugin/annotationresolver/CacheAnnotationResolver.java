@@ -1,6 +1,5 @@
-package com.teddy.jfinal.plugin.CustomAnnotationResolve;
+package com.teddy.jfinal.plugin.annotationresolver;
 
-import com.jfinal.aop.Invocation;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.jfinal.annotation.Cache;
 import com.teddy.jfinal.annotation.CustomAnnotation;
@@ -8,10 +7,6 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.PropPlugin;
-import com.teddy.jfinal.tools.ReflectTool;
-import com.teddy.jfinal.tools.StringTool;
-import net.sf.cglib.proxy.MethodProxy;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;

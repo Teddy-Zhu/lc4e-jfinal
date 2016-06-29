@@ -14,12 +14,8 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.interfaces.IPlugin;
-import com.teddy.jfinal.plugin.CustomPlugin;
-import com.teddy.jfinal.plugin.PropPlugin;
-import com.teddy.jfinal.plugin.ShiroPlugin;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -112,10 +108,7 @@ public class JfinalPlugin implements IPlugin {
         if (prop.getBool(Dict.USE_CACHE, true)) {
             plugins.add(new EhCachePlugin(prop.getValue(Dict.CACHE_CONFIG, Const.CONFIG_CACHE_FILE)));
         }
-        //Init Shiro
-        if (prop.getBool(Dict.USE_SHIRO, true)) {
-            plugins.add(new ShiroPlugin());
-        }
+
 
         configPlugin.getAnnotationClass(PluginHandler.class).forEach(plugin -> {
             try {

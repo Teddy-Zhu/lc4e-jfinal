@@ -3,7 +3,6 @@ package com.teddy.jfinal.tools;
 import com.jfinal.kit.PathKit;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.Config;
-import com.teddy.jfinal.plugin.PropPlugin;
 
 import java.io.File;
 import java.io.FilenameFilter;

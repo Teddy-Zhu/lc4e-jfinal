@@ -2,7 +2,7 @@ package com.teddy.jfinal.handler;
 
 import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
-import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;

@@ -7,11 +7,8 @@ import com.teddy.jfinal.annotation.Inject;
 import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.handler.CustomInterceptor;
-import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
 import com.teddy.jfinal.interfaces.IPlugin;
-import com.teddy.jfinal.plugin.CustomPlugin;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;

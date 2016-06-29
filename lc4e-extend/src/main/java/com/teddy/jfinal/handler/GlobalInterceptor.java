@@ -2,9 +2,7 @@ package com.teddy.jfinal.handler;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
-import com.jfinal.core.Controller;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
-import com.teddy.jfinal.plugin.CustomPlugin;
 
 /**
  * Created by teddy on 2015/7/19.

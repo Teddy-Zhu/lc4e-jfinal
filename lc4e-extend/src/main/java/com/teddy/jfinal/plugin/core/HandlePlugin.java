@@ -3,11 +3,8 @@ package com.teddy.jfinal.plugin.core;
 import com.jfinal.config.*;
 import com.jfinal.handler.Handler;
 import com.teddy.jfinal.annotation.GlobalHandler;
-import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.interfaces.IHandler;
 import com.teddy.jfinal.interfaces.IPlugin;
-import com.teddy.jfinal.plugin.CustomPlugin;
-import com.teddy.jfinal.plugin.PropPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,9 +65,6 @@ public class HandlePlugin  implements IPlugin{
         //Init Core Handler
         jfinalHandler.add(new com.teddy.jfinal.handler.GlobalHandler());
 
-        if (prop.getBool(Dict.XSS)) {
-            //     handlers.add(new XSSHandler());
-        }
 
         return false;
     }

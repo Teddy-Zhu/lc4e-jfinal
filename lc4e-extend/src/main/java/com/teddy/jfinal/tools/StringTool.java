@@ -3,7 +3,6 @@ package com.teddy.jfinal.tools;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.Config;
-import com.teddy.jfinal.plugin.PropPlugin;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;

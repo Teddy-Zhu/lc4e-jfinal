@@ -1,6 +1,6 @@
 package com.teddy.jfinal.interfaces;
 
-import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

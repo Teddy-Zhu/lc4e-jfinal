@@ -1,10 +1,12 @@
-package com.teddy.jfinal.plugin;
+package com.teddy.jfinal.plugin.core;
 
+import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
-import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.Config;
+import com.teddy.jfinal.plugin.shiro.ShiroHandler;
+import com.teddy.jfinal.interfaces.IPlugin;
 import com.teddy.jfinal.plugin.shiro.QuartzSessionValidationScheduler;
 import com.teddy.jfinal.plugin.shiro.RetryLimitHashedCredentialsMatcher;
 import com.teddy.jfinal.plugin.shiro.ShiroLoader;
@@ -23,15 +25,55 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import javax.servlet.ServletContext;
 
 /**
- * Created by teddy on 2015/8/7.
+ * Created by teddyzhu on 16/6/29.
  */
 public class ShiroPlugin implements IPlugin {
+    @Override
+    public void init(Plugins me) {
+
+    }
+
+    @Override
+    public void init(Routes me) {
+
+    }
+
+    @Override
+    public void init(Constants me) {
+
+    }
+
+    @Override
+    public void init(Interceptors me) {
+
+    }
+
+    @Override
+    public void init(Handlers me) {
+        me.add(new ShiroHandler());
+    }
 
     public static DefaultWebSecurityManager defaultWebSecurityManager;
 
     private static ServletContext servletContext;
 
     private static AuthorizingRealm realm;
+
+
+    @Override
+    public boolean start(CustomPlugin configPlugin) {
+
+        return true;
+    }
+
+    @Override
+    public boolean stop(CustomPlugin configPlugin) {
+        return true;
+    }
+
+    public static void setRealm(AuthorizingRealm realm) {
+        ShiroPlugin.realm = realm;
+    }
 
     @Override
     public boolean start() {
@@ -98,16 +140,8 @@ public class ShiroPlugin implements IPlugin {
         return true;
     }
 
-
     @Override
     public boolean stop() {
-
-
         return true;
     }
-
-    public static void setRealm(AuthorizingRealm realm) {
-        ShiroPlugin.realm = realm;
-    }
 }
-

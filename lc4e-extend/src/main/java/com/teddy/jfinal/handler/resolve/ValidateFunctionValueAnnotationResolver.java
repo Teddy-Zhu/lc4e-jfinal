@@ -6,8 +6,7 @@ import com.teddy.jfinal.exceptions.Lc4eApplicationException;
 import com.teddy.jfinal.exceptions.Lc4eAutoSetterException;
 import com.teddy.jfinal.exceptions.Lc4eValidateException;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
-import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
 import com.teddy.jfinal.plugin.core.InjectPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 

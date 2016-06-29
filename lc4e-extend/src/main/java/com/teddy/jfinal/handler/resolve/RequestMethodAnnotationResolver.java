@@ -1,12 +1,11 @@
 package com.teddy.jfinal.handler.resolve;
 
-import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.teddy.jfinal.annotation.CustomAnnotation;
 import com.teddy.jfinal.annotation.RequestMethod;
 import com.teddy.jfinal.exceptions.Lc4eValidateException;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.CustomAnnotationResolve.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

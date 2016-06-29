@@ -1,6 +1,5 @@
-package com.teddy.jfinal.plugin.CustomAnnotationResolve;
+package com.teddy.jfinal.plugin.annotationresolver;
 
-import com.jfinal.aop.Invocation;
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Config;
 import com.jfinal.plugin.activerecord.DbKit;

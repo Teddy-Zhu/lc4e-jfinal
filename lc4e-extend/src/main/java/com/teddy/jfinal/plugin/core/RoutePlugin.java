@@ -7,7 +7,6 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.Route;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.interfaces.IPlugin;
-import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
 import org.apache.log4j.Logger;
@@ -70,9 +69,8 @@ public class RoutePlugin implements IPlugin {
                 configPlugin.getClassAnnotationMap().put(controller, controllerAns);
                 String controllerKey = controllerBind.value();
                 String controllerView = controllerBind.views();
-                if (controllerKey.equals("")) {
-                    LOGGER.error(controller.getName() + " path must not be empty");
-                    return;
+                if (controllerKey.equals("") || controllerKey.equals(Const.DEFAULT_NONE)) {
+                    controllerKey = controller.getSimpleName();
                 }
                 routes.add(new Route(controllerKey, controller, controllerView));
                 Method[] methods = controller.getMethods();

@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin;
+package com.teddy.jfinal.plugin.core;
 
 import com.jfinal.kit.Prop;
 import com.teddy.jfinal.common.Dict;

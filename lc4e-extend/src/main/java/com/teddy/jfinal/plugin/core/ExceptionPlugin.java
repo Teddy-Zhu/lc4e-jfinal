@@ -4,7 +4,6 @@ import com.jfinal.config.*;
 import com.teddy.jfinal.annotation.ExceptionHandler;
 import com.teddy.jfinal.annotation.ExceptionHandlers;
 import com.teddy.jfinal.interfaces.IPlugin;
-import com.teddy.jfinal.plugin.CustomPlugin;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
