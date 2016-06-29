@@ -49,22 +49,37 @@ public class CustomPlugin implements IPlugin {
         initScanClass();
         initConfigClass();
 
+        //Core
         plugins.add(new JfinalPlugin());
+
+        //autowired  for @Inject
         plugins.add(new InjectPlugin());
+
+        //for @GlobalHandler
         plugins.add(new HandlePlugin());
+
+        //for @Service
         plugins.add(new ServicePlugin());
+
+        //for @Controller
         plugins.add(new RoutePlugin());
+
+        //for @InterceptorHandler
         plugins.add(new InterceptorPlugin());
+
+        //for @ExceptionHandlers @ExceptionHandler
         plugins.add(new ExceptionPlugin());
+
+
+        //for @CustomAnnotation
         plugins.add(new CustomAnPlugin());
-        plugins.add(new CacheControlPlugin());
 
         //Init Shiro
         if (prop.getBool(Dict.USE_SHIRO, true)) {
             plugins.add(new ShiroPlugin());
         }
 
-        //Init Shiro
+        //enable CacheControl
         if (prop.getBool(Dict.USE_CACHE_CONTROL, true)) {
             plugins.add(new CacheControlPlugin());
         }
