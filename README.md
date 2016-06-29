@@ -46,6 +46,7 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 - `Model [T]`：结合ActiveRecord，自动Mapping数据库， 结合Tools 可以自动生成Dao 与 Mapping数据
 - `Inject [F]`: 自动注入，须在Serivce 或者 Controller中。
 
+
 ## 自定义注解插件
 > 自定义注解插件,除了系统初始化级别的注解外,`Controller ` 以及`Service ` 内的注解均可以通过此插件进行拓展.	
 > 用法(Usage): 具体参考系统一有注解	
@@ -71,6 +72,39 @@ public class customAn implements CustomAnnotationPlugin {
             public abstract Object intercept(Annotation annotation, AnnotationPluginResolver resolver, Object[] objects, Object target, Method method, boolean[] isHandled) throws Throwable;
 }
 ```
+### Jfinal Plugin 增强
+```java
+public interface IPlugin {  
+
+	  //在configPlugin中初始化  
+	       void init(Plugins me);  
+    //在configRoute中初始化  
+         void init(Routes me);  
+    //在configConstant中初始化  
+         void init(Constants me);  
+    //在configInterceptor中初始化  
+         void init(Interceptors me);  
+    
+    //configHandler中初始化  
+     void init(Handlers me);  
+    
+    //立即执行的函数  
+         boolean start(CustomPlugin configPlugin);  
+    
+    //暂无作用 预留函数  
+         boolean stop(CustomPlugin configPlugin);  
+    
+    //jifnal 原生 start  
+         default boolean start() {  
+             return true;  
+             }  
+    //jifnal 原生 stop  
+         default boolean stop() {  
+             return true;  
+             }  
+     }
+```
+
 ###基于CustonAnnotation的注解插件
 - `Transaction [M]`:在方法上注入，可以自动事物
 - `RequestHeader[T/M]`:request Header 验证
@@ -98,11 +132,11 @@ public class customAn implements CustomAnnotationPlugin {
 - `RequiresUser[T/M]`:
 
 
-### 其他注解
+### 其他
 - `BaseController`：增强Controller 增加isAJAX ，isPJAX , 验证码render等
 - `DBModel`: 增强Model,自动set updateTime，createTime,自动事务，自动Cache
 - `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
-- `IIPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
+- `IPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
 
 
 ## 新增异常(待整理)
