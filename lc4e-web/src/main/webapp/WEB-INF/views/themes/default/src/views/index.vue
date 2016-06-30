@@ -57,7 +57,7 @@
         </div>
         <div id="articlebottons" class="ui bottom attached floating message">
             <div id="prePage" v-waves
-                 class="ui left floated basic labeled icon button" v-show="page>0"
+                 class="ui left floated basic labeled icon button" v-show="page>1"
                  v-on:click="prevPage">
                 <i class="angle double left icon"></i>
                 Prevs
@@ -147,7 +147,6 @@
 
             },
             nextPage: function () {
-                console.log(this.page);
                 this.page = this.page + 1;
             },
             prevPage: function () {

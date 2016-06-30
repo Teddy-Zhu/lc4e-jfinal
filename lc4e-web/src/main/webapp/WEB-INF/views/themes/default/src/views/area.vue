@@ -85,7 +85,7 @@
             <topic-list :topics="topics" :page="page"></topic-list>
         </div>
         <div id="articlebottons" class="ui bottom clearing floating attached message">
-            <div id="prePage" v-waves class="ui left floated basic labeled icon button" v-show="page>0"
+            <div id="prePage" v-waves class="ui left floated basic labeled icon button" v-show="page>1"
                  v-on:click="prevPage">
                 <i class="angle double left icon"></i>
                 Prev
