@@ -125,9 +125,17 @@
         data: function () {
             return {
                 isLogin: this.$root.$data.isLogin,
-                sort: this.$root.$data.sort,
-                page: this.$root.$data.page,
                 comments: []
+            }
+        },
+        props: {
+            page: {
+                type: Number,
+                default: 1
+            },
+            sort: {
+                type: Number,
+                default: 2
             }
         },
         route: {

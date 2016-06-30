@@ -60,7 +60,7 @@
                  class="ui left floated basic labeled icon button" v-show="page>1"
                  v-on:click="prevPage">
                 <i class="angle double left icon"></i>
-                Prevs
+                Prev
             </div>
             <div id="nextPage" v-waves class="ui right floated basic right labeled icon button" v-on:click="nextPage">
                 <i class="angle double right icon"></i>
@@ -94,9 +94,17 @@
                 isLogin: this.$root.$data.isLogin,
                 siteName: this.$root.$data.siteName,
                 themePath: this.$root.$data.themePath,
-                sort: this.$root.$data.sort,
-                page: this.$root.$data.page,
                 topics: []
+            }
+        },
+        props: {
+            page: {
+                type: Number,
+                default: 1
+            },
+            sort: {
+                type: Number,
+                default: 2
             }
         },
         components: {

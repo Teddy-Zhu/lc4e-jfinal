@@ -107,12 +107,20 @@
                 params: {},
                 isLogin: this.$root.$data.isLogin,
                 siteName: this.$root.$data.siteName,
-                sort: this.$root.$data.sort,
-                page: this.$root.$data.page,
                 topics: [],
                 curArea: '',
                 showTopics: false
             };
+        },
+        props: {
+            page: {
+                type: Number,
+                default: 1
+            },
+            sort: {
+                type: Number,
+                default: 2
+            }
         },
         route: {
             data: function (transition) {
@@ -139,7 +147,7 @@
                     that.$router.go("/a/" + that.area + "-" + that.sort + "-" + that.page);
                     that.$nextTick(function () {
                         $.Lc4eLoading('hide');
-                        $('body').animate({scrollTop: 0}, 500,'easeOutQuad');
+                        $('body').animate({scrollTop: 0}, 500, 'easeOutQuad');
                     });
                 }
             }
@@ -163,9 +171,9 @@
                 this.page = this.page - 1;
             }
         },
-        computed :{
-            area :function () {
-                return  this.$route.params.area.split('-')[0];
+        computed: {
+            area: function () {
+                return this.$route.params.area.split('-')[0];
             }
         }
     }
