@@ -15,7 +15,7 @@
                     <div class="item">
                         <div class="ui icon input">
                             <input id="searchSite" type="text" placeholder="Search..."
-                                   v-on:focus="expend" v-on:blur="collapse"/> <i
+                                   v-on:focus="expend" v-on:blur="collapse" :class="{ 'expended' : expended }"/> <i
                                 class="search link icon"></i>
                         </div>
                     </div>
