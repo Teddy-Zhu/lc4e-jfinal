@@ -66,18 +66,18 @@ public class customAn implements CustomAnnotationPlugin {
 ```java
 public interface IPlugin {  
 
-	  //在configPlugin中初始化  
-	       void init(Plugins me);  
+	//在configPlugin中初始化  
+	   void init(Plugins me);  
     //在configRoute中初始化  
-         void init(Routes me);  
+        void init(Routes me);  
     //在configConstant中初始化  
-         void init(Constants me);  
+        void init(Constants me);  
     //在configInterceptor中初始化  
-         void init(Interceptors me);  
+        void init(Interceptors me);  
     
-    //configHandler中初始化  
-     void init(Handlers me);  
-    
+    //configHandler中初始化    
+        void init(Handlers me);  
+
     //立即执行的函数  
          boolean start(CustomPlugin configPlugin);  
     
