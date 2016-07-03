@@ -1,7 +1,7 @@
 package com.teddy.lc4e.util.plugins;
 
 import com.teddy.jfinal.interfaces.DBModel;
-import com.teddy.jfinal.plugin.quartz.IJob;
+import com.teddy.jfinal.depend.quartz.IJob;
 import com.teddy.lc4e.database.model.SysJob;
 import com.teddy.lc4e.web.service.JobService;
 import org.quartz.JobExecutionContext;

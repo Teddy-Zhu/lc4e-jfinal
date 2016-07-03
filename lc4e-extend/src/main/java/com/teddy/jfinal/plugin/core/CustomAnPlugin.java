@@ -4,6 +4,7 @@ import com.jfinal.config.*;
 import com.teddy.jfinal.annotation.CustomAnnotation;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -59,11 +60,11 @@ public class CustomAnPlugin implements IPlugin {
 
     @Override
     public boolean stop(CustomPlugin configPlugin) {
-        return false;
+        return true;
     }
 
 
-    public static boolean containsKey(Class<? extends Annotation> clz) {
+    public static boolean contains(Class<? extends Annotation> clz) {
         return customs.containsKey(clz);
     }
 

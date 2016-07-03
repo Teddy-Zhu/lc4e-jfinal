@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler.gzip;
+package com.teddy.jfinal.servlet.gzip;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;

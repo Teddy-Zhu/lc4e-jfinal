@@ -5,11 +5,13 @@ import com.jfinal.core.JFinal;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.config.Config;
-import com.teddy.jfinal.plugin.shiro.ShiroHandler;
+import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.plugin.support.shiro.ShiroHandler;
 import com.teddy.jfinal.interfaces.IPlugin;
-import com.teddy.jfinal.plugin.shiro.QuartzSessionValidationScheduler;
-import com.teddy.jfinal.plugin.shiro.RetryLimitHashedCredentialsMatcher;
-import com.teddy.jfinal.plugin.shiro.ShiroLoader;
+import com.teddy.jfinal.plugin.support.shiro.QuartzSessionValidationScheduler;
+import com.teddy.jfinal.plugin.support.shiro.RetryLimitHashedCredentialsMatcher;
+import com.teddy.jfinal.plugin.support.shiro.ShiroLoader;
+import com.teddy.jfinal.tools.PropTool;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -77,7 +79,7 @@ public class ShiroPlugin implements IPlugin {
 
     @Override
     public boolean start() {
-        PropPlugin prop = Config.getCustomConfig().getProp();
+        PropTool prop = Config.getCustomConfig().getProp();
         RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = new RetryLimitHashedCredentialsMatcher();
         retryLimitHashedCredentialsMatcher.setHashAlgorithmName(prop.getValue(Dict.SHIRO_CREDENTIALS_MATCHER_HASHALGORITHMNAME, "md5"));
         retryLimitHashedCredentialsMatcher.setHashIterations(prop.getInt(Dict.SHIRO_CREDENTIALS_MATCHER_HASHITERATIONS, 2));

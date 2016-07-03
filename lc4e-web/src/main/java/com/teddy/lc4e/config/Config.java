@@ -4,11 +4,11 @@ import com.jfinal.config.*;
 import com.jfinal.kit.JsonKit;
 import com.teddy.jfinal.annotation.ConfigHandler;
 import com.teddy.jfinal.common.Dict;
-import com.teddy.jfinal.plugin.core.PropPlugin;
+import com.teddy.jfinal.tools.PropTool;
 import com.teddy.jfinal.plugin.core.ShiroPlugin;
-import com.teddy.jfinal.plugin.jetbrick.function.TemplateTool;
-import com.teddy.jfinal.plugin.jetbrick.tag.staticIncludeTag;
-import com.teddy.jfinal.plugin.shiro.ShiroMethod;
+import com.teddy.jfinal.depend.jetbrick.function.TemplateTool;
+import com.teddy.jfinal.depend.jetbrick.tag.staticIncludeTag;
+import com.teddy.jfinal.plugin.support.shiro.ShiroMethod;
 import com.teddy.lc4e.util.plugins.AttributeKit;
 import com.teddy.lc4e.util.plugins.ValidateKit;
 import com.teddy.lc4e.util.shiro.UserRealm;
@@ -35,7 +35,7 @@ public class Config extends JFinalConfig {
     private static final Logger LOGGER = Logger.getLogger(Config.class);
 
     public void configConstant(Constants me) {
-        PropPlugin prop = com.teddy.jfinal.config.Config.getCustomConfig().getProp();
+        PropTool prop = com.teddy.jfinal.config.Config.getCustomConfig().getProp();
         //enable comvar and validate comvar function
         com.teddy.jfinal.config.Config.getCustomConfig().setAttributeKit(new AttributeKit());
         com.teddy.jfinal.config.Config.getCustomConfig().setValidateKit(new ValidateKit());

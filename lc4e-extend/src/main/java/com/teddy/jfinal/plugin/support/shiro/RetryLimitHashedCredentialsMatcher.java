@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.shiro;
+package com.teddy.jfinal.plugin.support.shiro;
 
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.jfinal.common.Const;
@@ -6,8 +6,6 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

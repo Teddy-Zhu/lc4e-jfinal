@@ -2,7 +2,7 @@ package com.teddy.jfinal.handler.resolve;
 
 import com.teddy.jfinal.annotation.CustomAnnotation;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolve.AnnotationPluginResolver;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.annotation.RequiresGuest;

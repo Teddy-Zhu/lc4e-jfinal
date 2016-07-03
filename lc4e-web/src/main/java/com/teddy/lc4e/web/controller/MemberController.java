@@ -1,12 +1,11 @@
 package com.teddy.lc4e.web.controller;
 
-import com.jfinal.kit.StrKit;
 import com.teddy.jfinal.annotation.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.Method;
 import com.teddy.jfinal.exceptions.Lc4eApplicationException;
 import com.teddy.jfinal.interfaces.BaseController;
-import com.teddy.jfinal.plugin.jetbrick.Lc4eCaptchaRender;
+import com.teddy.jfinal.depend.jetbrick.Lc4eCaptchaRender;
 import com.teddy.jfinal.tools.StringTool;
 import com.teddy.lc4e.config.Key;
 import com.teddy.lc4e.database.model.SysCommonVariable;

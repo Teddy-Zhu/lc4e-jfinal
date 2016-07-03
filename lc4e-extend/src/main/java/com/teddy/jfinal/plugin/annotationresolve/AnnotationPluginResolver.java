@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.annotationresolver;
+package com.teddy.jfinal.plugin.annotationresolve;
 
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
 import com.teddy.jfinal.plugin.core.CustomAnPlugin;
@@ -39,9 +39,10 @@ public class AnnotationPluginResolver {
 
         pluginMap = new HashedMap();
 
-        for (Annotation an:
-             annotations) {
-            if(CustomAnPlugin.containsKey(an.annotationType())){
+        for (Annotation an :
+                annotations) {
+            CustomAnnotationPlugin type = CustomAnPlugin.get(an.annotationType());
+            if (type != null) {
                 pluginMap.put(CustomAnPlugin.get(an.annotationType()), an);
             }
         }
@@ -56,6 +57,14 @@ public class AnnotationPluginResolver {
         });
 
 
+    }
+
+    public void init(boolean[] isHandled, Object target, Method method, Object[] args, MethodProxy methodProxy) {
+        this.target = target;
+        this.method = method;
+        this.args = args;
+        this.methodProxy = methodProxy;
+        this.isHandled = isHandled;
     }
 
 

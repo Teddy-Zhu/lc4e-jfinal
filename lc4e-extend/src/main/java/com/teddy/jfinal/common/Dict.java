@@ -59,9 +59,12 @@ public class Dict {
     public static final String USE_SHIRO = "USE_SHIRO";
 
 
+    public static final String USE_EVENT = "USE_EVENT";
     public static final String USE_CACHE_CONTROL = "USE_CACHE_CONTROL";
 
     public static final String USE_HTTP_CACHE = "USE_HTTP_CACHE";
+
+    public static final String EVENT_THREAD_SIZE = "EVENT_THREAD_SIZE";
 
     public static final String XSS = "XSS";
 

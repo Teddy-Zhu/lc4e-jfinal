@@ -5,6 +5,7 @@ import com.jfinal.config.*;
 import com.teddy.jfinal.annotation.InterceptorHandler;
 import com.teddy.jfinal.handler.GlobalInterceptor;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,6 @@ public class InterceptorPlugin implements IPlugin {
 
     @Override
     public boolean stop(CustomPlugin configPlugin) {
-        return false;
+        return true;
     }
 }

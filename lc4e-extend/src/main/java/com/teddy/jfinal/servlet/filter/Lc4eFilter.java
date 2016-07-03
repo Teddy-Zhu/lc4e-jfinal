@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler.filter;
+package com.teddy.jfinal.servlet.filter;
 
 import com.jfinal.config.Constants;
 import com.jfinal.config.JFinalConfig;
@@ -6,7 +6,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.core.JFinalPublic;
 import com.jfinal.handler.Handler;
 import com.jfinal.log.Log;
-import com.teddy.jfinal.handler.gzip.GZIPResponseWrapper;
+import com.teddy.jfinal.servlet.gzip.GZIPResponseWrapper;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

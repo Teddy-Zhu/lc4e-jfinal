@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.jetbrick.tag;
+package com.teddy.jfinal.depend.jetbrick.tag;
 
 import com.jfinal.core.JFinal;
 import jetbrick.template.runtime.JetTagContext;

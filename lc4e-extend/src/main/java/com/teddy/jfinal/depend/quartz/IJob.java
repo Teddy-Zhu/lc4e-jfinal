@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.quartz;
+package com.teddy.jfinal.depend.quartz;
 
 import com.teddy.jfinal.interfaces.DBModel;
 import org.quartz.Job;

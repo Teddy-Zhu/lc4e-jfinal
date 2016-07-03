@@ -4,6 +4,7 @@ import com.jfinal.config.*;
 import com.teddy.jfinal.annotation.ExceptionHandler;
 import com.teddy.jfinal.annotation.ExceptionHandlers;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -55,17 +56,14 @@ public class ExceptionPlugin implements IPlugin {
                 }
             }
         });
-        return false;
+        return true;
     }
 
     @Override
     public boolean stop(CustomPlugin configPlugin) {
-        return false;
+        return true;
     }
 
-    public static boolean containsKey(Class<? extends Throwable> clz) {
-        return exceptionsMap.containsKey(clz);
-    }
 
     public static Method get(Class<? extends Throwable> clz) {
         return exceptionsMap.get(clz);

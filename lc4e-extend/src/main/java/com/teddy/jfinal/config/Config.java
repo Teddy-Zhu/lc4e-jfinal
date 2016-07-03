@@ -3,7 +3,7 @@ package com.teddy.jfinal.config;
 import com.jfinal.config.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.exceptions.Lc4eException;
-import com.teddy.jfinal.plugin.core.CustomPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 import org.apache.log4j.Logger;
 
@@ -24,13 +24,15 @@ public class Config extends com.jfinal.config.JFinalConfig {
     public void configConstant(Constants me) {
         //Init Property File And Scan Annotation Classes
         try {
-            customConfig.init(loadPropertyFile(Const.CONFIG_FILE));
-
+            if (!customConfig.init(loadPropertyFile(Const.CONFIG_FILE)))
+                throw new RuntimeException("custom plugin init error");
         } catch (Lc4eException | InstantiationException | IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
             logger.error("init failed");
         }
         customConfig.init(me);
+
+
         //Init original Config
         resolve(Const.CONFIG_CONSTANT, me);
 
@@ -45,8 +47,8 @@ public class Config extends com.jfinal.config.JFinalConfig {
 
 
     public void configPlugin(Plugins me) {
-        customConfig.init(me);
         me.add(customConfig);
+        customConfig.init(me);
         resolve(Const.CONFIG_PLUGIN, me);
     }
 

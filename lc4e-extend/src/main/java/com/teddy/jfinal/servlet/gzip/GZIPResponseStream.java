@@ -1,4 +1,4 @@
-package com.teddy.jfinal.handler.gzip;
+package com.teddy.jfinal.servlet.gzip;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

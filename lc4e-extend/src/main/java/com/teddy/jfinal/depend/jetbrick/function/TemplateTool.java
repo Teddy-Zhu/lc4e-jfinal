@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.jetbrick.function;
+package com.teddy.jfinal.depend.jetbrick.function;
 
 import com.jfinal.kit.StrKit;
 import com.teddy.jfinal.tools.RelativeDate;

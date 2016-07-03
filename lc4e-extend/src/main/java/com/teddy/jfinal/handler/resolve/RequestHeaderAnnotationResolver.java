@@ -6,7 +6,7 @@ import com.teddy.jfinal.annotation.RequestHeader;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.exceptions.Lc4eValidateException;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolve.AnnotationPluginResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;

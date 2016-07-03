@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.jetbrick;
+package com.teddy.jfinal.depend.jetbrick;
 
 import com.jfinal.render.Render;
 import com.teddy.jfinal.tools.StringTool;

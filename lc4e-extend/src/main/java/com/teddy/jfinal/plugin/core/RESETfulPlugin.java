@@ -2,6 +2,7 @@ package com.teddy.jfinal.plugin.core;
 
 import com.jfinal.config.*;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 /**
  * Created by teddyzhu on 16/6/29.

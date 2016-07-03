@@ -5,6 +5,8 @@ import com.jfinal.handler.Handler;
 import com.teddy.jfinal.annotation.GlobalHandler;
 import com.teddy.jfinal.interfaces.IHandler;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.tools.PropTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,6 @@ public class HandlePlugin  implements IPlugin{
 
     @Override
     public boolean start(CustomPlugin configPlugin) {
-        PropPlugin prop = configPlugin.getProp();
         configPlugin.getAnnotationClass(GlobalHandler.class).forEach(handler -> {
             try {
                 if (IHandler.class.isAssignableFrom(handler)) {
@@ -66,12 +67,12 @@ public class HandlePlugin  implements IPlugin{
         jfinalHandler.add(new com.teddy.jfinal.handler.GlobalHandler());
 
 
-        return false;
+        return true;
     }
 
     @Override
     public boolean stop(CustomPlugin configPlugin) {
-        return false;
+        return true;
     }
 
     public static List<IHandler> getLc4eHandler() {

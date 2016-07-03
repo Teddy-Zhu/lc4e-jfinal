@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.core;
+package com.teddy.jfinal.tools;
 
 import com.jfinal.kit.Prop;
 import com.teddy.jfinal.common.Dict;
@@ -7,18 +7,19 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 
-public class PropPlugin {
+public class PropTool {
 
 
     private Map<String, Object> paramMap = new HashMap<>();
 
     private Properties properties;
 
-    public PropPlugin() {
+    public PropTool() {
     }
 
-    public PropPlugin(Properties properties) {
+    public PropTool(Properties properties) {
         this.properties = properties;
+        start();
     }
 
 

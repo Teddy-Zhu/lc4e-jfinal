@@ -3,7 +3,7 @@ package com.teddy.jfinal.handler.resolve;
 import com.teddy.jfinal.annotation.CustomAnnotation;
 import com.teddy.jfinal.annotation.ResponseStatus;
 import com.teddy.jfinal.interfaces.CustomAnnotationPlugin;
-import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolve.AnnotationPluginResolver;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

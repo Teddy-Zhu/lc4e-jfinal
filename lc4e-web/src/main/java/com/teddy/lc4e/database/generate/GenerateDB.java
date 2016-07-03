@@ -6,7 +6,7 @@ import com.jfinal.plugin.activerecord.generator.Generator;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
-import com.teddy.jfinal.plugin.core.PropPlugin;
+import com.teddy.jfinal.tools.PropTool;
 
 import java.io.IOException;
 import java.sql.*;
@@ -18,7 +18,7 @@ import java.sql.*;
 public class GenerateDB {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-        PropPlugin plugin = new PropPlugin(new Prop(Const.CONFIG_FILE,com.jfinal.core.Const.DEFAULT_ENCODING).getProperties());
+        PropTool plugin = new PropTool(new Prop(Const.CONFIG_FILE,com.jfinal.core.Const.DEFAULT_ENCODING).getProperties());
         plugin.start();
         C3p0Plugin c3p0Plugin = new C3p0Plugin(plugin.getValue(Dict.DATABASE_URL), plugin.getValue(Dict.DATABASE_USERNAME), plugin.getValue(Dict.DATABASE_PASSWORD));
         c3p0Plugin.start();

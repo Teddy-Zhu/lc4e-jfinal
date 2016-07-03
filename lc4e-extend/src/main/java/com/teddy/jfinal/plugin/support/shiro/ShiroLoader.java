@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.shiro;
+package com.teddy.jfinal.plugin.support.shiro;
 
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.config.ResourceConfigurable;

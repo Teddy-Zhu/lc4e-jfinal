@@ -30,7 +30,7 @@
 *******************************/
 
 
-/* Event */
+/* EventObject */
 .ui.feed > .event {
   display: -webkit-box;
   display: -webkit-flex;
@@ -55,7 +55,7 @@
   padding-bottom: 0em;
 }
 
-/* Event Label */
+/* EventObject Label */
 .ui.feed > .event > .label {
   display: block;
   -webkit-box-flex: 0;

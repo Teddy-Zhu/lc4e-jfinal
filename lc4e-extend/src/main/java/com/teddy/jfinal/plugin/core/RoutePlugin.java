@@ -7,6 +7,7 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.entity.Route;
 import com.teddy.jfinal.interfaces.BaseController;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 import com.teddy.jfinal.tools.StringTool;
 import org.apache.log4j.Logger;
@@ -86,12 +87,12 @@ public class RoutePlugin implements IPlugin {
                 LOGGER.debug("Controller Registered : controller = " + controller + ", Mapping URL = " + controllerKey);
             }
         });
-        return false;
+        return true;
     }
 
     @Override
     public boolean stop(CustomPlugin configPlugin) {
-        return false;
+        return true;
     }
 
     private String createActionKey(Class<? extends BaseController> controllerClass,

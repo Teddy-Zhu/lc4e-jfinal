@@ -21,11 +21,12 @@ public class CacheControlHandler extends Handler {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
+            response.setHeader("Cache-Control", "max-age=" + MAX_AGE);
+            response.addDateHeader("Expires", now + MAX_AGE * 1000);
+            response.addDateHeader("Last-Modified", now);
         }
         next.handle(target, request, response, isHandled);
 
-        response.setHeader("Cache-Control", "max-age=" + MAX_AGE);
-        response.addDateHeader("Expires", now + MAX_AGE * 1000);
-        response.addDateHeader("Last-Modified", now);
+
     }
 }

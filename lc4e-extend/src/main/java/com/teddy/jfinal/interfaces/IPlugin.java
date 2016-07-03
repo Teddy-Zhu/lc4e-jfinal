@@ -1,7 +1,7 @@
 package com.teddy.jfinal.interfaces;
 
 import com.jfinal.config.*;
-import com.teddy.jfinal.plugin.core.CustomPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 
 /**

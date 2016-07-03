@@ -13,11 +13,14 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 public @interface Cache {
 
+    //cache name
     String cacheName() default Const.COMVAR;
-
+    //cache dynamic key
     int index() default -1;
 
+    // cache key
     String key() default Const.DEFAULT_NONE;
 
+    // defaultValue if null
     String defaultValue() default Const.DEFAULT_NONE;
 }

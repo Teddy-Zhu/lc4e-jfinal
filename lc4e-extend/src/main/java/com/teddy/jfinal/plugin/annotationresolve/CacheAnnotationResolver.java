@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.annotationresolver;
+package com.teddy.jfinal.plugin.annotationresolve;
 
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.teddy.jfinal.annotation.Cache;

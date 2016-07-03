@@ -2,20 +2,26 @@ package com.teddy.jfinal.handler;
 
 import com.teddy.jfinal.config.Config;
 import com.teddy.jfinal.handler.support.GlobalInterceptorKit;
-import com.teddy.jfinal.plugin.annotationresolver.AnnotationPluginResolver;
+import com.teddy.jfinal.plugin.annotationresolve.AnnotationPluginResolver;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by teddy on 2015/7/25.
  */
 public class CustomInterceptor implements MethodInterceptor {
+
+    private static Map<Class, AnnotationPluginResolver> annotationPluginResolverCache = new HashMap<>();
+
     private Object target;
 
     private boolean isClass = false;
+
 
     private CustomInterceptor(Object target) {
         this.target = target;
@@ -31,15 +37,22 @@ public class CustomInterceptor implements MethodInterceptor {
         boolean[] isHandled = new boolean[]{false};
 
         Object returnValue;
-        //resolve Autowired
-        Class clz = target.getClass();
-        AnnotationPluginResolver resolver = new AnnotationPluginResolver(isHandled, target, method, objects, methodProxy,
-                    isClass ? Config.getCustomConfig().getClassAnnotationMap().get(clz) : Config.getCustomConfig().getMethodAnnotationMap().get(method));
 
+        Class clz = target.getClass();
+
+        //cached
+        AnnotationPluginResolver resolver = annotationPluginResolverCache.get(clz);
+        if (resolver == null) {
+            resolver = new AnnotationPluginResolver(isHandled, target, method, objects, methodProxy,
+                    isClass ? Config.getCustomConfig().getClassAnnotationMap().get(clz) : Config.getCustomConfig().getMethodAnnotationMap().get(method));
+            annotationPluginResolverCache.put(clz, resolver);
+        } else {
+            resolver.init(isHandled, target, method, objects, methodProxy);
+        }
 
         GlobalInterceptorKit.Autowired(target, clz);
 
-
+        //resolve Autowired
         returnValue = resolver.invoke();
 
 
@@ -66,27 +79,23 @@ public class CustomInterceptor implements MethodInterceptor {
     @SuppressWarnings("unchecked")
     public static <T> T Proxy(T target) {
         if (null == target) return null;
-        Object proxy = null;
 
         Enhancer en = new Enhancer();
         en.setSuperclass(target.getClass());
         en.setCallback(new CustomInterceptor(target));
-        proxy = en.create();
 
-        return (T) proxy;
+        return (T) en.create();
     }
 
 
     @SuppressWarnings("unchecked")
     public static <T> T Proxy(T target, boolean isClass) {
         if (null == target) return null;
-        Object proxy = null;
 
         Enhancer en = new Enhancer();
         en.setSuperclass(target.getClass());
         en.setCallback(new CustomInterceptor(target, isClass));
-        proxy = en.create();
 
-        return (T) proxy;
+        return (T) en.create();
     }
 }

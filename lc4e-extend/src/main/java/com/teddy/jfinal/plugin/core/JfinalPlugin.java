@@ -14,6 +14,9 @@ import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.tools.PluginTool;
+import com.teddy.jfinal.tools.PropTool;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
@@ -27,8 +30,10 @@ import java.util.Set;
  */
 public class JfinalPlugin implements IPlugin {
 
+    // plugin which implements jfinal IPlugin by user
     private static List<com.jfinal.plugin.IPlugin> plugins = new ArrayList<>();
 
+    // plugin which implements IPlugin by user
     private static List<IPlugin> lc4ePlugins = new ArrayList<>();
 
     @Override
@@ -59,11 +64,10 @@ public class JfinalPlugin implements IPlugin {
 
     @Override
     public boolean start(CustomPlugin configPlugin) {
-        PropPlugin prop = configPlugin.getProp();
-        if (configPlugin.containsAnnotation(Model.class)) {
+        PropTool prop = configPlugin.getProp();
+        Set<Class> Classes = configPlugin.getAnnotationClass(Model.class);
 
-            Set<Class> Classes = configPlugin.getAnnotationClass(Model.class);
-
+        if (Classes != null) {
 
             //Init Model annotation
 
@@ -124,23 +128,22 @@ public class JfinalPlugin implements IPlugin {
             }
         });
 
-        return true;
+
+        return PluginTool.startLc4ePlugin(lc4ePlugins, configPlugin);
     }
 
     @Override
     public boolean stop(CustomPlugin configPlugin) {
-        return true;
+        return PluginTool.stopLc4ePlugin(lc4ePlugins, configPlugin);
     }
 
     @Override
     public boolean stop() {
-        lc4ePlugins.forEach(IPlugin::stop);
-        return true;
+        return PluginTool.stopLc4ePluginOrigin(lc4ePlugins) && PluginTool.stopJifnalPlugin(plugins);
     }
 
     @Override
     public boolean start() {
-        lc4ePlugins.forEach(IPlugin::start);
-        return true;
+        return PluginTool.startLc4ePluginOrigin(lc4ePlugins) && PluginTool.startJfinalPluin(plugins);
     }
 }

@@ -33,11 +33,6 @@ public class Const {
 
     public static final String UIDATA = "UiData";
 
-    public static final String USE_CACHE = "UseCache";
-
-    public static final String USE_INJECT_TARGET = "useInjectTarget";
-
-
     public static final String DB_DAO = "dao";
 
     public static final String DB_SAVE = "save";

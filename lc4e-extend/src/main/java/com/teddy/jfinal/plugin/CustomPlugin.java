@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.core;
+package com.teddy.jfinal.plugin;
 
 import com.jfinal.config.*;
 import com.jfinal.plugin.IPlugin;
@@ -7,7 +7,10 @@ import com.teddy.jfinal.common.Dict;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.handler.resolve.AttributeKitI;
 import com.teddy.jfinal.handler.resolve.ValidateKitI;
+import com.teddy.jfinal.plugin.core.*;
 import com.teddy.jfinal.tools.ClassSearcherTool;
+import com.teddy.jfinal.tools.PluginTool;
+import com.teddy.jfinal.tools.PropTool;
 import org.apache.log4j.Logger;
 
 import java.lang.annotation.Annotation;
@@ -33,7 +36,7 @@ public class CustomPlugin implements IPlugin {
 
     private Map<Class<? extends Annotation>, Set<Class>> classesMap = new HashMap<>();
 
-    private PropPlugin prop;
+    private PropTool prop;
 
     private List<com.teddy.jfinal.interfaces.IPlugin> plugins = new ArrayList<>();
 
@@ -43,9 +46,7 @@ public class CustomPlugin implements IPlugin {
 
     public boolean init(Properties properties) throws Lc4eException, InstantiationException, NoSuchFieldException, IllegalAccessException {
         //init base
-        prop = new PropPlugin(properties);
-        prop.start();
-
+        initProp(properties);
         initScanClass();
         initConfigClass();
 
@@ -70,7 +71,6 @@ public class CustomPlugin implements IPlugin {
         //for @ExceptionHandlers @ExceptionHandler
         plugins.add(new ExceptionPlugin());
 
-
         //for @CustomAnnotation
         plugins.add(new CustomAnPlugin());
 
@@ -84,23 +84,27 @@ public class CustomPlugin implements IPlugin {
             plugins.add(new CacheControlPlugin());
         }
 
+        if (prop.getBool(Dict.USE_EVENT, true)) {
+            plugins.add(new EventPlugin());
+        }
 
-        plugins.forEach(plugin -> plugin.start(this));
 
-        return true;
+        return PluginTool.startLc4ePlugin(plugins, this);
     }
 
     private void initConfigClass() throws Lc4eException {
-        if (!classesMap.containsKey(ConfigHandler.class)) {
+
+        Set<Class> clzes = classesMap.get(ConfigHandler.class);
+
+        if (clzes == null) {
             LOGGER.error("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
             throw new Lc4eException("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
         }
-        Set<Class> clzes = classesMap.get(ConfigHandler.class);
-
         if (clzes.size() != 1) {
             LOGGER.error("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
             throw new Lc4eException("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
         }
+
         clzes.forEach(aClass -> clazz = aClass);
     }
 
@@ -115,14 +119,13 @@ public class CustomPlugin implements IPlugin {
 
     }
 
+    private void initProp(Properties properties) {
+        prop = new PropTool(properties);
+    }
+
     public Class<?> getClazz() {
         return clazz;
     }
-
-    public void setClazz(Class<?> clazz) {
-        this.clazz = clazz;
-    }
-
 
     public void setValidateKit(ValidateKitI validateKit) {
         this.validateKit = validateKit;
@@ -152,15 +155,11 @@ public class CustomPlugin implements IPlugin {
         return classesMap.getOrDefault(clz, new HashSet<>());
     }
 
-    public boolean containsAnnotation(Class<? extends Annotation> clz) {
-        return classesMap.containsKey(clz);
-    }
-
-    public PropPlugin getProp() {
+    public PropTool getProp() {
         return prop;
     }
 
-    public void setProp(PropPlugin prop) {
+    public void setProp(PropTool prop) {
         this.prop = prop;
     }
 
@@ -185,15 +184,12 @@ public class CustomPlugin implements IPlugin {
         plugins.forEach(iPlugin -> iPlugin.init(me));
     }
 
-    @Override
     public boolean start() {
-        plugins.forEach(com.teddy.jfinal.interfaces.IPlugin::start);
-        return true;
+        return PluginTool.startLc4ePluginOrigin(plugins);
     }
-    @Override
+
     public boolean stop() {
-        plugins.forEach(com.teddy.jfinal.interfaces.IPlugin::stop);
-        plugins.forEach(iPlugin -> iPlugin.stop(this));
-        return true;
+        return PluginTool.stopLc4ePlugin(plugins, this) && PluginTool.stopLc4ePluginOrigin(plugins);
     }
+
 }

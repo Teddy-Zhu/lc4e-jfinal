@@ -11,16 +11,6 @@ converted from spring mvc project -> [lc4e-spring](https://github.com/Teddy-Zhu/
 >#### Font
 >### `Webpack` `HTML5`,`VueJs`,`CSS3`
 
-----------
-
-# 计划ING(2015-03-20)
-> 前端使用 vuejs	
-> <del>前端UI 准备替换 semantic-ui (这家伙实在过于庞大,且低效),重写新的UI	
-> <del>抛弃Jquery (同上,Render效率较低)	
-> <del>本项目会暂缓更新,等待新的UI(选择/开发)完成)
-
-> 时间关系,新UI放弃,暂时继续混用jquery ,vuejs,semantic ui
-
 
 # [Demo](http://www.eicoding.com) #
 ----------
@@ -72,7 +62,7 @@ public class customAn implements CustomAnnotationPlugin {
             public abstract Object intercept(Annotation annotation, AnnotationPluginResolver resolver, Object[] objects, Object target, Method method, boolean[] isHandled) throws Throwable;
 }
 ```
-### Jfinal Plugin 增强
+### Jfinal IPlugin 增强
 ```java
 public interface IPlugin {  
 
@@ -123,6 +113,14 @@ public interface IPlugin {
 - `Cache[M]`:在Service的方法中注解，可以自动缓存结果
 - `SetPJAX`:设置PJAX attribute
 - `SetAJAX`:设置AJAX attribute
+
+### 基于增强 IPlugin 增加的功能
+- `CacheControlPlugin`
+- `CustomAnPlugin`
+- `EventPlugin`
+- `ExceptionPlugin`
+-  ``
+
 
 ### Shiro相关注解
 - `RequireGuest[T/M]`:

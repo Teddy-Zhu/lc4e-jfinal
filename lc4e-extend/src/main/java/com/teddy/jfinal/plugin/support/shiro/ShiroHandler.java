@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.shiro;
+package com.teddy.jfinal.plugin.support.shiro;
 
 import com.jfinal.handler.Handler;
 import com.teddy.jfinal.plugin.core.ShiroPlugin;

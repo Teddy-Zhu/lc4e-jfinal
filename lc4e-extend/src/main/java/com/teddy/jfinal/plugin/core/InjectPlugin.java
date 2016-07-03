@@ -8,6 +8,7 @@ import com.teddy.jfinal.annotation.Service;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.handler.CustomInterceptor;
 import com.teddy.jfinal.interfaces.IPlugin;
+import com.teddy.jfinal.plugin.CustomPlugin;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -96,7 +97,7 @@ public class InjectPlugin implements IPlugin {
 
     @Override
     public boolean stop(CustomPlugin configPlugin) {
-        return false;
+        return true;
     }
 
     public static boolean containsKey(Class clz){

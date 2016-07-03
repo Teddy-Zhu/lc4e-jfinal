@@ -1,4 +1,4 @@
-package com.teddy.jfinal.plugin.shiro;
+package com.teddy.jfinal.plugin.support.shiro;
 
 import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.SessionValidationScheduler;

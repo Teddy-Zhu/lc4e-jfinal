@@ -2,7 +2,6 @@ package com.teddy.jfinal.interfaces;
 
 import com.jfinal.core.Controller;
 import com.teddy.jfinal.entity.ReturnData;
-import com.teddy.jfinal.plugin.jetbrick.Lc4eCaptchaRender;
 import com.teddy.jfinal.tools.WebTool;
 
 /**
