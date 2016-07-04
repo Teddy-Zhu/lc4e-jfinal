@@ -27,6 +27,5 @@ public class CacheControlHandler extends Handler {
         }
         next.handle(target, request, response, isHandled);
 
-
     }
 }

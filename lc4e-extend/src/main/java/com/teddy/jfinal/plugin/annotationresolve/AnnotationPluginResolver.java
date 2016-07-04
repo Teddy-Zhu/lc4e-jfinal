@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class AnnotationPluginResolver {
 
-    public int index = 0;
+    public int index;
 
     private boolean useInjectTarget = true;
     private Object target;
@@ -34,6 +34,7 @@ public class AnnotationPluginResolver {
         this.args = args;
         this.methodProxy = methodProxy;
         this.isHandled = isHandled;
+        this.index = 0;
         if (annotations == null)
             annotations = new Annotation[0];
 
@@ -65,6 +66,7 @@ public class AnnotationPluginResolver {
         this.args = args;
         this.methodProxy = methodProxy;
         this.isHandled = isHandled;
+        this.index = 0;
     }
 
 

@@ -16,7 +16,9 @@ import java.util.Map;
  */
 public class CustomInterceptor implements MethodInterceptor {
 
-    private static Map<Class, AnnotationPluginResolver> annotationPluginResolverCache = new HashMap<>();
+    private static Map<Class, AnnotationPluginResolver> annotationPluginResolverClzCache = new HashMap<>();
+    private static Map<Method, AnnotationPluginResolver> annotationPluginResolverMethodCache = new HashMap<>();
+
 
     private Object target;
 
@@ -41,11 +43,15 @@ public class CustomInterceptor implements MethodInterceptor {
         Class clz = target.getClass();
 
         //cached
-        AnnotationPluginResolver resolver = annotationPluginResolverCache.get(clz);
+        AnnotationPluginResolver resolver = isClass ? annotationPluginResolverClzCache.get(clz) : annotationPluginResolverMethodCache.get(method);
         if (resolver == null) {
             resolver = new AnnotationPluginResolver(isHandled, target, method, objects, methodProxy,
                     isClass ? Config.getCustomConfig().getClassAnnotationMap().get(clz) : Config.getCustomConfig().getMethodAnnotationMap().get(method));
-            annotationPluginResolverCache.put(clz, resolver);
+            if (isClass) {
+                annotationPluginResolverClzCache.put(clz, resolver);
+            } else {
+                annotationPluginResolverMethodCache.put(method, resolver);
+            }
         } else {
             resolver.init(isHandled, target, method, objects, methodProxy);
         }

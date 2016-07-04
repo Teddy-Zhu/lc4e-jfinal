@@ -74,11 +74,6 @@ public class CustomPlugin implements IPlugin {
         //for @CustomAnnotation
         plugins.add(new CustomAnPlugin());
 
-        //Init Shiro
-        if (prop.getBool(Dict.USE_SHIRO, true)) {
-            plugins.add(new ShiroPlugin());
-        }
-
         //enable CacheControl
         if (prop.getBool(Dict.USE_CACHE_CONTROL, true)) {
             plugins.add(new CacheControlPlugin());
@@ -89,6 +84,10 @@ public class CustomPlugin implements IPlugin {
         }
 
 
+        //Init Shiro
+        if (prop.getBool(Dict.USE_SHIRO, true)) {
+            plugins.add(new ShiroPlugin());
+        }
         return PluginTool.startLc4ePlugin(plugins, this);
     }
 
