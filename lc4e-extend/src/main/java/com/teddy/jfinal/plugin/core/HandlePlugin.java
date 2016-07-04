@@ -3,10 +3,8 @@ package com.teddy.jfinal.plugin.core;
 import com.jfinal.config.*;
 import com.jfinal.handler.Handler;
 import com.teddy.jfinal.annotation.GlobalHandler;
-import com.teddy.jfinal.interfaces.IHandler;
 import com.teddy.jfinal.interfaces.IPlugin;
 import com.teddy.jfinal.plugin.CustomPlugin;
-import com.teddy.jfinal.tools.PropTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +12,9 @@ import java.util.List;
 /**
  * Created by teddyzhu on 16/6/6.
  */
-public class HandlePlugin  implements IPlugin{
+public class HandlePlugin implements IPlugin {
 
-    private static List<IHandler> lc4eHandler = new ArrayList<>();
-
-
-    private static List<Handler> jfinalHandler  = new ArrayList<>();
+    private static List<Handler> jfinalHandler = new ArrayList<>();
 
 
     @Override
@@ -51,21 +46,14 @@ public class HandlePlugin  implements IPlugin{
     public boolean start(CustomPlugin configPlugin) {
         configPlugin.getAnnotationClass(GlobalHandler.class).forEach(handler -> {
             try {
-                if (IHandler.class.isAssignableFrom(handler)) {
-                    //custom handler with @GlobalHandler
-                    lc4eHandler.add((IHandler) handler.newInstance());
-                } else {
-                    //Jfinal handler
-                    jfinalHandler.add((Handler) handler.newInstance());
-                }
+
+                //Jfinal handler
+                jfinalHandler.add((Handler) handler.newInstance());
+
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
-
-        //Init Core Handler
-        jfinalHandler.add(new com.teddy.jfinal.handler.GlobalHandler());
-
 
         return true;
     }
@@ -75,7 +63,5 @@ public class HandlePlugin  implements IPlugin{
         return true;
     }
 
-    public static List<IHandler> getLc4eHandler() {
-        return lc4eHandler;
-    }
+
 }

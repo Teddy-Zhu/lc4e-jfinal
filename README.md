@@ -115,12 +115,19 @@ public interface IPlugin {
 - `SetAJAX`:设置AJAX attribute
 
 ### 基于增强 IPlugin 增加的功能
-- `CacheControlPlugin`
-- `CustomAnPlugin`
-- `EventPlugin`
-- `ExceptionPlugin`
--  ``
-
+- `CacheControlPlugin`: 静态文件缓存插件
+- `CustomAnPlugin`: [CORE]自定义注解插件, 实现了 CustonAnnotation 功能
+- `EventPlugin`: 事件驱动插件
+- `ExceptionPlugin`:[CORE]异常处理插件
+- `HandlePlugin`: [CORE]处理基于@GlobalHandler的 handler
+- `InjectPlugin` : [CORE]自动注入基础插件
+-	`InterceptorPlugin`: [CORE]处理 intercept的插件
+-	`JfinalPlugin`:[CORE]处理 jfinal本身
+-	`QuartzPlugin`:quartz 插件
+-	`RESTfulPlugin`: restful 风格 api
+-	`RoutePlugin`:[CORE]注解路由
+-	`ServicePlugin`:[CORE]注册服务注解类
+-	`ShiroPlugin`:shiro 权限控制插件
 
 ### Shiro相关注解
 - `RequireGuest[T/M]`:
@@ -133,7 +140,6 @@ public interface IPlugin {
 ### 其他
 - `BaseController`：增强Controller 增加isAJAX ，isPJAX , 验证码render等
 - `DBModel`: 增强Model,自动set updateTime，createTime,自动事务，自动Cache
-- `IHandler`: handler增强 增加 beforeHandler，afterHandler方法，需使用GlobalHandler注解载入
 - `IPlugin`:plugin增强，需使用PluginHander载入，增加 init方法 ，可以设置Plugins，Routes，Constants，Interceptors，Handlers
 
 
@@ -186,4 +192,7 @@ public interface IPlugin {
 
 - 01/11/2016 23:34:42
 >update jfinal version to 2.1
+
+- 02/05/2017 10:31:31
+>update jfinal version to 2.2
 
