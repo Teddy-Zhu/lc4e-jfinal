@@ -93,7 +93,8 @@ public class Config extends JFinalConfig {
         globalContext.set(List.class, "menulist", MenuService.service.getMenuTree());
         globalContext.set(String.class, "menusString", JsonKit.toJson(MenuService.service.getMenuTree()));
         globalContext.set(String.class, "version", com.teddy.jfinal.config.Config.getCustomConfig().getProp().getValue(Dict.version));
-        globalContext.set(String.class, "Theme", "/themes/" + ComVarService.service.getComVarValueByName("DefaultTheme"));
+        //add cdn
+        globalContext.set(String.class, "Theme", "http://7u2sne.com1.z0.glb.clouddn.com" +"/themes/" + ComVarService.service.getComVarValueByName("DefaultTheme"));
 
 
         Key.kvs.put("Theme", ComVarService.service.getComVarValueByName("DefaultTheme"));
