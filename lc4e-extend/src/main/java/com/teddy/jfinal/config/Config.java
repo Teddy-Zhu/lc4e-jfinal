@@ -4,6 +4,7 @@ import com.jfinal.config.*;
 import com.teddy.jfinal.common.Const;
 import com.teddy.jfinal.exceptions.Lc4eException;
 import com.teddy.jfinal.plugin.CustomPlugin;
+import com.teddy.jfinal.plugin.core.JfinalPlugin;
 import com.teddy.jfinal.tools.ReflectTool;
 import org.apache.log4j.Logger;
 
@@ -34,14 +35,13 @@ public class Config extends com.jfinal.config.JFinalConfig {
 
 
         //Init original Config
-        resolve(Const.CONFIG_CONSTANT, me);
-
+        customConfig.getConfigs().forEach(config -> config.configConstant(me));
 
     }
 
     public void configRoute(Routes me) {
         customConfig.init(me);
-        resolve(Const.CONFIG_ROUTE, me);
+        customConfig.getConfigs().forEach(config -> config.configRoute(me));
 
     }
 
@@ -49,43 +49,27 @@ public class Config extends com.jfinal.config.JFinalConfig {
     public void configPlugin(Plugins me) {
         me.add(customConfig);
         customConfig.init(me);
-        resolve(Const.CONFIG_PLUGIN, me);
+        customConfig.getConfigs().forEach(config -> config.configPlugin(me));
     }
 
     public void configInterceptor(Interceptors me) {
         customConfig.init(me);
-        resolve(Const.CONFIG_INTERCEPTOR, me);
+        customConfig.getConfigs().forEach(config -> config.configInterceptor(me));
     }
 
     public void configHandler(Handlers me) {
         customConfig.init(me);
-        resolve(Const.CONFIG_HANDLER, me);
-    }
-
-    private void resolve(String methodName, Object me) {
-        Class<?> clz = customConfig.getClazz();
-        Method method;
-        try {
-            method = ReflectTool.getDeclaredMethodByClassAndName(clz, methodName);
-            method.setAccessible(true);
-            if (me == null) {
-                method.invoke(clz.newInstance());
-            } else {
-                method.invoke(clz.newInstance(), me);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        customConfig.getConfigs().forEach(config -> config.configHandler(me));
     }
 
     @Override
     public void afterJFinalStart() {
-        resolve(Const.AFTER_JFINAL_START, null);
+        customConfig.getConfigs().forEach(config -> config.afterJFinalStart());
     }
 
     @Override
     public void beforeJFinalStop() {
-        resolve(Const.BEFORE_JFINAL_STOP, null);
+        customConfig.getConfigs().forEach(config -> config.beforeJFinalStop());
     }
 
 

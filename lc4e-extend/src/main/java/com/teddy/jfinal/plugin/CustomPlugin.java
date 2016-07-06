@@ -24,7 +24,7 @@ public class CustomPlugin implements IPlugin {
 
     private static final Logger LOGGER = Logger.getLogger(CustomPlugin.class);
 
-    private Class<?> clazz;
+    private List<JFinalConfig> configs = new ArrayList<>();
 
     private AttributeKitI attributeKit;
 
@@ -99,12 +99,16 @@ public class CustomPlugin implements IPlugin {
             LOGGER.error("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
             throw new Lc4eException("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
         }
-        if (clzes.size() != 1) {
-            LOGGER.error("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
-            throw new Lc4eException("Init Config Failed,Must be submit a config class with Annotation @ConfigHander");
-        }
 
-        clzes.forEach(aClass -> clazz = aClass);
+        clzes.forEach(aClass -> {
+            if (JFinalConfig.class.isAssignableFrom(aClass)) {
+                try {
+                    configs.add((JFinalConfig) aClass.newInstance());
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     private void initScanClass() {
@@ -120,10 +124,6 @@ public class CustomPlugin implements IPlugin {
 
     private void initProp(Properties properties) {
         prop = new PropTool(properties);
-    }
-
-    public Class<?> getClazz() {
-        return clazz;
     }
 
     public void setValidateKit(ValidateKitI validateKit) {
@@ -191,4 +191,7 @@ public class CustomPlugin implements IPlugin {
         return PluginTool.stopLc4ePlugin(plugins, this) && PluginTool.stopLc4ePluginOrigin(plugins);
     }
 
+    public List<JFinalConfig> getConfigs() {
+        return configs;
+    }
 }
